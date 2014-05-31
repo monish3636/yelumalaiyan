@@ -132,7 +132,7 @@ function reload_update_user(){
                         <?php $form =array('name'=>'posnic'); 
                     echo form_open('items/items_manage',$form) ?>
                         <div class="row">
-                            <div class="col-sm-12" id="user_list"><br>
+                            <div class="col-sm-12" id="add_item_form"><br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                             <h4 class="panel-title"><?php echo $this->lang->line('items') ?></h4>                                                                               
@@ -159,476 +159,160 @@ function reload_update_user(){
                 <?php echo form_close(); ?>
              </div>
         </div>
-</section>    
-<section id="add_item_form" class="container clearfix main_section">
+</section>
+<script type="text/javascript">
+    function box_right(){
+        var width=parseFloat($('#box_width').val());
+        $('#box_width').val(width+2);
+        $('#box').css("width",width+2 + "px");
+    }
+    function box_left(){
+        var width=parseFloat($('#box_width').val());
+        $('#box_width').val(width-2);
+        $('#box').css("width",width-2 + "px");
+    }
+    function box_down(){
+        var height=parseFloat($('#box_height').val());
+        $('#box_height').val(height+2);
+        $('#box').css("height",height+2 + "px");
+    }
+    function box_up(){
+        var height=parseFloat($('#box_height').val());
+        $('#box_height').val(height-2);
+        $('#box').css("height",height-2 + "px");
+    }
+    function add_label(){
+        
+    }
+</script>
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+<style>
+#drag_label { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0;z-index: 99999999 !important; }
+#drag_input_box { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#first6 { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#box { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
+.inputs{
+    z-index: 99999999 !important;
+}
+</style>
+<script>
+$(function() {
+    $("#drag_label" ).draggable();
+  
+    $("#drag_input_box" ).draggable();
+    $("#drag_label1" ).draggable();
+    $("#first6" ).draggable();
+    $("#box" ).droppable({
+        drop: function( event, ui ) {
+             var count=parseFloat($('#input_count').val());
+                $('#drag_input_box1').remove();
+                $('#drag_input_box2').remove();
+                console.log(parseFloat(count-1));
+              $('#drag_input_box'+parseFloat(count-1)).remove();
+             $('#input_fileds').append('<label id="drag_label'+count+'" class="btn btn-default inputs"><?php  echo $this->lang->line('label');?></label><label id="drag_input_box'+count+'" class="btn btn-default" ><?php  echo $this->lang->line('input_box');?></label>');
+            //    $('#input_fileds').append('<div id="draggable9" class="draggable ui-widget-content"><p>Default (snap: true), snaps to all other draggable elements</p></div>');
+                $( "#drag_label"+count ).draggable();
+            
+$('#input_count').val(parseFloat(count+1));
+        }
+    });
+});
+</script>
+
+
+<input type="hidden" id="input_count" value="2">
+
+ 
+<section id="user_list" class="container clearfix main_section">
      <?php   $form =array('id'=>'add_item',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
        echo form_open_multipart('items/add_pos_items_details/',$form);?>
         <div id="main_content_outer" class="clearfix">
-           <div id="main_content">
-                <div class="row">
-                     <div class="col-lg-12">
-                          <div class="panel panel-default">
+                <div id="main_content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
                                <div class="panel-heading">
                                        <h4 class="panel-title"><?php echo $this->lang->line('items_setting') ?></h4>  
                                        <input type="hidden" name="guid" id="guid">
                                      <input type="checkbox" style="display: none" >
                                </div>
                               <br>
-                               <div class="row">
-                                       <div class="col col-lg-12" >
-                                           <div class="row">
-                                               <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep" id="select_item">
-                                                         <label for="items_category_name" class="req"><?php echo $this->lang->line('item') ?></label>                                                                                                       
-                                                           
-                                                            <?php $name=array('name'=>'name',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'item_name_data',
-                                                                                    'value'=>set_value('name'));
-                                                           echo form_input($name)?> 
-                                                    </div>
-                                                 </div>
-                                                 <div class="col col-lg-1"></div>
-                                                 </div>
-                                               <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="sku" ><?php echo $this->lang->line('sku') ?></label>                                                                                                       
-                                                           <?php $sku=array('name'=>'sku',
-                                                                                    'class'=>'required form-control',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'id'=>'sku',
-                                                                                    'value'=>set_value('sku'));
-                                                           echo form_input($sku)?> 
-                                                    </div>                                                  
-                                                 </div>
-                                                <div class="col col-lg-1"></div>
+                              <div class="row" style="padding-left: 20px">
+                                    <div class="col col-lg-2" id="input_fileds">
+                                       <a id="drag_label">  <label id="drag_label1" class="btn btn-default"><?php  echo $this->lang->line('label');?></label></a><a id="drag_input_box"><label id="drag_input_box1" class="btn btn-default" ><?php  echo $this->lang->line('input_box');?></label></a>
+                                    </div>
+                                    <div class="col col-lg-3" >
+                                        <div class="row">
+                                           
+<!--                                                <input type="text" class="form-control" value="#8fff00" id="cp1" >-->
+                                                 <div class="input-group color" data-color="rgb(0,194,255,0.78)" data-color-format="rgba" id="cp3">
+                                                    <input type="text" class="form-control" value="rgb(0,194,255,0.78)" readonly>
+                                                    <span class="input-group-addon"><i style="margin-top:2px;background-color:rgb(0,194,255,0.78)"></i></span>
+                                                </div>     
+                                        </div>
+                                        <div class="row">
+                                            <div class="col col-lg-3">
+                                                <div style="margin-top: 20px">
+                                                    <a href="javascript:move_left()" class="btn btn-default"><i class="icon icon-arrow-left"></i> </a>
                                                 </div>
-                                             <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="location" ><?php echo $this->lang->line('location') ?></label>                                                                                                       
-                                                           <?php $location=array('name'=>'location',
-                                                                                    'class'=>'required form-control',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'id'=>'location',
-                                                                                    'value'=>set_value('location'));
-                                                           echo form_input($location)?> 
-                                                    </div>                                                   
-                                                   </div>
-                                                   <div class="col col-lg-1"></div>
-                                                 </div>
-                                               
-                                        </div>                              
-                             
-                              
-                                           <div class="row">
-                                              <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="brand" ><?php echo $this->lang->line('brand') ?></label>                                                                                                       
-                                                           <?php $brand=array('name'=>'brand',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'brand',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('brand'));
-                                                           echo form_input($brand)?> 
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="category" ><?php echo $this->lang->line('category') ?></label>                                                                                                       
-                                                           <?php $category=array('name'=>'category',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'category',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('category'));
-                                                           echo form_input($category)?> 
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="department_name" ><?php echo $this->lang->line('department_name') ?></label>                                                                                                       
-                                                           <?php $department_name=array('name'=>'department_name',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'department_name',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('department_name'));
-                                                           echo form_input($department_name)?> 
-                                                    </div>
+                                            </div>
+                                            <div class="col col-lg-3">
+                                                
+                                              <a href="javascript:move_up()" class="btn btn-default"><i class="icon icon-arrow-up"></i> </a> 
+                                               <div style="margin-top: 20px">
+                                                    <a href="javascript:move_down()" class="btn btn-default"><i class="icon icon-arrow-down"></i> </a>
                                                </div>
-                                                <div class="col col-lg-1"></div>
+                                            </div>
+                                            <div class="col col-lg-3">
+                                                <div style="margin-top: 20px">
+                                                    <a href="javascript:move_left()" class="btn btn-default"><i class="icon icon-arrow-right"></i> </a>
                                                 </div>
-                                              
-                                                                     
-                                         </div>
-                                           <div class="row">
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="min_quty" ><?php echo $this->lang->line('min_quty') ?></label>                                                                                                       
-                                                              <?php $min_quty=array('name'=>'min_quty',
-                                                                                    'class'=>' form-control',
-                                                                                    'id'=>'min_quty',
-                                                                                    'value'=>set_value('min_quty'));
-                                                           echo form_input($min_quty)?> 
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="max_quty" ><?php echo $this->lang->line('max_quty') ?></label>                                                                                                       
-                                                              <?php $max_quty=array('name'=>'max_quty',
-                                                                                    'class'=>' form-control',
-                                                                                    'id'=>'max_quty',
-                                                                                    'value'=>set_value('max_quty'));
-                                                           echo form_input($max_quty)?> 
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="allow_negative" ><?php echo $this->lang->line('allow_negative') ?></label>                                                                                                       
-                                                         <select class="form-control" name="allow_negative" id="allow_negative">
-                                                             <option value="0" id="yes"><?php  echo $this->lang->line('no') ?></option>
-                                                             <option value="1" id="no" ><?php  echo $this->lang->line('yes') ?></option>
-                                                         </select>
-                                                    </div>
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                                                    
-                              </div>
-                                           <div class="row">
-                                                 <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="sale_or_non_sale" ></label>                                                                                                       
-                                                      <input type="radio" value="1" name="sales" id="sales_yes"> <label for="sales_yes" class="icheck_label"><?php echo $this->lang->line('sales') ?></label><br>
-                                                      <input type="radio" value="0" name="sales" id="sales_no" > <label for="sales_No" class="icheck_label"><?php echo $this->lang->line('non_sales') ?></label>
-                                                    </div>
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                              <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="brand" ></label>                                                                                                       
-                                                    <input type="radio" value="1" name="sales_return" id="sales_return_yes"> <label for="sales_return_yes" class="icheck_label"><?php echo $this->lang->line('sales_return') ?></label><br>
-                                                      <input type="radio" value="0" name="sales_return" id="sales_return_no" > <label for="sales_return_No" class="icheck_label"><?php echo $this->lang->line('non_sales_return') ?></label>
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="purchase" ></label>                                                                                                       
-                                                         <input type="radio" autocomplete="o" value="1" name="purchase" id="purchase_yes"> <label for="purchase_yes" class="icheck_label"><?php echo $this->lang->line('purchase') ?></label><br>
-                                                      <input type="radio" value="0" name="purchase" id="purchase_no" > <label for="purchase_No" class="icheck_label"><?php echo $this->lang->line('non_purchase') ?></label>
-                                                    
-                                                    </div>
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="purchase_return" ></label>                                                                                                       
-                                                      <input type="radio" value="0" name="purchase_return" id="purchase_return_yes"> <label for="purchase_return_yes" class="icheck_label"><?php echo $this->lang->line('purchase_return') ?></label><br>
-                                                      <input type="radio" value="1" name="purchase_return" id="purchase_return_no" > <label for="purchase_return_No" class="icheck_label"><?php echo $this->lang->line('non_purchase_return') ?></label>
-                                                    
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                                                     
-                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="col col-lg-1" style="width: 46px;padding-right: 0px !important;margin-left: 20px" >
+                                      
+                                        <div class="row " style="padding-right: 0px !important;padding-top: 40px !important"> 
+                                            <a href="javascript:box_up()" class="btn btn-default"><i class="icon icon-arrow-up"></i> </a>
+                                        </div>
+                                        <div class="row " style="padding-right: 0px !important">
+                                            <a href="javascript:box_down()" class="btn btn-default"><i class="icon icon-arrow-down"></i> </a>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-6" >
+                                        <div class="row ">
+                                            <a href="javascript:box_left()" class="btn btn-default"><i class="icon icon-arrow-left"></i> </a>
+                                            <a href="javascript:box_right()" class="btn btn-default"><i class="icon icon-arrow-right"></i> </a>
+                                        </div>
+                                        <div class="row">
+                                            <div id="box"  style="border: solid #D3D3D3 3px;width: 300px;height: 150px">
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="box_width" id="box_width" value="300">
+                                        <input type="hidden" name="box_height" id="box_height" value="150">
+                                    </div>
+                                    
+                                </div>
                               <br><br>
-                          </div>
-                     </div>
+                            </div>
+                   
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+
+
+
+                    </div>
                 </div>
-                   <div class="row">
-                        <div class="col-lg-4"></div>
-                      <div class="col col-lg-4 text-center"><br><br>
-                          <button id="set_new_code"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('set_or_reset') ?></button>
-                          <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-cancel"> </i> <?php echo $this->lang->line('cancel') ?></a>
-                      </div>
-                  </div>
-                </div>
-          </div>
-          </div>
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_item_form" class="container clearfix main_section">
-     <?php   $form =array('id'=>'parsley_reg',
-                          'runat'=>'server',
-                          'class'=>'form-horizontal');
-       echo form_open_multipart('items/upadate_pos_items_details/',$form);?>
-        <div id="main_content_outer" class="clearfix">
-           <div id="main_content">
-                <div class="row">
-                     <div class="col-lg-12">
-                          <div class="panel panel-default">
-                               <div class="panel-heading">
-                                       <h4 class="panel-title"><?php echo $this->lang->line('items_setting') ?></h4>  
-                                     <input type="hidden" name="guid" id="guid">
-                                  
-                               </div>
-                              <br>
-                               <div class="row">
-                                       <div class="col col-lg-12" >
-                                           <div class="row">
-                                               <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep" id="select_item">
-                                                         <label for="items_category_name" class="req"><?php echo $this->lang->line('item') ?></label>                                                                                                       
-                                                           
-                                                            <?php $name=array('name'=>'name',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'item_name',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('name'));
-                                                           echo form_input($name)?> 
-                                                    </div>
-                                                 </div>
-                                                 <div class="col col-lg-1"></div>
-                                                 </div>
-                                               <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="sku" ><?php echo $this->lang->line('sku') ?></label>                                                                                                       
-                                                           <?php $sku=array('name'=>'sku',
-                                                                                    'class'=>'required form-control',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'id'=>'sku',
-                                                                                    'value'=>set_value('sku'));
-                                                           echo form_input($sku)?> 
-                                                    </div>                                                  
-                                                 </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                             <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="location" ><?php echo $this->lang->line('location') ?></label>                                                                                                       
-                                                           <?php $location=array('name'=>'location',
-                                                                                    'class'=>'required form-control',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'id'=>'location',
-                                                                                    'value'=>set_value('location'));
-                                                           echo form_input($location)?> 
-                                                    </div>                                                   
-                                                   </div>
-                                                   <div class="col col-lg-1"></div>
-                                                 </div>
-                                               
-                                        </div>                              
-                             
-                              
-                                           <div class="row">
-                                              <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="brand" ><?php echo $this->lang->line('brand') ?></label>                                                                                                       
-                                                           <?php $brand=array('name'=>'brand',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'brand',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('brand'));
-                                                           echo form_input($brand)?> 
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="category" ><?php echo $this->lang->line('category') ?></label>                                                                                                       
-                                                           <?php $category=array('name'=>'category',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'category',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('category'));
-                                                           echo form_input($category)?> 
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-4">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="department_name" ><?php echo $this->lang->line('department_name') ?></label>                                                                                                       
-                                                           <?php $department_name=array('name'=>'department_name',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'department_name',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('department_name'));
-                                                           echo form_input($department_name)?> 
-                                                    </div>
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                              
-                                                                     
-                                         </div>
-                                           <div class="row">
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="min_quty" ><?php echo $this->lang->line('min_quty') ?></label>                                                                                                       
-                                                              <?php $min_quty=array('name'=>'min_quty',
-                                                                                    'class'=>' form-control',
-                                                                                    'id'=>'min_quty',
-                                                                                    'value'=>set_value('min_quty'));
-                                                           echo form_input($min_quty)?> 
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="max_quty" ><?php echo $this->lang->line('max_quty') ?></label>                                                                                                       
-                                                              <?php $max_quty=array('name'=>'max_quty',
-                                                                                    'class'=>' form-control',
-                                                                                    'id'=>'max_quty',
-                                                                                    'value'=>set_value('max_quty'));
-                                                           echo form_input($max_quty)?> 
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="allow_negative" ><?php echo $this->lang->line('allow_negative') ?></label>                                                                                                       
-                                                         <select class="form-control" name="allow_negative" id="allow_negative">
-                                                             <option value="0" ><?php  echo $this->lang->line('no') ?></option>
-                                                             <option value="1" ><?php  echo $this->lang->line('yes') ?></option>
-                                                         </select>
-                                                    </div>
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                                                    
-                              </div>
-                                           <div class="row">
-                                                 <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="sale_or_non_sale" ></label>                                                                                                       
-                                                      <input type="radio" value="1" name="sales" id="sales_yes"> <label for="sales_yes" class="icheck_label"><?php echo $this->lang->line('sales') ?></label><br>
-                                                      <input type="radio" value="0" name="sales" id="sales_no" > <label for="sales_No" class="icheck_label"><?php echo $this->lang->line('non_sales') ?></label>
-                                                    </div>
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                              <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="brand" ></label>                                                                                                       
-                                                    <input type="radio" value="1" name="sales_return" id="sales_return_yes"> <label for="sales_return_yes" class="icheck_label"><?php echo $this->lang->line('sales_return') ?></label><br>
-                                                      <input type="radio" value="0" name="sales_return" id="sales_return_no" > <label for="sales_return_No" class="icheck_label"><?php echo $this->lang->line('non_sales_return') ?></label>
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="purchase" ></label>                                                                                                       
-                                                     <input type="radio" value="1" name="purchase" id="purchase_yes"> <label for="purchase_yes" class="icheck_label"><?php echo $this->lang->line('purchase') ?></label><br>
-                                                      <input type="radio" value="0" name="purchase" id="purchase_no" > <label for="purchase_No" class="icheck_label"><?php echo $this->lang->line('non_purchase') ?></label>
-                                                    
-                                                    </div>
-                                               </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                               <div class="col col-lg-3">
-                                               <div class="col col-lg-1"></div>
-                                               <div class="col col-lg-10">
-                                                    <div class="form_sep">
-                                                         <label for="purchase_return" ></label>                                                                                                       
-                                                      <input type="radio" value="1" name="purchase_return" id="purchase_return_yes"> <label for="purchase_return_yes" class="icheck_label"><?php echo $this->lang->line('purchase_return') ?></label><br>
-                                                      <input type="radio" value="0" name="purchase_return" id="purchase_return_no" > <label for="purchase_return_No" class="icheck_label"><?php echo $this->lang->line('non_purchase_return') ?></label>
-                                                    
-                                                    </div>
-                                                   </div>
-                                                <div class="col col-lg-1"></div>
-                                                </div>
-                                                                     
-                              </div>
-                              <br><br>
-                          </div>
-                     </div>
-                </div>
-                   <div class="row">
-                        <div class="col-lg-4"></div>
-                      <div class="col col-lg-4 text-center"><br><br>
-                          <button id="update_items"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('set_or_reset') ?></button>
-                          <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-cancel"> </i> <?php echo $this->lang->line('cancel') ?></a>
-                      </div>
-                  </div>
-                </div>
-          </div>
-          </div>
-          </div>
-    <?php echo form_close();?>
-</section>    
+    
            <div id="footer_space">
               
            </div>

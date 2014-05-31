@@ -57,6 +57,7 @@
                         
                 <!-- datepicker -->
                         <script src="<?php echo base_url() ?>template/app/js/lib/datepicker/js/bootstrap-datepicker.js"></script>
+                        <script src="<?php echo base_url() ?>template/app/js/lib/colorpicker/js/bootstrap-colorpicker.js"></script>
                 <!-- iCheck -->
                         <script src="<?php echo base_url() ?>template/app/js/lib/iCheck/jquery.icheck.min.js"></script>
                 <!-- parsley -->

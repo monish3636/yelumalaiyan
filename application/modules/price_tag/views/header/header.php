@@ -9,10 +9,7 @@
                                 { 
                                   return false;
                                 } 
-                                parsley_reg.onsubmit=function()
-                                { 
-                                  return false;
-                                } 
+                                
                                    $('#item_name_data').change(function() {
                    var guid = $('#item_name_data').select2('data').id;
                    $.ajax({                                      
