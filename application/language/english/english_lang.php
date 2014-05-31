@@ -652,5 +652,7 @@ $lang['credit_days']='Credit Days';
     $lang['credit']='Credit';
     $lang['received_stock']='Received Stock';
     $lang['price_tag']='Price Tag';
+    $lang['label']='Label';
+    $lang['input_box']='Input Box';
    
 ?>

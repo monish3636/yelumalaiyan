@@ -5,12 +5,12 @@ class Price_tag extends MX_Controller{
                $this->load->library('posnic');   
     }
     function index(){ 
-        //    $this->get_items();
-         $this->load->library('zend');
-    $this->zend->load('Zend/Barcode');
-    $test = Zend_Barcode::draw('ean8', 'image', array('text' => '25122'), array());
-    var_dump($test);
-    imagejpeg($test, 'barcode4.png', 100);
+       $this->get_items();
+//         $this->load->library('zend');
+//    $this->zend->load('Zend/Barcode');
+//    $test = Zend_Barcode::draw('ean8', 'image', array('text' => '25122'), array());
+//    var_dump($test);
+//    imagejpeg($test, 'barcode4.png', 100);
     }
     
     function get_items(){                  
