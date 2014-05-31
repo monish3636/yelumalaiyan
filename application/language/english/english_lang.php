@@ -650,5 +650,7 @@ $lang['credit_days']='Credit Days';
     $lang['type']='Type';
     $lang['debit']='Debit';
     $lang['credit']='Credit';
-    $lang['received_stock']='Received Stock;'
+    $lang['received_stock']='Received Stock';
+    $lang['price_tag']='Price Tag';
+   
 ?>

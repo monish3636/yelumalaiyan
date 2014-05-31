@@ -1,4 +1,4 @@
-yelumalaiyan
-============
+Ponit-of-Sale
+=============
 
-Thirupathi Yelumalaiyan
+PHP Point of Sale - More details posnic.com
