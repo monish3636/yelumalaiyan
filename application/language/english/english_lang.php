@@ -660,5 +660,9 @@ $lang['credit_days']='Credit Days';
     $lang['set']='Set';
     $lang['reset']='Reset';
     $lang['font_style']='Font Style';
+    $lang['input_width']='Input Width';
+    $lang['input_height']='Input Height';
+    $lang['rotate']='Rotate';
+    $lang['design_price_tag']='Design Price Tag';
    
 ?>
