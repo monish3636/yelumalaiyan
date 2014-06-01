@@ -184,37 +184,176 @@ function reload_update_user(){
     function add_label(){
         
     }
+    function remove_field(id){
+        $('#'+id).remove();
+        $('#field_actions_'+id).remove();
+    }
+    function edit_field(id){
+      $('#box').css("display", "block");
+      $('#label_text').val($('#'+id+" label").text());
+       $('#label_text').removeAttr('disabled');
+      $('#field_id').val(id);
+    }
+    function set(){
+        if($('#field_id').val()!=""){
+            var size=$('#label_text').css("font-size");
+            $('#'+$('#field_id').val()+" label").text($('#label_text').val());
+            $('#work').append('<span id="span_'+$('#field_id').val()+'">'+$('#label_text').val()+'<span>');
+            $('#span_'+$('#field_id').val()).css("font-size",parseInt(size));
+            var width=$('#span_'+$('#field_id').val()).width();
+            $('#'+$('#field_id').val()).width(width+3);
+            $('#span_'+$('#field_id').val()).remove();
+            $('#edit_actions_'+$('#field_id').val()).css('margin-left',width+3);
+            $('#delete_actions_'+$('#field_id').val()).css('margin-left',width+3);
+            $('#font_colorbox')
+            $('#'+$('#field_id').val()+" label").css("font-size",parseInt(size));
+            $('#'+$('#field_id').val()+" label").css("color",$('#font_colorbox').val());
+            
+        }
+    }
+    function font_size_max(){
+    var size=$('#label_text').css("font-size");
+    $('#label_text').css("font-size",parseInt(size)+2)
+    }
+    function font_size_min(){
+    var size=$('#label_text').css("font-size");
+    $('#label_text').css("font-size",parseInt(size)-2)
+    }
+    function font_bold(){
+        var bold=$('#label_text').css("font-style");
+       
+        if(font=='italic'){
+            $('#label_text').css("font-weight",'100');
+        }else{
+            $('#label_text').css("font-weight",'bold');
+           
+        }
+    }
+    function font_italic(){
+        var style=$('#label_text').css("font-style");
+       
+        if(style=='italic'){
+            $('#label_text').css("font-style",'normal');
+        }else{
+            $('#label_text').css("font-style",'italic');
+           
+        }
+    }
+    function font_underline(){
+        var font=$('#label_text').css("text-decoration");
+       
+        if(font=='underline'){
+            $('#label_text').css("text-decoration",'none');
+        }else{
+            $('#label_text').css("text-decoration",'underline');
+           
+        }
+    }
 </script>
- <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+ 
 
 <style>
-#drag_label { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0;z-index: 99999999 !important; }
-#drag_input_box { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#drag_label1 { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0;z-index: 99999999 !important; }
+#drag_input_box1 { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
 #first6 { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
 #box { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
 .inputs{
     z-index: 99999999 !important;
+    width: 90px;
+    height:25px;
+}
+.field_none{
+    display: none;
+}
+.field_input{
+    width: auto;
+     
+    
+    
+}
+.default{
+    color: black;
+}
+.delete_action{
+     margin-left: 40px;
+    margin-top: -8px;
+    position: absolute;
+}
+.edit_action{
+     margin-left: 40px;
+    margin-top: -22px;
+    position: absolute;
+}
+.inputs:hover{
+  //  border: solid #C0C0C0 1px;
+}
+//.btn:active, .btn.active {
+.shadow {
+    background: #000 !important;
+ 
 }
 </style>
 <script>
 $(function() {
-    $("#drag_label" ).draggable();
+ $("#box").on("hover", "div", function(){
+    var field=this.id;
+    $('#edit_actions_'+field).show();
+    $('#delete_actions_'+field).show();
+     // $('#field_actions_'+field).toggle(field.type === 'mouseenter');
+   
+});
+$("#box").hover( function(){
+    // $('.field_none').hide();
+});
+ $("#box").on("hover", function(){
   
-    $("#drag_input_box" ).draggable();
-    $("#drag_label1" ).draggable();
+   
+     // $('#field_actions_'+field).toggle(field.type === 'mouseenter');
+   
+})
+  
+    $("#drag_input_box1" ).draggable();
+    $("#drag_label1" ).draggable({
+      
+    });
     $("#first6" ).draggable();
     $("#box" ).droppable({
         drop: function( event, ui ) {
-             var count=parseFloat($('#input_count').val());
-                $('#drag_input_box1').remove();
-                $('#drag_input_box2').remove();
-                console.log(parseFloat(count-1));
-              $('#drag_input_box'+parseFloat(count-1)).remove();
-             $('#input_fileds').append('<label id="drag_label'+count+'" class="btn btn-default inputs"><?php  echo $this->lang->line('label');?></label><label id="drag_input_box'+count+'" class="btn btn-default" ><?php  echo $this->lang->line('input_box');?></label>');
-            //    $('#input_fileds').append('<div id="draggable9" class="draggable ui-widget-content"><p>Default (snap: true), snaps to all other draggable elements</p></div>');
-                $( "#drag_label"+count ).draggable();
+             var input_count=parseFloat($('#input_count').val());
+             var label_count=parseFloat($('#label_count').val());
+          
+              var draged=ui.draggable.attr("id");
+           
+              if(draged=='drag_label'+parseFloat(label_count-1)){
+                    $('#'+draged).remove();
+                    $('#label_row').append('<div id="drag_label'+label_count+'"    class="inputs btn btn-default "><?php  echo $this->lang->line('label');?></div>');
+                    $('#box').append('<div id="drag_label_'+label_count+'"    class="inputs push-left "><label><?php  echo $this->lang->line('label');?></label><a id="delete_actions_drag_label_'+label_count+'" class="field_none delete_action" href=javascript:remove_field("drag_label_'+label_count+'")><i class="icon icon-trash default"></i></a><a  id="edit_actions_drag_label_'+label_count+'" class="field_none edit_action" href=javascript:edit_field("drag_label_'+label_count+'")><i class="icon icon-edit default"></i></a></div>')
+                    $( "#drag_label"+label_count ).draggable();
+                    $( "#drag_label_"+label_count ).draggable();
+                    $('#label_count').val(parseFloat(label_count+1));
+                   //  $( "#drag_input_box"+input_count ).remove();
+              }
+              if(draged=='drag_input_box'+parseFloat(input_count-1)){
+                     $('#'+draged).remove();
+                    $('#input_row').append('<div id="drag_input_box'+input_count+'"   class="inputs btn btn-default" ><?php  echo $this->lang->line('input_box');?></div>');
+                    $('#box').append('<div id="drag_input_box_'+input_count+'"   class="inputs " ><input class="form-control field_input"><i class="icon icon-trash"></i><i class="icon icon-edit"></i></div>');
+                    $( "#drag_input_box"+input_count ).draggable();
+                    $( "#drag_input_box_"+input_count ).draggable();
+                    $('#input_count').val(parseFloat(input_count+1));
+              //      $( "#drag_label"+label_count ).remove();
+                    
+              
+              }
+              
             
-$('#input_count').val(parseFloat(count+1));
+              
+              //  console.log(parseFloat(count-1));
+             
+           
+            //    $('#input_fields').append('<div id="draggable9" class="draggable ui-widget-content"><p>Default (snap: true), snaps to all other draggable elements</p></div>');
+              
+            
+
         }
     });
 });
@@ -222,7 +361,11 @@ $('#input_count').val(parseFloat(count+1));
 
 
 <input type="hidden" id="input_count" value="2">
-
+<input type="hidden" id="label_count" value="2">
+<input type="hidden" id="field_id" value="2">
+<div id="work">
+    
+</div>
  
 <section id="user_list" class="container clearfix main_section">
      <?php   $form =array('id'=>'add_item',
@@ -241,18 +384,18 @@ $('#input_count').val(parseFloat(count+1));
                                </div>
                               <br>
                               <div class="row" style="padding-left: 20px">
-                                    <div class="col col-lg-2" id="input_fileds">
-                                       <a id="drag_label">  <label id="drag_label1" class="btn btn-default"><?php  echo $this->lang->line('label');?></label></a><a id="drag_input_box"><label id="drag_input_box1" class="btn btn-default" ><?php  echo $this->lang->line('input_box');?></label></a>
+                                    <div class="col col-lg-2" id="input_fields">
+                                        <div class="row" id="label_row">
+                                            <div id="drag_label1"  class="btn btn-default"><?php  echo $this->lang->line('label');?></div>
+                                        </div>
+                                        <div class="row" id="input_row">
+                                            <div id="drag_input_box1"  class="btn btn-default" ><?php  echo $this->lang->line('input_box');?></div>
+                                        </div>
+                                       
+                                        
                                     </div>
                                     <div class="col col-lg-3" >
-                                        <div class="row">
-                                           
-<!--                                                <input type="text" class="form-control" value="#8fff00" id="cp1" >-->
-                                                 <div class="input-group color" data-color="rgb(0,194,255,0.78)" data-color-format="rgba" id="cp3">
-                                                    <input type="text" class="form-control" value="rgb(0,194,255,0.78)" readonly>
-                                                    <span class="input-group-addon"><i style="margin-top:2px;background-color:rgb(0,194,255,0.78)"></i></span>
-                                                </div>     
-                                        </div>
+                                        
                                         <div class="row">
                                             <div class="col col-lg-3">
                                                 <div style="margin-top: 20px">
@@ -269,6 +412,53 @@ $('#input_count').val(parseFloat(count+1));
                                             <div class="col col-lg-3">
                                                 <div style="margin-top: 20px">
                                                     <a href="javascript:move_left()" class="btn btn-default"><i class="icon icon-arrow-right"></i> </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                         <div class="row">
+                                            <div class="col col-lg-10">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('text') ?></label>
+                                                    <textarea  id="label_text" name="label_text" disabled="disabled" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                         <div class="row">
+                                            <div class="col col-lg-5">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('font_size') ?></label>
+
+                                                            <a href="javascript:font_size_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
+                                                            <a href="javascript:font_size_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-7">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('font_style') ?></label>
+
+                                                            <a href="javascript:font_bold()"id="bold_button" class="btn btn-default" ><i class="icon icon-bold"></i> </a>
+                                                            <a href="javascript:font_italic()" id="italic_button" class="btn btn-default"><i class="icon icon-italic"></i> </a>
+                                                            <a href="javascript:font_underline()" id="underline_button" class="btn btn-default"><i class="icon icon-underline"></i> </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col col-lg-10">
+                                                   <label><?php echo $this->lang->line('color') ?></label>
+<!--                                                <input type="text" class="form-control" value="#8fff00" id="cp1" >-->
+                                                 <div class="input-group color" data-color="rgb(0,194,255,0.78)" data-color-format="rgba" id="cp3">
+                                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgb(0,194,255,0.78)" readonly >
+                                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgb(0,194,255,0.78)"></i></span>
+                                                </div>     
+                                                </div>     
+                                        </div>
+                                         <div class="row">
+                                            <div class="col col-lg-10">
+                                                <div class="form_sep">
+                                                  
+
+                                            <a href="javascript:set()" class="btn btn-default"><i class="icon icon-save"></i> <?php echo $this->lang->line('set') ?> </a>
+                                                                                                <a href="javascript:reset()" class="btn btn-default"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('reset') ?></a>
                                                 </div>
                                             </div>
                                         </div>
