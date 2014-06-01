@@ -654,5 +654,11 @@ $lang['credit_days']='Credit Days';
     $lang['price_tag']='Price Tag';
     $lang['label']='Label';
     $lang['input_box']='Input Box';
+    $lang['text']='Text';
+    $lang['font_size']='Font Size';
+    $lang['color']='Color';
+    $lang['set']='Set';
+    $lang['reset']='Reset';
+    $lang['font_style']='Font Style';
    
 ?>
