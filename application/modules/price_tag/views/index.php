@@ -21,61 +21,60 @@
  
 </style>	
 <script type="text/javascript">
-        $(document).ready( function () {
+    
+    
+    function save_design(){
+      //  console.log($('#barcode').css('transform'));
+      //  $('#company').css('transform',$('#barcode').css('transform'));
+             var barcode_left=$('#barcode').css('left');
+             var barcode_top=$('#barcode').css('top');
+             var label;
+             var left;
+             var top;
+             var bold;
+             var italic;
+             var under_line;
+             var size;
+             var width;
+             var height;
+             var j=0;
+             for(var i=1;i<$('#label_count').val();i++)
+             {
+                 console.log($('#drag_label_'+i).css('left'));
+//              //  label[j]='10';
+     left[i]=$('#drag_label_'+i).css('left');
+//                top[j]=$('#drag_label_'+i).css('top');
+//                bold[j]=$('#drag_label_'+i).css('font-weight');
+//                italic[j]=$('#drag_label_'+i).css('font-style');
+//                under_line[j]=$('#drag_label_'+i).css('text-decoration');
+//                size[j]=$('#drag_label_'+i).css('font-size');
+//                width[j]=$('#drag_label_'+i).css('width');
+//                height[j]=$('#drag_label_'+i).css('height');
+//                j++;
+             }
          
-
-         $('#set_new_code').click(function() { 
-                <?php if($this->session->userdata['items_setting_per']['set']==1){ ?>
-                var inputs = $('#add_item').serialize();
                       $.ajax ({
-                            url: "<?php echo base_url('index.php/items_setting/set_items_setting')?>",
-                            data: inputs,
+                            url: "<?php echo base_url('index.php/price_tag/save_design')?>",
+                            data: { 
+                          //      label:label,
+                                left:left,
+                                top:top,
+                                bold:bold,
+                                italic:italic,
+                                under_line:under_line,
+                                size:size, 
+                                width:width,
+                                height:height
+                                
+                            },
                             type:'POST',
                             complete: function(response) {
-                                if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('items_setting').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#add_item").trigger('reset');
-                                       posnic_items_lists();
-                                    }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#items_name').val()+' <?php echo $this->lang->line('items_setting').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                                    }else  if(response['responseText']=='FALSE'){
-                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Set')." ".$this->lang->line('items_setting');?>', { type: "error" });                           
-                                    }
+                              
                        }
-                });<?php }else{ ?>
-                  $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_setting');?>', { type: "error" });                           
-                    <?php }?>
-        });
-         $('#update_items').click(function() { 
-                <?php if($this->session->userdata['items_setting_per']['set']==1){ ?>
-                var inputs = $('#parsley_reg').serialize();
-                       $.ajax ({
-                            url: "<?php echo base_url('index.php/items_setting/set_items_setting')?>",
-                            data: inputs,
-                            type:'POST',
-                            complete: function(response) {
-                                if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('items_setting').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#add_item").trigger('reset');
-                                       posnic_items_lists();
-                                    }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#items_name').val()+' <?php echo $this->lang->line('items_setting').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                                    }else  if(response['responseText']=='FALSE'){
-                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Set')." ".$this->lang->line('items_setting');?>', { type: "error" });                           
-                                    }
-                       }
-                 });
-                 <?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('items_setting');?>', { type: "error" });                           
-                    <?php }?>
-        });
-     });
+                });
+                
+    }
+       
 function posnic_add_new(){
     <?php if($this->session->userdata['items_setting_per']['set']==1){ ?>
              $("#add_item").trigger('reset');
@@ -160,6 +159,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>
+<script type="text/javascript" src="http://jqueryrotate.googlecode.com/svn/trunk/jQueryRotate.js"></script>
 <script type="text/javascript">
     function box_right(){
         var width=parseFloat($('#box_width').val());
@@ -189,26 +189,34 @@ function reload_update_user(){
         $('#field_actions_'+id).remove();
     }
     function edit_field(id){
-      $('#box').css("display", "block");
-      $('#label_text').val($('#'+id+" label").text());
+      //$('#box').css("display", "block");
+      $('#label_text').val($('#'+id+" p").text());
        $('#label_text').removeAttr('disabled');
       $('#field_id').val(id);
     }
     function set(){
         if($('#field_id').val()!=""){
             var size=$('#label_text').css("font-size");
-            $('#'+$('#field_id').val()+" label").text($('#label_text').val());
+            $('#'+$('#field_id').val()+" p").text($('#label_text').val());
             $('#work').append('<span id="span_'+$('#field_id').val()+'">'+$('#label_text').val()+'<span>');
             $('#span_'+$('#field_id').val()).css("font-size",parseInt(size));
             var width=$('#span_'+$('#field_id').val()).width();
-            $('#'+$('#field_id').val()).width(width+3);
+            var height=$('#span_'+$('#field_id').val()).height();
+            $('#'+$('#field_id').val()).css('width',width+10);
+            $('#_p'+$('#field_id').val()).width('width',width);
+            $('#'+$('#field_id').val()).css('height',height+10);
+            $('#_p'+$('#field_id').val()).css('height',height);
             $('#span_'+$('#field_id').val()).remove();
-            $('#edit_actions_'+$('#field_id').val()).css('margin-left',width+3);
-            $('#delete_actions_'+$('#field_id').val()).css('margin-left',width+3);
             $('#font_colorbox')
-            $('#'+$('#field_id').val()+" label").css("font-size",parseInt(size));
-            $('#'+$('#field_id').val()+" label").css("color",$('#font_colorbox').val());
+            $('#'+$('#field_id').val()+" p").css("font-size",parseInt(size));
+            $('#'+$('#field_id').val()+" p").css("color",$('#font_colorbox').val());
             
+            var bold=$('#label_text').css("font-weight");
+                $('#'+$('#field_id').val()+" p").css("font-weight",bold);
+            var style=$('#label_text').css("font-style");
+                $('#'+$('#field_id').val()+" p").css("font-style",style);
+            var font=$('#label_text').css("text-decoration");
+                $('#'+$('#field_id').val()+" p").css("text-decoration",font);
         }
     }
     function font_size_max(){
@@ -220,9 +228,9 @@ function reload_update_user(){
     $('#label_text').css("font-size",parseInt(size)-2)
     }
     function font_bold(){
-        var bold=$('#label_text').css("font-style");
+        var bold=$('#label_text').css("font-weight");
        
-        if(font=='italic'){
+        if(bold=='700'){
             $('#label_text').css("font-weight",'100');
         }else{
             $('#label_text').css("font-weight",'bold');
@@ -249,13 +257,70 @@ function reload_update_user(){
            
         }
     }
+    function move_down(){
+        var top=$('#'+$('#field_id').val()).css('top');
+        $('#'+$('#field_id').val()).css('top',parseInt(top)+5);
+    }
+    function move_up(){
+        var top=$('#'+$('#field_id').val()).css('top');
+        $('#'+$('#field_id').val()).css('top',parseInt(top)-5);
+    }
+    function move_right(){
+        var left=$('#'+$('#field_id').val()).css('left');
+        $('#'+$('#field_id').val()).css('left',parseInt(left)+5);
+    }
+    function move_left(){
+        var left=$('#'+$('#field_id').val()).css('left');
+        $('#'+$('#field_id').val()).css('left',parseInt(left)-5);
+    }
+    function width_min(){
+        var width=$('#p_'+$('#field_id').val()).css('width');
+        var div=parseInt(width)+5;
+        $('#p_'+$('#field_id').val()).css('width',parseInt(width)-1);
+        $('#'+$('#field_id').val()).css('width',parseInt(div)-1);
+    }
+    function width_max(){
+        var width=$('#p_'+$('#field_id').val()).css('width');
+        var div=parseInt(width)+5;
+        $('#p_'+$('#field_id').val()).css('width',parseInt(width)+1);
+        $('#'+$('#field_id').val()).css('width',parseInt(div)+1);
+    }
+    function height_min(){
+        var height=$('#p_'+$('#field_id').val()).css('height');
+        var div=parseInt(height)+5;
+        $('#p_'+$('#field_id').val()).css('height',parseInt(height)-1);
+        $('#'+$('#field_id').val()).css('height',parseInt(div)-1);
+    }
+    function height_max(){
+        var height=$('#p_'+$('#field_id').val()).css('height');
+        var div=parseInt(height)+5;
+        $('#p_'+$('#field_id').val()).css('height',parseInt(height)+1);
+        $('#'+$('#field_id').val()).css('height',parseInt(div)+1);
+    }
+    function clock(){
+        var rot=$('#rotate_value').val();
+        $('#rotate_value').val(parseInt(rot)+1);
+        $('#'+$('#field_id').val()).rotate(parseInt(rot)+1);
+    }
+    function anty_clock(){
+        var rot=$('#rotate_value').val();
+        $('#rotate_value').val(parseInt(rot)-1);
+        $('#'+$('#field_id').val()).rotate(parseInt(rot)-1);
+    }
+    function reset(){
+       // edit_field($('#'+$('#field_id').val()));
+       $('#label_text').val('');
+    }
 </script>
  
 
 <style>
 #drag_label1 { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0;z-index: 99999999 !important; }
 #drag_input_box1 { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
-#first6 { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#barcode { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#price_label { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#company { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#product { padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
 #box { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
 .inputs{
     z-index: 99999999 !important;
@@ -275,13 +340,13 @@ function reload_update_user(){
     color: black;
 }
 .delete_action{
-     margin-left: 40px;
-    margin-top: -8px;
+     margin-left: 20px;
+    margin-top: -10px;
     position: absolute;
 }
 .edit_action{
-     margin-left: 40px;
-    margin-top: -22px;
+    // margin-left: 20px;
+    margin-top: -10px;
     position: absolute;
 }
 .inputs:hover{
@@ -299,24 +364,22 @@ $(function() {
     var field=this.id;
     $('#edit_actions_'+field).show();
     $('#delete_actions_'+field).show();
-     // $('#field_actions_'+field).toggle(field.type === 'mouseenter');
+    
    
 });
 $("#box").hover( function(){
-    // $('.field_none').hide();
+   $('.field_none').hide();
 });
- $("#box").on("hover", function(){
-  
-   
-     // $('#field_actions_'+field).toggle(field.type === 'mouseenter');
-   
-})
+
   
     $("#drag_input_box1" ).draggable();
     $("#drag_label1" ).draggable({
       
     });
-    $("#first6" ).draggable();
+    $("#company" ).draggable();
+    $("#barcode" ).draggable();
+    $("#price_label" ).draggable();
+    $("#product" ).draggable();
     $("#box" ).droppable({
         drop: function( event, ui ) {
              var input_count=parseFloat($('#input_count').val());
@@ -326,33 +389,39 @@ $("#box").hover( function(){
            
               if(draged=='drag_label'+parseFloat(label_count-1)){
                     $('#'+draged).remove();
-                    $('#label_row').append('<div id="drag_label'+label_count+'"    class="inputs btn btn-default "><?php  echo $this->lang->line('label');?></div>');
-                    $('#box').append('<div id="drag_label_'+label_count+'"    class="inputs push-left "><label><?php  echo $this->lang->line('label');?></label><a id="delete_actions_drag_label_'+label_count+'" class="field_none delete_action" href=javascript:remove_field("drag_label_'+label_count+'")><i class="icon icon-trash default"></i></a><a  id="edit_actions_drag_label_'+label_count+'" class="field_none edit_action" href=javascript:edit_field("drag_label_'+label_count+'")><i class="icon icon-edit default"></i></a></div>')
+                    $('#label_row').append('<div id="drag_label'+label_count+'"    class="btn btn-default "><?php  echo $this->lang->line('label');?></div>');
+                    $('#box').append('<div id="drag_label_'+label_count+'"    class="inputs push-left  "><p id="p_drag_label_'+label_count+'"  styel="height:30px;width:30px"><?php  echo $this->lang->line('label');?></p><a id="delete_actions_drag_label_'+label_count+'" class="field_none delete_action" href=javascript:remove_field("drag_label_'+label_count+'")><i class="icon icon-trash default"></i></a><a  id="edit_actions_drag_label_'+label_count+'" class="field_none edit_action" href=javascript:edit_field("drag_label_'+label_count+'")><i class="icon icon-edit default"></i></a></div>')
                     $( "#drag_label"+label_count ).draggable();
                     $( "#drag_label_"+label_count ).draggable();
                     $('#label_count').val(parseFloat(label_count+1));
-                   //  $( "#drag_input_box"+input_count ).remove();
+                   
               }
-              if(draged=='drag_input_box'+parseFloat(input_count-1)){
-                     $('#'+draged).remove();
-                    $('#input_row').append('<div id="drag_input_box'+input_count+'"   class="inputs btn btn-default" ><?php  echo $this->lang->line('input_box');?></div>');
-                    $('#box').append('<div id="drag_input_box_'+input_count+'"   class="inputs " ><input class="form-control field_input"><i class="icon icon-trash"></i><i class="icon icon-edit"></i></div>');
-                    $( "#drag_input_box"+input_count ).draggable();
-                    $( "#drag_input_box_"+input_count ).draggable();
-                    $('#input_count').val(parseFloat(input_count+1));
-              //      $( "#drag_label"+label_count ).remove();
-                    
+             else{
+                
+                  if(draged=='barcode'){
+                      $('#'+draged).removeClass('btn');
+                      $('#'+draged).removeClass('btn-default');
+                      $('#'+draged).addClass('default');
+                  }
+                  else if(draged=='company'){
+                      $('#'+draged+" p").removeClass('btn');
+                      $('#'+draged+" p").removeClass('btn-default');
+                      $('#'+draged+" p").addClass('default');
+                  }
+                  else if(draged=='product'){
+                      $('#'+draged+" p").removeClass('btn');
+                      $('#'+draged+" p").removeClass('btn-default');
+                      $('#'+draged+" p").addClass('default');
+                  }
+                  else if(draged=='price_label'){
+                      $('#'+draged+" p").removeClass('btn');
+                      $('#'+draged+" p").removeClass('btn-default');
+                      $('#'+draged+" p").addClass('default');
+                  }
+                 
               
               }
-              
-            
-              
-              //  console.log(parseFloat(count-1));
-             
-           
-            //    $('#input_fields').append('<div id="draggable9" class="draggable ui-widget-content"><p>Default (snap: true), snaps to all other draggable elements</p></div>');
-              
-            
+               edit_field(draged);
 
         }
     });
@@ -361,8 +430,9 @@ $("#box").hover( function(){
 
 
 <input type="hidden" id="input_count" value="2">
-<input type="hidden" id="label_count" value="2">
+<input type="text" id="label_count" value="2">
 <input type="hidden" id="field_id" value="2">
+<input type="hidden" id="rotate_value" value="5">
 <div id="work">
     
 </div>
@@ -378,25 +448,54 @@ $("#box").hover( function(){
                         <div class="col-lg-12">
                             <div class="panel panel-default">
                                <div class="panel-heading">
-                                       <h4 class="panel-title"><?php echo $this->lang->line('items_setting') ?></h4>  
+                                       <h4 class="panel-title"><?php echo $this->lang->line('design_price_tag') ?></h4>  
                                        <input type="hidden" name="guid" id="guid">
                                      <input type="checkbox" style="display: none" >
                                </div>
                               <br>
-                              <div class="row" style="padding-left: 20px">
+                              <div class="row" style="padding-left: 40px">
                                     <div class="col col-lg-2" id="input_fields">
                                         <div class="row" id="label_row">
                                             <div id="drag_label1"  class="btn btn-default"><?php  echo $this->lang->line('label');?></div>
                                         </div>
+                                       
                                         <div class="row" id="input_row">
-                                            <div id="drag_input_box1"  class="btn btn-default" ><?php  echo $this->lang->line('input_box');?></div>
+                                            <img id="barcode"  class="btn btn-default" src="<?php echo base_url() ?>barcode.jpg">
+                                        </div>
+                                        <div class="row" id="input_row">
+                                            <div id="price_label"><p id="p_price_label"  class="btn btn-default" style="font-size: 25px">$0.00</p></div> 
+                                        </div>
+                                        <div class="row" id="input_row">
+                                            <div  id="product"  ><p id="p_product" class="btn btn-default" >Product Name & Unit</p></div>
+                                        </div>
+                                        <div class="row" id="input_row">
+                                            <div  id="company"> <p id="p_company" class="btn btn-default" >Store Name</p></div>
                                         </div>
                                        
                                         
                                     </div>
-                                    <div class="col col-lg-3" >
-                                        
+                                    
+                                   <div class="col col-lg-1" style="width: 46px;padding-right: 0px !important;margin-left: 20px" >
+                                      
+                                        <div class="row " style="padding-right: 0px !important;padding-top: 40px !important"> 
+                                            <a href="javascript:box_up()" class="btn btn-default"><i class="icon icon-minus"></i> </a>
+                                        </div>
+                                        <div class="row " style="padding-right: 0px !important">
+                                            <a href="javascript:box_down()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-5" >
+                                        <div class="row ">
+                                            <a href="javascript:box_left()" class="btn btn-default"><i class="icon icon-minus"></i> </a>
+                                            <a href="javascript:box_right()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                        </div>
                                         <div class="row">
+                                            <div id="box"  style="border: solid #D3D3D3 3px;width: 300px;height: 150px">
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                       
+                                             <div class="row">
                                             <div class="col col-lg-3">
                                                 <div style="margin-top: 20px">
                                                     <a href="javascript:move_left()" class="btn btn-default"><i class="icon icon-arrow-left"></i> </a>
@@ -411,7 +510,50 @@ $("#box").hover( function(){
                                             </div>
                                             <div class="col col-lg-3">
                                                 <div style="margin-top: 20px">
-                                                    <a href="javascript:move_left()" class="btn btn-default"><i class="icon icon-arrow-right"></i> </a>
+                                                    <a href="javascript:move_right()" class="btn btn-default"><i class="icon icon-arrow-right"></i> </a>
+                                                </div>
+                                            </div>
+                                             </div><br>
+                                        <div class="row">
+                                            <div class="col col-lg-3">
+                                                <a href="javascript:save_design()" class="btn btn-default"><i class="icon icon-save"></i> <?php echo $this->lang->line('save') ?></a>
+                                            </div>
+                                            <div class="col col-lg-3">
+                                                 <a href="javascript:clear()" class="btn btn-default"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('clear') ?></a>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="box_width" id="box_width" value="300">
+                                        <input type="hidden" name="box_height" id="box_height" value="150">
+                                    </div>
+                                  <div class="col col-lg-3" >
+                                        
+                                       
+                                        <div class="row">
+                                            <div class="col col-lg-2"></div>
+                                            <div class="col col-lg-6">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('rotate') ?></label>
+
+                                                            <a href="javascript:anty_clock()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
+                                                            <a href="javascript:clock()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col col-lg-5">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('input_width') ?></label>
+
+                                                            <a href="javascript:width_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
+                                                            <a href="javascript:width_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-5">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('input_height') ?></label>
+
+                                                            <a href="javascript:height_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
+                                                            <a href="javascript:height_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -446,9 +588,9 @@ $("#box").hover( function(){
                                             <div class="col col-lg-10">
                                                    <label><?php echo $this->lang->line('color') ?></label>
 <!--                                                <input type="text" class="form-control" value="#8fff00" id="cp1" >-->
-                                                 <div class="input-group color" data-color="rgb(0,194,255,0.78)" data-color-format="rgba" id="cp3">
-                                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgb(0,194,255,0.78)" readonly >
-                                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgb(0,194,255,0.78)"></i></span>
+                                                 <div class="input-group color" data-color="rgba(4,5,5,0.78)" data-color-format="rgba" id="cp3">
+                                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgba(4,5,5,0.78)" readonly >
+                                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgba(4,5,5,0.78)"></i></span>
                                                 </div>     
                                                 </div>     
                                         </div>
@@ -462,28 +604,6 @@ $("#box").hover( function(){
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                   <div class="col col-lg-1" style="width: 46px;padding-right: 0px !important;margin-left: 20px" >
-                                      
-                                        <div class="row " style="padding-right: 0px !important;padding-top: 40px !important"> 
-                                            <a href="javascript:box_up()" class="btn btn-default"><i class="icon icon-arrow-up"></i> </a>
-                                        </div>
-                                        <div class="row " style="padding-right: 0px !important">
-                                            <a href="javascript:box_down()" class="btn btn-default"><i class="icon icon-arrow-down"></i> </a>
-                                        </div>
-                                    </div>
-                                    <div class="col col-lg-6" >
-                                        <div class="row ">
-                                            <a href="javascript:box_left()" class="btn btn-default"><i class="icon icon-arrow-left"></i> </a>
-                                            <a href="javascript:box_right()" class="btn btn-default"><i class="icon icon-arrow-right"></i> </a>
-                                        </div>
-                                        <div class="row">
-                                            <div id="box"  style="border: solid #D3D3D3 3px;width: 300px;height: 150px">
-                                                <p></p>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="box_width" id="box_width" value="300">
-                                        <input type="hidden" name="box_height" id="box_height" value="150">
                                     </div>
                                     
                                 </div>
