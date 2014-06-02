@@ -28,35 +28,69 @@
       //  $('#company').css('transform',$('#barcode').css('transform'));
              var barcode_left=$('#barcode').css('left');
              var barcode_top=$('#barcode').css('top');
-             var label;
-             var left;
-             var top;
-             var bold;
-             var italic;
-             var under_line;
-             var size;
-             var width;
-             var height;
+             var label=Array();
+             var left=Array();
+             var top=Array();
+             var bold=Array();
+             var italic=Array();
+             var under_line=Array();
+             var size=Array();
+             var width=Array();
+             var height=Array();
+             var transform=Array();
              var j=0;
              for(var i=1;i<$('#label_count').val();i++)
              {
-                 console.log($('#drag_label_'+i).css('left'));
-//              //  label[j]='10';
-     left[i]=$('#drag_label_'+i).css('left');
-//                top[j]=$('#drag_label_'+i).css('top');
-//                bold[j]=$('#drag_label_'+i).css('font-weight');
-//                italic[j]=$('#drag_label_'+i).css('font-style');
-//                under_line[j]=$('#drag_label_'+i).css('text-decoration');
-//                size[j]=$('#drag_label_'+i).css('font-size');
-//                width[j]=$('#drag_label_'+i).css('width');
-//                height[j]=$('#drag_label_'+i).css('height');
-//                j++;
+               
+                label[j]='label';
+                left[i]=$('#drag_label_'+i).css('left');
+                top[j]=$('#drag_label_'+i).css('top');
+                bold[j]=$('#drag_label_'+i).css('font-weight');
+                italic[j]=$('#drag_label_'+i).css('font-style');
+                under_line[j]=$('#drag_label_'+i).css('text-decoration');
+                size[j]=$('#drag_label_'+i).css('font-size');
+                width[j]=$('#drag_label_'+i).css('width');
+                height[j]=$('#drag_label_'+i).css('height');
+                transform[j]=$('#drag_label_'+i).css('transform');
+                j++;
              }
+                label[j]='store';
+                left[i]=$('#company'+i).css('left');
+                top[j]=$('#company'+i).css('top');
+                bold[j]=$('#company'+i).css('font-weight');
+                italic[j]=$('#company'+i).css('font-style');
+                under_line[j]=$('#company'+i).css('text-decoration');
+                size[j]=$('#company'+i).css('font-size');
+                width[j]=$('#company'+i).css('width');
+                height[j]=$('#company'+i).css('height');
+                transform[j]=$('#company'+i).css('transform');
+                j++;
+                label[j]='product';
+                left[i]=$('#product'+i).css('left');
+                top[j]=$('#product'+i).css('top');
+                bold[j]=$('#product'+i).css('font-weight');
+                italic[j]=$('#product'+i).css('font-style');
+                under_line[j]=$('#product'+i).css('text-decoration');
+                size[j]=$('#product'+i).css('font-size');
+                width[j]=$('#product'+i).css('width');
+                height[j]=$('#product'+i).css('height');
+                transform[j]=$('#product'+i).css('transform');
+                j++;
+                label[j]='barcode';
+                left[i]=$('#product'+i).css('left');
+                top[j]=$('#product'+i).css('top');
+                bold[j]=0;
+                italic[j]=0;
+                under_line[j]=0;
+                size[j]=0;
+                width[j]=0;
+                height[j]=0;
+                transform[j]=0;
          
                       $.ajax ({
                             url: "<?php echo base_url('index.php/price_tag/save_design')?>",
                             data: { 
-                          //      label:label,
+                                label:label,
                                 left:left,
                                 top:top,
                                 bold:bold,
@@ -64,7 +98,8 @@
                                 under_line:under_line,
                                 size:size, 
                                 width:width,
-                                height:height
+                                height:height,
+                                transform:transform
                                 
                             },
                             type:'POST',
