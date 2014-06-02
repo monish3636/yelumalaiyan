@@ -5,14 +5,63 @@ class Price_tag extends MX_Controller{
                $this->load->library('posnic');   
     }
     function index(){ 
-       $this->get_items();
+       //$this->get_items();
+   $this->create_price_tag();
+      //include_once '/text_in_image/text.php';
+
 //         $this->load->library('zend');
 //    $this->zend->load('Zend/Barcode');
 //    $test = Zend_Barcode::draw('ean8', 'image', array('text' => '25122'), array());
 //    var_dump($test);
 //    imagejpeg($test, 'barcode4.png', 100);
     }
-    
+    function create_price_tag(){
+        $this->load->model('tag') ;
+        $data=  $this->tag->get_design_cord('D-123');
+        
+        foreach ($data as $row){
+           $box_width=$row['box_width'];
+           $box_height=$row['box_height'];
+           if($row['label']=='barcode'){
+               $barcode_top=$row['top'];
+               $barcode_left=$row['left'];
+           }
+           if($row['label']=='store'){
+               $store_top=$row['top'];
+               $store_left=$row['left'];
+               $store_size=$row['size'];
+           }
+           if($row['label']=='barcode'){
+               $product_top=$row['top'];
+               $product_left=$row['left'];
+           }
+        }
+        
+    $this->output->set_header("Content-Type: image/png");
+    $font=  'text_in_image/arial.ttf';
+    $top_file = 'uploads/price_tags/core/barcode.jpg';
+    $top = imagecreatefromjpeg($top_file);
+    list($top_width, $top_height) = getimagesize($top_file);
+    $new = imagecreate($box_width, $box_height);
+//imagecopy($new, $top, 300, 0, 0, -180, $top_width, $top_height);
+imagecopy($new, $top, $barcode_left, $barcode_top, 0, 0, $top_width, $top_height);
+
+// save to file
+imagejpeg($new, 'uploads/price_tags/core/merged_image.jpg');
+$bar = imagecreatefromjpeg('uploads/price_tags/core/merged_image.jpg');
+$black = imagecolorallocate($bar, 0, 0, 0);
+imagettftext($bar, 40, 0, $top_width+40, 110, $black, $font, '$67');
+imagettftext($bar, 12, 0, $top_width+40, 130, $black, $font, 'Sugar');
+imagettftext($bar, $store_size, 0, $store_left, $store_top, $black, $font, 'POSNIC');
+//magettftext($bar, 10, 0, 30, 50, $black, $font, '#133,18th Cross,29Th Main,HSR Layout');
+imagejpeg($bar);
+
+
+imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
+
+
+    }
+            
     function get_items(){                  
         $this->load->view('template/app/header'); 
         $this->load->view('header/header');         
@@ -98,6 +147,7 @@ class Price_tag extends MX_Controller{
     
     function save_design(){
         if($this->session->userdata['price_tag_per']['set']==1){
+                $design=$this->input->post('design');
                 $label=$this->input->post('label');
                 $left=  $this->input->post('left');
                 $top=  $this->input->post('top');
@@ -108,9 +158,14 @@ class Price_tag extends MX_Controller{
                 $width=  $this->input->post('width');
                 $height=  $this->input->post('height');
                 $this->load->model('tag');
+                if($this->tag->check_duplicate($design)){
                 for($i=0;$i<count($label);$i++){
-                    $val=array('label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                    $val=array('design'=>$design,'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
                     $this->tag->save_design($val);
+                   
+                } echo 'True';
+                }else{
+                    echo 'Already';
                 }
         }else{ 
             echo 'Noop';

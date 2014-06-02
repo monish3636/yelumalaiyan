@@ -39,7 +39,7 @@
              var height=Array();
              var transform=Array();
              var j=0;
-             for(var i=1;i<$('#label_count').val();i++)
+             for(var i=2;i<$('#label_count').val();i++)
              {
                
                 label[j]='label';
@@ -55,30 +55,30 @@
                 j++;
              }
                 label[j]='store';
-                left[i]=$('#company'+i).css('left');
-                top[j]=$('#company'+i).css('top');
-                bold[j]=$('#company'+i).css('font-weight');
-                italic[j]=$('#company'+i).css('font-style');
-                under_line[j]=$('#company'+i).css('text-decoration');
-                size[j]=$('#company'+i).css('font-size');
-                width[j]=$('#company'+i).css('width');
-                height[j]=$('#company'+i).css('height');
-                transform[j]=$('#company'+i).css('transform');
+                left[i]=$('#company').css('left');
+                top[j]=$('#company').css('top');
+                bold[j]=$('#company').css('font-weight');
+                italic[j]=$('#company').css('font-style');
+                under_line[j]=$('#company').css('text-decoration');
+                size[j]=$('#company').css('font-size');
+                width[j]=$('#company').css('width');
+                height[j]=$('#company').css('height');
+                transform[j]=$('#company').css('transform');
                 j++;
                 label[j]='product';
-                left[i]=$('#product'+i).css('left');
-                top[j]=$('#product'+i).css('top');
-                bold[j]=$('#product'+i).css('font-weight');
-                italic[j]=$('#product'+i).css('font-style');
-                under_line[j]=$('#product'+i).css('text-decoration');
-                size[j]=$('#product'+i).css('font-size');
-                width[j]=$('#product'+i).css('width');
-                height[j]=$('#product'+i).css('height');
-                transform[j]=$('#product'+i).css('transform');
+                left[i]=$('#product').css('left');
+                top[j]=$('#product').css('top');
+                bold[j]=$('#product').css('font-weight');
+                italic[j]=$('#product').css('font-style');
+                under_line[j]=$('#product').css('text-decoration');
+                size[j]=$('#product').css('font-size');
+                width[j]=$('#product').css('width');
+                height[j]=$('#product').css('height');
+                transform[j]=$('#product').css('transform');
                 j++;
                 label[j]='barcode';
-                left[i]=$('#product'+i).css('left');
-                top[j]=$('#product'+i).css('top');
+                left[i]=$('#barcode').css('left');
+                top[j]=$('#barcode').css('top');
                 bold[j]=0;
                 italic[j]=0;
                 under_line[j]=0;
@@ -90,6 +90,7 @@
                       $.ajax ({
                             url: "<?php echo base_url('index.php/price_tag/save_design')?>",
                             data: { 
+                                design:$('#design_id').val(),
                                 label:label,
                                 left:left,
                                 top:top,
@@ -104,7 +105,16 @@
                             },
                             type:'POST',
                             complete: function(response) {
-                              
+                               if(response['responseText']=='True'){
+                                      $.bootstrapGrowl('<?php echo $this->lang->line('price_tag').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                      
+                                    }else  if(response['responseText']=='Already'){
+                                           $.bootstrapGrowl($('#design_id').val()+' <?php echo $this->lang->line('price_tag_design').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                    }else  if(response['responseText']=='Flase'){
+                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                                    }else{
+                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('price_tag_design');?>', { type: "error" });                           
+                                    }
                        }
                 });
                 
@@ -490,6 +500,10 @@ $("#box").hover( function(){
                               <br>
                               <div class="row" style="padding-left: 40px">
                                     <div class="col col-lg-2" id="input_fields">
+                                        <div class="row" >
+                                            <label><?php echo $this->lang->line('design_id') ?></label>
+                                            <input type="tetx" name="design_id" id="design_id" class="form-control">
+                                        </div>
                                         <div class="row" id="label_row">
                                             <div id="drag_label1"  class="btn btn-default"><?php  echo $this->lang->line('label');?></div>
                                         </div>

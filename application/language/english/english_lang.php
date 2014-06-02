@@ -664,5 +664,7 @@ $lang['credit_days']='Credit Days';
     $lang['input_height']='Input Height';
     $lang['rotate']='Rotate';
     $lang['design_price_tag']='Design Price Tag';
+    $lang['design_id']='Design ID';
+    $lang['price_tag_design']='Price Tag Design';
    
 ?>
