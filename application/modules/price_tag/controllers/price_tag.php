@@ -78,10 +78,10 @@ class Price_tag extends MX_Controller{
         echo json_encode($output1);
     }
     
-    function get_items_setting_details($guid){
+    function get_price_tag_details($guid){
         $this->load->model('core_model');
         $data[0]=  $this->core_model->get_items_details_for_update($this->session->userdata['branch_id'],$guid);
-        $data[1]=  $this->core_model->get_items_setting_details($this->session->userdata['branch_id'],$guid);
+        $data[1]=  $this->core_model->get_price_tag_details($this->session->userdata['branch_id'],$guid);
         echo json_encode($data);       
     }
     
@@ -96,30 +96,22 @@ class Price_tag extends MX_Controller{
         $this->load->view('edit_setting',$data);
     }
     
-    function set_items_setting(){
-        if($this->session->userdata['items_setting_per']['set']==1){
-            $guid=$this->input->post('guid');
-               $this->form_validation->set_rules("min_qty",$this->lang->line('min_qty'),'max_length[15]|regex_match[/^[0-9]+$/]|xss_clean');                                             
-               $this->form_validation->set_rules("max_qty",$this->lang->line('max_qty'),'max_length[15]|regex_match[/^[0-9]+$/]|xss_clean');                           
-             if ($this->form_validation->run() !== false ) { 
-                 
-                 $this->input->post('sales')==0?$sales=1:$sales=0;
-                 $data=array(
-                    'set'=>1,
-                    'sales'=>$this->input->post('sales'),
-                    'salses_return'=>$this->input->post('sales_return'),
-                    'purchase'=>$this->input->post('purchase'),
-                    'purchase_return'=>$this->input->post('purchase_return'),
-                    'allow_negative'=>$this->input->post('allow_negative'),
-                    'min_q'=>$this->input->post('min_quty'),
-                    'max_q'=>$this->input->post('max_quty'));
-                    $where=array('guid'=>$guid);
-                   
-                     $this->posnic->posnic_update_record($data,$where,'items_setting');
-                    echo 'TRUE';
-                  
-            }else{  echo 'FALSE';
-            }
+    function save_design(){
+        if($this->session->userdata['price_tag_per']['set']==1){
+                $label=$this->input->post('label');
+                $left=  $this->input->post('left');
+                $top=  $this->input->post('top');
+                $bold=  $this->input->post('bold');
+                $italic=  $this->input->post('italic');
+                $under_line=  $this->input->post('under_line');
+                $size=  $this->input->post('size');
+                $width=  $this->input->post('width');
+                $height=  $this->input->post('height');
+                $this->load->model('tag');
+                for($i=0;$i<count($label);$i++){
+                    $val=array('label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                    $this->tag->save_design($val);
+                }
         }else{ 
             echo 'Noop';
         }   
