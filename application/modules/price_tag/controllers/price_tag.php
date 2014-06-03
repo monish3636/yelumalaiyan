@@ -5,8 +5,8 @@ class Price_tag extends MX_Controller{
                $this->load->library('posnic');   
     }
     function index(){ 
-        $this->get_items();
- //  $this->create_price_tag();
+     //  $this->get_items();
+  $this->create_price_tag();
       //include_once '/text_in_image/text.php';
 
 //         $this->load->library('zend');
@@ -17,7 +17,7 @@ class Price_tag extends MX_Controller{
     }
     function create_price_tag(){
         $this->load->model('tag') ;
-        $data=  $this->tag->get_design_cord('D-123');
+        $data=  $this->tag->get_design_cord('GD-125');
         
         foreach ($data as $row){
            $box_width=$row['box_width'];
@@ -27,7 +27,7 @@ class Price_tag extends MX_Controller{
                $barcode_left=$row['left'];
            }
            if($row['label']=='store'){
-               $store_top=$row['top'];
+               $store_top=$row['top']+25;
                $store_left=$row['left'];
                $store_size=$row['size'];
                $store_color=$row['color'];
@@ -38,7 +38,7 @@ class Price_tag extends MX_Controller{
                $store_under_line=$row['under_line'];
            }
            if($row['label']=='product'){
-               $product_top=$row['top'];
+               $product_top=$row['top']+25;
                $product_left=$row['left'];
                $product_size=$row['size'];
                $product_color=$row['color'];
@@ -48,10 +48,21 @@ class Price_tag extends MX_Controller{
                $product_italic=$row['italic'];
                $product_under_line=$row['under_line'];
            }
+           if($row['label']=='price_label'){
+               $price_label_top=$row['top']+25;
+               $price_label_left=$row['left'];
+               $price_label_size=$row['size'];
+               $price_label_color=$row['color'];
+               $price_label_bold=$row['bold'];
+               $price_label_tarnsform=$row['transform'];
+               $price_label_width=$row['width'];
+               $price_label_italic=$row['italic'];
+               $price_label_under_line=$row['under_line'];
+           }
         }
         
     $this->output->set_header("Content-Type: image/png");
-    $font=  'text_in_image/arial.ttf';
+    $font=  'uploads/price_tags/core/font/Verdana.ttf';
     $italic=  'uploads/price_tags/core/font/605.ttf';
     $top_file = 'uploads/price_tags/core/barcode.jpg';
     $top = imagecreatefromjpeg($top_file);
@@ -98,6 +109,21 @@ if($product_bold==700){
 if($product_under_line!='none'){
 imagefilledrectangle($bar,$product_width+$product_left,$product_top+5,$product_left,$product_top+7,$black);
 }
+$color=array();
+$color=explode(',',$price_label_color);
+$black = imagecolorallocate($bar,$color[0], $color[1], $color[2]);
+if($price_label_italic=='italic'){
+    $price_label_font=$italic;
+}else{
+    $price_label_font=$font;
+}
+    imagettftext($bar, $price_label_size, $price_label_tarnsform, $price_label_left, $price_label_top, $black, $price_label_font, '$69');
+if($price_label_bold==700){
+    imagettftext($bar, $price_label_size, $price_label_tarnsform, $price_label_left+1, $price_label_top+1, $black, $price_label_font, '$69');
+}
+if($price_label_under_line!='none'){
+imagefilledrectangle($bar,$price_label_width+$price_label_left,$price_label_top+5,$price_label_left,$price_label_top+7,$black);
+}
 /* product details design end*/
      foreach ($data as $row){
         if($row['label']=='label'){
@@ -109,6 +135,7 @@ imagefilledrectangle($bar,$product_width+$product_left,$product_top+5,$product_l
             }else{
                 $row['font']=$font;
             }
+            $row['top']=$row['top']+5;
                 imagettftext($bar, $row['size'], $row['transform'], $row['left'], $row['top'], $black, $row['font'], $row['content']);
             if($row['bold']==700){
                  imagettftext($bar, $row['size'], $row['transform'], $row['left']+1, $row['top']+1, $black, $row['font'], $row['content']);
@@ -119,7 +146,7 @@ imagefilledrectangle($bar,$product_width+$product_left,$product_top+5,$product_l
         }
      }
 
-imagettftext($bar, 40, 0, $top_width+40, 110, $black, $italic, '$67');
+
 //magettftext($bar, 10, 0, 30, 50, $black, $font, '#133,18th Cross,29Th Main,HSR Layout');
 imagejpeg($bar);
 
@@ -250,7 +277,7 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
                 $this->load->model('tag');
                 if($this->tag->check_duplicate($design)){
                 for($i=0;$i<count($label);$i++){
-                    $val=array('transform'=>$transform,'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                    $val=array('transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
                     $this->tag->save_design($val);
                    
                 } echo 'True';
