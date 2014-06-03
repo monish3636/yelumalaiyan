@@ -5,8 +5,8 @@ class Price_tag extends MX_Controller{
                $this->load->library('posnic');   
     }
     function index(){ 
-     // $this->get_items();
-   $this->create_price_tag();
+        $this->get_items();
+ //  $this->create_price_tag();
       //include_once '/text_in_image/text.php';
 
 //         $this->load->library('zend');
@@ -234,6 +234,8 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
     function save_design(){
         if($this->session->userdata['price_tag_per']['set']==1){
                 $design=$this->input->post('design');
+                $box_height=$this->input->post('box_height');
+                $box_width=$this->input->post('box_width');
                 $label=$this->input->post('label');
                 $left=  $this->input->post('left');
                 $top=  $this->input->post('top');
@@ -241,12 +243,14 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
                 $italic=  $this->input->post('italic');
                 $under_line=  $this->input->post('under_line');
                 $size=  $this->input->post('size');
+                $color=  $this->input->post('color');
                 $width=  $this->input->post('width');
                 $height=  $this->input->post('height');
+                $transform=  $this->input->post('transform');
                 $this->load->model('tag');
                 if($this->tag->check_duplicate($design)){
                 for($i=0;$i<count($label);$i++){
-                    $val=array('design'=>$design,'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                    $val=array('transform'=>$transform,'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
                     $this->tag->save_design($val);
                    
                 } echo 'True';
