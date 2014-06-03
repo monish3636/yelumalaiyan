@@ -25,12 +25,13 @@
 {
     var options = { 
 	complete: function(response) { 
-                  if(response['responseText']=='false'){
-                                       $.bootstrapGrowl('<?php echo $this->lang->line('file_is_large');?>', { type: "warning" });                      
-                  }else {
-                         var image=response['responseText'];
-                         $('#import_box').css("background-image", "url(uploads/price_tags/"+image+")");  
-                  }
+            if(response['responseText']=='false'){
+                $.bootstrapGrowl('<?php echo $this->lang->line('file_is_large');?>', { type: "warning" });                      
+            }else {
+                var image=response['responseText'];
+                $('#import_box').css("background-image", "url(uploads/price_tags/"+image+")");  
+                $('#import_image').val(image);
+            }
 	 
                   
 	},
@@ -151,6 +152,7 @@
                       $.ajax ({
                            url: "<?php echo base_url('index.php/price_tag/save_design')?>",
                             data: { 
+                                image:"",
                                 design:$('#design_id').val(),
                                 box_height:parseFloat($('#box_height').val()),
                                 box_width:parseFloat($('#box_width').val()),
@@ -183,6 +185,108 @@
                        }
                 });
                 
+    }
+    function save_import_design(){
+                var image=$('#import_image').val();
+                var label=Array();
+                var left=Array();
+                var top=Array();
+                var bold=Array();
+                var italic=Array();
+                var under_line=Array();
+                var size=Array();
+                var color=Array();
+                var width=Array();
+                var height=Array();
+                var transform=Array();
+                var content=Array();
+                var j=0;
+                label[j]='store';
+                left[j]=parseInt($('#import_company').offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#import_company').offset().top)-$('#box').offset().top;
+                bold[j]=$('#import_p_company').css('font-weight');
+                italic[j]=$('#import_p_company').css('font-style');
+                under_line[j]=$('#import_p_company').css('text-decoration');
+                size[j]=parseInt($('#import_p_company').css('font-size'));
+                color[j]=rgb2hex($('#import_p_company').css('color'));
+                width[j]=parseInt($('#import_company').css('width'));
+                height[j]=parseInt($('#import_company').css('height'));
+                transform[j]=transform_degree($('#import_company').css('transform'));
+                content[j]="";
+                j++;
+                label[j]='product';
+                left[j]=parseInt($('#import_product').offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#import_product').offset().top)-$('#box').offset().top;
+                bold[j]=$('#import_p_product').css('font-weight');
+                italic[j]=$('#import_p_product').css('font-style');
+                under_line[j]=$('#import_p_product').css('text-decoration');
+                size[j]=parseInt($('#import_p_product').css('font-size'));
+                color[j]=rgb2hex($('#import_p_product').css('color'));
+                width[j]=parseInt($('#import_product').css('width'));
+                height[j]=parseInt($('#import_product').css('height'));
+                transform[j]=transform_degree($('#import_product').css('transform'));
+                content[j]="";
+                j++;
+                label[j]='price_label';
+                left[j]=parseInt($('#import_price_label').offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#import_price_label').offset().top)-$('#box').offset().top;
+                bold[j]=$('#import_p_price_label').css('font-weight');
+                italic[j]=$('#import_p_price_label').css('font-style');
+                under_line[j]=$('#import_p_price_label').css('text-decoration');
+                size[j]=parseInt($('#import_p_price_label').css('font-size'));
+                color[j]=rgb2hex($('#import_p_price_label').css('color'));
+                width[j]=parseInt($('#import_price_label').css('width'));
+                height[j]=parseInt($('#import_price_label').css('height'));
+                transform[j]=transform_degree($('#import_price_label').css('transform'));
+                content[j]="";
+                j++;
+                label[j]='barcode';
+                left[j]=parseInt($('#import_barcode').offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#import_barcode').offset().top)-$('#box').offset().top;
+                bold[j]=0;
+                italic[j]=0;
+                under_line[j]=0;
+                size[j]=0;
+                color[j]='0,0,0';
+                width[j]=0;
+                height[j]=0;
+                transform[j]=0;
+                content[j]="";
+                 $.ajax ({
+                           url: "<?php echo base_url('index.php/price_tag/save_design')?>",
+                            data: { 
+                                image:image,
+                                design:$('#design_id').val(),
+                                box_height:parseFloat($('#box_height').val()),
+                                box_width:parseFloat($('#box_width').val()),
+                                label:label,
+                                left:left,
+                                top:top,
+                                bold:bold,
+                                italic:italic,
+                                under_line:under_line,
+                                size:size,
+                                color:color,
+                                width:width,
+                                height:height,
+                                transform:transform,
+                                content:content
+                                
+                            },
+                            type:'POST',
+                            complete: function(response) {
+                               if(response['responseText']=='True'){
+                                      $.bootstrapGrowl('<?php echo $this->lang->line('price_tag').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                      
+                                    }else  if(response['responseText']=='Already'){
+                                           $.bootstrapGrowl($('#design_id').val()+' <?php echo $this->lang->line('price_tag_design').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                    }else  if(response['responseText']=='Flase'){
+                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                                    }else{
+                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('price_tag_design');?>', { type: "error" });                           
+                                    }
+                       }
+                });
     }
        
 function posnic_add_new(){

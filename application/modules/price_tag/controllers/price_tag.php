@@ -282,6 +282,7 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
     function save_design(){
         if($this->session->userdata['price_tag_per']['set']==1){
                 $design=$this->input->post('design');
+                $image=$this->input->post('image');
                 $box_height=$this->input->post('box_height');
                 $box_width=$this->input->post('box_width');
                 $label=$this->input->post('label');
@@ -302,7 +303,7 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
                     if(!$content[$i]){
                         $content[$i]="";
                     }
-                    $val=array('content'=>$content[$i],'transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                    $val=array('image'=>$image,'content'=>$content[$i],'transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
                     $this->tag->save_design($val);
                    
                 } echo 'True';
