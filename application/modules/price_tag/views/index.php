@@ -26,6 +26,9 @@
          return rgb.split(',')[0].split('(')[1]+','+rgb.split(',')[1]+','+rgb.split(',')[2].split(')')[0]
     }
     function transform_degree(trans){
+        if(trans=='none'){
+            return 0;
+        }
         var values = trans.split('(')[1];
         values = values.split(')')[0];
         values = values.split(',');
@@ -42,8 +45,6 @@
     
       //  $('#company').css('transform',$('#barcode').css('transform'));
     
-             var barcode_left=$('#barcode').css('left');
-             var barcode_top=$('#barcode').css('top');
              var label=Array();
              var left=Array();
              var top=Array();
@@ -55,15 +56,14 @@
              var width=Array();
              var height=Array();
              var transform=Array();
+             var content=Array();
              var j=0;
-             var offset_left= $('#box').offset().left;
-             var offset_top= $('#box').offset().top;
              for(var i=2;i<$('#label_count').val();i++)
              {
                
                 label[j]='label';
-                left[i]=offset_left-parseInt($('#drag_label_'+i).css('left'));
-                top[j]=offset_top-parseInt($('#drag_label_'+i).css('top'));
+                left[j]=parseInt($('#drag_label_'+i).offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#drag_label_'+i).offset().top)-$('#box').offset().top;
                 bold[j]=$('#drag_label_'+i).css('font-weight');
                 italic[j]=$('#drag_label_'+i).css('font-style');
                 under_line[j]=$('#drag_label_'+i).css('text-decoration');
@@ -72,11 +72,12 @@
                 width[j]=parseInt($('#drag_label_'+i).css('width'));
                 height[j]=parseInt($('#drag_label_'+i).css('height'));
                 transform[j]=transform_degree($('#drag_label_'+i).css('transform'));
+                content[j]=$('#drag_label_'+i).text();
                 j++;
              }
                 label[j]='store';
-                left[i]=offset_left-parseInt($('#company').css('left'));
-                top[j]=offset_top-parseInt($('#company').css('top'));
+                left[j]=parseInt($('#company').offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#company').offset().top)-$('#box').offset().top;
                 bold[j]=$('#company').css('font-weight');
                 italic[j]=$('#company').css('font-style');
                 under_line[j]=$('#company').css('text-decoration');
@@ -87,8 +88,8 @@
                 transform[j]=transform_degree($('#company').css('transform'));
                 j++;
                 label[j]='product';
-                left[i]=offset_left-parseInt($('#product').css('left'));
-                top[j]=offset_top-parseInt($('#product').css('top'));
+                left[j]=parseInt($('#product').offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#product').offset().top)-$('#box').offset().top;
                 bold[j]=$('#product').css('font-weight');
                 italic[j]=$('#product').css('font-style');
                 under_line[j]=$('#product').css('text-decoration');
@@ -98,9 +99,21 @@
                 height[j]=parseInt($('#product').css('height'));
                 transform[j]=transform_degree($('#product').css('transform'));
                 j++;
+                label[j]='price_label';
+                left[j]=parseInt($('#price_label').offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#price_label').offset().top)-$('#box').offset().top;
+                bold[j]=$('#price_label').css('font-weight');
+                italic[j]=$('#price_label').css('font-style');
+                under_line[j]=$('#price_label').css('text-decoration');
+                size[j]=parseInt($('#price_label').css('font-size'));
+                color[j]=rgb2hex($('#price_label').css('color'));
+                width[j]=parseInt($('#price_label').css('width'));
+                height[j]=parseInt($('#price_label').css('height'));
+                transform[j]=transform_degree($('#product').css('transform'));
+                j++;
                 label[j]='barcode';
-                left[i]=offset_left-parseInt($('#barcode').css('left'));
-                top[j]=offset_top-parseInt($('#barcode').css('top'));
+                left[j]=parseInt($('#barcode').offset().left)-$('#box').offset().left;
+                top[j]=parseInt($('#barcode').offset().top)-$('#box').offset().top;
                 bold[j]=0;
                 italic[j]=0;
                 under_line[j]=0;
@@ -126,7 +139,8 @@
                                 color:color,
                                 width:width,
                                 height:height,
-                                transform:transform
+                                transform:transform,
+                                content:content
                                 
                             },
                             type:'POST',
@@ -445,14 +459,20 @@ $("#box").hover( function(){
   
     $("#drag_input_box1" ).draggable();
     $("#drag_label1" ).draggable({
-      
+       drag: function(){
+            var offset = $(this).offset();
+            var xPos =$('#box').offset().left-offset.left;
+            var yPos = $('#box').offset().top-offset.top;
+            $('#posX').val('x: ' + xPos);
+            $('#posY').val('y: ' + yPos);
+        }
     });
     $("#company" ).draggable();
     $("#barcode" ).draggable({
         drag: function(){
             var offset = $(this).offset();
-            var xPos =$('#box').offset().left-offset.left;
-            var yPos = offset.top;
+            var xPos =offset.left-$('#box').offset().left;
+            var yPos =offset.top-$('#box').offset().top;
             $('#posX').val('x: ' + xPos);
             $('#posY').val('y: ' + yPos);
         }
@@ -473,6 +493,8 @@ $("#box").hover( function(){
                     $( "#drag_label"+label_count ).draggable();
                     $( "#drag_label_"+label_count ).draggable();
                     $('#label_count').val(parseFloat(label_count+1));
+                  //  $('#work').append('<input typ="text" id="left_drag_label'+label_count+'" value="'+$("#drag_label"+label_count).offset().left+'" >');
+                  //  $('#work').append('<input typ="text" id="top_drag_label'+label_count+'" value="'+$("#drag_label"+label_count).offset().top+'" >');
                    
               }
              else{
@@ -512,8 +534,8 @@ $("#box").hover( function(){
 <input type="hidden" id="label_count" value="2">
 <input type="hidden" id="field_id" value="2">
 <input type="hidden" id="rotate_value" value="5">
-<input type="hidden" id="posX" >
-<input type="hidden" id="posY" >
+<input type="text" id="posX" >
+<input type="text" id="posY" >
 <div id="work">
     
 </div>
