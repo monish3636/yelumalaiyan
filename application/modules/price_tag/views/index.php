@@ -208,24 +208,174 @@ function posnic_add_new(){
 }
 function design_price_tag(){
       $('#design_list_div').hide('hide');      
+      $('#import_design_div').hide('hide');      
       $("#design_tag").show('slow');
       $('#design_list').removeAttr("disabled");
       $('#design_tag').attr("disabled",'disabled');
+      $('#tools').remove();
+      $('#tools_import').remove();
+       $('#design_tool_list').append('\n\
+            \n\
+           <div class="col col-lg-3" id="tools">\n\
+                       <div class="row">\n\
+                            <div class="col col-lg-2"></div>\n\
+                            <div class="col col-lg-6">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('rotate') ?></label>\n\
+                                            <a href="javascript:anty_clock()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>\n\
+                                            <a href="javascript:clock()" class="btn btn-default"><i class="icon icon-plus"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                        <div class="row">\n\
+                            <div class="col col-lg-5">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('input_width') ?></label>\n\
+                                            <a href="javascript:width_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>\n\
+                                            <a href="javascript:width_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                            <div class="col col-lg-5">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('input_height') ?></label>\n\
+                                            <a href="javascript:height_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>\n\
+                                            <a href="javascript:height_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                         <div class="row">\n\
+                            <div class="col col-lg-10">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('text') ?></label>\n\
+                                    <textarea  id="label_text" name="label_text" disabled="disabled" class="form-control"></textarea>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                         <div class="row">\n\
+                            <div class="col col-lg-5">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('font_size') ?></label>\n\
+                                            <a href="javascript:font_size_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>\n\
+                                            <a href="javascript:font_size_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                            <div class="col col-lg-7">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('font_style') ?></label>\n\
+                                            <a href="javascript:font_bold()"id="bold_button" class="btn btn-default" ><i class="icon icon-bold"></i> </a>\n\
+                                            <a href="javascript:font_italic()" id="italic_button" class="btn btn-default"><i class="icon icon-italic"></i> </a>\n\
+                                            <a href="javascript:font_underline()" id="underline_button" class="btn btn-default"><i class="icon icon-underline"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                        <div class="row">\n\
+                            <div class="col col-lg-10">\n\
+                                   <label><?php echo $this->lang->line('color') ?></label>\n\
+                                 <div class="input-group color" data-color="rgb(4,5,5)" data-color-format="rgb" id="cp3">\n\
+                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgb(4,5,5)" readonly >\n\
+                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgb(4,5,5)"></i></span>\n\
+                                </div>     \n\
+                                </div>     \n\
+                        </div>\n\
+                         <div class="row">\n\
+                            <div class="col col-lg-10">\n\
+                                <div class="form_sep">    \n\
+                            <a href="javascript:set()" class="btn btn-default"><i class="icon icon-save"></i> <?php echo $this->lang->line('set') ?> </a>\n\
+                                                                                <a href="javascript:reset()" class="btn btn-default"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('reset') ?></a>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                    </div>');
 }
 function design_list(){
       $('#design_tag').hide('hide');      
       $("#design_list_div").show('slow');
-     
+      $('#tools').remove();
+      $('#import_tools').remove();
       $('#design_tag').removeAttr("disabled");
       $('#design_list').attr("disabled",'disabled');
+     
 }
 function import_design(){
-      $('#design_list_div').hide('hide');       
-      $("#import_design_div").show('slow');
-     
-      $('#design_tag').removeAttr("disabled");
-       $('#design_list').attr("disabled",'disabled');
-      $('#import_design').attr("disabled",'disabled');
+    $('#design_list_div').hide('hide');       
+    $("#import_design_div").show('slow');
+    $('#tools_import').remove();
+    $('#tools').remove();
+    $('#design_tag').removeAttr("disabled");
+    $('#import_design_list').attr("disabled",' disabled');
+    $('#import_design').attr("disabled",'disabled');
+    $('#import_tools_list').append('\n\
+            \n\
+           <div class="col col-lg-3" id="tools_import" >\n\
+                       <div class="row">\n\
+                            <div class="col col-lg-2"></div>\n\
+                            <div class="col col-lg-6">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('rotate') ?></label>\n\
+                                            <a href="javascript:anty_clock()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>\n\
+                                            <a href="javascript:clock()" class="btn btn-default"><i class="icon icon-plus"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                        <div class="row">\n\
+                            <div class="col col-lg-5">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('input_width') ?></label>\n\
+                                            <a href="javascript:width_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>\n\
+                                            <a href="javascript:width_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                            <div class="col col-lg-5">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('input_height') ?></label>\n\
+                                            <a href="javascript:height_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>\n\
+                                            <a href="javascript:height_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                         <div class="row">\n\
+                            <div class="col col-lg-10">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('text') ?></label>\n\
+                                    <textarea  id="label_text" name="label_text" disabled="disabled" class="form-control"></textarea>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                         <div class="row">\n\
+                            <div class="col col-lg-5">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('font_size') ?></label>\n\
+                                            <a href="javascript:font_size_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>\n\
+                                            <a href="javascript:font_size_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                            <div class="col col-lg-7">\n\
+                                <div class="form_sep">\n\
+                                    <label><?php echo $this->lang->line('font_style') ?></label>\n\
+                                            <a href="javascript:font_bold()"id="bold_button" class="btn btn-default" ><i class="icon icon-bold"></i> </a>\n\
+                                            <a href="javascript:font_italic()" id="italic_button" class="btn btn-default"><i class="icon icon-italic"></i> </a>\n\
+                                            <a href="javascript:font_underline()" id="underline_button" class="btn btn-default"><i class="icon icon-underline"></i> </a>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                        <div class="row">\n\
+                            <div class="col col-lg-10">\n\
+                                   <label><?php echo $this->lang->line('color') ?></label>\n\
+                                 <div class="input-group color" data-color="rgb(4,5,5)" data-color-format="rgb" id="cp3">\n\
+                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgb(4,5,5)" readonly >\n\
+                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgb(4,5,5)"></i></span>\n\
+                                </div>     \n\
+                                </div>     \n\
+                        </div>\n\
+                         <div class="row">\n\
+                            <div class="col col-lg-10">\n\
+                                <div class="form_sep">    \n\
+                            <a href="javascript:set()" class="btn btn-default"><i class="icon icon-save"></i> <?php echo $this->lang->line('set') ?> </a>\n\
+                                                                                <a href="javascript:reset()" class="btn btn-default"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('reset') ?></a>\n\
+                                </div>\n\
+                            </div>\n\
+                        </div>\n\
+                    </div>');
 }
 function clear_add_items(){
       $("#posnic_user_2").trigger('reset');
@@ -547,9 +697,7 @@ $("#box").hover( function(){
                     $( "#drag_label"+label_count ).draggable();
                     $( "#drag_label_"+label_count ).draggable();
                     $('#label_count').val(parseFloat(label_count+1));
-                  //  $('#work').append('<input typ="text" id="left_drag_label'+label_count+'" value="'+$("#drag_label"+label_count).offset().left+'" >');
-                  //  $('#work').append('<input typ="text" id="top_drag_label'+label_count+'" value="'+$("#drag_label"+label_count).offset().top+'" >');
-                   
+                
               }
              else{
                 
@@ -685,87 +833,9 @@ $("#box").hover( function(){
                                         <input type="hidden" name="box_width" id="box_width" value="300">
                                         <input type="hidden" name="box_height" id="box_height" value="150">
                                     </div>
-                                  <div class="col col-lg-3" >
-                                        
-                                       
-                                        <div class="row">
-                                            <div class="col col-lg-2"></div>
-                                            <div class="col col-lg-6">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('rotate') ?></label>
-
-                                                            <a href="javascript:anty_clock()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
-                                                            <a href="javascript:clock()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col col-lg-5">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('input_width') ?></label>
-
-                                                            <a href="javascript:width_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
-                                                            <a href="javascript:width_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
-                                                </div>
-                                            </div>
-                                            <div class="col col-lg-5">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('input_height') ?></label>
-
-                                                            <a href="javascript:height_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
-                                                            <a href="javascript:height_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                         <div class="row">
-                                            <div class="col col-lg-10">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('text') ?></label>
-                                                    <textarea  id="label_text" name="label_text" disabled="disabled" class="form-control"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                         <div class="row">
-                                            <div class="col col-lg-5">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('font_size') ?></label>
-
-                                                            <a href="javascript:font_size_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
-                                                            <a href="javascript:font_size_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
-                                                </div>
-                                            </div>
-                                            <div class="col col-lg-7">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('font_style') ?></label>
-
-                                                            <a href="javascript:font_bold()"id="bold_button" class="btn btn-default" ><i class="icon icon-bold"></i> </a>
-                                                            <a href="javascript:font_italic()" id="italic_button" class="btn btn-default"><i class="icon icon-italic"></i> </a>
-                                                            <a href="javascript:font_underline()" id="underline_button" class="btn btn-default"><i class="icon icon-underline"></i> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col col-lg-10">
-                                                   <label><?php echo $this->lang->line('color') ?></label>
-<!--                                                <input type="text" class="form-control" value="#8fff00" id="cp1" >-->
-                                                 <div class="input-group color" data-color="rgb(4,5,5)" data-color-format="rgb" id="cp3">
-                                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgb(4,5,5)" readonly >
-                                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgb(4,5,5)"></i></span>
-                                                </div>     
-                                                </div>     
-                                        </div>
-                                         <div class="row">
-                                            <div class="col col-lg-10">
-                                                <div class="form_sep">
-                                                  
-
-                                            <a href="javascript:set()" class="btn btn-default"><i class="icon icon-save"></i> <?php echo $this->lang->line('set') ?> </a>
-                                                                                                <a href="javascript:reset()" class="btn btn-default"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('reset') ?></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
+                                  <div  id="design_tool_list">
+                                  </div>
+                                     
                                 </div>
                               <br><br>
                             </div>
@@ -857,84 +927,10 @@ $("#box").hover( function(){
                                         <input type="hidden" name="box_width" id="box_width" value="300">
                                         <input type="hidden" name="box_height" id="box_height" value="150">
                                     </div>
-                                  <div class="col col-lg-3" >
-                                        
+                                   <div id="import_tools_list">
+                                  <div class="col col-lg-3" id="import_tools" >
+                                     
                                        
-                                        <div class="row">
-                                            <div class="col col-lg-2"></div>
-                                            <div class="col col-lg-6">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('rotate') ?></label>
-
-                                                            <a href="javascript:anty_clock()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
-                                                            <a href="javascript:clock()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col col-lg-5">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('input_width') ?></label>
-
-                                                            <a href="javascript:width_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
-                                                            <a href="javascript:width_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
-                                                </div>
-                                            </div>
-                                            <div class="col col-lg-5">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('input_height') ?></label>
-
-                                                            <a href="javascript:height_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
-                                                            <a href="javascript:height_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                         <div class="row">
-                                            <div class="col col-lg-10">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('text') ?></label>
-                                                    <textarea  id="label_text" name="label_text" disabled="disabled" class="form-control"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                         <div class="row">
-                                            <div class="col col-lg-5">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('font_size') ?></label>
-
-                                                            <a href="javascript:font_size_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
-                                                            <a href="javascript:font_size_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
-                                                </div>
-                                            </div>
-                                            <div class="col col-lg-7">
-                                                <div class="form_sep">
-                                                    <label><?php echo $this->lang->line('font_style') ?></label>
-
-                                                            <a href="javascript:font_bold()"id="bold_button" class="btn btn-default" ><i class="icon icon-bold"></i> </a>
-                                                            <a href="javascript:font_italic()" id="italic_button" class="btn btn-default"><i class="icon icon-italic"></i> </a>
-                                                            <a href="javascript:font_underline()" id="underline_button" class="btn btn-default"><i class="icon icon-underline"></i> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col col-lg-10">
-                                                   <label><?php echo $this->lang->line('color') ?></label>
-<!--                                                <input type="text" class="form-control" value="#8fff00" id="cp1" >-->
-                                                 <div class="input-group color" data-color="rgb(4,5,5)" data-color-format="rgb" id="cp3">
-                                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgb(4,5,5)" readonly >
-                                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgb(4,5,5)"></i></span>
-                                                </div>     
-                                                </div>     
-                                        </div>
-                                         <div class="row">
-                                            <div class="col col-lg-10">
-                                                <div class="form_sep">
-                                                  
-
-                                            <a href="javascript:set()" class="btn btn-default"><i class="icon icon-save"></i> <?php echo $this->lang->line('set') ?> </a>
-                                                                                                <a href="javascript:reset()" class="btn btn-default"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('reset') ?></a>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     
