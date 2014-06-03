@@ -666,5 +666,13 @@ $lang['credit_days']='Credit Days';
     $lang['design_price_tag']='Design Price Tag';
     $lang['design_id']='Design ID';
     $lang['price_tag_design']='Price Tag Design';
+    $lang['create_barcode']='Create Barcode';
+    $lang['design_list']='Design List';
+    $lang['import_design']='Import Design';
+    $lang['upload_file']='Upload File';
+    $lang['upload']='Upload';
+    $lang['file_is_large']='File Is Large';
+    $lang['store_name']='Store Name';
+    $lang['Product_Name_Unit']='Product Name & Unit';
    
 ?>

@@ -5,8 +5,8 @@ class Price_tag extends MX_Controller{
                $this->load->library('posnic');   
     }
     function index(){ 
-     //  $this->get_items();
-  $this->create_price_tag();
+      $this->get_items();
+  //$this->create_price_tag();
       //include_once '/text_in_image/text.php';
 
 //         $this->load->library('zend');
@@ -17,7 +17,7 @@ class Price_tag extends MX_Controller{
     }
     function create_price_tag(){
         $this->load->model('tag') ;
-        $data=  $this->tag->get_design_cord('GD-125');
+        $data=  $this->tag->get_design_cord('2');
         
         foreach ($data as $row){
            $box_width=$row['box_width'];
@@ -61,20 +61,41 @@ class Price_tag extends MX_Controller{
            }
         }
         
-    $this->output->set_header("Content-Type: image/png");
+   
+    $this->output->set_header("Content-Type: image/jpeg");
     $font=  'uploads/price_tags/core/font/Verdana.ttf';
     $italic=  'uploads/price_tags/core/font/605.ttf';
     $top_file = 'uploads/price_tags/core/barcode.jpg';
     $top = imagecreatefromjpeg($top_file);
     list($top_width, $top_height) = getimagesize($top_file);
     $new = imagecreate($box_width, $box_height);
+ 
+
+
+
+
 //imagecopy($new, $top, 300, 0, 0, -180, $top_width, $top_height);
 imagecopy($new, $top, $barcode_left, $barcode_top, 0, 0, $top_width, $top_height);
 
 /* store name design start*/
 imagejpeg($new, 'uploads/price_tags/core/merged_image.jpg');
 $bar = imagecreatefromjpeg('uploads/price_tags/core/merged_image.jpg');
+$bordercolors = imagecolorallocate($bar, 0, 0, 0); 
+$x = 0;
 
+$y = 0;
+
+$w = imagesx($bar) - 1;
+
+$h = imagesy($bar) - 1;
+
+imageline($bar, $x,$y,$x,$y+$h,$bordercolors);
+
+imageline($bar, $x,$y,$x+$w,$y,$bordercolors);
+
+imageline($bar, $x+$w,$y,$x+$w,$y+$h,$bordercolors);
+
+imageline($bar, $x,$y+$h,$x+$w,$y+$h,$bordercolors);
 $color=array();
 $color=explode(',',$store_color);
 $black = imagecolorallocate($bar,$color[0], $color[1], $color[2]);
@@ -102,9 +123,9 @@ if($product_italic=='italic'){
 }else{
     $product_font=$font;
 }
-    imagettftext($bar, $product_size, $product_tarnsform, $product_left, $product_top, $black, $product_font, 'Sugar');
+    imagettftext($bar, $product_size, $product_tarnsform, $product_left, $product_top, $black, $product_font, 'Product Name & Unit');
 if($product_bold==700){
-    imagettftext($bar, $product_size, $product_tarnsform, $product_left+1, $product_top+1, $black, $product_font, 'Sugar');
+    imagettftext($bar, $product_size, $product_tarnsform, $product_left+1, $product_top+1, $black, $product_font, 'Product Name & Unit');
 }
 if($product_under_line!='none'){
 imagefilledrectangle($bar,$product_width+$product_left,$product_top+5,$product_left,$product_top+7,$black);
@@ -186,7 +207,7 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
     }
     
     function data_table(){
-        $aColumns = array( 'name', 'code','name','location','b_name','c_name','guid','active_status','guid' );	
+        $aColumns = array( 'id', 'design','design','design','design','design','design','design','design' );	
         $start = "";
         $end="";
         if ( $this->input->get_post('iDisplayLength') != '-1' )	{
@@ -208,12 +229,12 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
         $like = array();
         if ( $_GET['sSearch'] != "" )
             {
-                $like =array('upc_ean_code'=>  $this->input->get_post('sSearch'),'items.name'=>  $this->input->get_post('sSearch'),'code'=>  $this->input->get_post('sSearch'));
+                $like =array('design'=>  $this->input->get_post('sSearch'));
             }
-        $this->load->model('core_model')		   ;
-        $rResult1 = $this->core_model->items_data_table($end,$start,$order,$like,$this->session->userdata['branch_id']);
-        $iFilteredTotal =$this->posnic->data_table_count('items');
-        $iTotal =$this->posnic->data_table_count('items');
+        $this->load->model('tag')		   ;
+        $rResult1 = $this->tag->data_table($end,$start,$order,$like);
+        $iFilteredTotal =$this->tag->count('items');
+        $iTotal= $iFilteredTotal;
         $output1 = array(
             "sEcho" => intval($_GET['sEcho']),
             "iTotalRecords" => $iTotal,
@@ -274,10 +295,14 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
                 $width=  $this->input->post('width');
                 $height=  $this->input->post('height');
                 $transform=  $this->input->post('transform');
+                $content=  $this->input->post('content');
                 $this->load->model('tag');
                 if($this->tag->check_duplicate($design)){
                 for($i=0;$i<count($label);$i++){
-                    $val=array('transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                    if(!$content[$i]){
+                        $content[$i]="";
+                    }
+                    $val=array('content'=>$content[$i],'transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
                     $this->tag->save_design($val);
                    
                 } echo 'True';
@@ -289,9 +314,37 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
         }   
         
     }
+    function import_design(){        
+        $config['upload_path'] = './uploads/price_tags';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size']	= '202100';
+        $config['max_width']  = '11024';
+        $config['max_height']  = '3768';
+        $randomString = md5(time().date("Y/m/d"));
+        $config['file_name']=$randomString;
+      //  $config['overwrite'] = TRUE;
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload())
+        {
+echo 'false';
+        }
+        else
+        {       
+                $upload_data = $this->upload->data();
+                echo $upload_data['file_name'];
+              
+        }
+    }
     function language($lang){
        $lang= $this->lang->load($lang);
        return $lang;
+    }
+    function search_items(){
+        $search= $this->input->post('term');
+        $this->load->model('tag');
+        $data= $this->tag->search_items($search);      
+        echo json_encode($data);
     }
     
     

@@ -21,7 +21,28 @@
  
 </style>	
 <script type="text/javascript">
-    
+        $(document).ready(function()
+{
+    var options = { 
+	complete: function(response) { 
+                  if(response['responseText']=='false'){
+                                       $.bootstrapGrowl('<?php echo $this->lang->line('file_is_large');?>', { type: "warning" });                      
+                  }else {
+                         var image=response['responseText'];
+                         $('#import_box').css("background-image", "url(uploads/price_tags/"+image+")");  
+                  }
+	 
+                  
+	},
+	error: function()
+	{
+		$("#message").html("<font color='red'> ERROR: unable to upload files</font>");
+
+	}
+   
+}; 
+      $("#import_design_form").ajaxForm(options);
+});
     function rgb2hex(rgb) {
          return rgb.split(',')[0].split('(')[1]+','+rgb.split(',')[1]+','+rgb.split(',')[2].split(')')[0]
     }
@@ -64,11 +85,11 @@
                 label[j]='label';
                 left[j]=parseInt($('#drag_label_'+i).offset().left)-$('#box').offset().left;
                 top[j]=parseInt($('#drag_label_'+i).offset().top)-$('#box').offset().top;
-                bold[j]=$('#drag_label_'+i).css('font-weight');
-                italic[j]=$('#drag_label_'+i).css('font-style');
-                under_line[j]=$('#drag_label_'+i).css('text-decoration');
-                size[j]=parseInt($('#drag_label_'+i).css('font-size'));
-                color[j]=rgb2hex($('#drag_label_'+i).css('color'));
+                bold[j]=$('#p_drag_label_'+i).css('font-weight');
+                italic[j]=$('#p_drag_label_'+i).css('font-style');
+                under_line[j]=$('#p_drag_label_'+i).css('text-decoration');
+                size[j]=parseInt($('#p_drag_label_'+i).css('font-size'));
+                color[j]=rgb2hex($('#p_drag_label_'+i).css('color'));
                 width[j]=parseInt($('#drag_label_'+i).css('width'));
                 height[j]=parseInt($('#drag_label_'+i).css('height'));
                 transform[j]=transform_degree($('#drag_label_'+i).css('transform'));
@@ -78,38 +99,41 @@
                 label[j]='store';
                 left[j]=parseInt($('#company').offset().left)-$('#box').offset().left;
                 top[j]=parseInt($('#company').offset().top)-$('#box').offset().top;
-                bold[j]=$('#company').css('font-weight');
-                italic[j]=$('#company').css('font-style');
-                under_line[j]=$('#company').css('text-decoration');
-                size[j]=parseInt($('#company').css('font-size'));
-                color[j]=rgb2hex($('#company').css('color'));
+                bold[j]=$('#p_company').css('font-weight');
+                italic[j]=$('#p_company').css('font-style');
+                under_line[j]=$('#p_company').css('text-decoration');
+                size[j]=parseInt($('#p_company').css('font-size'));
+                color[j]=rgb2hex($('#p_company').css('color'));
                 width[j]=parseInt($('#company').css('width'));
                 height[j]=parseInt($('#company').css('height'));
                 transform[j]=transform_degree($('#company').css('transform'));
+                content[j]="";
                 j++;
                 label[j]='product';
                 left[j]=parseInt($('#product').offset().left)-$('#box').offset().left;
                 top[j]=parseInt($('#product').offset().top)-$('#box').offset().top;
-                bold[j]=$('#product').css('font-weight');
-                italic[j]=$('#product').css('font-style');
-                under_line[j]=$('#product').css('text-decoration');
-                size[j]=parseInt($('#product').css('font-size'));
-                color[j]=rgb2hex($('#product').css('color'));
+                bold[j]=$('#p_product').css('font-weight');
+                italic[j]=$('#p_product').css('font-style');
+                under_line[j]=$('#p_product').css('text-decoration');
+                size[j]=parseInt($('#p_product').css('font-size'));
+                color[j]=rgb2hex($('#p_product').css('color'));
                 width[j]=parseInt($('#product').css('width'));
                 height[j]=parseInt($('#product').css('height'));
                 transform[j]=transform_degree($('#product').css('transform'));
+                content[j]="";
                 j++;
                 label[j]='price_label';
                 left[j]=parseInt($('#price_label').offset().left)-$('#box').offset().left;
                 top[j]=parseInt($('#price_label').offset().top)-$('#box').offset().top;
-                bold[j]=$('#price_label').css('font-weight');
-                italic[j]=$('#price_label').css('font-style');
-                under_line[j]=$('#price_label').css('text-decoration');
-                size[j]=parseInt($('#price_label').css('font-size'));
-                color[j]=rgb2hex($('#price_label').css('color'));
+                bold[j]=$('#p_price_label').css('font-weight');
+                italic[j]=$('#p_price_label').css('font-style');
+                under_line[j]=$('#p_price_label').css('text-decoration');
+                size[j]=parseInt($('#p_price_label').css('font-size'));
+                color[j]=rgb2hex($('#p_price_label').css('color'));
                 width[j]=parseInt($('#price_label').css('width'));
                 height[j]=parseInt($('#price_label').css('height'));
-                transform[j]=transform_degree($('#product').css('transform'));
+                transform[j]=transform_degree($('#price_label').css('transform'));
+                content[j]="";
                 j++;
                 label[j]='barcode';
                 left[j]=parseInt($('#barcode').offset().left)-$('#box').offset().left;
@@ -122,9 +146,10 @@
                 width[j]=0;
                 height[j]=0;
                 transform[j]=0;
+                content[j]="";
          
                       $.ajax ({
-                            url: "<?php echo base_url('index.php/price_tag/save_design')?>",
+                           url: "<?php echo base_url('index.php/price_tag/save_design')?>",
                             data: { 
                                 design:$('#design_id').val(),
                                 box_height:parseFloat($('#box_height').val()),
@@ -168,7 +193,7 @@ function posnic_add_new(){
                  
                                
                                 
-      $("#user_list").hide();
+      $("#design_tag").hide();
       $('#add_item_form').show('slow');
       $('#posnic_add_items').attr("disabled", "disabled");    
       $('#items_lists').removeAttr("disabled");
@@ -181,29 +206,43 @@ function posnic_add_new(){
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_setting');?>', { type: "error" });                           
                     <?php }?>
 }
-function posnic_items_lists(){
-      $('#edit_item_form').hide('hide');
-      $('#add_item_form').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#active').removeAttr("disabled");
-      $('#deactive').removeAttr("disabled");
-      $('#posnic_add_items').removeAttr("disabled");
-      $('#items_lists').attr("disabled",'disabled');
+function design_price_tag(){
+      $('#design_list_div').hide('hide');      
+      $("#design_tag").show('slow');
+      $('#design_list').removeAttr("disabled");
+      $('#design_tag').attr("disabled",'disabled');
+}
+function design_list(){
+      $('#design_tag').hide('hide');      
+      $("#design_list_div").show('slow');
+     
+      $('#design_tag').removeAttr("disabled");
+      $('#design_list').attr("disabled",'disabled');
+}
+function import_design(){
+      $('#design_list_div').hide('hide');       
+      $("#import_design_div").show('slow');
+     
+      $('#design_tag').removeAttr("disabled");
+       $('#design_list').attr("disabled",'disabled');
+      $('#import_design').attr("disabled",'disabled');
 }
 function clear_add_items(){
       $("#posnic_user_2").trigger('reset');
 }
 function reload_update_user(){
-    posnic_items_lists();
+    design_price_tag();
 }
 </script>
 <nav id="top_navigation">
     <div class="container">
             <div class="row">
                 <div class="col col-lg-7">
-                        <a href="javascript:posnic_add_new()" id="posnic_add_items" class="btn btn-default" ><i class="glyphicon glyphicon-cog"></i> <?php echo $this->lang->line('setting') ?></a>  
-                        <a href="javascript:posnic_items_lists()" class="btn btn-default" id="items_lists"><i class="icon icon-desktop"></i> <?php echo $this->lang->line('price_tag_design') ?></a>
+                    <a href="javascript:design_price_tag()" class="btn btn-default" id="items_lists"><i class="icon icon-desktop"></i> <?php echo $this->lang->line('price_tag_design') ?></a>
+                    <a href="javascript:design_list()" id="design_list" class="btn btn-default" ><i class="icon icon-barcode"></i> <?php echo $this->lang->line('design_list') ?></a>  
+                    <a href="javascript:import_design()" id="import_design" class="btn btn-default" ><i class="icon icon-upload"></i> <?php echo $this->lang->line('import_design') ?></a>  
+                        
+                        
                 </div>
             </div>
     </div>
@@ -216,7 +255,7 @@ function reload_update_user(){
                         <?php $form =array('name'=>'posnic'); 
                     echo form_open('items/items_manage',$form) ?>
                         <div class="row">
-                            <div class="col-sm-12" id="add_item_form"><br>
+                            <div class="col-sm-12" id="design_list_div"><br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                             <h4 class="panel-title"><?php echo $this->lang->line('items') ?></h4>                                                                               
@@ -225,13 +264,9 @@ function reload_update_user(){
                                         <tr>
                                           <th>Id</th>
                                           
-                                          <th ><?php echo $this->lang->line('sku'); ?></th>
+                                        
                                           <th ><?php echo $this->lang->line('name'); ?></th>
-                                          <th ><?php echo $this->lang->line('location'); ?></th>
-                                          <th ><?php echo $this->lang->line('brand'); ?></th>
-                                          <th ><?php echo $this->lang->line('category'); ?> </th>
-                                          
-                                          <th><?php echo $this->lang->line('status'); ?></th>
+                                         
                                           <th><?php echo $this->lang->line('action'); ?></th>
                                          </tr>
                                       </thead>
@@ -406,6 +441,11 @@ function reload_update_user(){
 #price_label { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
 #company { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
 #product { padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#import_barcode { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#import_price_label { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#import_company { width: 100px;  padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#import_product { padding: 0.5em; float: left; margin: 10px 10px 10px 0; z-index: 99999999 !important;}
+#import_box { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
 #box { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
 .inputs{
     z-index: 99999999 !important;
@@ -458,27 +498,41 @@ $("#box").hover( function(){
 
   
     $("#drag_input_box1" ).draggable();
-    $("#drag_label1" ).draggable({
-       drag: function(){
-            var offset = $(this).offset();
-            var xPos =$('#box').offset().left-offset.left;
-            var yPos = $('#box').offset().top-offset.top;
-            $('#posX').val('x: ' + xPos);
-            $('#posY').val('y: ' + yPos);
-        }
-    });
+    $("#drag_label1" ).draggable();
     $("#company" ).draggable();
-    $("#barcode" ).draggable({
-        drag: function(){
-            var offset = $(this).offset();
-            var xPos =offset.left-$('#box').offset().left;
-            var yPos =offset.top-$('#box').offset().top;
-            $('#posX').val('x: ' + xPos);
-            $('#posY').val('y: ' + yPos);
-        }
-    });
+    $("#barcode" ).draggable();
     $("#price_label" ).draggable();
     $("#product" ).draggable();
+    $("#import_barcode" ).draggable();
+    $("#import_company" ).draggable();
+    $("#import_product" ).draggable();
+    $("#import_price_label" ).draggable();
+    $("#import_box" ).droppable({
+        drop: function( event, ui ) {
+            var draged=ui.draggable.attr("id");
+             if(draged=='import_barcode'){
+                      $('#'+draged).removeClass('btn');
+                      $('#'+draged).removeClass('btn-default');
+                      $('#'+draged).addClass('default');
+                  }
+                  else if(draged=='import_company'){
+                      $('#'+draged+" p").removeClass('btn');
+                      $('#'+draged+" p").removeClass('btn-default');
+                      $('#'+draged+" p").addClass('default');
+                  }
+                  else if(draged=='import_product'){
+                      $('#'+draged+" p").removeClass('btn');
+                      $('#'+draged+" p").removeClass('btn-default');
+                      $('#'+draged+" p").addClass('default');
+                  }
+                  else if(draged=='import_price_label'){
+                      $('#'+draged+" p").removeClass('btn');
+                      $('#'+draged+" p").removeClass('btn-default');
+                      $('#'+draged+" p").addClass('default');
+                  }
+                  edit_field(draged);
+        }
+        });
     $("#box" ).droppable({
         drop: function( event, ui ) {
              var input_count=parseFloat($('#input_count').val());
@@ -526,7 +580,8 @@ $("#box").hover( function(){
 
         }
     });
-});
+    });
+
 </script>
 
 
@@ -534,13 +589,11 @@ $("#box").hover( function(){
 <input type="hidden" id="label_count" value="2">
 <input type="hidden" id="field_id" value="2">
 <input type="hidden" id="rotate_value" value="5">
-<input type="text" id="posX" >
-<input type="text" id="posY" >
 <div id="work">
     
 </div>
  
-<section id="user_list" class="container clearfix main_section">
+<section id="design_tag" class="container clearfix main_section">
      <?php   $form =array('id'=>'add_item',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -560,7 +613,7 @@ $("#box").hover( function(){
                                     <div class="col col-lg-2" id="input_fields">
                                         <div class="row" >
                                             <label><?php echo $this->lang->line('design_id') ?></label>
-                                            <input type="tetx" name="design_id" id="design_id" class="form-control">
+                                            <input type="text" name="design_id" id="design_id" class="form-control">
                                         </div>
                                         <div class="row" id="label_row">
                                             <div id="drag_label1"  class="btn btn-default"><?php  echo $this->lang->line('label');?></div>
@@ -573,10 +626,10 @@ $("#box").hover( function(){
                                             <div id="price_label"><p id="p_price_label"  class="btn btn-default" style="font-size: 25px">$0.00</p></div> 
                                         </div>
                                         <div class="row" id="input_row">
-                                            <div  id="product"  ><p id="p_product" class="btn btn-default" >Product Name & Unit</p></div>
+                                            <div  id="product"  ><p id="p_product" class="btn btn-default" ><?php  echo $this->lang->line('Product_Name_Unit') ?></p></div>
                                         </div>
                                         <div class="row" id="input_row">
-                                            <div  id="company"> <p id="p_company" class="btn btn-default" >Store Name</p></div>
+                                            <div  id="company"> <p id="p_company" class="btn btn-default" ><?php  echo $this->lang->line('store_name') ?></p></div>
                                         </div>
                                        
                                         
@@ -729,16 +782,185 @@ $("#box").hover( function(){
           </div>
     <?php echo form_close();?>
 </section>    
+<section id="import_design_div" class="container clearfix main_section">
+     <?php   $form =array('id'=>'import_design_form',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('price_tag/import_design/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+                <div id="main_content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                               <div class="panel-heading">
+                                       <h4 class="panel-title"><?php echo $this->lang->line('import_design_div') ?></h4>  
+                                   
+                               </div>
+                              <br>
+                              <div class="row" style="padding-left: 40px">
+                                    <div class="col col-lg-2" >
+                                         <div class="row" >
+                                            <label><?php echo $this->lang->line('upload_file') ?></label>
+                                            <input type="file" name="userfile"  >
+                                        </div>
+                                         <div class="row" >
+                                             <div class="col col-lg-8">
+                                                     <input type="submit" name="upload" class="form-control btn btn-default" value="<?php echo $this->lang->line('upload') ?>">
+                                             </div>
+                                         
+                                        </div>
+                                       
+                                        
+                                       
+                                        
+                                    </div>
+                                    <div class="col col-lg-2" id="input_fields"  style="padding-left: 20px">
+                                         <div class="row" >
+                                            <label><?php echo $this->lang->line('design_id') ?></label>
+                                            <input type="text" name="design_id" id="design_id" class="form-control">
+                                        </div>
+                                       
+                                        <div class="row" id="input_row">
+                                            <img id="import_barcode"  class="btn btn-default" src="<?php echo base_url() ?>barcode.jpg">
+                                        </div>
+                                         <div class="row" id="input_row">
+                                            <div id="import_price_label"><p id="p_price_label"  class="btn btn-default" style="font-size: 25px">$0.00</p></div> 
+                                        </div>
+                                        <div class="row" id="input_row">
+                                            <div  id="import_product"  ><p id="import_p_product" class="btn btn-default" ><?php  echo $this->lang->line('Product_Name_Unit') ?></p></div>
+                                        </div>
+                                        <div class="row" id="input_row">
+                                            <div  id="import_company"> <p id="import_p_company" class="btn btn-default" ><?php  echo $this->lang->line('store_name') ?></p></div>
+                                        </div>
+                                       
+                                        
+                                    </div>
+                                    
+                                   
+                                    <div class="col col-lg-5" >
+                                        
+                                        <div class="row">
+                                            <div id="import_box"  style="border: solid #D3D3D3 3px;width: 300px;height: 150px">
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                       
+                                             
+                                        <div class="row">
+                                            <div class="col col-lg-3">
+                                                <a href="javascript:save_import_design()" class="btn btn-default"><i class="icon icon-save"></i> <?php echo $this->lang->line('save') ?></a>
+                                            </div>
+                                            <div class="col col-lg-3">
+                                                 <a href="javascript:clear()" class="btn btn-default"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('clear') ?></a>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="box_width" id="box_width" value="300">
+                                        <input type="hidden" name="box_height" id="box_height" value="150">
+                                    </div>
+                                  <div class="col col-lg-3" >
+                                        
+                                       
+                                        <div class="row">
+                                            <div class="col col-lg-2"></div>
+                                            <div class="col col-lg-6">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('rotate') ?></label>
+
+                                                            <a href="javascript:anty_clock()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
+                                                            <a href="javascript:clock()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col col-lg-5">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('input_width') ?></label>
+
+                                                            <a href="javascript:width_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
+                                                            <a href="javascript:width_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-5">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('input_height') ?></label>
+
+                                                            <a href="javascript:height_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
+                                                            <a href="javascript:height_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                         <div class="row">
+                                            <div class="col col-lg-10">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('text') ?></label>
+                                                    <textarea  id="label_text" name="label_text" disabled="disabled" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                         <div class="row">
+                                            <div class="col col-lg-5">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('font_size') ?></label>
+
+                                                            <a href="javascript:font_size_min()" class="btn btn-default" ><i class="icon icon-minus"></i> </a>
+                                                            <a href="javascript:font_size_max()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-7">
+                                                <div class="form_sep">
+                                                    <label><?php echo $this->lang->line('font_style') ?></label>
+
+                                                            <a href="javascript:font_bold()"id="bold_button" class="btn btn-default" ><i class="icon icon-bold"></i> </a>
+                                                            <a href="javascript:font_italic()" id="italic_button" class="btn btn-default"><i class="icon icon-italic"></i> </a>
+                                                            <a href="javascript:font_underline()" id="underline_button" class="btn btn-default"><i class="icon icon-underline"></i> </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col col-lg-10">
+                                                   <label><?php echo $this->lang->line('color') ?></label>
+<!--                                                <input type="text" class="form-control" value="#8fff00" id="cp1" >-->
+                                                 <div class="input-group color" data-color="rgb(4,5,5)" data-color-format="rgb" id="cp3">
+                                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgb(4,5,5)" readonly >
+                                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgb(4,5,5)"></i></span>
+                                                </div>     
+                                                </div>     
+                                        </div>
+                                         <div class="row">
+                                            <div class="col col-lg-10">
+                                                <div class="form_sep">
+                                                  
+
+                                            <a href="javascript:set()" class="btn btn-default"><i class="icon icon-save"></i> <?php echo $this->lang->line('set') ?> </a>
+                                                                                                <a href="javascript:reset()" class="btn btn-default"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('reset') ?></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                              <br><br>
+                            </div>
+                   
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+
+
+
+                    </div>
+                </div>
+          </div>
+    <?php echo form_close();?>
+</section>    
     
            <div id="footer_space">
               
            </div>
 		</div>
 	
-                <script type="text/javascript">                
-                    $(document).ready(function() {
-                    $('#add_item').validate();});
-                </script>
+               
         
 
       
