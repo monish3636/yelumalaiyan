@@ -33,5 +33,42 @@ class Tag extends CI_Model{
         return $sql->result_array(); // return date in array format
     }
     // function end;
+    /* search items**/
+    function search_items($search){
+        $this->db->select('items_setting.purchase,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id')->from('items')->where('items.branch_id',  $this->session->userdata('branch_id'))->where('items.active_status',1)->where('items.delete_status',1);
+     
+         $this->db->join('items_category', 'items.category_id=items_category.guid','left');
+         $this->db->join('items_setting', 'items.guid=items_setting.item_id AND items_setting.purchase=1','left');
+         $this->db->join('taxes', "items.tax_id=taxes.guid ",'left');
+         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid ",'left');
+         $this->db->join('brands', 'items.brand_id=brands.guid','left');
+         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
+         $like=array('items.active_status'=>$search,'items.name'=>$search,'items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
+                $this->db->or_like($like);
+                $this->db->limit($this->session->userdata('data_limit'));
+                $sql=  $this->db->get();
+                $data=array();
+                foreach ($sql->result() as $row){
+                    if($row->purchase==1){
+                    $data[]=$row;
+                    }
+                }
+           
+         
+         return $data;
+    }
+    function data_table($end,$start,$order,$like){
+        $this->db->select()->from('price_tag_designs')->like($like);//->limit($start,$end);
+     $this->db->group_by('design');
+        $sql=  $this->db->get();
+      
+        return $sql->result_array();
+    }
+    function count(){
+        $this->db->select('id')->from('price_tag_designs');
+        $this->db->group_by('design');
+        $sql=  $this->db->get();
+        return $sql->num_rows();
+    }
 }
 
