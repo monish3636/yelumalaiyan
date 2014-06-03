@@ -22,10 +22,26 @@
 </style>	
 <script type="text/javascript">
     
-    
+    function rgb2hex(rgb) {
+         return rgb.split(',')[0].split('(')[1]+','+rgb.split(',')[1]+','+rgb.split(',')[2].split(')')[0]
+    }
+    function transform_degree(trans){
+        var values = trans.split('(')[1];
+        values = values.split(')')[0];
+        values = values.split(',');
+        var a = values[0];
+        var b = values[1];
+        var c = values[2];
+        var d = values[3];
+        var scale = Math.sqrt(a*a + b*b);
+        var sin = b/scale;
+        var angle = Math.round(Math.asin(sin) * (180/Math.PI));
+        return angle;
+    }
     function save_design(){
-      //  console.log($('#barcode').css('transform'));
+    
       //  $('#company').css('transform',$('#barcode').css('transform'));
+    
              var barcode_left=$('#barcode').css('left');
              var barcode_top=$('#barcode').css('top');
              var label=Array();
@@ -35,54 +51,61 @@
              var italic=Array();
              var under_line=Array();
              var size=Array();
+             var color=Array();
              var width=Array();
              var height=Array();
              var transform=Array();
              var j=0;
+             var offset_left= $('#box').offset().left;
+             var offset_top= $('#box').offset().top;
              for(var i=2;i<$('#label_count').val();i++)
              {
                
                 label[j]='label';
-                left[i]=$('#drag_label_'+i).css('left');
-                top[j]=$('#drag_label_'+i).css('top');
+                left[i]=offset_left-parseInt($('#drag_label_'+i).css('left'));
+                top[j]=offset_top-parseInt($('#drag_label_'+i).css('top'));
                 bold[j]=$('#drag_label_'+i).css('font-weight');
                 italic[j]=$('#drag_label_'+i).css('font-style');
                 under_line[j]=$('#drag_label_'+i).css('text-decoration');
-                size[j]=$('#drag_label_'+i).css('font-size');
-                width[j]=$('#drag_label_'+i).css('width');
-                height[j]=$('#drag_label_'+i).css('height');
-                transform[j]=$('#drag_label_'+i).css('transform');
+                size[j]=parseInt($('#drag_label_'+i).css('font-size'));
+                color[j]=rgb2hex($('#drag_label_'+i).css('color'));
+                width[j]=parseInt($('#drag_label_'+i).css('width'));
+                height[j]=parseInt($('#drag_label_'+i).css('height'));
+                transform[j]=transform_degree($('#drag_label_'+i).css('transform'));
                 j++;
              }
                 label[j]='store';
-                left[i]=$('#company').css('left');
-                top[j]=$('#company').css('top');
+                left[i]=offset_left-parseInt($('#company').css('left'));
+                top[j]=offset_top-parseInt($('#company').css('top'));
                 bold[j]=$('#company').css('font-weight');
                 italic[j]=$('#company').css('font-style');
                 under_line[j]=$('#company').css('text-decoration');
-                size[j]=$('#company').css('font-size');
-                width[j]=$('#company').css('width');
-                height[j]=$('#company').css('height');
-                transform[j]=$('#company').css('transform');
+                size[j]=parseInt($('#company').css('font-size'));
+                color[j]=rgb2hex($('#company').css('color'));
+                width[j]=parseInt($('#company').css('width'));
+                height[j]=parseInt($('#company').css('height'));
+                transform[j]=transform_degree($('#company').css('transform'));
                 j++;
                 label[j]='product';
-                left[i]=$('#product').css('left');
-                top[j]=$('#product').css('top');
+                left[i]=offset_left-parseInt($('#product').css('left'));
+                top[j]=offset_top-parseInt($('#product').css('top'));
                 bold[j]=$('#product').css('font-weight');
                 italic[j]=$('#product').css('font-style');
                 under_line[j]=$('#product').css('text-decoration');
-                size[j]=$('#product').css('font-size');
-                width[j]=$('#product').css('width');
-                height[j]=$('#product').css('height');
-                transform[j]=$('#product').css('transform');
+                size[j]=parseInt($('#product').css('font-size'));
+                color[j]=rgb2hex($('#product').css('color'));
+                width[j]=parseInt($('#product').css('width'));
+                height[j]=parseInt($('#product').css('height'));
+                transform[j]=transform_degree($('#product').css('transform'));
                 j++;
                 label[j]='barcode';
-                left[i]=$('#barcode').css('left');
-                top[j]=$('#barcode').css('top');
+                left[i]=offset_left-parseInt($('#barcode').css('left'));
+                top[j]=offset_top-parseInt($('#barcode').css('top'));
                 bold[j]=0;
                 italic[j]=0;
                 under_line[j]=0;
                 size[j]=0;
+                color[j]='0,0,0';
                 width[j]=0;
                 height[j]=0;
                 transform[j]=0;
@@ -91,13 +114,16 @@
                             url: "<?php echo base_url('index.php/price_tag/save_design')?>",
                             data: { 
                                 design:$('#design_id').val(),
+                                box_height:parseFloat($('#box_height').val()),
+                                box_width:parseFloat($('#box_width').val()),
                                 label:label,
                                 left:left,
                                 top:top,
                                 bold:bold,
                                 italic:italic,
                                 under_line:under_line,
-                                size:size, 
+                                size:size,
+                                color:color,
                                 width:width,
                                 height:height,
                                 transform:transform
@@ -422,7 +448,15 @@ $("#box").hover( function(){
       
     });
     $("#company" ).draggable();
-    $("#barcode" ).draggable();
+    $("#barcode" ).draggable({
+        drag: function(){
+            var offset = $(this).offset();
+            var xPos =$('#box').offset().left-offset.left;
+            var yPos = offset.top;
+            $('#posX').val('x: ' + xPos);
+            $('#posY').val('y: ' + yPos);
+        }
+    });
     $("#price_label" ).draggable();
     $("#product" ).draggable();
     $("#box" ).droppable({
@@ -475,9 +509,11 @@ $("#box").hover( function(){
 
 
 <input type="hidden" id="input_count" value="2">
-<input type="text" id="label_count" value="2">
+<input type="hidden" id="label_count" value="2">
 <input type="hidden" id="field_id" value="2">
 <input type="hidden" id="rotate_value" value="5">
+<input type="hidden" id="posX" >
+<input type="hidden" id="posY" >
 <div id="work">
     
 </div>
@@ -637,9 +673,9 @@ $("#box").hover( function(){
                                             <div class="col col-lg-10">
                                                    <label><?php echo $this->lang->line('color') ?></label>
 <!--                                                <input type="text" class="form-control" value="#8fff00" id="cp1" >-->
-                                                 <div class="input-group color" data-color="rgba(4,5,5,0.78)" data-color-format="rgba" id="cp3">
-                                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgba(4,5,5,0.78)" readonly >
-                                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgba(4,5,5,0.78)"></i></span>
+                                                 <div class="input-group color" data-color="rgb(4,5,5)" data-color-format="rgb" id="cp3">
+                                                     <input type="text"  id="font_colorbox"  class="form-control" value="rgb(4,5,5)" readonly >
+                                                    <span class="input-group-addon" ><i style="margin-top:2px;background-color:rgb(4,5,5)"></i></span>
                                                 </div>     
                                                 </div>     
                                         </div>
