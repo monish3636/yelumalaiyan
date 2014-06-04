@@ -5,8 +5,8 @@ class Price_tag extends MX_Controller{
                $this->load->library('posnic');   
     }
     function index(){ 
-      $this->get_items();
-  //$this->create_price_tag();
+     $this->get_items();
+ //$this->create_price_tag();
       //include_once '/text_in_image/text.php';
 
 //         $this->load->library('zend');
@@ -17,7 +17,7 @@ class Price_tag extends MX_Controller{
     }
     function create_price_tag(){
         $this->load->model('tag') ;
-        $data=  $this->tag->get_design_cord('2');
+        $data=  $this->tag->get_design_cord('GD-67');
         
         foreach ($data as $row){
            $box_width=$row['box_width'];
@@ -104,9 +104,9 @@ if($store_italic=='italic'){
 }else{
     $store_font=$font;
 }
-    imagettftext($bar, $store_size, $store_tarnsform, $store_left, $store_top, $black, $store_font, 'POSNIC');
+    imagettftext($bar, $store_size-3, $store_tarnsform, $store_left, $store_top, $black, $store_font, 'POSNIC');
 if($store_bold==700){
-    imagettftext($bar, $store_size, $store_tarnsform, $store_left+1, $store_top+1, $black, $store_font, 'POSNIC');
+    imagettftext($bar, $store_size-3, $store_tarnsform, $store_left+1, $store_top+1, $black, $store_font, 'POSNIC');
 }
 if($store_under_line!='none'){
 imagefilledrectangle($bar,$store_width+$store_left,$store_top+5,$store_left,$store_top+7,$black);
@@ -123,9 +123,9 @@ if($product_italic=='italic'){
 }else{
     $product_font=$font;
 }
-    imagettftext($bar, $product_size, $product_tarnsform, $product_left, $product_top, $black, $product_font, 'Product Name & Unit');
+    imagettftext($bar, $product_size-3, $product_tarnsform, $product_left, $product_top, $black, $product_font, 'Product Name & Unit');
 if($product_bold==700){
-    imagettftext($bar, $product_size, $product_tarnsform, $product_left+1, $product_top+1, $black, $product_font, 'Product Name & Unit');
+    imagettftext($bar, $product_size-3, $product_tarnsform, $product_left+1, $product_top+1, $black, $product_font, 'Product Name & Unit');
 }
 if($product_under_line!='none'){
 imagefilledrectangle($bar,$product_width+$product_left,$product_top+5,$product_left,$product_top+7,$black);
@@ -138,9 +138,9 @@ if($price_label_italic=='italic'){
 }else{
     $price_label_font=$font;
 }
-    imagettftext($bar, $price_label_size, $price_label_tarnsform, $price_label_left, $price_label_top, $black, $price_label_font, '$69');
+    imagettftext($bar, $price_label_size-3, $price_label_tarnsform, $price_label_left, $price_label_top, $black, $price_label_font, '$69');
 if($price_label_bold==700){
-    imagettftext($bar, $price_label_size, $price_label_tarnsform, $price_label_left+1, $price_label_top+1, $black, $price_label_font, '$69');
+    imagettftext($bar, $price_label_size-3, $price_label_tarnsform, $price_label_left+1, $price_label_top+1, $black, $price_label_font, '$69');
 }
 if($price_label_under_line!='none'){
 imagefilledrectangle($bar,$price_label_width+$price_label_left,$price_label_top+5,$price_label_left,$price_label_top+7,$black);
@@ -157,9 +157,9 @@ imagefilledrectangle($bar,$price_label_width+$price_label_left,$price_label_top+
                 $row['font']=$font;
             }
             $row['top']=$row['top']+5;
-                imagettftext($bar, $row['size'], $row['transform'], $row['left'], $row['top'], $black, $row['font'], $row['content']);
+                imagettftext($bar, $row['size']-3, $row['transform'], $row['left'], $row['top'], $black, $row['font'], $row['content']);
             if($row['bold']==700){
-                 imagettftext($bar, $row['size'], $row['transform'], $row['left']+1, $row['top']+1, $black, $row['font'], $row['content']);
+                 imagettftext($bar, $row['size']-3, $row['transform'], $row['left']+1, $row['top']+1, $black, $row['font'], $row['content']);
             }
             if($row['under_line']!='none'){
                 imagefilledrectangle($bar,$row['width']+$row['left'],$row['top']+5,$row['left'],$row['top']+7,$black);
@@ -207,7 +207,7 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
     }
     
     function data_table(){
-        $aColumns = array( 'id', 'design','design','design','design','design','design','design','design' );	
+        $aColumns = array( 'id', 'design','design','design','image','design','design','design','design' );	
         $start = "";
         $end="";
         if ( $this->input->get_post('iDisplayLength') != '-1' )	{
@@ -260,13 +260,7 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
         }
         echo json_encode($output1);
     }
-    
-    function get_price_tag_details($guid){
-        $this->load->model('core_model');
-        $data[0]=  $this->core_model->get_items_details_for_update($this->session->userdata['branch_id'],$guid);
-        $data[1]=  $this->core_model->get_price_tag_details($this->session->userdata['branch_id'],$guid);
-        echo json_encode($data);       
-    }
+  
     
     function set_item($guid){
         $data['guid']=$guid;
@@ -280,7 +274,7 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
     }
     
     function save_design(){
-        if($this->session->userdata['price_tag_per']['set']==1){
+        if($this->session->userdata['price_tag_per']['add']==1){
                 $design=$this->input->post('design');
                 $image=$this->input->post('image');
                 $box_height=$this->input->post('box_height');
@@ -308,7 +302,18 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
                    
                 } echo 'True';
                 }else{
-                    echo 'Already';
+                    if($this->input->post('update')!=""){
+                        for($i=0;$i<count($label);$i++){
+                            if(!$content[$i]){
+                                  $content[$i]="";
+                            }
+                            $val=array('image'=>$image,'content'=>$content[$i],'transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                            $this->tag->update_design($val,$this->input->post('update'),$label[$i]);
+                        }
+                        echo 'True';
+                    }else{
+                        echo 'Already';
+                    }
                 }
         }else{ 
             echo 'Noop';
@@ -347,6 +352,11 @@ echo 'false';
         $search= $this->input->post('term');
         $this->load->model('tag');
         $data= $this->tag->search_items($search);      
+        echo json_encode($data);
+    }
+    function get_price_tag_details($guid){
+        $this->load->model('tag');
+        $data=  $this->tag->get_price_tag_details($guid);
         echo json_encode($data);
     }
     

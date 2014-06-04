@@ -29,22 +29,17 @@
                 $.bootstrapGrowl('<?php echo $this->lang->line('file_is_large');?>', { type: "warning" });                      
             }else {
                 var image=response['responseText'];
-       
                 $('#import_box').css('width',image.split(',')[0]);
                 $('#import_box').css('height',image.split(',')[1]);
-               $('#import_box').css("background-image", "url(uploads/price_tags/"+image.split(',')[2]+")");  
-             //   $('#import_image').val(image);
-            }
-	 
-                  
+                $('#import_box').css("background-image", "url(uploads/price_tags/"+image.split(',')[2]+")");   
+                $('#import_image').val(image.split(',')[2]);
+            }  
 	},
 	error: function()
 	{
 		$("#message").html("<font color='red'> ERROR: unable to upload files</font>");
-
-	}
-   
-}; 
+	}   
+    }; 
       $("#import_design_form").ajaxForm(options);
 });
     function rgb2hex(rgb) {
@@ -178,7 +173,8 @@
                             complete: function(response) {
                                if(response['responseText']=='True'){
                                       $.bootstrapGrowl('<?php echo $this->lang->line('price_tag').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
-                                      
+                                      design_list();
+                                      $("#dt_table_tools").dataTable().fnDraw();
                                     }else  if(response['responseText']=='Already'){
                                            $.bootstrapGrowl($('#design_id').val()+' <?php echo $this->lang->line('price_tag_design').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
                                     }else  if(response['responseText']=='Flase'){
@@ -206,8 +202,8 @@
                 var content=Array();
                 var j=0;
                 label[j]='store';
-                left[j]=parseInt($('#import_company').offset().left)-$('#box').offset().left;
-                top[j]=parseInt($('#import_company').offset().top)-$('#box').offset().top;
+                left[j]=parseInt($('#import_company').offset().left)-$('#import_box').offset().left;
+                top[j]=parseInt($('#import_company').offset().top)-$('#import_box').offset().top;
                 bold[j]=$('#import_p_company').css('font-weight');
                 italic[j]=$('#import_p_company').css('font-style');
                 under_line[j]=$('#import_p_company').css('text-decoration');
@@ -220,8 +216,8 @@
                 content[j]="";
                 j++;
                 label[j]='product';
-                left[j]=parseInt($('#import_product').offset().left)-$('#box').offset().left;
-                top[j]=parseInt($('#import_product').offset().top)-$('#box').offset().top;
+                left[j]=parseInt($('#import_product').offset().left)-$('#import_box').offset().left;
+                top[j]=parseInt($('#import_product').offset().top)-$('#import_box').offset().top;
                 bold[j]=$('#import_p_product').css('font-weight');
                 italic[j]=$('#import_p_product').css('font-style');
                 under_line[j]=$('#import_p_product').css('text-decoration');
@@ -234,8 +230,8 @@
                 content[j]="";
                 j++;
                 label[j]='price_label';
-                left[j]=parseInt($('#import_price_label').offset().left)-$('#box').offset().left;
-                top[j]=parseInt($('#import_price_label').offset().top)-$('#box').offset().top;
+                left[j]=parseInt($('#import_price_label').offset().left)-$('#import_box').offset().left;
+                top[j]=parseInt($('#import_price_label').offset().top)-$('#import_box').offset().top;
                 bold[j]=$('#import_p_price_label').css('font-weight');
                 italic[j]=$('#import_p_price_label').css('font-style');
                 under_line[j]=$('#import_p_price_label').css('text-decoration');
@@ -248,8 +244,8 @@
                 content[j]="";
                 j++;
                 label[j]='barcode';
-                left[j]=parseInt($('#import_barcode').offset().left)-$('#box').offset().left;
-                top[j]=parseInt($('#import_barcode').offset().top)-$('#box').offset().top;
+                left[j]=parseInt($('#import_barcode').offset().left)-$('#import_box').offset().left;
+                top[j]=parseInt($('#import_barcode').offset().top)-$('#import_box').offset().top;
                 bold[j]=0;
                 italic[j]=0;
                 under_line[j]=0;
@@ -260,12 +256,13 @@
                 transform[j]=0;
                 content[j]="";
                  $.ajax ({
-                           url: "<?php echo base_url('index.php/price_tag/save_design')?>",
+                          url: "<?php echo base_url('index.php/price_tag/save_design')?>",
                             data: { 
                                 image:image,
                                 design:$('#import_design_id').val(),
-                                box_height:parseFloat($('#box_height').val()),
-                                box_width:parseFloat($('#box_width').val()),
+                                update:$('#update_import_design_id').val(),
+                                box_height:parseInt($('#import_box').css('height')),
+                                box_width:parseInt($('#import_box').css('width')),
                                 label:label,
                                 left:left,
                                 top:top,
@@ -283,10 +280,12 @@
                             type:'POST',
                             complete: function(response) {
                                if(response['responseText']=='True'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('price_tag').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
-                                      
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('price_tag').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                    design_list();
+                                    $("#dt_table_tools").dataTable().fnDraw();
                                     }else  if(response['responseText']=='Already'){
                                            $.bootstrapGrowl($('#design_id').val()+' <?php echo $this->lang->line('price_tag_design').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                           
                                     }else  if(response['responseText']=='Flase'){
                                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
                                     }else{
@@ -322,10 +321,11 @@ function design_price_tag(){
       $('#import_design_div').hide('hide');      
       $("#design_tag").show('slow');
       $('#design_list').removeAttr("disabled");
-      $('#design_tag').attr("disabled",'disabled');
+      $('#items_lists').attr("disabled",'disabled');
+      $('#import_design').removeAttr("disabled");
       $('#tools').remove();
       $('#tools_import').remove();
-       $('#design_tool_list').append('\n\
+      $('#design_tool_list').append('\n\
             \n\
            <div class="col col-lg-3" id="tools">\n\
                        <div class="row">\n\
@@ -399,21 +399,24 @@ function design_price_tag(){
                     </div>');
 }
 function design_list(){
+      $('#import_design_div').hide('hide');      
       $('#design_tag').hide('hide');      
       $("#design_list_div").show('slow');
       $('#tools').remove();
       $('#import_tools').remove();
       $('#design_tag').removeAttr("disabled");
+      $('#import_design').removeAttr("disabled");
       $('#design_list').attr("disabled",'disabled');
      
 }
 function import_design(){
     $('#design_list_div').hide('hide');       
+    $('#design_tag').hide('hide');       
     $("#import_design_div").show('slow');
     $('#tools_import').remove();
     $('#tools').remove();
-    $('#design_tag').removeAttr("disabled");
-    $('#import_design_list').attr("disabled",' disabled');
+    $('#items_lists').removeAttr("disabled");
+    $('#design_list').removeAttr("disabled");
     $('#import_design').attr("disabled",'disabled');
     $('#import_tools_list').append('\n\
             \n\
@@ -500,8 +503,9 @@ function reload_update_user(){
             <div class="row">
                 <div class="col col-lg-7">
                     <a href="javascript:design_price_tag()" class="btn btn-default" id="items_lists"><i class="icon icon-desktop"></i> <?php echo $this->lang->line('price_tag_design') ?></a>
-                    <a href="javascript:design_list()" id="design_list" class="btn btn-default" ><i class="icon icon-barcode"></i> <?php echo $this->lang->line('design_list') ?></a>  
                     <a href="javascript:import_design()" id="import_design" class="btn btn-default" ><i class="icon icon-upload"></i> <?php echo $this->lang->line('import_design') ?></a>  
+                    <a href="javascript:design_list()" id="design_list" class="btn btn-default" ><i class="icon icon-barcode"></i> <?php echo $this->lang->line('design_list') ?></a>  
+                    
                         
                         
                 </div>
@@ -848,6 +852,7 @@ $("#box").hover( function(){
 <input type="hidden" id="label_count" value="2">
 <input type="hidden" id="field_id" value="2">
 <input type="hidden" id="rotate_value" value="5">
+<input type="hidden" id="import_image" >
 <div id="work">
     
 </div>
@@ -1002,7 +1007,7 @@ $("#box").hover( function(){
                                          <div class="row" >
                                             <label><?php echo $this->lang->line('design_id') ?></label>
                                             <input type="text" name="import_design_id" id="import_design_id" class="form-control">
-                                        </div>
+                                            <input type="hidden"  name="update_import_design_id" id="update_import_design_id">                                       </div>
                                        
                                         <div class="row" id="input_row">
                                             <img id="import_barcode"  class="btn btn-default" src="<?php echo base_url() ?>barcode.jpg">
