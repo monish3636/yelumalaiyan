@@ -85,5 +85,13 @@ class Tag extends CI_Model{
         return $sql->result();
     }
     // function  end
+    
+    /* delete price tag design */
+    // function starts
+    function delete($design){
+        $this->db->where('design',$design);
+        $this->db->delete('price_tag_designs');
+    }
+    // function end
 }
 

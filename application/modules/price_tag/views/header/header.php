@@ -50,7 +50,28 @@
                                    
 			}
 
-           
+           function delete_design(design){
+             <?php if($this->session->userdata['price_tag_per']['delete']==1){ ?>
+                                                               
+                            $.ajax({                                      
+                              url: "<?php echo base_url() ?>index.php/price_tag/delete/"+design,                     
+                             data: "", 
+                             dataType: 'json',
+                              complete: function(response) {
+                            if(response['responseText']=='TRUE'){
+                                   $.bootstrapGrowl(' <?php echo $this->lang->line('price_tag_design') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
+                        $("#dt_table_tools").dataTable().fnDraw();
+                            }
+                                   } 
+                           });
+                         
+                        
+                              
+                         
+                        <?php }else{?>
+                                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('price_tag');?>', { type: "error" });                           
+                        <?php }?>
+           }
           
            function edit_import_design(guid){
                        $("#import_design_form").trigger('reset');
