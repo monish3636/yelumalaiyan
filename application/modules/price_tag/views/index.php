@@ -29,8 +29,11 @@
                 $.bootstrapGrowl('<?php echo $this->lang->line('file_is_large');?>', { type: "warning" });                      
             }else {
                 var image=response['responseText'];
-                $('#import_box').css("background-image", "url(uploads/price_tags/"+image+")");  
-                $('#import_image').val(image);
+       
+                $('#import_box').css('width',image.split(',')[0]);
+                $('#import_box').css('height',image.split(',')[1]);
+               $('#import_box').css("background-image", "url(uploads/price_tags/"+image.split(',')[2]+")");  
+             //   $('#import_image').val(image);
             }
 	 
                   
@@ -45,7 +48,8 @@
       $("#import_design_form").ajaxForm(options);
 });
     function rgb2hex(rgb) {
-         return rgb.split(',')[0].split('(')[1]+','+rgb.split(',')[1]+','+rgb.split(',')[2].split(')')[0]
+     return rgb.split(',')[0].split('(')[1]+','+rgb.split(',')[1]+','+rgb.split(',')[2].split(')')[0]
+     // return "0,0,0";
     }
     function transform_degree(trans){
         if(trans=='none'){
@@ -209,6 +213,7 @@
                 under_line[j]=$('#import_p_company').css('text-decoration');
                 size[j]=parseInt($('#import_p_company').css('font-size'));
                 color[j]=rgb2hex($('#import_p_company').css('color'));
+             
                 width[j]=parseInt($('#import_company').css('width'));
                 height[j]=parseInt($('#import_company').css('height'));
                 transform[j]=transform_degree($('#import_company').css('transform'));
@@ -222,6 +227,7 @@
                 under_line[j]=$('#import_p_product').css('text-decoration');
                 size[j]=parseInt($('#import_p_product').css('font-size'));
                 color[j]=rgb2hex($('#import_p_product').css('color'));
+               
                 width[j]=parseInt($('#import_product').css('width'));
                 height[j]=parseInt($('#import_product').css('height'));
                 transform[j]=transform_degree($('#import_product').css('transform'));
@@ -235,6 +241,7 @@
                 under_line[j]=$('#import_p_price_label').css('text-decoration');
                 size[j]=parseInt($('#import_p_price_label').css('font-size'));
                 color[j]=rgb2hex($('#import_p_price_label').css('color'));
+               
                 width[j]=parseInt($('#import_price_label').css('width'));
                 height[j]=parseInt($('#import_price_label').css('height'));
                 transform[j]=transform_degree($('#import_price_label').css('transform'));
@@ -256,7 +263,7 @@
                            url: "<?php echo base_url('index.php/price_tag/save_design')?>",
                             data: { 
                                 image:image,
-                                design:$('#design_id').val(),
+                                design:$('#import_design_id').val(),
                                 box_height:parseFloat($('#box_height').val()),
                                 box_width:parseFloat($('#box_width').val()),
                                 label:label,
@@ -844,6 +851,9 @@ $("#box").hover( function(){
 <div id="work">
     
 </div>
+<div id="image_size">
+    
+</div>
  
 <section id="design_tag" class="container clearfix main_section">
      <?php   $form =array('id'=>'add_item',
@@ -991,14 +1001,14 @@ $("#box").hover( function(){
                                     <div class="col col-lg-2" id="input_fields"  style="padding-left: 20px">
                                          <div class="row" >
                                             <label><?php echo $this->lang->line('design_id') ?></label>
-                                            <input type="text" name="design_id" id="design_id" class="form-control">
+                                            <input type="text" name="import_design_id" id="import_design_id" class="form-control">
                                         </div>
                                        
                                         <div class="row" id="input_row">
                                             <img id="import_barcode"  class="btn btn-default" src="<?php echo base_url() ?>barcode.jpg">
                                         </div>
                                          <div class="row" id="input_row">
-                                            <div id="import_price_label"><p id="p_price_label"  class="btn btn-default" style="font-size: 25px">$0.00</p></div> 
+                                            <div id="import_price_label"><p id="import_p_price_label"  class="btn btn-default" style="font-size: 25px">$0.00</p></div> 
                                         </div>
                                         <div class="row" id="input_row">
                                             <div  id="import_product"  ><p id="import_p_product" class="btn btn-default" ><?php  echo $this->lang->line('Product_Name_Unit') ?></p></div>

@@ -333,7 +333,9 @@ echo 'false';
         else
         {       
                 $upload_data = $this->upload->data();
-                echo $upload_data['file_name'];
+                echo $upload_data['image_width'].','.$upload_data['image_height'].",".$upload_data['file_name'];
+            
+              
               
         }
     }
