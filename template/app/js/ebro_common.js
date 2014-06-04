@@ -14,7 +14,7 @@
 		//* tooltips_popovers
 		ebro_tooltips_popovers.init();
 		//* main search autocomplete
-		
+		ebro_autocomplete.init();
 		
         //* ebro style switcher
         ebro_styleSwitcher.init();
@@ -23,12 +23,6 @@
         $('.notification_dropdown .dropdown-menu').click(function(e) {
             e.stopPropagation();
         });
-		
-		//* show
-		if($('#side_fixed_nav').length && $.cookie('ebro_side_fixed') == undefined) {
-			$('body').addClass('side_fixed_open');
-			$('#toogle_nav_visible').bootstrapSwitch('setState', true);
-		}
 		
     });
 
@@ -227,22 +221,6 @@
 					}
 				});
 				
-				if(!is_touch_device()) {
-					//* Lazy Bind or Delay Bind http://www.ideawu.com/blog/2011/05/jquery-delay-bind-event-handler-lazy-bind.html
-					(function(a){a.fn.lazybind=function(d,e,f,b){var c=null;if(void 0!==b)a(this).on(b,function(){clearTimeout(c)});return a(this).on(d,function(a){var b=this;c=setTimeout(function(){e.call(b,a)},f)})}})(jQuery);
-					
-					$('#side_fixed_nav').lazybind('mouseenter', function(){
-						if( ($.cookie(cookieFixedNav) == undefined) || ( ($.cookie(cookieFixedNav) != undefined) && ($.cookie(cookieFixedNav) == 'nav_hidden') ) ) {
-							$('body').addClass('side_fixed_open');
-						}
-					}, 150, 'mouseleave');
-					$('#side_fixed_nav').lazybind('mouseleave', function(){
-						if( ($.cookie(cookieFixedNav) == undefined) || ( ($.cookie(cookieFixedNav) != undefined) && ($.cookie(cookieFixedNav) == 'nav_hidden') ) ) {
-							$('body').removeClass('side_fixed_open');
-						}
-					}, 250, 'mouseenter');
-				};
-				
 				//* show/hide nav on click()
 				$('#side_fixed_nav_toggle').click(function( e ) {
 					e.stopImmediatePropagation();
@@ -259,6 +237,32 @@
 					$('body').addClass('side_fixed_open');
 					$('#toogle_nav_visible').bootstrapSwitch('setState', true);
 				}
+				
+				if(!is_touch_device()) {
+					//* Lazy Bind or Delay Bind http://www.ideawu.com/blog/2011/05/jquery-delay-bind-event-handler-lazy-bind.html
+					(function(a){a.fn.lazybind=function(d,e,f,b){var c=null;if(void 0!==b)a(this).on(b,function(){clearTimeout(c)});return a(this).on(d,function(a){var b=this;c=setTimeout(function(){e.call(b,a)},f)})}})(jQuery);
+					
+					$('#side_fixed_nav').lazybind('mouseenter', function(){
+						if( ($.cookie(cookieFixedNav) == undefined) || ( ($.cookie(cookieFixedNav) != undefined) && ($.cookie(cookieFixedNav) == 'nav_hidden') ) ) {
+							$('body').addClass('side_fixed_open');
+						}
+					}, 250, 'mouseleave');
+					$('#side_fixed_nav').lazybind('mouseleave', function(){
+						if( ($.cookie(cookieFixedNav) == undefined) || ( ($.cookie(cookieFixedNav) != undefined) && ($.cookie(cookieFixedNav) == 'nav_hidden') ) ) {
+							$('body').removeClass('side_fixed_open');
+						}
+					}, 350, 'mouseenter');
+				} else {
+					$("#side_fixed_nav").swipe( {
+						swipeRight:function(event, direction, distance, duration, fingerCount) {
+							$('body').addClass('side_fixed_open');	
+						},
+						swipeLeft:function(event, direction, distance, duration, fingerCount) {
+							$('body').removeClass('side_fixed_open');	
+						},
+						threshold:0
+					});
+				};
 				
             }
 		}
@@ -300,7 +304,7 @@
 			$('.main_search .typeahead').typeahead({
 				name: 'ebro-countries',
 				valueKey: 'name',
-				prefetch: '',
+				prefetch: 'js/lib/typeahead.js/example.json',
 				template: [
 					'<p class="sg_main"><b>{{name}}</b> <small class="text-muted">{{tld}}</small></p>',
 					'<p class="sg_desc">{{subregion}}</p>'
@@ -336,7 +340,7 @@
                 var $color = $(this).attr('title');
                 $('#theme_switch li').removeClass('style_active');
                 $(this).addClass('style_active');
-                $('#theme').attr('href','css/theme/'+$color+'.css');
+                $('#theme').attr('href','http://localhost/posnic/template/app/css/theme/'+$color+'.css');
             });
             
 			//* patterns
@@ -379,7 +383,7 @@
                 $('#layout_style>option:eq(0)').prop('selected', true);
                 
                 $('#theme_switch li').removeClass('style_active').eq(0).addClass('style_active');
-                $('#theme').attr('href','css/theme/color_1.css');
+                $('#theme').attr('href','http://localhost/posnic/template/app/css/theme/color_1.css');
                 
                 $('body').removeClass('pattern_1 pattern_2 pattern_3 pattern_4 pattern_5 pattern_6 pattern_7 pattern_8  pattern_9  pattern_10 sidebar_right boxed full_width');
 				

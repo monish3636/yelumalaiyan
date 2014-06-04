@@ -4,7 +4,7 @@
            
                     $('#add_brand_form').hide();
                     $('#edit_brand_form').hide();
-                              posnic_table();
+                             posnic_table();
                                 add_brand.onsubmit=function()
                                 { 
                                   return false;
@@ -165,7 +165,7 @@
                         <?php }?>
                        }
 		</script>
-                <script type="text/javascript" charset="utf-8" language="javascript" src="<?php echo base_url() ?>template/data_table/js/DT_bootstrap.js"></script>
+<!--                <script type="text/javascript" charset="utf-8" language="javascript" src="<?php echo base_url() ?>template/data_table/js/DT_bootstrap.js"></script>-->
 
 
   

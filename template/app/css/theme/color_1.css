@@ -1,6 +1,6 @@
 textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus, .form-control:focus {border-color:#48ac2e}
 
-.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {border-color:#48ac2e;background:#48ac2e;color:#fff}
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus,.panel-footer .pagination > li.active > a {border-color:#48ac2e;background:#48ac2e;color:#fff}
 
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {background:#48ac2e;color:#fff}
 
@@ -73,3 +73,6 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 /* onepage Scroll */
 	.landing_page nav .p_active a,.owl-prev:hover,.owl-next:hover {background:#48ac2e}
 	.grid_filters .filter:hover,.grid_filters .filter.active {color:#48ac2e}
+	
+/* pricing table */
+.pricing_panel_feat .pricing_heading {color:#48ac2e}
