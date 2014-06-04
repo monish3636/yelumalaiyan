@@ -12,6 +12,13 @@ class Tag extends CI_Model{
     }
     /* function end*/
     
+    /* update design 
+       function start     */
+    function update_design($val,$design,$label){
+        $this->db->where(array('design'=>$design,'label'=>$label));
+        $this->db->update('price_tag_designs',$val);
+    }
+    /* function end*/
     /* check duplicate designs 
      *  function start**/
     function check_duplicate($design){
@@ -70,5 +77,13 @@ class Tag extends CI_Model{
         $sql=  $this->db->get();
         return $sql->num_rows();
     }
+    /* get price tag design details to update*/
+    // function start
+    function get_price_tag_details($guid){
+        $this->db->select()->from('price_tag_designs')->where('design',$guid);
+        $sql=  $this->db->get();
+        return $sql->result();
+    }
+    // function  end
 }
 
