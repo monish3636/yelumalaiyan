@@ -153,6 +153,7 @@
                             data: { 
                                 image:"",
                                 design:$('#design_id').val(),
+                                update:$('#update_design_id').val(),
                                 box_height:parseFloat($('#box_height').val()),
                                 box_width:parseFloat($('#box_width').val()),
                                 label:label,
@@ -317,6 +318,7 @@ function posnic_add_new(){
                     <?php }?>
 }
 function design_price_tag(){
+    
       $('#design_list_div').hide('hide');      
       $('#import_design_div').hide('hide');      
       $("#design_tag").show('slow');
@@ -404,7 +406,7 @@ function design_list(){
       $("#design_list_div").show('slow');
       $('#tools').remove();
       $('#import_tools').remove();
-      $('#design_tag').removeAttr("disabled");
+      $('#items_lists').removeAttr("disabled");
       $('#import_design').removeAttr("disabled");
       $('#design_list').attr("disabled",'disabled');
      
@@ -881,6 +883,7 @@ $("#box").hover( function(){
                                         <div class="row" >
                                             <label><?php echo $this->lang->line('design_id') ?></label>
                                             <input type="text" name="design_id" id="design_id" class="form-control">
+                                            <input type="hidden" name="update_design_id" id="update_design_id">
                                         </div>
                                         <div class="row" id="label_row">
                                             <div id="drag_label1"  class="btn btn-default"><?php  echo $this->lang->line('label');?></div>
@@ -916,7 +919,7 @@ $("#box").hover( function(){
                                             <a href="javascript:box_left()" class="btn btn-default"><i class="icon icon-minus"></i> </a>
                                             <a href="javascript:box_right()" class="btn btn-default"><i class="icon icon-plus"></i> </a>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="box_parent">
                                             <div id="box"  style="border: solid #D3D3D3 3px;width: 300px;height: 150px">
                                                 <p></p>
                                             </div>

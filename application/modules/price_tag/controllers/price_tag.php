@@ -5,8 +5,8 @@ class Price_tag extends MX_Controller{
                $this->load->library('posnic');   
     }
     function index(){ 
-     $this->get_items();
- //$this->create_price_tag();
+  $this->get_items();
+//$this->create_price_tag();
       //include_once '/text_in_image/text.php';
 
 //         $this->load->library('zend');
@@ -17,7 +17,7 @@ class Price_tag extends MX_Controller{
     }
     function create_price_tag(){
         $this->load->model('tag') ;
-        $data=  $this->tag->get_design_cord('GD-67');
+        $data=  $this->tag->get_design_cord('GD1');
         
         foreach ($data as $row){
            $box_width=$row['box_width'];
@@ -293,14 +293,25 @@ imagejpeg($bar, 'uploads/price_tags/core/merged_image.jpg');
                 $content=  $this->input->post('content');
                 $this->load->model('tag');
                 if($this->tag->check_duplicate($design)){
-                for($i=0;$i<count($label);$i++){
-                    if(!$content[$i]){
-                        $content[$i]="";
+                     if($this->input->post('update')!=""){
+                        for($i=0;$i<count($label);$i++){
+                            if(!$content[$i]){
+                                  $content[$i]="";
+                            }
+                            $val=array('image'=>$image,'content'=>$content[$i],'transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                            $this->tag->update_design($val,$this->input->post('update'),$label[$i]);
+                        }
+                        echo 'True';
+                    }else{
+                        for($i=0;$i<count($label);$i++){
+                            if(!$content[$i]){
+                                $content[$i]="";
+                            }
+                            $val=array('image'=>$image,'content'=>$content[$i],'transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
+                            $this->tag->save_design($val);
+
+                        } echo 'True';
                     }
-                    $val=array('image'=>$image,'content'=>$content[$i],'transform'=>$transform[$i],'box_width'=>$box_width,'box_height'=>$box_height,'design'=>$design,'color'=>$color[$i],'label'=>$label[$i],'left'=>$left[$i],'top'=>$top[$i],'bold'=>$bold[$i],'italic'=>$italic[$i],'under_line'=>$under_line[$i],'size'=>$size[$i],'width'=>$width[$i],'height'=>$height[$i],);
-                    $this->tag->save_design($val);
-                   
-                } echo 'True';
                 }else{
                     if($this->input->post('update')!=""){
                         for($i=0;$i<count($label);$i++){
