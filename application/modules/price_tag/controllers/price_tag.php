@@ -370,6 +370,12 @@ echo 'false';
         $data=  $this->tag->get_price_tag_details($guid);
         echo json_encode($data);
     }
+    function delete($design){
+        $this->load->model('tag');
+        $this->tag->delete($design);
+        echo 'TRUE';
+                
+    }
     
     
 }

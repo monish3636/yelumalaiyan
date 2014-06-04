@@ -803,17 +803,18 @@ $("#box").hover( function(){
     $("#box" ).droppable({
         drop: function( event, ui ) {
              var input_count=parseFloat($('#input_count').val());
-             var label_count=parseFloat($('#label_count').val());
+             var label_count=$('#label_count').val();
           
               var draged=ui.draggable.attr("id");
-           
-              if(draged=='drag_label'+parseFloat(label_count-1)){
+          
+           var lable_id=parseInt(label_count)-1;
+              if(draged=='drag_label'+lable_id){
                     $('#'+draged).remove();
                     $('#label_row').append('<div id="drag_label'+label_count+'"    class="btn btn-default "><?php  echo $this->lang->line('label');?></div>');
                     $('#box').append('<div id="drag_label_'+label_count+'"    class="inputs push-left  "><p id="p_drag_label_'+label_count+'"  styel="height:30px;width:30px"><?php  echo $this->lang->line('label');?></p><a id="delete_actions_drag_label_'+label_count+'" class="field_none delete_action" href=javascript:remove_field("drag_label_'+label_count+'")><i class="icon icon-trash default"></i></a><a  id="edit_actions_drag_label_'+label_count+'" class="field_none edit_action" href=javascript:edit_field("drag_label_'+label_count+'")><i class="icon icon-edit default"></i></a></div>')
                     $( "#drag_label"+label_count ).draggable();
                     $( "#drag_label_"+label_count ).draggable();
-                    $('#label_count').val(parseFloat(label_count+1));
+                    $('#label_count').val(parseInt(label_count)+1);
                 
               }
              else{
