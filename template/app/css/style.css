@@ -174,8 +174,8 @@
 
 /* navigation */
 	body.side_fixed {padding-left:40px;-webkit-transition: padding-left 200ms ease-out;-moz-transition: padding-left 200ms ease-out;-o-transition: padding-left 200ms ease-out;transition: padding-left 200ms ease-out;}
-	#side_fixed_nav {display:none;position:fixed;background:#222;width:42px;left:0;top:0;height:100%;overflow:hidden;padding:0;-webkit-transition: width 200ms ease-out;-moz-transition: width 200ms ease-out;-o-transition: width 200ms ease-out;transition: width 200ms ease-out;z-index:102}
-	#text_nav_side_fixed {margin:0;padding:0;width:220px}
+	#side_fixed_nav {display:none;position:fixed;background:#002828;width:42px;left:0;top:0;height:100%;overflow:hidden;padding:0;-webkit-transition: width 200ms ease-out;-moz-transition: width 200ms ease-out;-o-transition: width 200ms ease-out;transition: width 200ms ease-out;z-index:102}
+	#text_nav_side_fixed {margin:0;padding:0;width:160px}
 	#text_nav_side_fixed li {list-style:none}
 	#text_nav_side_fixed a {line-height:36px;color:#fff;color:rgba(255, 255, 255, 0.6);font-size:13px;display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;position:relative}
 	#text_nav_side_fixed > li > a {padding-right:28px}
@@ -195,12 +195,12 @@
 	#text_nav_side_fixed .link_active a {position:relative;color:rgba(255, 255, 255, 0.8)}
 	#text_nav_side_fixed .link_active a:after {position:absolute;right:0;top:8px;border:8px solid rgba(255,255,255,0);border-right-color:#fff;content:'';width:0;height:0}
 	
-	body.side_fixed_open {padding-left:220px}
-	body.side_fixed_open #side_fixed_nav {width:220px}
+	body.side_fixed_open {padding-left:160px}
+	body.side_fixed_open #side_fixed_nav {width:160px}
 	body.side_fixed_open #text_nav_side_fixed ul {height:auto}
 	body.side_fixed #side_fixed_nav {display:block}
 
-	.side_nav_actions {width:220px;overflow:hidden}
+	.side_nav_actions {width:160px;overflow:hidden}
 	.side_nav_actions #side_fixed_nav_toggle {display:block;font-size:14px;margin:10px;padding:17px 13px 22px;float:left;margin:0;color:#fff}
 	.side_nav_actions #toogle_nav_visible {float:right;margin:17px 10px 0 0;border-color:#333}
 	
