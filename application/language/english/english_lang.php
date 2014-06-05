@@ -680,5 +680,6 @@ $lang['credit_days']='Credit Days';
     $lang['decomposition_uom']='Decomposition U O M';
     $lang['formula']='Formula';
     $lang['uom_name']='U O M Name';
+    $lang['weight']='Weight';
    
 ?>

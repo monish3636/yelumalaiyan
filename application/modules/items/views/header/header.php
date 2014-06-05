@@ -167,6 +167,14 @@
                                  $('#parsley_reg #category').val(data[0]['category_id']);
                                  $('#parsley_reg #unit_of_mes').val(data[0]['uom']);
                                  $('#parsley_reg #no_of_unit').val(data[0]['no_of_unit']);
+                                 if(data[0]['decomposition']==1){
+                                        $('#parsley_reg #hidden_weight').show();
+                                        $('#parsley_reg #weight').val(data[0]['weight']);  
+                                        $('#decomposition').attr('checked','checked');
+                                    }else{
+                                        $('#parsley_reg #hidden_weight').hide();
+                                        $('#parsley_reg #weight').val(0);
+                                    }
                                  $('#parsley_reg .fileupload-preview').empty();
                                $('#parsley_reg .fileupload-preview').append('<img src="<?php echo base_url('uploads/items') ?>/'+data[0]['image']+'">');
     $("#parsley_reg .fileupload-preview").css('display' ,'block')  ;                       
