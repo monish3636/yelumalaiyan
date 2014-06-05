@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Decomposition_uom extends MX_Controller
+class Decomposition_type extends MX_Controller
 {
     function __construct() {
         parent::__construct();
@@ -13,13 +13,13 @@ class Decomposition_uom extends MX_Controller
         $this->load->view('template/app/header'); 
         $this->load->view('header/header');         
         $this->load->view('template/branch',$this->posnic->branches());
-        $data['active']='decomposition_uom';
+        $data['active']='decomposition_type';
         $this->load->view('index',$data);
         $this->load->view('template/app/navigation',$this->posnic->modules());
         $this->load->view('template/app/footer');
     }
-    function decomposition_uom_data_table(){
-        $aColumns = array( 'guid','uom_name','uom_name','value','formula','formula','active_status' );	
+    function decomposition_type_data_table(){
+        $aColumns = array( 'guid','type_name','type_name','value','formula','formula','active_status' );	
 	$start = "";
 	$end="";		
         if ( $this->input->get_post('iDisplayLength') != '-1' )	{
@@ -45,10 +45,10 @@ class Decomposition_uom extends MX_Controller
 
         if ( $_GET['sSearch'] != "" )
             {
-                $like =array('uom_name'=>  $this->input->get_post('sSearch'));
+                $like =array('type_name'=>  $this->input->get_post('sSearch'));
             }
-        $rResult1 = $this->posnic->posnic_data_table($end,$start,$order,$like,'decomposition_uom');
-        $iFilteredTotal =$this->posnic->data_table_count('decomposition_uom');		
+        $rResult1 = $this->posnic->posnic_data_table($end,$start,$order,$like,'decomposition_type');
+        $iFilteredTotal =$this->posnic->data_table_count('decomposition_type');		
         $iTotal =$iFilteredTotal;
         $output1 = array(
                 "sEcho" => intval($_GET['sEcho']),
@@ -79,20 +79,20 @@ class Decomposition_uom extends MX_Controller
     }
    
    
-    function update_decomposition_uom(){
-        if($this->session->userdata['decomposition_uom_per']['edit']==1){
-           if($this->input->post('decomposition_uom')){
-                $this->form_validation->set_rules('decomposition_uom',$this->lang->line('decomposition_uom'),'required'); 
+    function update_decomposition_type(){
+        if($this->session->userdata['decomposition_type_per']['edit']==1){
+           if($this->input->post('decomposition_type')){
+                $this->form_validation->set_rules('decomposition_type',$this->lang->line('decomposition_type'),'required'); 
                 if ( $this->form_validation->run() !== false ) {  
                       $id=  $this->input->post('guid');
-                      $name=$this->input->post('decomposition_uom');                
+                      $name=$this->input->post('decomposition_type');                
                       $formula=$this->input->post('formula');    
                        $value=  $this->input->post('value');
-                      $where=array('guid !='=>$id,'uom_name'=>$name,'value'=>$value);
-                if($this->posnic->check_record_unique($where,'decomposition_uom')){
-                    $value=array('uom_name'=>$name,'formula'=>$formula,'value'=>$value);
+                      $where=array('guid !='=>$id,'type_name'=>$name,'value'=>$value);
+                if($this->posnic->check_record_unique($where,'decomposition_type')){
+                    $value=array('type_name'=>$name,'formula'=>$formula,'value'=>$value);
                     $update_where=array('guid'=>$id);
-                    $this->posnic->posnic_update_record($value,$update_where,'decomposition_uom');
+                    $this->posnic->posnic_update_record($value,$update_where,'decomposition_type');
                     echo 'TRUE';
                 }else{
                         echo "ALREADY";
@@ -110,7 +110,7 @@ class Decomposition_uom extends MX_Controller
 
     function active(){
         $id=  $this->input->post('guid');
-        $report= $this->posnic->posnic_module_active($id,'decomposition_uom'); 
+        $report= $this->posnic->posnic_module_active($id,'decomposition_type'); 
         if (!$report['error']) {
             echo 'TRUE';
         } else {
@@ -119,16 +119,16 @@ class Decomposition_uom extends MX_Controller
     }
     function deactive(){
         $id=  $this->input->post('guid');
-        $report= $this->posnic->posnic_module_deactive($id,'decomposition_uom'); 
+        $report= $this->posnic->posnic_module_deactive($id,'decomposition_type'); 
         if (!$report['error']) {
             echo 'TRUE';
         } else {
             echo 'FALSE';
         }
     }
-    function edit_decomposition_uom($guid){
-        if($this->session->userdata['decomposition_uom_per']['edit']==1){
-            $data=  $this->posnic->get_module_details_for_update($guid,'decomposition_uom');
+    function edit_decomposition_type($guid){
+        if($this->session->userdata['decomposition_type_per']['edit']==1){
+            $data=  $this->posnic->get_module_details_for_update($guid,'decomposition_type');
             echo json_encode($data);
         }else{
             echo 'FALSE';
@@ -137,10 +137,10 @@ class Decomposition_uom extends MX_Controller
             
     
     function delete(){
-        if($this->session->userdata['decomposition_uom_per']['delete']==1){
+        if($this->session->userdata['decomposition_type_per']['delete']==1){
             if($this->input->post('guid')){
                 $guid=  $this->input->post('guid');
-                $this->posnic->posnic_delete($guid,'decomposition_uom');
+                $this->posnic->posnic_delete($guid,'decomposition_type');
                 echo 'TRUE';
             }
         }else{
@@ -148,19 +148,19 @@ class Decomposition_uom extends MX_Controller
         }
     }
     
-    function add_decomposition_uom(){
-        if($this->session->userdata['decomposition_uom_per']['add']==1){
-           if($this->input->post('decomposition_uom')){
-                $this->form_validation->set_rules("decomposition_uom",$this->lang->line('decomposition_uom'),'required'); 
+    function add_decomposition_type(){
+        if($this->session->userdata['decomposition_type_per']['add']==1){
+           if($this->input->post('decomposition_type')){
+                $this->form_validation->set_rules("decomposition_type",$this->lang->line('decomposition_type'),'required'); 
                 if ( $this->form_validation->run() !== false ) { 
-                      $name=$this->input->post('decomposition_uom');   
+                      $name=$this->input->post('decomposition_type');   
                       $value=  $this->input->post('value');
-                      $where=array('uom_name'=>$name,'value'=>$value);
-                if($this->posnic->check_record_unique($where,'decomposition_uom')){
+                      $where=array('type_name'=>$name,'value'=>$value);
+                if($this->posnic->check_record_unique($where,'decomposition_type')){
                     
                     $formula=  $this->input->post('formula');
-                    $value=array('uom_name'=>$name,'formula'=>$formula,'value'=>$value);
-                    $this->posnic->posnic_add_record($value,'decomposition_uom');
+                    $value=array('type_name'=>$name,'formula'=>$formula,'value'=>$value);
+                    $this->posnic->posnic_add_record($value,'decomposition_type');
                     echo 'TRUE';
                 }else{
                         echo "ALREADY";

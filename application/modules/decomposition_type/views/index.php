@@ -22,82 +22,82 @@
 </style>	
 <script type="text/javascript">
      $(document).ready( function () {
-         $('#add_new_decomposition_uom').click(function() { 
-                <?php if($this->session->userdata['decomposition_uom_per']['add']==1){ ?>
-                var inputs = $('#add_decomposition_uom').serialize();
+         $('#add_new_decomposition_type').click(function() { 
+                <?php if($this->session->userdata['decomposition_type_per']['add']==1){ ?>
+                var inputs = $('#add_decomposition_type').serialize();
                       $.ajax ({
-                            url: "<?php echo base_url('index.php/decomposition_uom/add_decomposition_uom')?>",
+                            url: "<?php echo base_url('index.php/decomposition_type/add_decomposition_type')?>",
                             data: inputs,
                             type:'POST',
                             complete: function(response) {
                                 if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('decomposition_uom').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                      $.bootstrapGrowl('<?php echo $this->lang->line('decomposition_type').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
                                        $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#add_decomposition_uom").trigger('reset');
-                                       posnic_decomposition_uom_lists();
+                                       $("#add_decomposition_type").trigger('reset');
+                                       posnic_decomposition_type_lists();
                                     }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#decomposition_uom').val()+' <?php echo $this->lang->line('decomposition_uom').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                           $.bootstrapGrowl($('#decomposition_type').val()+' <?php echo $this->lang->line('decomposition_type').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
                                     }else  if(response['responseText']=='FALSE'){
                                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
                                     }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition_uom');?>', { type: "error" });                           
+                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                           
                                     }
                        }
                 });<?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition_uom');?>', { type: "error" });                       
+                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                       
                     <?php }?>
         });
-         $('#update_decomposition_uom').click(function() { 
-                <?php if($this->session->userdata['decomposition_uom_per']['edit']==1){ ?>
+         $('#update_decomposition_type').click(function() { 
+                <?php if($this->session->userdata['decomposition_type_per']['edit']==1){ ?>
                 var inputs = $('#parsley_reg').serialize();
                       $.ajax ({
-                            url: "<?php echo base_url('index.php/decomposition_uom/update_decomposition_uom')?>",
+                            url: "<?php echo base_url('index.php/decomposition_type/update_decomposition_type')?>",
                             data: inputs,
                             type:'POST',
                             complete: function(response) {
                                   if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('decomposition_uom').' '.$this->lang->line('updated');?>', { type: "success" });                                                                                  
+                                      $.bootstrapGrowl('<?php echo $this->lang->line('decomposition_type').' '.$this->lang->line('updated');?>', { type: "success" });                                                                                  
                                        $("#dt_table_tools").dataTable().fnDraw();
                                        $("#parsley_reg").trigger('reset');
-                                       posnic_decomposition_uom_lists();
+                                       posnic_decomposition_type_lists();
                                     }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#decomposition_uom').val()+' <?php echo $this->lang->line('decomposition_uom').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                           $.bootstrapGrowl($('#decomposition_type').val()+' <?php echo $this->lang->line('decomposition_type').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
                                     }else  if(response['responseText']=='FALSE'){
                                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
                                     }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('decomposition_uom');?>', { type: "error" });                           
+                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                           
                                     }
                        }
                  });
                  <?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('decomposition_uom');?>', { type: "error" });                        
+                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                        
                     <?php }?>
         });
      });
 function posnic_add_new(){
-    <?php if($this->session->userdata['decomposition_uom_per']['add']==1){ ?>
+    <?php if($this->session->userdata['decomposition_type_per']['add']==1){ ?>
       $("#user_list").hide();
-      $('#add_decomposition_uom_form').show('slow');
+      $('#add_decomposition_type_form').show('slow');
       $('#delete').attr("disabled", "disabled");
-      $('#posnic_add_decomposition_uom').attr("disabled", "disabled");
+      $('#posnic_add_decomposition_type').attr("disabled", "disabled");
       $('#active').attr("disabled", "disabled");
       $('#deactive').attr("disabled", "disabled");
-      $('#decomposition_uom_lists').removeAttr("disabled");
+      $('#decomposition_type_lists').removeAttr("disabled");
       <?php }else{ ?>
-                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition_uom');?>', { type: "error" });                         
+                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                         
                     <?php }?>
 }
-function posnic_decomposition_uom_lists(){
-      $('#edit_decomposition_uom_form').hide('hide');
-      $('#add_decomposition_uom_form').hide('hide');      
+function posnic_decomposition_type_lists(){
+      $('#edit_decomposition_type_form').hide('hide');
+      $('#add_decomposition_type_form').hide('hide');      
       $("#user_list").show('slow');
       $('#delete').removeAttr("disabled");
       $('#active').removeAttr("disabled");
       $('#deactive').removeAttr("disabled");
-      $('#posnic_add_decomposition_uom').removeAttr("disabled");
-      $('#decomposition_uom_lists').attr("disabled",'disabled');
+      $('#posnic_add_decomposition_type').removeAttr("disabled");
+      $('#decomposition_type_lists').attr("disabled",'disabled');
 }
-function clear_add_decomposition_uom(){
+function clear_add_decomposition_type(){
       $("#posnic_user_2").trigger('reset');
 }
 function reload_update_user(){
@@ -109,11 +109,11 @@ function reload_update_user(){
     <div class="container">
             <div class="row">
                 <div class="col col-lg-7">
-                        <a href="javascript:posnic_add_new()" id="posnic_add_decomposition_uom" class="btn btn-default" ><i class="icon icon-user"></i> <?php echo $this->lang->line('addnew') ?></a>  
+                        <a href="javascript:posnic_add_new()" id="posnic_add_decomposition_type" class="btn btn-default" ><i class="icon icon-user"></i> <?php echo $this->lang->line('addnew') ?></a>  
                         <a href="javascript:posnic_group_deactive()" id="active" class="btn btn-default" ><i class="icon icon-pause"></i> <?php echo $this->lang->line('deactive') ?></a>
                         <a href="javascript:posnic_group_active()" class="btn btn-default" id="deactive"  ><i class="icon icon-play"></i> <?php echo $this->lang->line('active') ?></a>
                         <a href="javascript:posnic_delete()" class="btn btn-default" id="delete"><i class="icon icon-trash"></i> <?php echo $this->lang->line('delete') ?></a>
-                        <a href="javascript:posnic_decomposition_uom_lists()" class="btn btn-default" id="decomposition_uom_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('decomposition_uom') ?></a>
+                        <a href="javascript:posnic_decomposition_type_lists()" class="btn btn-default" id="decomposition_type_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('decomposition_type') ?></a>
                 </div>
             </div>
     </div>
@@ -124,18 +124,18 @@ function reload_update_user(){
         <div id="main_content_outer" class="clearfix">
             <div id="main_content">
                         <?php $form =array('name'=>'posnic'); 
-                    echo form_open('decomposition_uom/decomposition_uom_manage',$form) ?>
+                    echo form_open('decomposition_type/decomposition_type_manage',$form) ?>
                         <div class="row">
                             <div class="col-sm-12" id="user_list"><br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                            <h4 class="panel-title"><?php echo $this->lang->line('decomposition_uom') ?></h4>                                                                               
+                                            <h4 class="panel-title"><?php echo $this->lang->line('decomposition_type') ?></h4>                                                                               
                                     </div>
                                     <table id="dt_table_tools" class="table-striped table-condensed" style="width: 100%"><thead>
                                         <tr>
                                           <th>Id</th>
                                           <th ><?php echo $this->lang->line('select') ?></th>
-                                          <th ><?php echo $this->lang->line('decomposition_uom') ?></th>
+                                          <th ><?php echo $this->lang->line('decomposition_type') ?></th>
                                           <th ><?php echo $this->lang->line('value') ?></th>
                                           <th ><?php echo $this->lang->line('formula') ?></th>
                                           
@@ -153,11 +153,11 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_decomposition_uom_form" class="container clearfix main_section">
-     <?php   $form =array('id'=>'add_decomposition_uom',
+<section id="add_decomposition_type_form" class="container clearfix main_section">
+     <?php   $form =array('id'=>'add_decomposition_type',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
-       echo form_open_multipart('decomposition_uom/add_pos_decomposition_uom_details/',$form);?>
+       echo form_open_multipart('decomposition_type/add_pos_decomposition_type_details/',$form);?>
         <div id="main_content_outer" class="clearfix">
            <div id="main_content">
                  <div class="row">
@@ -165,7 +165,7 @@ function reload_update_user(){
                      <div class="col-lg-4">
                           <div class="panel panel-default">
                                <div class="panel-heading">
-                                     <h4 class="panel-title"><?php echo $this->lang->line('decomposition_uom') ?></h4>   
+                                     <h4 class="panel-title"><?php echo $this->lang->line('decomposition_type') ?></h4>   
                                    
                                </div>
                               <br>
@@ -175,12 +175,12 @@ function reload_update_user(){
                                                <div class="col col-lg-1"></div>
                                                <div class="col col-lg-10">
                                                     <div class="form_sep">
-                                                         <label for="decomposition_uom" class="req"><?php echo $this->lang->line('decomposition_uom') ?></label>                                                                                                       
-                                                           <?php $decomposition_uom=array('name'=>'decomposition_uom',
+                                                         <label for="decomposition_type" class="req"><?php echo $this->lang->line('decomposition_type') ?></label>                                                                                                       
+                                                           <?php $decomposition_type=array('name'=>'decomposition_type',
                                                                                     'class'=>'required form-control',
-                                                                                    'id'=>'decomposition_uom',
-                                                                                    'value'=>set_value('decomposition_uom'));
-                                                           echo form_input($decomposition_uom)?> 
+                                                                                    'id'=>'decomposition_type',
+                                                                                    'value'=>set_value('decomposition_type'));
+                                                           echo form_input($decomposition_type)?> 
                                                     </div>
                                                    </div>
                                                <div class="col col-lg-1"></div>
@@ -225,19 +225,19 @@ function reload_update_user(){
                     <div class="row">
                                 <div class="col-lg-4"></div>
                                   <div class="col col-lg-4 text-center"><br><br>
-                                      <button id="add_new_decomposition_uom"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
-                                      <a href="javascript:clear_add_decomposition_uom()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                      <button id="add_new_decomposition_type"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
+                                      <a href="javascript:clear_add_decomposition_type()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
                                   </div>
                               </div>
                 </div>
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_decomposition_uom_form" class="container clearfix main_section">
+<section id="edit_decomposition_type_form" class="container clearfix main_section">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
-       echo form_open_multipart('decomposition_uom/upadate_pos_decomposition_uom_details/',$form);?>
+       echo form_open_multipart('decomposition_type/upadate_pos_decomposition_type_details/',$form);?>
         <div id="main_content_outer" class="clearfix">
            <div id="main_content">
                 <div class="row">
@@ -245,7 +245,7 @@ function reload_update_user(){
                      <div class="col-lg-4">
                           <div class="panel panel-default">
                                <div class="panel-heading">
-                                    <h4 class="panel-title"><?php echo $this->lang->line('decomposition_uom') ?></h4>  
+                                    <h4 class="panel-title"><?php echo $this->lang->line('decomposition_type') ?></h4>  
                                      <input type="hidden" name="guid" id="guid" >
                                </div>
                               <br>
@@ -255,12 +255,12 @@ function reload_update_user(){
                                                <div class="col col-lg-1"></div>
                                                <div class="col col-lg-10">
                                                     <div class="form_sep">
-                                                         <label for="decomposition_uom" class="req"><?php echo $this->lang->line('decomposition_uom') ?></label>                                                                                                       
-                                                           <?php $decomposition_uom=array('name'=>'decomposition_uom',
+                                                         <label for="decomposition_type" class="req"><?php echo $this->lang->line('decomposition_type') ?></label>                                                                                                       
+                                                           <?php $decomposition_type=array('name'=>'decomposition_type',
                                                                                     'class'=>'required form-control',
-                                                                                    'id'=>'decomposition_uom',
-                                                                                    'value'=>set_value('decomposition_uom'));
-                                                           echo form_input($decomposition_uom)?> 
+                                                                                    'id'=>'decomposition_type',
+                                                                                    'value'=>set_value('decomposition_type'));
+                                                           echo form_input($decomposition_type)?> 
                                                     </div>
                                                    </div>
                                                <div class="col col-lg-1"></div>
@@ -305,7 +305,7 @@ function reload_update_user(){
                    <div class="row">
                         <div class="col-lg-4"></div>
                       <div class="col col-lg-4 text-center"><br><br>
-                          <button id="update_decomposition_uom"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('update') ?></button>
+                          <button id="update_decomposition_type"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('update') ?></button>
                           <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('reload') ?></a>
                       </div>
                   </div>
@@ -331,14 +331,14 @@ function reload_update_user(){
                       }
                       if (flag<1) {
                         
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('decomposition_uom');?>', { type: "warning" });
+                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('decomposition_type');?>', { type: "warning" });
                       
                       }else{
                             var posnic=document.forms.posnic;
                       for (i = 0; i < posnic.length; i++){
                           if(posnic[i].checked==true){                             
                               $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/decomposition_uom/active',
+                                url: '<?php echo base_url() ?>/index.php/decomposition_type/active',
                                 type: "POST",
                                 data: {
                                     guid:posnic[i].value
@@ -372,9 +372,9 @@ function reload_update_user(){
                       }
                       if (flag<1) {
                         
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('decomposition_uom');?>', { type: "warning" });
+                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('decomposition_type');?>', { type: "warning" });
                       }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('decomposition_uom') ?>", function(result) {
+                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('decomposition_type') ?>", function(result) {
              if(result){
               
              
@@ -382,7 +382,7 @@ function reload_update_user(){
                         for (i = 0; i < posnic.length; i++){
                           if(posnic[i].checked==true){                             
                               $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/decomposition_uom/delete',
+                                url: '<?php echo base_url() ?>/index.php/decomposition_type/delete',
                                 type: "POST",
                                 data: {
                                     guid:posnic[i].value
@@ -419,14 +419,14 @@ function reload_update_user(){
                       }
                       if (flag<1) {
                         
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('decomposition_uom');?>', { type: "warning" });
+                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('decomposition_type');?>', { type: "warning" });
                       
                       }else{
                             var posnic=document.forms.posnic;
                       for (i = 0; i < posnic.length; i++){
                           if(posnic[i].checked==true){                             
                                  $.ajax({
-                                    url: '<?php echo base_url() ?>/index.php/decomposition_uom/deactive',
+                                    url: '<?php echo base_url() ?>/index.php/decomposition_type/deactive',
                                     type: "POST",
                                     data: {
                                         guid: posnic[i].value
