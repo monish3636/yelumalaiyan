@@ -135,6 +135,7 @@ class Items extends MX_Controller{
                             $this->form_validation->set_rules('selling_price', $this->lang->line('selling_price'),'required|numeric|xss_clean'); 
                             $this->form_validation->set_rules('mrp', $this->lang->line('mrp'),'required|numeric|xss_clean'); 
                             $this->form_validation->set_rules('no_of_unit', $this->lang->line('no_of_unit'),'numeric|xss_clean'); 
+                            $this->form_validation->set_rules('weight', $this->lang->line('weight'),'numeric|xss_clean'); 
                           
                             $this->form_validation->set_rules('taxes', $this->lang->line('taxes'),'required');
                             $this->form_validation->set_rules('taxes_area', $this->lang->line('taxes_area'),'required');
@@ -161,6 +162,8 @@ class Items extends MX_Controller{
                                     'tax_id'=>$this->input->post('taxes'),
                                     'image'=>$this->user_image,
                                     'no_of_unit'=>$this->input->post('no_of_unit')==""?0:$this->input->post('no_of_unit'),
+                                    'decomposition'=>$this->input->post('weight')==""?0:1,
+                                    'weight'=>$this->input->post('weight'),
                                     'uom'=>$this->input->post('unit_of_mes'),
                                     'tax_area_id'=>$this->input->post('taxes_area'),
                                     'depart_id'=>$this->input->post('item_department'),
@@ -234,7 +237,9 @@ class Items extends MX_Controller{
                                     'category_id'=>$this->input->post('category'),
                                     'supplier_id'=>$this->input->post('supplier'),
                                     'tax_id'=>$this->input->post('taxes'),
-                                         'no_of_unit'=>$this->input->post('no_of_unit'),
+                                    'no_of_unit'=>$this->input->post('no_of_unit'),
+                                    'decomposition'=>$this->input->post('weight')==""?0:1,
+                                    'weight'=>$this->input->post('weight'),
                                     'uom'=>$this->input->post('unit_of_mes'),
                                     'tax_area_id'=>$this->input->post('taxes_area'),
                                     'depart_id'=>$this->input->post('item_department'),
@@ -252,8 +257,10 @@ class Items extends MX_Controller{
                                     'end_date'=>$this->input->post('ending_date'),
                                     'tax_Inclusive'=>$this->input->post('tax_Inclusive'),
                                     'location'=>$this->input->post('location'),
-                                        'image'=>$this->user_image,
-                                         'no_of_unit'=>$this->input->post('no_of_unit'),
+                                    'image'=>$this->user_image,
+                                    'no_of_unit'=>$this->input->post('no_of_unit'),
+                                    'decomposition'=>$this->input->post('weight')==""?0:1,
+                                    'weight'=>$this->input->post('weight'),
                                     'uom'=>$this->input->post('unit_of_mes'),
                                     'category_id'=>$this->input->post('category'),
                                     'supplier_id'=>$this->input->post('supplier'),

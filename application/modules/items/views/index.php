@@ -765,7 +765,8 @@ function change_orm_to_case_update(){
     
 $(document).ready(function()
 {
-
+ $('#hidden_weight').hide();
+        $('#weight').val(0);
 	var options = { 
 	complete: function(response) { 
                   if(response['responseText']=='TRUE'){
@@ -1094,6 +1095,26 @@ function new_discount(e){
             $('#add_item #selling_price').focus();
         }   
     }
+function item_decomposition(){
+
+    if($('#add_item #decomposition').attr("checked")){
+        $('#add_item #hidden_weight').show();
+        
+    }else{
+        $('#add_item #hidden_weight').hide();
+        $('#add_item #weight').val(0);
+    }
+    }
+function items_decomposition(){
+
+    if($('#parsley_reg #decomposition').attr("checked")){
+        $('#parsley_reg #hidden_weight').show();
+        
+    }else{
+        $('#parsley_reg #hidden_weight').hide();
+       // $('#parsley_reg #weight').val(0);
+    }
+    }
 </script>
 <section id="add_item_form" class="container clearfix main_section">
      <?php   $form =array('id'=>'add_item',
@@ -1382,12 +1403,9 @@ function new_discount(e){
                       <div class="col-lg-5">
                               <div class="panel panel-default">
                                <div class="panel-heading">
-                                     <h4 class="panel-title"><?php echo $this->lang->line('uom') ?></h4>  
-                                   
+                                     <h4 class="panel-title"><?php echo $this->lang->line('uom') ?></h4> 
                                </div>
                               <br>
-                              
-                              
                               <div class="row "  style="margin-left:1px;margin-right: 1px" >
                                          <div class="col col-lg-6" >
                                                                  <div class="form_sep">
@@ -1397,7 +1415,6 @@ function new_discount(e){
                                                                           <option value="1" onclick="change_orm_to_case()"><?php echo $this->lang->line('case_or_box') ?></option>
                                                                       </select>
                                                                  </div>
-
                                                      </div>                              
                                                     <div class="col col-lg-6" id="hidden_no_unit">
 
@@ -1409,19 +1426,38 @@ function new_discount(e){
                                                                                                  'id'=>'no_of_unit',
                                                                                                  'onKeyPress'=>"new_no_of_unit(event);return numbersonly(event)",
                                                                                                  'value'=>set_value('no_of_unit'));
-                                                                        echo form_input($no_of_unit)?> 
-                                                                           
+                                                                        echo form_input($no_of_unit)?>                                                                            
                                                                  </div>
-
-                                                     </div>                              
-                                                   
-                                      
-                                  
+                                                     </div> 
                               </div>
-                              
-                              
-                              
-                              
+                              <br>
+                          </div>
+                              <div class="panel panel-default">
+                               <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('decomposition') ?></h4> 
+                               </div>
+                              <br>
+                              <div class="row "  style="margin-left:1px;margin-right: 1px" >
+                                         <div class="col col-lg-6" >
+                                                                 <div class="form_sep">
+                                                                      <label for="decomposition" ><?php echo $this->lang->line('yes') ?></label>                                                                                                       
+                                                                      <input type="checkbox" name="decomposition" id="decomposition" value="0" class="form-control check-mark" onclick="item_decomposition()">
+                                                                 </div>
+                                                     </div>                              
+                                                    <div class="col col-lg-6" id="hidden_weight">
+
+                                                                 <div class="form_sep">
+                                                                      <label for="weight" ><?php echo $this->lang->line('weight') ?></label>                                                                                                       
+                                                                   
+                                                                                    <?php $weight=array('name'=>'weight',
+                                                                                                 'class'=>'required form-control',
+                                                                                                 'id'=>'weight',
+                                                                                                 'onKeyPress'=>"weight(event);return numbersonly(event)",
+                                                                                                 'value'=>set_value('weight'));
+                                                                        echo form_input($weight)?>                                                                            
+                                                                 </div>
+                                                     </div> 
+                              </div>
                               <br>
                           </div>
                               <div class="panel panel-default">
@@ -1808,6 +1844,34 @@ function new_discount(e){
                               
                               
                               
+                              <br>
+                          </div>
+                           <div class="panel panel-default">
+                               <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('decomposition') ?></h4> 
+                               </div>
+                              <br>
+                              <div class="row "  style="margin-left:1px;margin-right: 1px" >
+                                         <div class="col col-lg-6" >
+                                                                 <div class="form_sep">
+                                                                      <label for="decomposition" ><?php echo $this->lang->line('yes') ?></label>                                                                                                       
+                                                                      <input type="checkbox" name="decomposition" id="decomposition" value="0" class="form-control check-mark" onclick="items_decomposition()">
+                                                                 </div>
+                                                     </div>                              
+                                                    <div class="col col-lg-6" id="hidden_weight">
+
+                                                                 <div class="form_sep">
+                                                                      <label for="weight" ><?php echo $this->lang->line('weight') ?></label>                                                                                                       
+                                                                   
+                                                                                    <?php $weight=array('name'=>'weight',
+                                                                                                 'class'=>'required form-control',
+                                                                                                 'id'=>'weight',
+                                                                                                 'onKeyPress'=>"weight(event);return numbersonly(event)",
+                                                                                                 'value'=>set_value('weight'));
+                                                                        echo form_input($weight)?>                                                                            
+                                                                 </div>
+                                                     </div> 
+                              </div>
                               <br>
                           </div>
                               <div class="panel panel-default">
