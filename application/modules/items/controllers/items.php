@@ -134,7 +134,7 @@ class Items extends MX_Controller{
                             $this->form_validation->set_rules('cost', $this->lang->line('cost'),'required|numeric|xss_clean'); 
                             $this->form_validation->set_rules('selling_price', $this->lang->line('selling_price'),'required|numeric|xss_clean'); 
                             $this->form_validation->set_rules('mrp', $this->lang->line('mrp'),'required|numeric|xss_clean'); 
-                            $this->form_validation->set_rules('no_of_unit', $this->lang->line('no_of_unit'),'required|numeric|xss_clean'); 
+                            $this->form_validation->set_rules('no_of_unit', $this->lang->line('no_of_unit'),'numeric|xss_clean'); 
                           
                             $this->form_validation->set_rules('taxes', $this->lang->line('taxes'),'required');
                             $this->form_validation->set_rules('taxes_area', $this->lang->line('taxes_area'),'required');
@@ -160,7 +160,7 @@ class Items extends MX_Controller{
                                     'supplier_id'=>$this->input->post('supplier'),
                                     'tax_id'=>$this->input->post('taxes'),
                                     'image'=>$this->user_image,
-                                    'no_of_unit'=>$this->input->post('no_of_unit'),
+                                    'no_of_unit'=>$this->input->post('no_of_unit')==""?0:$this->input->post('no_of_unit'),
                                     'uom'=>$this->input->post('unit_of_mes'),
                                     'tax_area_id'=>$this->input->post('taxes_area'),
                                     'depart_id'=>$this->input->post('item_department'),
