@@ -681,5 +681,6 @@ $lang['credit_days']='Credit Days';
     $lang['formula']='Formula';
     $lang['uom_name']='U O M Name';
     $lang['weight']='Weight';
+    $lang['in']='In';
    
 ?>

@@ -156,77 +156,27 @@
      $(document).ready( function () {
          
        
-          $('#parsley_reg #items').change(function() {
-              if(document.getElementById('new_item_row_id_'+$('#parsley_reg #items').select2('data').item) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #items').select2('data').item){
-                     $.bootstrapGrowl('<?php echo $this->lang->line('this item already added');?> '+$('#parsley_reg #select_item').val(), { type: "warning" });  
-                       $('#parsley_reg #items').select2('open');
+          $('#parsley_reg #decomposition_type').change(function() {
+              if(document.getElementById('new_item_row_id_'+$('#parsley_reg #decomposition_type').select2('data').item) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #decomposition_type').select2('data').item){
+                     $.bootstrapGrowl('<?php echo $this->lang->line('this item already added');?> '+$('#parsley_reg #decomposition_type').val(), { type: "warning" });  
+                       $('#parsley_reg #decomposition_type').select2('open');
               }else{
-                   var guid = $('#parsley_reg #items').select2('data').item;
+                var guid = $('#parsley_reg #decomposition_type').select2('data').item;
                 
                        
-                $('#parsley_reg #item_id').val(guid);
-                $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').value);
-                $('#parsley_reg #stock_id').val($('#parsley_reg #items').select2('data').sid);
-                $('#parsley_reg #item_name').val($('#parsley_reg #items').select2('data').text);
-                if($('#parsley_reg #items').select2('data').uom==0){
-                    $('#parsley_reg #price').val(parseFloat($('#parsley_reg #items').select2('data').price));
-                }else{
-                    $('#parsley_reg #price').val(parseFloat($('#parsley_reg #items').select2('data').price)/parseFloat($('#parsley_reg #items').select2('data').no_of_unit));
-                }
-                $('#parsley_reg #stock_quty').val($('#parsley_reg #items').select2('data').quty);
-                $('#parsley_reg #tax_value').val($('#parsley_reg #items').select2('data').tax_value);
-                $('#parsley_reg #tax_type').val($('#parsley_reg #items').select2('data').tax_type);
-              
-                
-                var start=$('#parsley_reg #items').select2('data').start
-                var end=$('#parsley_reg #items').select2('data').end
-           
-                var tax=$('#parsley_reg #items').select2('data').tax_Inclusive;
-                $('#parsley_reg #tax_Inclusive').val(tax);
-                if(tax==1){
-                    $('#tax_label').text('Tax(Exc)');
-                }else{
-                    $('#tax_label').text('Tax(Inc)');   
-                }
-                
-                if(start==0 && end==0){
-                    $('#parsley_reg #discount').val(0);  
-                }else{
-                    $('#parsley_reg #discount').val($('#parsley_reg #items').select2('data').discount);
-                }
-                if(isNaN($('#parsley_reg #tax_value').val())){
-                      $('#parsley_reg #tax_value').val(0);
-                      $('#parsley_reg #tax').val(0);
-                }
-                   
-               net_amount();
-                $('#parsley_reg #quantity').focus();
-                    window.setTimeout(function ()
-                    {
-                      
-                        $('#parsley_reg #quantity').focus();
-                    }, 0);
+                $('#parsley_reg #decomposition_guid').val(guid);
+                $('#parsley_reg #formula').val($('#parsley_reg #decomposition_type').select2('data').formula);
+                $('#parsley_reg #decomposition_value').val($('#parsley_reg #decomposition_type').select2('data').value);
+               
           }
           });
-          function format_item(sup) {
-            if (!sup.id) return sup.text;
-            
-            if(sup.uom==0){
-                return  "<p style='font-size:13px;'>"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:78px'></img></p><p style='font-size:14px;margin-top: -27px;'>"+"<?php echo ' <br>'.$this->lang->line('price') ?> : "+sup.price+" <?php echo ' '.$this->lang->line('stock') ?> : "+sup.quty+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.value+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.category+"</p> <p style='width:130px;  margin-left: 218px'> "+sup.brand+"</p><p style='width:120px;  margin-left: 380px;margin-top: -28px;'> "+sup.department+"</p>";
-            }else{
-                return  "<p style='font-size:13px;'>"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:78px'></img></p><p style='font-size:14px;margin-top: -27px;'>"+"<?php echo ' <br>'.$this->lang->line('price') ?> : "+parseFloat(sup.price)/parseFloat(sup.no_of_unit)+" <?php echo ' '.$this->lang->line('stock') ?> : "+sup.quty+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.value+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.category+"</p> <p style='width:130px;  margin-left: 218px'> "+sup.brand+"</p><p style='width:120px;  margin-left: 380px;margin-top: -28px;'> "+sup.department+"</p>";
-            }
-          }
-          $('#parsley_reg #items').select2({
-             
-              dropdownCssClass : 'item_select',
-                 formatResult: format_item,
-                formatSelection: format_item,
+         
+          $('#parsley_reg #decomposition_type').select2({
                 
                 escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('items') ?>",
+                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('decomposition_type') ?>",
                 ajax: {
-                     url: '<?php echo base_url() ?>index.php/decomposition/search_items/',
+                     url: '<?php echo base_url() ?>index.php/decomposition/search_decomposition_type/',
                      data: function(term, page) {
                             return {types: ["exercise"],
                                 limit: 2,
@@ -240,7 +190,6 @@
                     data: function (term) {
                         return {
                             term: term,
-                                     suppler:$('#parsley_reg #items_guid').val()
                         };
                     },
                     results: function (data) {
@@ -248,25 +197,12 @@
                       
                       $.each(data, function(index, item){
                         results.push({
-                          id: item.i_guid+item.price,
-                          item: item.i_guid,
-                          sid: item.guid,
-                          text: item.name,
-                          value: item.code,
-                          image: item.image,
-                          brand: item.b_name,
-                          category: item.c_name,
-                          department: item.d_name,
-                          quty: item.quty,
-                          price: item.price,
-                          tax_type: item.tax_type_name,
-                          tax_value: item.tax_value,
-                          tax_Inclusive : item.tax_Inclusive ,
-                          start : item.start_date ,
-                          end : item.end_state ,
-                          discount : item.discount ,
-                          uom : item.uom ,
-                          no_of_unit : item.no_of_unit ,
+                          id: item.guid+item.type_name,
+                          item: item.guid,
+                          text: item.type_name,
+                          value:item.value,
+                          formula:item.formula
+                         ,
                         });
                       });   if($('#items_guid').val()==""){
                           $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
@@ -290,16 +226,14 @@
                 return  "<p style='font-size:13px;'>"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:78px'></img></p><p style='font-size:14px;margin-top: -27px;'>"+"<?php echo ' <br>'.$this->lang->line('price') ?> : "+parseFloat(sup.price)/parseFloat(sup.no_of_unit)+" <?php echo ' '.$this->lang->line('stock') ?> : "+sup.quty+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.value+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.category+"</p> <p style='width:130px;  margin-left: 218px'> "+sup.brand+"</p><p style='width:120px;  margin-left: 380px;margin-top: -28px;'> "+sup.department+"</p>";
             }
             }
-        $('#parsley_reg #select_item').change(function() {
-           
-                   var guid = $('#parsley_reg #select_item').select2('data').item;
-                
-                       
+        $('#parsley_reg #select_item').change(function() {           
+                var guid = $('#parsley_reg #select_item').select2('data').item;
                 $('#parsley_reg #item_id').val(guid);
-                $('#parsley_reg #item_sku').val($('#parsley_reg #select_item').select2('data').value);
-              
+                $('#parsley_reg #item_sku').val($('#parsley_reg #select_item').select2('data').value);              
                 $('#parsley_reg #demo_item_stock').val($('#parsley_reg #select_item').select2('data').quty);
                 $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
+                $('#parsley_reg #demo_item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
+                $('#parsley_reg #item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
               
                 
                 window.setTimeout(function ()
@@ -358,7 +292,7 @@
                           end : item.end_state ,
                           discount : item.discount ,
                           uom : item.uom ,
-                          no_of_unit : item.no_of_unit ,
+                          weight : item.weight ,
                         });
                       });   
                       return {
@@ -1205,6 +1139,18 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                        </div>
                                                </div>
                                                <div class="col col-sm-2" >
+                                                    <div class="form_sep">
+                                                            <label for="item_stock" ><?php echo $this->lang->line('stock')." ".$this->lang->line('in')." ".$this->lang->line('weight'); ?></label>													
+                                                                     <?php $demo_item_weight_stock=array('name'=>'demo_item_weight_stock',
+                                                                                        'class'=>'required  form-control',
+                                                                                        'id'=>'demo_item_weight_stock',
+                                                                                        'disabled'=>'disabled',
+                                                                                        'value'=>set_value('item_stock'));
+                                                                         echo form_input($demo_item_weight_stock)?>
+                                                            <input type="hidden" name="item_weight_stock" id="item_weight_stock">
+                                                       </div>
+                                               </div>
+                                               <div class="col col-sm-2" >
                                                    <div class="form_sep">
                                                             <label for="decomposition_number" ><?php echo $this->lang->line('decomposition_id') ?></label>													
                                                                      <?php $decomposition_number=array('name'=>'demo_decomposition_number',
@@ -1230,20 +1176,7 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                                 </div>
                                                        </div>
                                                    </div>
-                                               <div class="col col-sm-2" >
-                                                     <div class="form_sep">
-                                                            <label for="expiry_date" ><?php echo $this->lang->line('expiry_date') ?></label>													
-                                                                     <div class="input-group date ebro_datepicker" data-date-format="dd.mm.yyyy" data-date-autoclose="true" data-date-start-view="2">
-                                                                           <?php $expiry_date=array('name'=>'expiry_date',
-                                                                                            'class'=>'required form-control',
-                                                                                            'id'=>'expiry_date',
-                                                                                            'onKeyPress'=>"new_expiry_date(event)", 
-                                                                                            'value'=>set_value('expiry_date'));
-                                                                             echo form_input($expiry_date)?>
-                                                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                                                </div>
-                                                       </div>
-                                                   </div>
+                                               
                                               
                                               
                                                </div>
@@ -1264,31 +1197,38 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                 <div class="col col-sm-1" style="padding:1px; width: 190px;">
                                              
                                                    
-                                             <label for="items" class="text-center" ><?php echo $this->lang->line('items') ?></label>	
+                                             <label for="items" class="text-center" ><?php echo $this->lang->line('decomposition_type') ?></label>	
                                                      <div class="form_sep" id='display_none_div'>
                                                       												
-                                                                  <?php $items=array('name'=>'items',
+                                                                  <?php $decomposition_type=array('name'=>'decomposition_type',
                                                                                     'class'=>'form-control',
-                                                                                    'id'=>'items',
-                                                                                    'value'=>set_value('items'));
-                                                                     echo form_input($items)?>
+                                                                                    'id'=>'decomposition_type',
+                                                                                    'value'=>set_value('decomposition_type'));
+                                                                     echo form_input($decomposition_type)?>
                                                   </div>
                                          
                                                     <input type="hidden" id='diabled_item' class="form-control">                                                 
-                                                    <input type="hidden" name="item_id" id="item_id">
-                                                    <input type="hidden" name="tax_type" id="tax_type">
-                                                    <input type="hidden" name="tax_Inclusive" id="tax_Inclusive">                                                 
-                                                    <input type="hidden" name="tax_value" id="tax_value">
-                                                    <input type="hidden" name="item_name" id="item_name">
-                                                    <input type="hidden" name="sku" id="sku">
-                                                    <input type="hidden" name="seleted_row_id" id="seleted_row_id">
-                                                    <input type="hidden" name="stock_quty" id="stock_quty">
-                                                    <input type="hidden" name="stock_id" id="stock_id">
-                                                    <input type="hidden" name="discount" id="discount">
-                                                    <input type="hidden" name="old_discount" id="old_discount">
-                                                    <input type="hidden" name="old_tax" id="old_tax">
+                                                    <input type="hidden" name="decomposition_guid" id="decomposition_guid">
+                                                    <input type="hidden" name="formula" id="formula">
+                                                    <input type="hidden" name="decomposition_value" id="decomposition_value">                                                 
+                                                    
                                                         </div>
                                                 
+                                                 <div class="col col-lg-1" style="padding:1px;width: 160px;">
+                                                   <div class="form_sep">
+                                                            
+                                                                <label for="stock_quantity" class="text-center" ><?php echo $this->lang->line('stock') ." ". $this->lang->line('quantity') ?></label>
+
+                                                                 <?php $stock_quantity=array('name'=>'stock_quantity',
+                                                                                            'class'=>' form-control text-center',
+                                                                                            'id'=>'stock_quantity',
+                                                                                            'onkeyup'=>"net_amount()", 
+                                                                     'onKeyPress'=>"add_new_quty(event); return numbersonly(event)",
+                                                                                            'value'=>set_value('stock_quantity'));
+                                                                             echo form_input($stock_quantity)?>
+                                                               
+                                                        </div>
+                                                        </div>
                                                  <div class="col col-lg-1" style="padding:1px;width: 160px;">
                                                    <div class="form_sep">
                                                             
@@ -1297,8 +1237,7 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                                  <?php $quantity=array('name'=>'quantity',
                                                                                             'class'=>' form-control text-center',
                                                                                             'id'=>'quantity',
-                                                                                            'onkeyup'=>"net_amount()", 
-                                                                     'onKeyPress'=>"add_new_quty(event); return numbersonly(event)",
+                                                                                            'disabled'=>'disabled',
                                                                                             'value'=>set_value('quantity'));
                                                                              echo form_input($quantity)?>
                                                                
@@ -1312,12 +1251,12 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                     <div class="col col-lg-1" style="padding:1px;width: 120px">
                                                    <div class="form_sep">
                                                             
-                                                                <label for="price" class="text-center" ><?php echo $this->lang->line('price') ?></label>
+                                                                <label for="price" class="text-center" ><?php echo $this->lang->line('selling_price') ?></label>
 
                                                                  <?php $price=array('name'=>'price',
                                                                                             'class'=>' form-control small_length text-right',
                                                                                             'id'=>'price',
-                                                                                            'disabled'=>'disabled',
+                                                                                           
                                                                   
                                                                                             'value'=>set_value('price'));
                                                                              echo form_input($price)?>
@@ -1356,17 +1295,7 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                         </div>
                                                     </div>
                                                
-                                                <div class="col col-lg-1" style="padding:1px;width:120px">
-                                                   <div class="form_sep"> <label for="discount" class="text-center" ><?php echo $this->lang->line('discount') ?></label>
-                                                            <?php $item_discount=array('name'=>'item_discount',
-                                                                                            'class'=>' form-control text-right',
-                                                                                            'id'=>'item_discount',
-                                                                                            'disabled'=>'disabled',
-                                                                                            'value'=>set_value('item_discount'));
-                                                                             echo form_input($item_discount)?>
-                                                                
-                                                        </div>
-                                                    </div>
+                                               
                                                 <div class="col col-lg-2" style="padding:1px;">
                                                    <div class="form_sep">
                                                             
