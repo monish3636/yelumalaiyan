@@ -1,4 +1,11 @@
-	html,body {height: 100%;max-width:100%}
+	@font-face
+{
+font-family: posnic;
+src: url(../fonts/vrinda.ttf);
+}
+html,body {height: 100%;max-width:100%;
+          // font-family:posnic !important;
+}
 	body {overflow-x:hidden}
 	
 	a {color:#2992c8}
