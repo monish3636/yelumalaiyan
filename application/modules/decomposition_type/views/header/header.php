@@ -2,10 +2,10 @@
 <script type="text/javascript" charset="utf-8">
           $(document).ready( function () {
            
-                    $('#add_decomposition_uom_form').hide();
-                    $('#edit_decomposition_uom_form').hide();
+                    $('#add_decomposition_type_form').hide();
+                    $('#edit_decomposition_type_form').hide();
                               posnic_table();
-                                add_decomposition_uom.onsubmit=function()
+                                add_decomposition_type.onsubmit=function()
                                 { 
                                   return false;
                                 } 
@@ -20,7 +20,7 @@
            $('#dt_table_tools').dataTable({
                                       "bProcessing": true,
 				      "bServerSide": true,
-                                      "sAjaxSource": "<?php echo base_url() ?>index.php/decomposition_uom/decomposition_uom_data_table",
+                                      "sAjaxSource": "<?php echo base_url() ?>index.php/decomposition_type/decomposition_type_data_table",
                                        aoColumns: [  
                                     
          { "bVisible": false} , {	"sName": "ID",
@@ -77,11 +77,11 @@
 			}
     function user_function(guid){
              var name=$('#name_'+guid).val();
-    <?php if($this->session->userdata['decomposition_uom_per']['delete']==1){ ?>
-             bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete This')." ".$this->lang->line('decomposition_uom') ?> "+$('#name_'+guid).val(), function(result) {
+    <?php if($this->session->userdata['decomposition_type_per']['delete']==1){ ?>
+             bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete This')." ".$this->lang->line('decomposition_type') ?> "+$('#name_'+guid).val(), function(result) {
              if(result){
             $.ajax({
-                url: '<?php echo base_url() ?>/index.php/decomposition_uom/delete',
+                url: '<?php echo base_url() ?>/index.php/decomposition_type/delete',
                 type: "POST",
                 data: {
                     guid: guid
@@ -90,7 +90,7 @@
                 success: function(response)
                 {
                     if(response){
-                        $.bootstrapGrowl('<?php echo $this->lang->line('decomposition_uom') ?> '+name+' <?php echo $this->lang->line('deleted');?>', { type: "error" });
+                        $.bootstrapGrowl('<?php echo $this->lang->line('decomposition_type') ?> '+name+' <?php echo $this->lang->line('deleted');?>', { type: "error" });
                         $("#dt_table_tools").dataTable().fnDraw();
                     }}
             });
@@ -98,13 +98,13 @@
 
                         }
     }); <?php }else{?>
-           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('decomposition_uom');?>', { type: "error" });                       
+           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                       
    <?php }
 ?>
                         }
             function posnic_deactive(guid){
                 $.ajax({
-                url: '<?php echo base_url() ?>index.php/decomposition_uom/deactive',
+                url: '<?php echo base_url() ?>index.php/decomposition_type/deactive',
                 type: "POST",
                 data: {
                     guid: guid
@@ -121,7 +121,7 @@
             }
             function posnic_active(guid){
                            $.ajax({
-                url: '<?php echo base_url() ?>index.php/decomposition_uom/active',
+                url: '<?php echo base_url() ?>index.php/decomposition_type/active',
                 type: "POST",
                 data: {
                     guid: guid
@@ -138,22 +138,22 @@
             }
            function edit_function(guid){
                        $("#parsley_reg").trigger('reset');
-                        <?php if($this->session->userdata['decomposition_uom_per']['edit']==1){ ?>
+                        <?php if($this->session->userdata['decomposition_type_per']['edit']==1){ ?>
                             $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/decomposition_uom/edit_decomposition_uom/"+guid,                      
+                             url: "<?php echo base_url() ?>index.php/decomposition_type/edit_decomposition_type/"+guid,                      
                              data: "", 
                              dataType: 'json',               
                              success: function(data)        
                              {    
                                  $("#user_list").hide();
-                                 $('#edit_decomposition_uom_form').show('slow');
+                                 $('#edit_decomposition_type_form').show('slow');
                                  $('#delete').attr("disabled", "disabled");
-                                 $('#posnic_add_decomposition_uom').attr("disabled", "disabled");
+                                 $('#posnic_add_decomposition_type').attr("disabled", "disabled");
                                  $('#active').attr("disabled", "disabled");
                                  $('#deactive').attr("disabled", "disabled");
-                                 $('#decomposition_uom_lists').removeAttr("disabled");
+                                 $('#decomposition_type_lists').removeAttr("disabled");
                                  $('#parsley_reg #guid').val(data[0]['guid']);
-                                 $('#parsley_reg #decomposition_uom').val(data[0]['uom_name']);
+                                 $('#parsley_reg #decomposition_type').val(data[0]['type_name']);
                                  $('#parsley_reg #formula').val(data[0]['formula']);
                                  $('#parsley_reg #value').val(data[0]['value']);
                                
@@ -164,7 +164,7 @@
                               
                          
                         <?php }else{?>
-                                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('decomposition_uom');?>', { type: "error" });                       
+                                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                       
                         <?php }?>
                        }
 		</script>
