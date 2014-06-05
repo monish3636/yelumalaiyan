@@ -25,7 +25,7 @@ class Items extends CI_Model{
 
     
     function search_items($search){
-         $this->db->select('items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata['branch_id'])->where('items.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',1);
+         $this->db->select('items.decomposition,items.weight,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata['branch_id'])->where('items.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',1)->where('items.decomposition',1);
          $this->db->join('items', "items.guid=stock.item ",'left');
          $this->db->join('items_category', 'items.category_id=items_category.guid','left');
          $this->db->join('items_setting', 'items.guid=items_setting.item_id AND items_setting.purchase=1','left');
@@ -39,14 +39,16 @@ class Items extends CI_Model{
                 $sql=  $this->db->get();
                 $data=array();
                 foreach ($sql->result_array() as $row){
-                    if($row['sales']==0){
+                   if($row['decomposition']==1){
                   
                        $data[]=$row;
                     }
+               
+                   // print_r($row);
                 }
               
          
-         return $data;
+        return $data;
      
      }
      function get_sales_quotation($guid){
@@ -118,9 +120,15 @@ class Items extends CI_Model{
                   $data[]=$row;
               }
           }
-          return $data;
+          return $data;          
           
-          
+     }
+     function search_decomposition_type($search){
+         $this->db->select()->from('decomposition_type')->where('branch_id',  $this->session->userdata('branch_id'));
+         $this->db->like(array('type_name'=>$search,'value'=>$search));
+         $this->db->limit($this->session->userdata('data_limit'));
+         $sql=  $this->db->get();
+         return $sql->result();
      }
     
 }

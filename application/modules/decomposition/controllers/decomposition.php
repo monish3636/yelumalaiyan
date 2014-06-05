@@ -297,17 +297,26 @@ function decomposition_number(){
  * search items to purchase decomposition with or like 
  *  */
 
-function search_items(){
-    $search= $this->input->post('term');
-    $this->load->model('items');
-    $data= $this->items->search_items($search);      
-    echo json_encode($data);
-       
-        
-}
-function language($lang){
+    function search_items(){
+        $search= $this->input->post('term');
+        $this->load->model('items');
+        $data= $this->items->search_items($search);      
+        echo json_encode($data);
+
+
+    }
+    /* search decomposition type */
+    function search_decomposition_type(){
+        $search= $this->input->post('term');
+        $this->load->model('items');
+        $data= $this->items->search_decomposition_type($search);      
+        echo json_encode($data);
+    }
+    /* function start */
+    function language($lang){
        $lang= $this->lang->load($lang);
        return $lang;
     }
+    // function end
 }
 ?>
