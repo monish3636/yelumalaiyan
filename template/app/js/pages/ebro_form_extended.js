@@ -199,8 +199,8 @@
 				});
 			}
 				/* For jquery.chained.remote.js */    
-				$("#series-remote").remoteChained("#mark-remote", "js/lib/chained/json.php");
-				$("#model-remote").remoteChained("#series-remote", "js/lib/chained/json.php");
+				//$("#series-remote").remoteChained("#mark-remote", "http://localhost/posnic/js/lib/chained/json.php");
+				//$("#model-remote").remoteChained("#series-remote", "http://localhost/posnic/js/lib/chained/json.php");
 				
 		}
 	}

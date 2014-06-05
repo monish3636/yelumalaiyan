@@ -674,5 +674,11 @@ $lang['credit_days']='Credit Days';
     $lang['file_is_large']='File Is Large';
     $lang['store_name']='Store Name';
     $lang['Product_Name_Unit']='Product Name & Unit';
+    $lang['decomposition']='Decomposition';
+    $lang['decomposition_id']='Decomposition Code';
+    $lang['decomposition_date']='Deomposition Date';
+    $lang['decomposition_uom']='Decomposition U O M';
+    $lang['formula']='Formula';
+    $lang['uom_name']='U O M Name';
    
 ?>
