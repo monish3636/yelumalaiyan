@@ -236,6 +236,7 @@
                 var guid = $('#parsley_reg #select_item').select2('data').item;
                 $('#parsley_reg #decomposition_item_guid').val(guid);
                 $('#parsley_reg #item_sku').val($('#parsley_reg #select_item').select2('data').value);              
+                $('#parsley_reg #stock_id').val($('#parsley_reg #select_item').select2('data').sid);              
                 $('#parsley_reg #demo_item_stock').val($('#parsley_reg #select_item').select2('data').quty);
                 $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
                 $('#parsley_reg #current_stock_weight').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
@@ -423,7 +424,7 @@ function reload_update_user(){
                                             <th>Id</th>
                                             <th ><?php echo $this->lang->line('select') ?></th>
                                             <th ><?php echo $this->lang->line('decomposition_id') ?></th>
-                                            <th><?php echo $this->lang->line('name') ?></th>
+                                            <th><?php echo $this->lang->line('item')." ".$this->lang->line('name') ?></th>
                                             <th><?php echo $this->lang->line('decomposition_date') ?></th>
                                             <th><?php echo $this->lang->line('no_of_type') ?></th>                                            
                                             
@@ -533,13 +534,13 @@ function reload_update_user(){
             formula=eval(formula);
             var total_weight=parseFloat(quty)*formula
             $('#total_weight').val(parseFloat(total_weight));
-            if(total_weight>(current_stock_weight*weight)){
+            if(total_weight>(current_stock_weight)){
                 $.bootstrapGrowl('<?php echo $this->lang->line('quantity_is_out_of_stock');?>', { type: "warning" });  
-                var stock=current_stock_weight*weight;           
+                var stock=current_stock_weight;           
                 formula=eval(formula);
                 var quty=parseFloat(stock)/formula;
                 $('#parsley_reg #quantity').val(quty);
-                $('#total_weight').val(parseFloat(current_stock_weight*weight));
+                $('#total_weight').val(parseFloat(current_stock_weight));
             }
             $('#parsley_reg #total').val($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val());
             var num = parseFloat($('#total').val());
@@ -617,8 +618,8 @@ function reload_update_user(){
                 price,
                 total,
                 '<input type="hidden" name="index" id="index">\n\
-                <input type="hidden" name="decomposition_value[]" id="decompositions_value" value="'+decomposition_value+'">\n\
-                <input type="hidden" name="decomposition_type[]" id="decompositions_type" value="'+$('#decomposition_type_val').val()+'">\n\
+                <input type="hidden" name="decompositions_value[]" id="decompositions_value" value="'+decomposition_value+'">\n\
+                <input type="hidden" name="decompositions_type[]" id="decompositions_type" value="'+$('#decomposition_type_val').val()+'">\n\
                 <input type="hidden" name="decompositions_id[]" id="decompositions_id" value="'+decompositions_id+'">\n\
                 <input type="hidden" name="decompositions_weight[]" id="decompositions_weight" value="'+weight+'">\n\
                 <input type="hidden" name="decompositions_quty[]" value="'+quty+'" id="decompositions_quty"> \n\
@@ -751,8 +752,7 @@ function clear_inputs(){
         
     <div id="main_content" style="padding: 0 14px !important;">
                      
-        <input type="hidden" name="dummy_discount" id="dummy_discount" >
-        <input type="hidden" name="dummy_discount_amount" id="dummy_discount_amount" >
+        <input type="hidden" name="guid" id="guid" >
                          <div class="row">
                           <div class="panel panel-default">
                               <div class="panel-heading" >
@@ -797,6 +797,7 @@ function clear_inputs(){
                                                                                         'value'=>set_value('item_stock'));
                                                                          echo form_input($item_stock)?>
                                                             <input type="hidden" name="item_stock" id="item_stock">
+                                                            <input type="hidden" name="stock_id" id="stock_id">
                                                             <input type="hidden" name="current_stock_weight" id="current_stock_weight">
                                                        </div>
                                                </div>
