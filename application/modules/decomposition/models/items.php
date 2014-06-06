@@ -70,7 +70,7 @@ class Items extends CI_Model{
          }
          return $data;
      }
-     function delete_order_item($guid){      
+     function delete_decomposition_item($guid){      
           $this->db->where('guid',$guid);
           $this->db->delete('decomposition_x_items');
      }

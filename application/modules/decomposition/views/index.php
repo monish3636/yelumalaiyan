@@ -74,93 +74,92 @@
     function numbersonly(e){
         var unicode=e.charCode? e.charCode : e.keyCode
         if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40){ //if the key isn't the backspace key (which we should allow)
-        if (unicode<48||unicode>57)
-        return false
-          }
+            if (unicode<48||unicode>57)
+                return false
+        }
     }
     function save_new_decomposition(){
-         <?php if($this->session->userdata['decomposition_per']['add']==1){ ?>
-                   if($('#parsley_reg').valid()){
-                       var oTable = $('#selected_item_table').dataTable();
-                       if(oTable.fnGetData().length>0){
-                var inputs = $('#parsley_reg').serialize();
-                      $.ajax ({
+        <?php if($this->session->userdata['decomposition_per']['add']==1){ ?>
+                if($('#parsley_reg').valid()){
+                    var oTable = $('#selected_item_table').dataTable();
+                    if(oTable.fnGetData().length>0){
+                        var inputs = $('#parsley_reg').serialize();
+                        $.ajax ({
                             url: "<?php echo base_url('index.php/decomposition/save')?>",
                             data: inputs,
                             type:'POST',
                             complete: function(response) {
                                 if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('decomposition').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#parsley_reg").trigger('reset');
-                                       posnic_decomposition_lists();
-                                       refresh_items_table();
-                                    }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#parsley_reg #decomposition_number').val()+' <?php echo $this->lang->line('items').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                                    }else  if(response['responseText']=='FALSE'){
-                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition');?>', { type: "error" });                           
-                                    }
-                       }
-                });
-                    }else{
-                  
-                   $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
-                     $('#parsley_reg #items').select2('open');
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('decomposition').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                    $("#dt_table_tools").dataTable().fnDraw();
+                                    $("#parsley_reg").trigger('reset');
+                                    posnic_decomposition_lists();
+                                    refresh_items_table();
+                                }else  if(response['responseText']=='ALREADY'){
+                                    $.bootstrapGrowl($('#parsley_reg #decomposition_number').val()+' <?php echo $this->lang->line('items').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                }else  if(response['responseText']=='FALSE'){
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                                }else{
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition');?>', { type: "error" });                           
+                                }
+                            }
+                        });
+                    }else{                  
+                        $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
+                        $('#parsley_reg #items').select2('open');
                     }
-                    }else{
-                   $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('all_require_elements');?>', { type: "error" });                        
-                    }<?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items');?>', { type: "error" });                       
-                    <?php }?>
+                }else{
+                    $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('all_require_elements');?>', { type: "error" });                        
+                }
+        <?php                 
+        }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items');?>', { type: "error" });                       
+        <?php }?>
     }
     function update_decomposition(){
-         <?php if($this->session->userdata['decomposition_per']['edit']==1){ ?>
-                   if($('#parsley_reg').valid()){
-                       var oTable = $('#selected_item_table').dataTable();
-                       if(oTable.fnGetData().length>0){
+        <?php if($this->session->userdata['decomposition_per']['edit']==1){ ?>
+            if($('#parsley_reg').valid()){
+                var oTable = $('#selected_item_table').dataTable();
+                if(oTable.fnGetData().length>0){
                 var inputs = $('#parsley_reg').serialize();
-                      $.ajax ({
-                            url: "<?php echo base_url('index.php/decomposition/update')?>",
-                            data: inputs,
-                            type:'POST',
-                            complete: function(response) {
-                                if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('decomposition').' '.$this->lang->line('updated');?>', { type: "success" });                                                                                  
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#parsley_reg").trigger('reset');
-                                       posnic_decomposition_lists();
-                                       refresh_items_table();
-                                    }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#parsley_reg #decomposition_number').val()+' <?php echo $this->lang->line('items').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                                    }else  if(response['responseText']=='FALSE'){
-                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition');?>', { type: "error" });                           
-                                    }
+                    $.ajax ({
+                        url: "<?php echo base_url('index.php/decomposition/update')?>",
+                        data: inputs,
+                        type:'POST',
+                        complete: function(response) {
+                            if(response['responseText']=='TRUE'){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('decomposition').' '.$this->lang->line('updated');?>', { type: "success" });                                                                                  
+                                $("#dt_table_tools").dataTable().fnDraw();
+                                $("#parsley_reg").trigger('reset');
+                                posnic_decomposition_lists();
+                                refresh_items_table();
+                            }else  if(response['responseText']=='ALREADY'){
+                                $.bootstrapGrowl($('#parsley_reg #decomposition_number').val()+' <?php echo $this->lang->line('items').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                            }else  if(response['responseText']=='FALSE'){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                            }else{
+                                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition');?>', { type: "error" });                           
+                            }
                        }
-                });
-                    }else{
-                  
-                   $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
-                     $('#parsley_reg #items').select2('open');
-                    }
-                    }else{
-                   $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('all_require_elements');?>', { type: "error" });                        
-                    }<?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items');?>', { type: "error" });                       
-                    <?php }?>
+                    });
+                }else{
+                    $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
+                    $('#parsley_reg #items').select2('open');
+                }
+            }else{
+                $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('all_require_elements');?>', { type: "error" });                        
+            }
+        <?php }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items');?>', { type: "error" });                       
+        <?php }?>
     }
     
-     $(document).ready( function () {
-         
-       
-          $('#parsley_reg #decomposition_type').change(function() {
-              if(document.getElementById('new_item_row_id_'+$('#parsley_reg #decomposition_type').select2('data').id) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #decomposition_type').select2('data').id){
-                    $.bootstrapGrowl($('#parsley_reg #decomposition_type').select2('data').text+"<?php echo $this->lang->line('is_already_added');?> ", { type: "warning" });  
-                    $('#parsley_reg #decomposition_type').select2('open');
-              }else{
+    $(document).ready( function () {
+        $('#parsley_reg #decomposition_type').change(function() {
+            if(document.getElementById('new_item_row_id_'+$('#parsley_reg #decomposition_type').select2('data').id) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #decomposition_type').select2('data').id){
+                $.bootstrapGrowl($('#parsley_reg #decomposition_type').select2('data').text+"<?php echo $this->lang->line('is_already_added');?> ", { type: "warning" });  
+                $('#parsley_reg #decomposition_type').select2('open');
+            }else{
                 var guid = $('#parsley_reg #decomposition_type').select2('data').id;
                 $('#parsley_reg #decomposition_guid').val(guid);
                 $('#parsley_reg #decomposition_type_val').val($('#parsley_reg #decomposition_type').select2('data').text);
@@ -171,116 +170,98 @@
                 {
                    $('#quantity').focus();
                 }, 0);
-                
-                       
-          }
-          
-          });
-         
-          $('#parsley_reg #decomposition_type').select2({
-                
-                escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('decomposition_type') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/decomposition/search_decomposition_type/',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: 2,
-                                term: term,
-                               
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term,
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      
-                      $.each(data, function(index, item){
+            }
+        });    
+        $('#parsley_reg #decomposition_type').select2({                
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('decomposition_type') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/decomposition/search_decomposition_type/',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: 2,
+                        term: term,
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term,
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          item: item.guid,
-                          text: item.type_name,
-                          value:item.value,
-                          formula:item.formula
-                         ,
+                            id: item.guid,
+                            item: item.guid,
+                            text: item.type_name,
+                            value:item.value,
+                            formula:item.formula                     
                         });
-                      });   if($('#items_guid').val()==""){
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-            $('#parsley_reg #items').select2('close');   
-            $('#parsley_reg #select_item').select2('open');
-        
-                      }
-                      return {
-                       
-                          results: results
-                      };
+                    });  
+                    if($('#items_guid').val()==""){
+                        $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
+                        $('#parsley_reg #items').select2('close');   
+                        $('#parsley_reg #select_item').select2('open');        
                     }
+                    return {
+                        results: results
+                    };
                 }
-            });
-         function format_items(sup) {
-             if (!sup.id) return sup.text;
-            
+            }
+        });
+        function format_items(sup) {
+            if (!sup.id) return sup.text;            
             if(sup.uom==0){
                 return  "<p style='font-size:13px;'>"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:78px'></img></p><p style='font-size:14px;margin-top: -27px;'>"+"<?php echo ' <br>'.$this->lang->line('price') ?> : "+sup.price+" <?php echo ' '.$this->lang->line('stock') ?> : "+sup.quty+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.value+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.category+"</p> <p style='width:130px;  margin-left: 218px'> "+sup.brand+"</p><p style='width:120px;  margin-left: 380px;margin-top: -28px;'> "+sup.department+"</p>";
             }else{
                 return  "<p style='font-size:13px;'>"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:78px'></img></p><p style='font-size:14px;margin-top: -27px;'>"+"<?php echo ' <br>'.$this->lang->line('price') ?> : "+parseFloat(sup.price)/parseFloat(sup.no_of_unit)+" <?php echo ' '.$this->lang->line('stock') ?> : "+sup.quty+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.value+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.category+"</p> <p style='width:130px;  margin-left: 218px'> "+sup.brand+"</p><p style='width:120px;  margin-left: 380px;margin-top: -28px;'> "+sup.department+"</p>";
             }
-            }
+        }
         $('#parsley_reg #select_item').change(function() {           
-                var guid = $('#parsley_reg #select_item').select2('data').item;
-                $('#parsley_reg #decomposition_item_guid').val(guid);
-                $('#parsley_reg #item_sku').val($('#parsley_reg #select_item').select2('data').value);              
-                $('#parsley_reg #stock_id').val($('#parsley_reg #select_item').select2('data').sid);              
-                $('#parsley_reg #demo_item_stock').val($('#parsley_reg #select_item').select2('data').quty);
-                $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
-                $('#parsley_reg #current_stock_weight').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
-                $('#parsley_reg #demo_item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
-                $('#parsley_reg #item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').weight));
-              
-                
-                window.setTimeout(function ()
-                {
+            var guid = $('#parsley_reg #select_item').select2('data').item;
+            $('#parsley_reg #decomposition_item_guid').val(guid);
+            $('#parsley_reg #item_sku').val($('#parsley_reg #select_item').select2('data').value);              
+            $('#parsley_reg #stock_id').val($('#parsley_reg #select_item').select2('data').sid);              
+            $('#parsley_reg #demo_item_stock').val($('#parsley_reg #select_item').select2('data').quty);
+            $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
+            $('#parsley_reg #current_stock_weight').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
+            $('#parsley_reg #demo_item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
+            $('#parsley_reg #item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').weight));
+            window.setTimeout(function ()
+            {
+                $('#parsley_reg #decomposition_date').focus();
+            }, 100);
+        });
+        $('#parsley_reg #select_item').select2({
+            dropdownCssClass : 'item_select',
+            formatResult: format_items,
+            formatSelection: format_items,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('items') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/decomposition/search_items/',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: 2,
+                        term: term,
 
-                    $('#parsley_reg #decomposition_date').focus();
-                }, 100);
-         
-             
-          });
-          $('#parsley_reg #select_item').select2({
-              dropdownCssClass : 'item_select',
-               formatResult: format_items,
-                formatSelection: format_items,
-                
-                escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('items') ?>",
-                ajax: {
-                   url: '<?php echo base_url() ?>index.php/decomposition/search_items/',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: 2,
-                                term: term,
-                               
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term,
-                                     suppler:$('#parsley_reg #items_guid').val()
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      
-                      $.each(data, function(index, item){
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term,
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
                           id: item.i_guid+item.price,
                           item: item.i_guid,
@@ -302,21 +283,14 @@
                           uom : item.uom ,
                           weight : item.weight ,
                         });
-                      });   
-                      return {
-                       
-                          results: results
-                      };
-                    }
+                    });   
+                    return {
+                        results: results
+                    };
                 }
-            });
-        
-        
-        
-        
-  
-        
-     });
+            }
+        });      
+    });
     
 function posnic_add_new(){
 refresh_items_table();
@@ -352,18 +326,17 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
             
             
       $("#user_list").hide();
-    $('#add_new_decomposition').show('slow');
+      $('#add_new_decomposition').show('slow');
       $('#delete').attr("disabled", "disabled");
       $('#posnic_add_decomposition').attr("disabled", "disabled");
       $('#active').attr("disabled", "disabled");
       $('#deactive').attr("disabled", "disabled");
-      $('#decomposition_lists').removeAttr("disabled");
-     
-         window.setTimeout(function ()
-    {
-       
-        $('#parsley_reg #select_item').select2('open');
-    }, 500);
+      $('#decomposition_lists').removeAttr("disabled");     
+            window.setTimeout(function ()
+       {
+
+           $('#parsley_reg #select_item').select2('open');
+       }, 500);
       <?php }else{ ?>
                     $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition');?>', { type: "error" });                         
                     <?php }?>
@@ -702,8 +675,10 @@ function reload_update_user(){
         var num = parseFloat($('#demo_total_amount').val());
         $('#demo_total_amount').val(num.toFixed(point));
         var num = parseFloat($('#total_amount').val());
-        $('#total_amount').val(num.toFixed(point));              
-        $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+guid+'">');
+        $('#total_amount').val(num.toFixed(point));    
+        if($('#selected_item_table #new_item_row_id_'+guid+' #deco_guid').length>0){
+            $('#deleted').append('<input type="text" id="r_items" name="r_items[]" value="'+$('#selected_item_table #new_item_row_id_'+guid+' #deco_guid').val()+'">');
+        }
         var index=$('#selected_item_table #new_item_row_id_'+guid+' #index').val();
         var anSelected =  $("#selected_item_table").dataTable();
         anSelected.fnDeleteRow(index-1);

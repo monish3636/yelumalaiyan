@@ -183,10 +183,8 @@ function save(){
                         
                 }
                 $delete=  $this->input->post('r_items');
-                    for($j=0;$j<count($delete);$j++){
-                        $this->load->model('items');
-                        
-                        // $this->items->delete_decomposition_item($delete[$j]);
+                    for($j=0;$j<count($delete);$j++){                      
+                         $this->items->delete_decomposition_item($delete[$j]);
                     }
                     
                 $decomposition=  $this->input->post('new_decomposition_id');
