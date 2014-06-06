@@ -252,7 +252,7 @@ function decomposition_approve(guid){
                                     total,
                                     '<input type="hidden" name="index" id="index">\n\
                                     <input type="hidden" name="decompositions_value[]" id="decompositions_value" value="'+decomposition_value+'">\n\
-                                    <input type="text" name="deco_guid[]" id="deco_guid" value="'+data[i]['deco_guid']+'">\n\
+                                    <input type="hidden" name="deco_guid[]" id="deco_guid" value="'+data[i]['deco_guid']+'">\n\
                                     <input type="hidden" name="decompositions_type[]" id="decompositions_type" value="'+decomposition_type+'">\n\
                                     <input type="hidden" name="decompositions_id[]" id="decompositions_id" value="'+decompositions_id+'">\n\
                                     <input type="hidden" name="decompositions_weight[]" id="decompositions_weight" value="'+weight+'">\n\

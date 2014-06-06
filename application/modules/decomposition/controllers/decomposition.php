@@ -174,11 +174,12 @@ function save(){
                 $deco_guid=  $this->input->post('deco_guid');
                 $quty=  $this->input->post('decompositions_quty');
                 $price=  $this->input->post('decompositions_price');
+                $weight=  $this->input->post('decompositions_weight');
                 $total=  $this->input->post('decompositions_total');
                 $this->load->model('items');
                 for($i=0;$i<count($deco_guid);$i++){
                  
-                    $this->items->update_decomposition($deco_guid[$i],$quty[$i],$price[$i],$total[$i]);                
+                    $this->items->update_decomposition($deco_guid[$i],$quty[$i],$price[$i],$weight[$i],$total[$i]);                
                         
                 }
                 $delete=  $this->input->post('r_items');

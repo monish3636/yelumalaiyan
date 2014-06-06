@@ -92,9 +92,9 @@ class Items extends CI_Model{
     function add_decomposition($guid,$decomposition,$weight,$quantity,$formula,$price,$total,$i){         
         $this->db->insert('decomposition_x_items',array('guid'=>  md5($i.$guid.$decomposition),'price'=>$price,'weight'=>$weight,'type_id'=>$decomposition,'formula'=>$formula,'quantity'=>$quantity,'total'=>$total,'decomposition_id'=>$guid));         
     }
-     function update_decomposition($deco_guid,$quty,$price,$total){
+     function update_decomposition($deco_guid,$quty,$price,$weight,$total){
          $this->db->where('guid',$deco_guid);
-         $this->db->update('decomposition_x_items',array('quantity'=>$quty,'price'=>$price,'total'=>$total));
+         $this->db->update('decomposition_x_items',array('quantity'=>$quty,'weight'=>$weight,'price'=>$price,'total'=>$total));
      }
     
      function search_decomposition_type($search){
