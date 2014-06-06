@@ -422,11 +422,12 @@ function reload_update_user(){
                                         <tr>
                                             <th>Id</th>
                                             <th ><?php echo $this->lang->line('select') ?></th>
-                                            <th ><?php echo $this->lang->line('decomposition_number') ?></th>                                          
-                                            <th><?php echo $this->lang->line('company') ?></th>
+                                            <th ><?php echo $this->lang->line('decomposition_id') ?></th>
                                             <th><?php echo $this->lang->line('name') ?></th>
                                             <th><?php echo $this->lang->line('decomposition_date') ?></th>
-                                            <th><?php echo $this->lang->line('number_of_items') ?></th>
+                                            <th><?php echo $this->lang->line('no_of_type') ?></th>                                            
+                                            
+                                            <th><?php echo $this->lang->line('weight') ?></th>
                                             <th><?php echo $this->lang->line('total_amount') ?></th>
                                             <th><?php echo $this->lang->line('status') ?></th>
                                             <th style="width: 120px"><?php echo $this->lang->line('action') ?></th>

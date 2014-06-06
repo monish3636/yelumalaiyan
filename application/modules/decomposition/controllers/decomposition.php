@@ -17,7 +17,7 @@ class Decomposition extends MX_Controller{
     }
     // sales quotation decomposition data table
     function data_table(){
-        $aColumns = array( 'guid','code','code','code','code','date','code','code','active_status','code' );	
+        $aColumns = array( 'guid','code','code','name','date','total_types','total_weight','total_amount','decomposition_status','guid' );	
 	$start = "";
 			$end="";
 		
@@ -115,7 +115,7 @@ function save(){
             if ( $this->form_validation->run() !== false ) {    
                 $item=  $this->input->post('decomposition_item_guid');
                 $decomposition_number=  $this->input->post('decomposition_number');
-                $decomposition_date= strtotime($this->input->post('quotation_date'));
+                $decomposition_date= strtotime($this->input->post('decomposition_date'));
                 $total_types=$this->input->post('index');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');

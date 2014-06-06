@@ -5,7 +5,7 @@ class Items extends CI_Model{
         parent::__construct();
     }
     function get($end,$start,$like,$branch){
-                $this->db->select('decomposition.* ,items.guid as i_guid');
+                $this->db->select('decomposition.* ,items.guid as i_guid,items.name');
              
                 $this->db->from('decomposition')->where('decomposition.branch_id',$branch)->where('decomposition.delete_status',0);
                 $this->db->join('items', 'items.guid=decomposition.item_id','left');
