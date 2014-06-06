@@ -691,53 +691,38 @@ function reload_update_user(){
     }
     
     function delete_decomposition_item(guid){
-        var net=$('#selected_item_table #new_item_row_id_'+guid+' #items_total').val();
-        var dis=$('#selected_item_table #new_item_row_id_'+guid+' #items_discount').val();
-        var items_tax_inclusive=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_inclusive').val();
-        if(items_tax_inclusive==1){
-            var quty=$('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val();
-            var price=$('#selected_item_table #new_item_row_id_'+guid+' #items_price').val();
-            var value=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_value').val();
-            var tax=parseFloat(quty)*parseFloat(price)*parseFloat(value)/100;
-             $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())-tax);
-        }
-
-        $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())-parseFloat(dis));
+        var net=$('#selected_item_table #new_item_row_id_'+guid+' #decompositions_total').val(); 
         var total=$("#parsley_reg #total_amount").val();
         $("#parsley_reg #total_amount").val(parseFloat(total)-parseFloat(net));
         $("#parsley_reg #demo_total_amount").val(parseFloat(total)-parseFloat(net));
+        var weight=$('#selected_item_table #new_item_row_id_'+guid+' #decompositions_weight').val(); 
+        var total_weight=$("#parsley_reg #total_item_weight").val();
+        $("#parsley_reg #total_item_weight").val(parseFloat(total_weight)-parseFloat(weight));
+        $("#parsley_reg #demo_total_item_weight").val(parseFloat(total_weight)-parseFloat(weight));        
         var num = parseFloat($('#demo_total_amount').val());
         $('#demo_total_amount').val(num.toFixed(point));
         var num = parseFloat($('#total_amount').val());
-        $('#total_amount').val(num.toFixed(point));
-
-        $("#parsley_reg #total_amount").val()
-         var decomposition=$('#selected_item_table #new_item_row_id_'+guid+' #items_decomposition_guid').val();
-          $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+decomposition+'">');
+        $('#total_amount').val(num.toFixed(point));              
+        $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+guid+'">');
         var index=$('#selected_item_table #new_item_row_id_'+guid+' #index').val();
-         var anSelected =  $("#selected_item_table").dataTable();
-           anSelected.fnDeleteRow(index-1);
+        var anSelected =  $("#selected_item_table").dataTable();
+        anSelected.fnDeleteRow(index-1);
         if(document.getElementById('newly_added_items_list_'+guid)){
             $('#newly_added_items_list_'+guid).remove();
         }
-        if($("#parsley_reg #total_amount").val()==0 || $("#parsley_reg #total_amount").val()==""){
-            $("#parsley_reg #demo_grand_total").val(0)
-            $("#parsley_reg #grand_total").val(0)
-        }
+        
     }
-function clear_inputs(){
-  $('#parsley_reg #decomposition_guid').val('');
-  $('#parsley_reg #formula').val('');
-  $('#parsley_reg #demo_formula').val('');
-  $('#parsley_reg #decomposition_value').val('');
-  $('#parsley_reg #total').val('');
-  $('#parsley_reg #price').val('');
-  $('#parsley_reg #quantity').val('');
-  $("#parsley_reg #decomposition_type").select2('data', {id:'',text: '<?php  echo $this->lang->line('search')." ".$this->lang->line('decomposition_type') ?>'});
-  $('#parsley_reg #decomposition_type').select2('open');
-   
-     
-}
+    function clear_inputs(){
+      $('#parsley_reg #decomposition_guid').val('');
+      $('#parsley_reg #formula').val('');
+      $('#parsley_reg #demo_formula').val('');
+      $('#parsley_reg #decomposition_value').val('');
+      $('#parsley_reg #total').val('');
+      $('#parsley_reg #price').val('');
+      $('#parsley_reg #quantity').val('');
+      $("#parsley_reg #decomposition_type").select2('data', {id:'',text: '<?php  echo $this->lang->line('search')." ".$this->lang->line('decomposition_type') ?>'});
+      $('#parsley_reg #decomposition_type').select2('open');
+    }
 
 
 </script>
