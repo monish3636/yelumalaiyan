@@ -5,10 +5,10 @@ class Items extends CI_Model{
         parent::__construct();
     }
     function get($end,$start,$like,$branch){
-                $this->db->select('sales_quotation.* ,customers.guid as s_guid,customers.first_name as s_name,customers.company_name as c_name');
+                $this->db->select('decomposition.* ,items.guid as i_guid');
              
-                $this->db->from('sales_quotation')->where('sales_quotation.branch_id',$branch)->where('sales_quotation.delete_status',0);
-                $this->db->join('customers', 'customers.guid=sales_quotation.customer_id','left');
+                $this->db->from('decomposition')->where('decomposition.branch_id',$branch)->where('decomposition.delete_status',0);
+                $this->db->join('items', 'items.guid=decomposition.item_id','left');
                 $this->db->limit($end,$start); 
                 $this->db->or_like($like);     
                 $query=$this->db->get();
@@ -17,7 +17,7 @@ class Items extends CI_Model{
     }
    
     function count($branch){
-        $this->db->select()->from('sales_quotation')->where('branch_id',$branch)->where('active_status',1)->where('delete_status',0);
+        $this->db->select()->from('decomposition')->where('branch_id',$branch)->where('active_status',1)->where('delete_status',0);
         $sql=  $this->db->get();
         return $sql->num_rows();
     }
@@ -51,13 +51,13 @@ class Items extends CI_Model{
         return $data;
      
      }
-     function get_sales_quotation($guid){
-         $this->db->select('items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,sales_quotation.*,sales_quotation_x_items.quty ,sales_quotation_x_items.stock_id ,sales_quotation_x_items.discount as item_discount,sales_quotation_x_items.price,sales_quotation_x_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_quotation')->where('sales_quotation.guid',$guid);
-         $this->db->join('sales_quotation_x_items', "sales_quotation_x_items.quotation_id = sales_quotation.guid  ",'left');
-         $this->db->join('items', "items.guid=sales_quotation_x_items.item AND sales_quotation_x_items.quotation_id='".$guid."' ",'left');
-         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=sales_quotation_x_items.item  ",'left');
-         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=sales_quotation_x_items.item  ",'left');
-         $this->db->join('customers', "customers.guid=sales_quotation.customer_id AND sales_quotation_x_items.quotation_id='".$guid."'  ",'left');
+     function get_decomposition($guid){
+         $this->db->select('items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,decomposition.*,decomposition_x_items.quty ,decomposition_x_items.stock_id ,decomposition_x_items.discount as item_discount,decomposition_x_items.price,decomposition_x_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('decomposition')->where('decomposition.guid',$guid);
+         $this->db->join('decomposition_x_items', "decomposition_x_items.quotation_id = decomposition.guid  ",'left');
+         $this->db->join('items', "items.guid=decomposition_x_items.item AND decomposition_x_items.quotation_id='".$guid."' ",'left');
+         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=decomposition_x_items.item  ",'left');
+         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=decomposition_x_items.item  ",'left');
+         $this->db->join('customers', "customers.guid=decomposition.item_id AND decomposition_x_items.quotation_id='".$guid."'  ",'left');
          $sql=  $this->db->get();
          $data=array();
          foreach($sql->result_array() as $row){
@@ -74,15 +74,15 @@ class Items extends CI_Model{
      }
      function delete_order_item($guid){      
           $this->db->where('guid',$guid);
-          $this->db->delete('sales_quotation_x_items');
+          $this->db->delete('decomposition_x_items');
      }
      function approve_order($guid){
          $this->db->where('guid',$guid);
-         $this->db->update('sales_quotation',array('quotation_status'=>1));
+         $this->db->update('decomposition',array('quotation_status'=>1));
         
      }
      function  check_approve($guid){
-          $this->db->select()->from('sales_quotation')->where('guid',$guid)->where('quotation_status',1);
+          $this->db->select()->from('decomposition')->where('guid',$guid)->where('quotation_status',1);
             $sql=  $this->db->get();
             if($sql->num_rows()>0){
                return FALSE;
@@ -91,22 +91,12 @@ class Items extends CI_Model{
             }
             
      }
-     function add_sales_quotation($guid,$item,$quty,$stock,$discount,$i){
-         
-         $this->db->select()->from('stock')->where('guid',$stock);
-         $sql=  $this->db->get();
-         $price;
-         foreach ($sql->result() as $row)
-         {
-             $price=$row->price;
-         }
-         $this->db->insert('sales_quotation_x_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'quotation_id'=>$guid));
-         
-               
-     }
+    function add_decomposition($guid,$decomposition,$weight,$quantity,$formula,$price,$total,$i){         
+        $this->db->insert('decomposition_x_items',array('guid'=>  md5($i.$guid.$decomposition),'price'=>$price,'weight'=>$weight,'type_id'=>$decomposition,'formula'=>$formula,'quantity'=>$quantity,'decomposition_id'=>$guid));         
+    }
      function update_quotation($guid,$quty){
          $this->db->where('guid',$guid);
-         $this->db->update('sales_quotation_x_items',array('quty'=>$quty));
+         $this->db->update('decomposition_x_items',array('quty'=>$quty));
      }
      function search_customers($search){
           $like=array('first_name'=>$search,'email'=>$search,'company_name'=>$search,'phone'=>$search,'email'=>$search);       
