@@ -684,5 +684,6 @@ $lang['credit_days']='Credit Days';
     $lang['in']='In';
     $lang['total_weight']='Total Weight';
     $lang['quantity_is_out_of_stock']='Quantity Is Out Of Stock';
+    $lang['no_of_type']='No Of Types';
    
 ?>
