@@ -212,137 +212,58 @@ function decomposition_approve(guid){
                                
                                 
                                 
-                                 $("#parsley_reg #select_item").select2('data', {id:'1',text: data[0]['s_name']});
+                                $("#parsley_reg #select_item").select2('data', {id:'1',text: data[0]['name']});
                                 $('#select_item').select2('disable');
-                                $('#select_item').val(data[0]['s_name'])
-                                $("#parsley_reg #company").val(data[0]['c_name']);
-                                $("#parsley_reg #address").val(data[0]['address']);
-                                $("#parsley_reg #decomposition_guid").val(guid);
-                                
+                                $('#guid').val(guid)
+                                $('#select_item').val(data[0]['name'])
+                                $("#parsley_reg #item_sku").val(data[0]['sku']);
+                                $("#parsley_reg #demo_item_stock").val(data[0]['quty']);
+                                $("#parsley_reg #item_stock").val(data[0]['quty']);                                
                                 $("#parsley_reg #demo_decomposition_number").val(data[0]['code']);
                                 $("#parsley_reg #decomposition_number").val(data[0]['code']);
                                 $("#parsley_reg #decomposition_date").val(data[0]['date']);
-                                $("#parsley_reg #expiry_date").val(data[0]['exp_date']);
-                                
-                                $("#parsley_reg #id_discount").val(data[0]['discount']);
                                 $("#parsley_reg #note").val(data[0]['note']);
-                                $("#parsley_reg #remark").val(data[0]['remark']);
-                                $("#parsley_reg #discount_amount").val(data[0]['discount_amt']);
-                                $("#parsley_reg #freight").val(data[0]['freight']);
-                                $("#parsley_reg #round_off_amount").val(data[0]['round_amt']);
-                                $("#parsley_reg #demo_grand_total").val(data[0]['total_amt']);
-                              
-                                $("#parsley_reg #grand_total").val(data[0]['total_amt']);
-                                
-                                $("#parsley_reg #demo_total_amount").val(data[0]['total_item_amt']);
-                                $("#parsley_reg #total_amount").val(data[0]['total_item_amt']);
-                                $("#parsley_reg #demo_customer_discount").val(data[0]['customer_discount']);
-                                $("#parsley_reg #customer_discount").val(data[0]['customer_discount']);
-                                $("#parsley_reg #demo_customer_discount_amount").val(data[0]['customer_discount_amount']);
-                                $("#parsley_reg #customer_discount_amount").val(data[0]['customer_discount_amount']);
-                                  var num = parseFloat($('#demo_total_amount').val());
-                                  $('#demo_total_amount').val(num.toFixed(point));
-                                  
-                                  var num = parseFloat($('#total_amount').val());
-                                  $('#total_amount').val(num.toFixed(point));
-                                  
-                                  var num = parseFloat($('#grand_total').val());
-                                  $('#grand_total').val(num.toFixed(point));
-                                  
-                                  var num = parseFloat($('#demo_grand_total').val());
-                                  $('#demo_grand_total').val(num.toFixed(point));
-                                  
-                                $("#parsley_reg #customers_guid").val(data[0]['c_guid']);
-                                var tax;
+                                $("#parsley_reg #remark").val(data[0]['remark']);                                
+                                $("#parsley_reg #demo_total_amount").val(data[0]['total_amount']);
+                                $("#parsley_reg #total_amount").val(data[0]['total_amount']);
+                                $("#parsley_reg #demo_total_item_weight").val(data[0]['total_weight']);
+                                $("#parsley_reg #total_item_weight").val(data[0]['total_weight']);
+                                $('#demo_item_weight_stock').val(parseFloat(data[0]['quty'])*parseFloat(data[0]['item_weight']))
+                                $('#item_weight_stock').val(parseFloat(data[0]['quty'])*parseFloat(data[0]['item_weight']))
+                                $('#current_stock_weight').val(parseFloat(data[0]['quty'])*parseFloat(data[0]['item_weight'])-data[0]['total_weight'])
+                               
                                 for(i=0;i<data.length;i++){
-                                      if(!$('#'+data[i]['i_guid']).length){
-                                  
-                                    var  name=data[i]['items_name'];
-                                    var  sku=data[i]['i_code'];
-                                    var  quty=data[i]['quty'];
-                                   
-                                    var  tax_type=data[i]['tax_type_name'];
-                                    var  tax_value=data[i]['tax_value'];
-                                    var  tax_Inclusive=data[i]['tax_Inclusive'];
-                                  
-                                    var  price=data[i]['price'];
-                                    var  items_id=data[i]['i_guid'];
-                                    var per =data[i]['item_discount'];
-                                    if(per==""){
-                                        per=0;
-                                    }
-                                    
-                                    
-                                    if(data[i]['item_discount']!=0){
-                                    var discount=(parseFloat(quty)*parseFloat(price))*(per/100);
-                                    
-                                    }else{
-                                    
-                                      discount=0;
-                                    var per=0
-                                    if(discount==""){
-                                        discount=0;
-                                    }
-                                  
-                                    }
-                                    
-                                   if(data[i]['tax_Inclusive']==1){
-                                     var tax=(parseFloat(quty)*parseFloat(price))*tax_value/100;
-                                    
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(price))-discount;
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                  
-                                      var tax=(parseFloat(quty)*parseFloat(price))*tax_value/100;
-                                      var total=(parseFloat(quty)*parseFloat(price))-discount;
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
-                                  if(data[i]['tax_Inclusive']==1){
-                                    if($('#parsley_reg #total_tax').val()==0){
-                                          $('#parsley_reg #total_tax').val(tax);
-
-                                    }else{
-                                        $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())+parseFloat(tax));
-                                    }
-                                    }
-                                    if($('#parsley_reg #total_item_discount_amount').val()==0){
-                                            $('#parsley_reg #total_item_discount_amount').val(discount);
-
-                                      }else{
-                                          $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())+parseFloat(discount));
-                                      }
+                                    if(!$('#'+data[i]['i_guid']).length){
+                                    var weight=data[i]['weight'];
+                                    var quantity=data[i]['quantity'];                                  
+                                    var price=data[i]['price'];
+                                    var formula=data[i]['formula'];
+                                    var total=data[i]['total'];
+                                    var decompositions_id =data[i]['type_id'];
+                                    var decomposition_value =data[i]['value'];                                  
+                                    var decomposition_type =data[i]['type'];                                  
                                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                                     null,
-                                    name,
-                                    sku,
-                                    quty,
+                                    decomposition_value,
+                                    formula,
+                                    weight,
+                                    quantity,
                                     price,
-                                    tax+' : '+tax_type+'('+type+')',
-                                    discount,
                                     total,
                                     '<input type="hidden" name="index" id="index">\n\
-                                <input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
-                                <input type="hidden" name="items_id[]" id="items_id" value="'+items_id+'">\n\
-                                <input type="hidden" name="sq_items[]" id="sq_items" value="'+data[i]['o_i_guid']+'">\n\
-                                <input type="hidden" name="items_sku[]" value="'+sku+'" id="items_sku">\n\
-                                <input type="hidden" name="items_quty[]" value="'+quty+'" id="items_quty"> \n\
-                                <input type="hidden" name="items_price[]" value="'+price+'" id="items_price">\n\
-                                <input type="hidden" name="items_tax_value[]" value="'+tax_value+'" id="items_tax_value">\n\
-                                <input type="hidden" name="items_tax_inclusive[]" value="'+tax_Inclusive+'" id="items_tax_inclusive">\n\
-                                <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
-                                <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
-                                <input type="hidden" name="items_stock[]" value="'+data[i]['stock_id']+'" id="items_stock">\n\
-                                <input type="hidden" name="items_decomposition_guid[]" value="'+data[i]['o_i_guid']+'" id="items_decomposition_guid">\n\
-                                <input type="hidden" name="items_sub_total[]"  value="'+parseFloat(quty)*parseFloat(price)+'" id="items_sub_total">\n\
-                                <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                <a href=javascript:edit_decomposition_item("'+items_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_decomposition_item('"+items_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
+                                    <input type="hidden" name="decompositions_value[]" id="decompositions_value" value="'+decomposition_value+'">\n\
+                                    <input type="text" name="deco_guid[]" id="deco_guid" value="'+data[i]['deco_guid']+'">\n\
+                                    <input type="hidden" name="decompositions_type[]" id="decompositions_type" value="'+decomposition_type+'">\n\
+                                    <input type="hidden" name="decompositions_id[]" id="decompositions_id" value="'+decompositions_id+'">\n\
+                                    <input type="hidden" name="decompositions_weight[]" id="decompositions_weight" value="'+weight+'">\n\
+                                    <input type="hidden" name="decompositions_quty[]" value="'+quantity+'" id="decompositions_quty"> \n\
+                                    <input type="hidden" name="decompositions_price[]" value="'+price+'" id="decompositions_price">\n\
+                                    <input type="hidden" name="decompositions_formula[]" value="'+formula+'" id="decompositions_formula">\n\
+                                    <input type="hidden" name="decompositions_total[]"  value="'+total+'" id="decompositions_total">\n\
+                                    <a href=javascript:edit_decomposition_item("'+decompositions_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_decomposition_item('"+decompositions_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
 
                               var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                              theNode.setAttribute('id','new_item_row_id_'+items_id)
+                              theNode.setAttribute('id','new_item_row_id_'+decompositions_id)
                                 }
                                 }
                              } 
