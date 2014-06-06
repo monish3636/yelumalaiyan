@@ -682,5 +682,7 @@ $lang['credit_days']='Credit Days';
     $lang['uom_name']='U O M Name';
     $lang['weight']='Weight';
     $lang['in']='In';
+    $lang['total_weight']='Total Weight';
+    $lang['quantity_is_out_of_stock']='Quantity Is Out Of Stock';
    
 ?>

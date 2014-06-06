@@ -157,18 +157,24 @@
          
        
           $('#parsley_reg #decomposition_type').change(function() {
-              if(document.getElementById('new_item_row_id_'+$('#parsley_reg #decomposition_type').select2('data').item) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #decomposition_type').select2('data').item){
-                     $.bootstrapGrowl('<?php echo $this->lang->line('this item already added');?> '+$('#parsley_reg #decomposition_type').val(), { type: "warning" });  
-                       $('#parsley_reg #decomposition_type').select2('open');
+              if(document.getElementById('new_item_row_id_'+$('#parsley_reg #decomposition_type').select2('data').id) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #decomposition_type').select2('data').id){
+                    $.bootstrapGrowl($('#parsley_reg #decomposition_type').select2('data').text+"<?php echo $this->lang->line('is_already_added');?> ", { type: "warning" });  
+                    $('#parsley_reg #decomposition_type').select2('open');
               }else{
-                var guid = $('#parsley_reg #decomposition_type').select2('data').item;
+                var guid = $('#parsley_reg #decomposition_type').select2('data').id;
+                $('#parsley_reg #decomposition_guid').val(guid);
+                $('#parsley_reg #decomposition_type_val').val($('#parsley_reg #decomposition_type').select2('data').text);
+                $('#parsley_reg #formula').val($('#parsley_reg #decomposition_type').select2('data').formula);
+                $('#parsley_reg #demo_formula').val($('#parsley_reg #decomposition_type').select2('data').formula);
+                $('#parsley_reg #decomposition_value').val($('#parsley_reg #decomposition_type').select2('data').value);
+                window.setTimeout(function ()
+                {
+                   $('#quantity').focus();
+                }, 0);
                 
                        
-                $('#parsley_reg #decomposition_guid').val(guid);
-                $('#parsley_reg #formula').val($('#parsley_reg #decomposition_type').select2('data').formula);
-                $('#parsley_reg #decomposition_value').val($('#parsley_reg #decomposition_type').select2('data').value);
-               
           }
+          
           });
          
           $('#parsley_reg #decomposition_type').select2({
@@ -197,7 +203,7 @@
                       
                       $.each(data, function(index, item){
                         results.push({
-                          id: item.guid+item.type_name,
+                          id: item.guid,
                           item: item.guid,
                           text: item.type_name,
                           value:item.value,
@@ -206,8 +212,8 @@
                         });
                       });   if($('#items_guid').val()==""){
                           $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-     $('#parsley_reg #items').select2('close');   
-    $('#parsley_reg #select_item').select2('open');
+            $('#parsley_reg #items').select2('close');   
+            $('#parsley_reg #select_item').select2('open');
         
                       }
                       return {
@@ -228,19 +234,20 @@
             }
         $('#parsley_reg #select_item').change(function() {           
                 var guid = $('#parsley_reg #select_item').select2('data').item;
-                $('#parsley_reg #item_id').val(guid);
+                $('#parsley_reg #decomposition_guid').val(guid);
                 $('#parsley_reg #item_sku').val($('#parsley_reg #select_item').select2('data').value);              
                 $('#parsley_reg #demo_item_stock').val($('#parsley_reg #select_item').select2('data').quty);
                 $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
+                $('#parsley_reg #current_stock_weight').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
                 $('#parsley_reg #demo_item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
-                $('#parsley_reg #item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
+                $('#parsley_reg #item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').weight));
               
                 
                 window.setTimeout(function ()
                 {
 
                     $('#parsley_reg #decomposition_date').focus();
-                }, 0);
+                }, 100);
          
              
           });
@@ -413,20 +420,17 @@ function reload_update_user(){
                                     </div>
                                     <table id="dt_table_tools" class="table-striped table-condensed" style="width: 100%"><thead>
                                         <tr>
-                                         <th>Id</th>
-                                          <th ><?php echo $this->lang->line('select') ?></th>
-                                          <th ><?php echo $this->lang->line('decomposition_number') ?></th>
-                                          
-                                          <th><?php echo $this->lang->line('company') ?></th>
-                                           <th><?php echo $this->lang->line('name') ?></th>
-                                          <th><?php echo $this->lang->line('decomposition_date') ?></th>
-                                          <th><?php echo $this->lang->line('number_of_items') ?></th>
-                                          <th><?php echo $this->lang->line('total_amount') ?></th>
-                                         
-                                      
-                                          <th><?php echo $this->lang->line('status') ?></th>
-                                          <th style="width: 120px"><?php echo $this->lang->line('action') ?></th>
-                                         </tr>
+                                            <th>Id</th>
+                                            <th ><?php echo $this->lang->line('select') ?></th>
+                                            <th ><?php echo $this->lang->line('decomposition_number') ?></th>                                          
+                                            <th><?php echo $this->lang->line('company') ?></th>
+                                            <th><?php echo $this->lang->line('name') ?></th>
+                                            <th><?php echo $this->lang->line('decomposition_date') ?></th>
+                                            <th><?php echo $this->lang->line('number_of_items') ?></th>
+                                            <th><?php echo $this->lang->line('total_amount') ?></th>
+                                            <th><?php echo $this->lang->line('status') ?></th>
+                                            <th style="width: 120px"><?php echo $this->lang->line('action') ?></th>
+                                        </tr>
                                       </thead>
                                       <tbody></tbody>
                                       </table>
@@ -448,636 +452,291 @@ function reload_update_user(){
         </div>
 </div>
 <script type="text/javascript">
- 
-    function discounte_amount(){
-    if(parseFloat($('#parsley_reg #hidden_total_price').val())>0){
-        total=parseFloat($('#parsley_reg #hidden_total_price').val());
-        discount=(total*parseFloat($('#parsley_reg #discount').val()))/100;
-        $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())-discount);
-       
-        round_amt=parseFloat($('#parsley_reg #round_amt').val());
-        freight=parseFloat($('#parsley_reg #freight').val())
-        if(freight==""){freight=0;}
-        if(round_amt==""){round_amt=0;}
-         $('#parsley_reg #discount_amt').val(discount);
-        if (isNaN($('#parsley_reg #total_price').val())) 
-    $('#parsley_reg #total_price').val('00');
-    
-        if (isNaN($('#parsley_reg #discount_amt').val())) 
-    $('#parsley_reg #discount_amt').val('0');
-        if (isNaN($('#parsley_reg #round_amt').val())) 
-    $('#parsley_reg #round_amt').val('00');
-        if (isNaN($('#parsley_reg #freight').val())) 
-    $('#parsley_reg #dfreight').val('00');;
-    }
-    var item_dis=0;
-  
-   
-    if($('#parsley_reg #discount').val()==0 || isNaN($('#parsley_reg #discount').val())){
-        $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())+round_amt+freight);
-    }
-    new_grand_total();
-    total=parseFloat($('#parsley_reg #hidden_total_price').val());
-    if(total=="" || total==0 || isNaN(total)){
-        $('#parsley_reg #total_price').val("0");
-    }
-}
-function new_decomposition_date(e){
-    if($('#parsley_reg #items_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #decomposition_date').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #expiry_date').focus();
-            
-        }
-         if (unicode!=27){
-        }
-       else{
-        
-           $('#parsley_reg #select_item').select2('open');
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #select_item').select2('open');
-
-        }
-
-    }
-function new_expiry_date(e){
-    if($('#parsley_reg #items_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #expiry_date').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-                  window.setTimeout(function ()
-    {
-           $('#parsley_reg #id_discount').focus();
-            }, 0);
-           
-           
-        }
-         if (unicode!=27){
-        }
-       else{
-          
-           $('#parsley_reg #decomposition_date').focus();
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #select_item').select2('open');
-
-        }
-
-    }
-
-
-
-
-
-function add_new_quty(e){
-    if($('#parsley_reg #item_id').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #quantity').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          copy_items();
-         
-        }
-         if (unicode!=27){
-        }
-       else{
-           
-           $('#parsley_reg #items').select2('open');
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
-         $('#parsley_reg #items').select2('open');
-
-        }
-
-    }
-
-    function net_amount(){
-      if(isNaN($('#parsley_reg #discount').val())){
-                $('#parsley_reg #discount').val(0);
-                $('#parsley_reg #item_discount').val(0);
+    function new_decomposition_date(e){
+        if($('#parsley_reg #items_guid').val()!=""){
+            var unicode=e.charCode? e.charCode : e.keyCode
+            if($('#parsley_reg #decomposition_date').value!=""){
+                if (unicode!=13 && unicode!=9){
+                }
+                else{
+                    $('#parsley_reg #decomposition_type').select2('open');
+                }
+                if (unicode!=27){
+                }
+                else{        
+                    $('#parsley_reg #select_item').select2('open');
+                }
             }
-        if(isNaN($('#parsley_reg #stock_quty').val()) || isNaN($('#parsley_reg #quantity').val())){
-            if(isNaN($('#parsley_reg #stock_quty').val())){
-                $('#parsley_reg #stock_quty').val(0);
+        }else{
+            $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
+            $('#parsley_reg #select_item').select2('open');
+        }
+    }
+    
+    function add_new_quty(e){
+        if($('#parsley_reg #formula').val()!=""){
+            var unicode=e.charCode? e.charCode : e.keyCode
+            if($('#parsley_reg #quantity').value!=""){
+                if (unicode!=13 && unicode!=9){
+                }
+                else{
+                    $('#price').focus();         
+                }
+                if (unicode!=27){
+                }
+                else{
+                    $('#parsley_reg #decomposition_type').select2('open');
+                }
+            }
+        }else{
+            $.bootstrapGrowl('<?php echo $this->lang->line('decomposition_type');?>', { type: "warning" }); 
+            $('#parsley_reg #decomposition_type').select2('open');
+        }
+    }
+    function add_new_price(e){
+        if($('#parsley_reg #formula').val()!=""){
+            var unicode=e.charCode? e.charCode : e.keyCode
+            if($('#parsley_reg #quantity').value!=""){        
+                if (unicode!=13 && unicode!=9){
+                }
+                else{
+                    copy_items();
+                }
+                if (unicode!=27){
+                }
+                else{
+                    $('#quantity').focus();
+                }
+            }
+        }else{
+            $.bootstrapGrowl('<?php echo $this->lang->line('decomposition_type');?>', { type: "warning" }); 
+            $('#parsley_reg #decomposition_type').select2('open');
+        }
+    }
+
+    function net_amount(){     
+        if(isNaN($('#parsley_reg #item_stock').val()) || isNaN($('#parsley_reg #total_weight').val())){
+            if(isNaN($('#parsley_reg #item_stock').val())){
+                $('#parsley_reg #item_stock').val(0);
             }else{
-                $('#parsley_reg #quantity').val(0);
+                $('#parsley_reg #total_weight').val(0);
+                $('#parsley_reg #quantity').val("");
+                $('#parsley_reg #total_weight').val(0);
             }
         }else{
-           
-           if(isNaN($('#parsley_reg #discount').val())){
-                $('#parsley_reg #discount').val(0);
-                $('#parsley_reg #item_discount').val(0);
+            var weight=parseFloat($('#item_weight_stock').val());
+            var formula=$('#formula').val();
+            var item_stock=parseFloat($('#item_stock').val()); 
+            var current_stock_weight=$('#current_stock_weight').val();
+            var quty=parseFloat($('#quantity').val());           
+            formula=eval(formula);
+            var total_weight=parseFloat(quty)*formula
+            $('#total_weight').val(parseFloat(total_weight));
+            if(total_weight>(current_stock_weight*weight)){
+                $.bootstrapGrowl('<?php echo $this->lang->line('quantity_is_out_of_stock');?>', { type: "warning" });  
+                var stock=current_stock_weight*weight;           
+                formula=eval(formula);
+                var quty=parseFloat(stock)/formula;
+                $('#parsley_reg #quantity').val(quty);
+                $('#total_weight').val(parseFloat(current_stock_weight*weight));
             }
-            if($('#discount').val()==""){
-                $('#parsley_reg #discount').val(0);
-                $('#parsley_reg #item_discount').val(0);
-            }
-         
-                 if($('#parsley_reg #discount').val()!="" && $('#parsley_reg #discount').val()!=0){
-                       
-                        $('#tax').val((parseFloat($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val())*(parseFloat($('#tax_value').val()))/100));
-                        var num = parseFloat($('#tax').val());
-                        $('#tax').val(num.toFixed(point));
-                        var discount=parseFloat($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val())*parseFloat($('#parsley_reg #discount').val())/100;
-                          if($('#tax_Inclusive').val()==1){
-                              
-                        $('#parsley_reg #total').val($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val()-parseFloat(discount)+parseFloat($('#tax').val()));
-                        }else{
-                             $('#parsley_reg #total').val($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val()-parseFloat(discount));
-                        }
-                        var num = parseFloat($('#total').val());
-                        $('#total').val(num.toFixed(point));
-                        $('#item_discount').val(discount);
-                        var num = parseFloat($('#item_discount').val());
-                        $('#item_discount').val(num.toFixed(point));
-
-                 }else{
-                     $('#tax').val((parseFloat($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val())*(parseFloat($('#tax_value').val()))/100));
-                        var num = parseFloat($('#tax').val());
-                        $('#tax').val(num.toFixed(point));
-                       
-                          if($('#tax_Inclusive').val()==1){
-                              
-                        $('#parsley_reg #total').val($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val()+parseFloat($('#tax').val()));
-                        }else{
-                             $('#parsley_reg #total').val($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val());
-                        }
-                        var num = parseFloat($('#total').val());
-                        $('#total').val(num.toFixed(point));
-                        $('#item_discount').val(discount);
-                        var num = parseFloat($('#item_discount').val());
-                        $('#item_discount').val(num.toFixed(point));
-                 }
-                 
-                   
-                    
-            
+            $('#parsley_reg #total').val($('#parsley_reg #price').val()*$('#parsley_reg #quantity').val());
+            var num = parseFloat($('#total').val());
+            $('#total').val(num.toFixed(point)); 
         }
-        if(isNaN($('#parsley_reg #tax').val())){
-                
-                $('#parsley_reg #tax').val(0);
-            }
-        if(isNaN($('#parsley_reg #item_discount').val())){
-                
-                $('#parsley_reg #item_discount').val(0);
-            }
+        if(isNaN($('#parsley_reg #quantity').val()) || $('#parsley_reg #quantity').val()==""){
+            $('#parsley_reg #quantity').val("");
+            $('#parsley_reg #total').val(0);
+            $('#parsley_reg #total_weight').val(0);
+        }
     }
-function copy_items(){
+    function copy_items(){
+        if( $('#parsley_reg #decomposition_guid').val()!="" &&  $('#parsley_reg #price').val()!=""   && $('#parsley_reg #quantity').val()!=""){
+            if(document.getElementById('new_item_row_id_'+$('#parsley_reg #decomposition_guid').val())){
+                var  decomposition_value=$('#parsley_reg #decomposition_value').val();
+                var  formula=$('#parsley_reg #formula').val();
+                var  quty=$('#parsley_reg #quantity').val();
+                var  weight=$('#parsley_reg #total_weight').val();
+                var decompositions_id=$('#parsley_reg #decomposition_guid').val(); 
+                var  price=$('#parsley_reg #price').val();
+                var total=parseFloat(quty)*parseFloat(price);
+                total=total.toFixed(point); 
+                var old_total= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' #decompositions_total').val();
+                var old_weight= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' #decompositions_weight').val();
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' td:nth-child(4)').html(weight);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' td:nth-child(5)').html(quty); 
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' td:nth-child(6)').html(price);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' td:nth-child(7)').html(total); 
+                $('#newly_added #new_decomposition_price_'+decompositions_id).val(price);
+                $('#newly_added #new_decomposition_weight_'+decompositions_id).val(weight);
+                $('#newly_added #new_decomposition_total_'+decompositions_id).val(total);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' #decompositions_quty').val(quty);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' #decompositions_price').val(price);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' #decompositions_total').val(total);  
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #decomposition_guid').val()+' #decompositions_weight').val(weight);
+                $.bootstrapGrowl($('#decomposition_type_val').val()+' <?php echo $this->lang->line('updated');?> ', { type: "success" });  
+                if(total!=old_total){    
+                    var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
+                    var total_weight=parseFloat($('#parsley_reg #total_item_weight').val())+parseFloat(weight)-parseFloat(old_weight)
+                    amount=amount.toFixed(point);
+                    $('#parsley_reg #total_amount').val();
+                    $('#parsley_reg #total_amount').val(amount)
+                    $('#parsley_reg #total_item_weight').val(total_weight); 
+                }
+                $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
+                $('#parsley_reg #demo_total_item_weight').val($('#parsley_reg #total_item_weight').val()); 
+                formula=eval(formula);
+                var stock=(parseFloat(quty)*parseFloat(formula));        
+                $('#current_stock_weight').val(parseFloat($('#current_stock_weight').val())-stock);
+                clear_inputs();
+            }else{
+                var  decomposition_value=$('#parsley_reg #decomposition_value').val();
+                var  formula=$('#parsley_reg #formula').val();
+                var  quty=$('#parsley_reg #quantity').val();
+                var  weight=$('#parsley_reg #total_weight').val();
+                var decompositions_id=$('#parsley_reg #decomposition_guid').val();
+                var  price=$('#parsley_reg #price').val();
+                var total=parseFloat(quty)*parseFloat(price);
+                total=total.toFixed(point);
+                $('#newly_added').append('<div id="newly_added_decompositions_list_'+decompositions_id+'"> \n\
+                \n\
+                <input type="hidden" name="new_decomposition_id[]" value="'+decompositions_id+'"  id="new_decomposition_id_'+decompositions_id+'">\n\
+                <input type="hidden" name="new_decomposition_weight[]" value="'+weight+'"  id="new_decomposition_weight_'+decompositions_id+'">\n\
+                <input type="hidden" name="new_decomposition_quty[]" value="'+quty+'" id="new_decomposition_quty_'+decompositions_id+'"> \n\
+                <input type="hidden" name="new_decomposition_formula[]" value="'+formula+'" id="new_decomposition_formula_'+decompositions_id+'"> \n\
+                <input type="hidden" name="new_decomposition_price[]" value="'+price+'" id="new_decomposition_price_'+decompositions_id+'">\n\
+                <input type="hidden" name="new_decomposition_total[]"  value="'+parseFloat(quty)*parseFloat(price)+'" id="new_decomposition_total_'+decompositions_id+'">\n\
+                </div>');
+                var addId = $('#selected_item_table').dataTable().fnAddData( [
+                null,
+                decomposition_value,
+                formula,
+                weight,
+                quty,
+                price,
+                total,
+                '<input type="hidden" name="index" id="index">\n\
+                <input type="hidden" name="decomposition_value[]" id="decompositions_value" value="'+decomposition_value+'">\n\
+                <input type="hidden" name="decomposition_type[]" id="decompositions_type" value="'+$('#decomposition_type_val').val()+'">\n\
+                <input type="hidden" name="decompositions_id[]" id="decompositions_id" value="'+decompositions_id+'">\n\
+                <input type="hidden" name="decompositions_weight[]" id="decompositions_weight" value="'+weight+'">\n\
+                <input type="hidden" name="decompositions_quty[]" value="'+quty+'" id="decompositions_quty"> \n\
+                <input type="hidden" name="decompositions_price[]" value="'+price+'" id="decompositions_price">\n\
+                <input type="hidden" name="decompositions_formula[]" value="'+formula+'" id="decompositions_formula">\n\
+                <input type="hidden" name="decompositions_total[]"  value="'+total+'" id="decompositions_total">\n\
+                <a href=javascript:edit_decomposition_item("'+decompositions_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_decomposition_item('"+decompositions_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
+                var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
+                theNode.setAttribute('id','new_item_row_id_'+decompositions_id)
+                $.bootstrapGrowl('<?php echo $this->lang->line('new')." ".$this->lang->line('item') ?> '+name+' <?php echo $this->lang->line('added');?> ', { type: "success" });  
+                if (isNaN($("#parsley_reg #demo_total_amount").val())) 
+                    $("#parsley_reg #demo_total_amount").val(0)    
+                if($('#parsley_reg #total_amount').val()==0){
+                    $('#parsley_reg #total_amount').val(total);     
+                }else{
+                    $('#parsley_reg #total_amount').val(parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total));
+                }
+                if($('#parsley_reg #total_item_weight').val()==0){
+                    $('#parsley_reg #total_item_weight').val(weight);     
+                }else{
+                    $('#parsley_reg #total_item_weight').val(parseFloat($('#parsley_reg #total_item_weight').val())+parseFloat(weight));
+                }
+                $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
+                $('#parsley_reg #demo_total_item_weight').val($('#parsley_reg #total_item_weight').val());
+                formula=eval(formula);
+                var stock=(parseFloat(quty)*parseFloat(formula));        
+                $('#current_stock_weight').val(parseFloat($('#current_stock_weight').val())-stock);
+                clear_inputs();
+            }  
 
- if( $('#parsley_reg #item_id').val()!="" &&  $('#parsley_reg #price').val()!=""   && $('#parsley_reg #quantity').val()!=""){
- 
-  
-      
-if(document.getElementById('new_item_row_id_'+$('#parsley_reg #item_id').val())){
-
-  var  name=$('#parsley_reg #item_name').val();
-  var  sku=$('#parsley_reg #sku').val();
-  var  quty=$('#parsley_reg #quantity').val();
-  if($('#parsley_reg #free').val()!=""){
-  var  free=$('#parsley_reg #free').val();
-  }else{
-      free=0;
-  }
-
-
-  var  price=$('#parsley_reg #price').val();
-  var  items_id=$('#parsley_reg #item_id').val();
-  var  tax_value=$('#parsley_reg #tax_value').val();
-  var  per=$('#parsley_reg #discount').val();
-  var  discount=((parseFloat(quty)*parseFloat(price))*$('#parsley_reg #discount').val())/100;
-  var  tax_type=$('#parsley_reg #tax_type').val();
-  var  tax_Inclusive=$('#parsley_reg #tax_Inclusive').val();
-  var tax=(parseFloat(quty)*parseFloat(price))*tax_value/100;
-    if(tax_Inclusive==1){
-     total= (parseFloat(quty)*parseFloat(price))+tax-discount;
-     type='Exc';
-  }else{
-      type='Inc';
-       total= (parseFloat(quty)*parseFloat(price))-discount;
-  }
-  if(discount==""){
-    discount=0;
-    }
-  if(per==""){
-    per=0;
-    }
-  
-    var tax=((parseFloat(quty)*parseFloat(price))*tax_value/100);
-    tax=tax.toFixed(point);
-    total=total.toFixed(point);
-  ///$('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()).remove();
- var old_total= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_total').val();
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' td:nth-child(2)').html(name);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' td:nth-child(3)').html(sku);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' td:nth-child(4)').html(quty);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' td:nth-child(5)').html(price);
- 
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' td:nth-child(6)').html(tax +''+' : '+tax_type+'('+type+')');
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' td:nth-child(7)').html(discount);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' td:nth-child(8)').html(total);
-
-  $('#newly_added #new_item_id_'+items_id).val(items_id);
-  $('#newly_added #new_item_quty_'+items_id).val(quty);
-  $('#newly_added #new_item_price_'+items_id).val(price);
-  $('#newly_added #new_item_total_'+items_id).val(parseFloat(quty)*parseFloat(price));
-  $('#newly_added #new_item_discount_'+items_id).val(discount);
-  $('#newly_added #new_item_discount_per_'+items_id).val(per);
-  $('#newly_added #new_item_tax_'+items_id).val(tax);
-  $('#newly_added #new_item_total'+items_id).val(total);
-
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_id').val(items_id);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_name').val(name);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_sku').val(sku);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_quty').val(quty);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_price').val(price);
-  
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_tax').val(tax);
-  
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_tax_type').val(tax_type);
-  
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_tax_value').val(tax_value);
-  
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_tax_inclusive').val(tax_Inclusive);
-  
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_discount').val(discount);
-  
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_discount_per').val(per);
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_sub_total').val(parseFloat(quty)*parseFloat(price));
-  
-  $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_total').val(total);
-    $.bootstrapGrowl('<?php echo $this->lang->line('item') ?> '+name+' <?php echo $this->lang->line('updated');?> ', { type: "success" });  
-    
-    if (isNaN($("#parsley_reg #total_amount").val())) {
-    $("#parsley_reg #total_amount").val(0)    
-    }
-   
-        if (isNaN($("#parsley_reg #discount_amount").val())) 
-    $("#parsley_reg #discount_amount").val(0);
-        if (isNaN($("#parsley_reg #round_off_amount").val())) 
-    $("#parsley_reg #round_off_amount").val(0);
-        if (isNaN($("#parsley_reg #freight").val())) 
-    $("#parsley_reg #freight").val(0)
-        if (isNaN($("#parsley_reg #demo_total_amount").val())) 
-    $("#parsley_reg #demo_total_amount").val(0)
-    
-        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #demo_grand_total").val(0)
-    
-        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #grand_total").val(0)
-
-
-
-if($('#parsley_reg #total_amount').val()==0){
-      $('#parsley_reg #total_amount').val(total-parseFloat(old_total));
-}else{
-   
-     if(total!=old_total){
-     
-         var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
-          amount=amount.toFixed(point);
-    $('#parsley_reg #total_amount').val();
-  $('#parsley_reg #total_amount').val(amount)
-     }
-}
- 
-if(tax_Inclusive==1){
-if($('#parsley_reg #total_tax').val()==0){
-      $('#parsley_reg #total_tax').val(tax);
-     
-}else{
-    $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())-$('#parsley_reg #old_tax').val()+parseFloat(tax));
-}
-}
-if($('#parsley_reg #total_item_discount_amount').val()==0){
-      $('#parsley_reg #total_item_discount_amount').val(discount);
-     
-}else{
-    $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())-$('#parsley_reg #old_discount').val()+parseFloat(discount));
-}
-$('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
-   
-    
-    
-    
-    clear_inputs();
-    $('#parsley_reg #tax').val(0);
-    $('#parsley_reg #item_discount').val(0);
-}else{
-   
-
-  var  name=$('#parsley_reg #item_name').val();
-  var  stock=$('#parsley_reg #stock_id').val();
-  var  sku=$('#parsley_reg #sku').val();
-  var  quty=$('#parsley_reg #quantity').val();
-  if($('#parsley_reg #free').val()!=""){
-  var  free=$('#parsley_reg #free').val();
-  }else{
-  var  free=0;
-  }
-  
-  var  price=$('#parsley_reg #price').val();
-  var  items_id=$('#parsley_reg #item_id').val();
-  var  items=$('#parsley_reg #items_guid').val();
-  var  tax_value=$('#parsley_reg #tax_value').val();
-  
-  var  tax_type=$('#parsley_reg #tax_type').val();
-  var  tax_Inclusive=$('#parsley_reg #tax_Inclusive').val();
-  var  discount=((parseFloat(quty)*parseFloat(price))*$('#parsley_reg #discount').val())/100;
-  var  per=$('#parsley_reg #discount').val();
-  var tax=((parseFloat(quty)*parseFloat(price))*tax_value)/100;
-  var total;
-  var type;
-  if(tax_Inclusive==1){
-     total= (parseFloat(quty)*parseFloat(price))+tax-discount;
-     type='Exc';
-  }else{
-      type='Inc';
-       total= (parseFloat(quty)*parseFloat(price))-discount;
-  }
-  if(discount==""){
-    discount=0;
-    }
-  if(per==""){
-    per=0;
-    }
-    
-   $('#newly_added').append('<div id="newly_added_items_list_'+items_id+'"> \n\
-\n\
-<input type="hidden" name="new_item_id[]" value="'+items_id+'"  id="new_item_id_'+items_id+'">\n\
-<input type="hidden" name="new_item_stock_id[]" value="'+stock+'"  id="new_item_stock_id_'+items_id+'">\n\
-<input type="hidden" name="new_item_quty[]" value="'+quty+'" id="new_item_quty_'+items_id+'"> \n\
-<input type="hidden" name="new_item_discount[]" value="'+per+'" id="new_item_discount_id_'+items_id+'"> \n\
-<input type="hidden" name="new_item_price[]" value="'+price+'" id="new_item_price_'+items_id+'">\n\
-<input type="hidden" name="new_item_total[]"  value="'+parseFloat(quty)*parseFloat(price)+'" id="new_item_total_'+items_id+'">\n\
-</div>');
- 
-   total=total.toFixed(point);
-   
-    tax=tax.toFixed(point);
-    discount=discount.toFixed(point);
-  
-   var addId = $('#selected_item_table').dataTable().fnAddData( [
-      null,
-      name,
-      sku,
-      quty,
-      price,
-      tax+' : '+tax_type+'('+type+')',
-      discount,
-      total,
-     
-'<input type="hidden" name="index" id="index">\n\
-<input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
-<input type="hidden" name="items_id[]" id="items_id" value="'+items_id+'">\n\
-<input type="hidden" name="items_stock_id[]" id="items__stock_id" value="'+stock+'">\n\
-<input type="hidden" name="items_sku[]" value="'+sku+'" id="items_sku">\n\
-<input type="hidden" name="items_quty[]" value="'+quty+'" id="items_quty"> \n\
-<input type="hidden" name="items_free[]" value="'+free+'" id="items_free">\n\
-<input type="hidden" name="items_price[]" value="'+price+'" id="items_price">\n\
-<input type="hidden" name="items_decomposition_guid[]" value="" id="items_decomposition_guid">\n\
-<input type="hidden" name="items_tax[]" value="'+tax+'" id="items_tax">\n\
-<input type="hidden" name="items_tax_type[]" value="'+tax_type+'" id="items_tax_type">\n\
-<input type="hidden" name="items_tax_value[]" value="'+tax_value+'" id="items_tax_value">\n\
-<input type="hidden" name="items_tax_inclusive[]" value="'+tax_Inclusive+'" id="items_tax_inclusive">\n\
-<input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
-<input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
-<input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-        <a href=javascript:edit_decomposition_item("'+items_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_decomposition_item('"+items_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
-
-var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-theNode.setAttribute('id','new_item_row_id_'+items_id)
-    $.bootstrapGrowl('<?php echo $this->lang->line('new')." ".$this->lang->line('item') ?> '+name+' <?php echo $this->lang->line('added');?> ', { type: "success" });  
-     if (isNaN($("#parsley_reg #total_amount").val())) 
-    $("#parsley_reg #total_amount").val(0)    
-        if (isNaN($("#parsley_reg #discount_amount").val())) 
-    $("#parsley_reg #discount_amount").val(0);
-        if (isNaN($("#parsley_reg #round_off_amount").val())) 
-    $("#parsley_reg #round_off_amount").val(0);
-        if (isNaN($("#parsley_reg #freight").val())) 
-    $("#parsley_reg #freight").val(0)
-        if (isNaN($("#parsley_reg #demo_total_amount").val())) 
-    $("#parsley_reg #demo_total_amount").val(0)
-    
-        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #demo_grand_total").val(0)
-    
-        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #grand_total").val(0)
-if($('#parsley_reg #total_amount').val()==0){
-      $('#parsley_reg #total_amount').val(total);
-     
-}else{
-    $('#parsley_reg #total_amount').val(parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total));
-}
-if(tax_Inclusive==1){
-if($('#parsley_reg #total_tax').val()==0){
-      $('#parsley_reg #total_tax').val(tax);
-     
-}else{
-    $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())+parseFloat(tax));
-}
-}
-if($('#parsley_reg #total_item_discount_amount').val()==0){
-      $('#parsley_reg #total_item_discount_amount').val(discount);
-     
-}else{
-    $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())+parseFloat(discount));
-}
-$('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
-   
-    
-    
-    clear_inputs();
-    $('#parsley_reg #tax').val(0);
-    $('#parsley_reg #item_discount').val(0);
-      }  
-        
-        
         }else{
-         if($('#parsley_reg #item_id').val()==""){
-            $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" });          
-           $('#parsley_reg #items').select2('open');
-        }
-          else if($('#parsley_reg #quantity').val()==""){
-          $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('quantity');?>', { type: "warning" });          
-           $('#parsley_reg #quantity').focus();
-        }
-        else{
-             $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" });          
-       $('#parsley_reg #items').select2('open');
-        }
-        }
-      new_grand_total(); 
-      
-      $('#parsley_reg #tax').val(0);
-    $('#parsley_reg #item_discount').val(0);
-}
-function edit_decomposition_item(guid){
-    $('#parsley_reg #item_name').val($('#selected_item_table #new_item_row_id_'+guid+' #row_item_name').val());
-    $('#parsley_reg #sku').val($('#selected_item_table #new_item_row_id_'+guid+' #items_sku').val());
-    $('#parsley_reg #items_quty').val($('#selected_item_table #new_item_row_id_'+guid+' #item_limit').val());
-    $('#parsley_reg #quantity').val($('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val());
-    $('#parsley_reg #price').val($('#selected_item_table #new_item_row_id_'+guid+' #items_price').val());
-    $('#parsley_reg #discount').val($('#selected_item_table #new_item_row_id_'+guid+' #items_discount_per').val());
-    $('#parsley_reg #tax').val($('#selected_item_table #new_item_row_id_'+guid+' #items_tax').val());
-    $('#parsley_reg #tax_type').val($('#selected_item_table #new_item_row_id_'+guid+' #items_tax_type').val());
-    $('#parsley_reg #tax_value').val($('#selected_item_table #new_item_row_id_'+guid+' #items_tax_value').val());
-    $('#parsley_reg #tax_Inclusive').val($('#selected_item_table #new_item_row_id_'+guid+' #items_tax_inclusive').val());
-    
-    //old 
-     $('#parsley_reg #old_tax').val($('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val()*$('#selected_item_table #new_item_row_id_'+guid+' #items_price').val()*$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_value').val()/100);
-      $('#parsley_reg #old_discount').val($('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val()*$('#selected_item_table #new_item_row_id_'+guid+' #items_price').val()*$('#selected_item_table #new_item_row_id_'+guid+' #items_discount_per').val()/100);
-   
-    $('#parsley_reg #item_id').val(guid);
-    $('#parsley_reg #total').val($('#selected_item_table #new_item_row_id_'+guid+' #items_total').val());
-     if( $('#parsley_reg #tax_Inclusive').val()==1){
-        $('#tax_label').text('Tax(Exc)');
-    }else{
-        $('#tax_label').text('Tax(Inc)');   
+            if($('#parsley_reg #decomposition_guid').val()==""){
+                $.bootstrapGrowl('<?php echo $this->lang->line('please_select')." ".$this->lang->line('decomposition_type') ;?>', { type: "warning" });          
+                $('#parsley_reg #decomposition_type').select2('open');
+            }
+            else if($('#parsley_reg #quantity').val()==""){
+                $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('quantity');?>', { type: "warning" });          
+                $('#parsley_reg #quantity').focus();
+            }
+            else if($('#parsley_reg #price').val()==""){
+                $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('price');?>', { type: "warning" });          
+                $('#parsley_reg #price').focus();
+            }
+            else{
+                $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" });          
+                $('#parsley_reg #select_item').select2('open');
+            }
+        }   
     }
-     $("#parsley_reg #items").select2('data', {id:guid,text:$('#selected_item_table #new_item_row_id_'+guid+' #row_item_name').val() });
+    function edit_decomposition_item(guid){
+        clear_inputs();
+        $('#parsley_reg #decomposition_value').val($('#selected_item_table #new_item_row_id_'+guid+' #decomposition_value').val());
+        $('#parsley_reg #demo_formula').val($('#selected_item_table #new_item_row_id_'+guid+' #decompositions_formula').val());
+        $('#parsley_reg #formula').val($('#selected_item_table #new_item_row_id_'+guid+' #decompositions_formula').val());
+        $('#parsley_reg #quantity').val($('#selected_item_table #new_item_row_id_'+guid+' #decompositions_quty').val());
+        $('#parsley_reg #total_weight').val($('#selected_item_table #new_item_row_id_'+guid+' #decompositions_weight').val());
+        $('#parsley_reg #price').val($('#selected_item_table #new_item_row_id_'+guid+' #decompositions_price').val());   
+        $('#parsley_reg #decomposition_guid').val(guid);
+        $('#parsley_reg #total').val($('#selected_item_table #new_item_row_id_'+guid+' #decompositions_total').val());
+        $('#decomposition_type').select2('data', {id:guid,text: $('#selected_item_table #new_item_row_id_'+guid+' #decompositions_type').val()});
+        var quty=$('#quantity').val();
+        var formula=$('#formula').val();
+        formula=eval(formula);
+        var stock=parseFloat(quty)*parseFloat(formula);
+        $('#current_stock_weight').val(parseFloat($('#current_stock_weight').val())+stock);
+        $('#decomposition_type').select2('close');
+        $('#quantity').focus();
 
-         net_amount();
-         
-        
-
-}
-function delete_decomposition_item(guid){
-    var net=$('#selected_item_table #new_item_row_id_'+guid+' #items_total').val();
-    var dis=$('#selected_item_table #new_item_row_id_'+guid+' #items_discount').val();
-    var items_tax_inclusive=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_inclusive').val();
-    if(items_tax_inclusive==1){
-        var quty=$('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val();
-        var price=$('#selected_item_table #new_item_row_id_'+guid+' #items_price').val();
-        var value=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_value').val();
-        var tax=parseFloat(quty)*parseFloat(price)*parseFloat(value)/100;
-         $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())-tax);
     }
     
-    $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())-parseFloat(dis));
-    var total=$("#parsley_reg #total_amount").val();
-    $("#parsley_reg #total_amount").val(parseFloat(total)-parseFloat(net));
-    $("#parsley_reg #demo_total_amount").val(parseFloat(total)-parseFloat(net));
-    var num = parseFloat($('#demo_total_amount').val());
-    $('#demo_total_amount').val(num.toFixed(point));
-    var num = parseFloat($('#total_amount').val());
-    $('#total_amount').val(num.toFixed(point));
-   
-    $("#parsley_reg #total_amount").val()
-     var decomposition=$('#selected_item_table #new_item_row_id_'+guid+' #items_decomposition_guid').val();
-      $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+decomposition+'">');
-    var index=$('#selected_item_table #new_item_row_id_'+guid+' #index').val();
-     var anSelected =  $("#selected_item_table").dataTable();
-       anSelected.fnDeleteRow(index-1);
-    if(document.getElementById('newly_added_items_list_'+guid)){
-        $('#newly_added_items_list_'+guid).remove();
+    function delete_decomposition_item(guid){
+        var net=$('#selected_item_table #new_item_row_id_'+guid+' #items_total').val();
+        var dis=$('#selected_item_table #new_item_row_id_'+guid+' #items_discount').val();
+        var items_tax_inclusive=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_inclusive').val();
+        if(items_tax_inclusive==1){
+            var quty=$('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val();
+            var price=$('#selected_item_table #new_item_row_id_'+guid+' #items_price').val();
+            var value=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_value').val();
+            var tax=parseFloat(quty)*parseFloat(price)*parseFloat(value)/100;
+             $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())-tax);
+        }
+
+        $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())-parseFloat(dis));
+        var total=$("#parsley_reg #total_amount").val();
+        $("#parsley_reg #total_amount").val(parseFloat(total)-parseFloat(net));
+        $("#parsley_reg #demo_total_amount").val(parseFloat(total)-parseFloat(net));
+        var num = parseFloat($('#demo_total_amount').val());
+        $('#demo_total_amount').val(num.toFixed(point));
+        var num = parseFloat($('#total_amount').val());
+        $('#total_amount').val(num.toFixed(point));
+
+        $("#parsley_reg #total_amount").val()
+         var decomposition=$('#selected_item_table #new_item_row_id_'+guid+' #items_decomposition_guid').val();
+          $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+decomposition+'">');
+        var index=$('#selected_item_table #new_item_row_id_'+guid+' #index').val();
+         var anSelected =  $("#selected_item_table").dataTable();
+           anSelected.fnDeleteRow(index-1);
+        if(document.getElementById('newly_added_items_list_'+guid)){
+            $('#newly_added_items_list_'+guid).remove();
+        }
+        if($("#parsley_reg #total_amount").val()==0 || $("#parsley_reg #total_amount").val()==""){
+            $("#parsley_reg #demo_grand_total").val(0)
+            $("#parsley_reg #grand_total").val(0)
+        }
     }
-    if($("#parsley_reg #total_amount").val()==0 || $("#parsley_reg #total_amount").val()==""){
-        $("#parsley_reg #demo_grand_total").val(0)
-        $("#parsley_reg #grand_total").val(0)
-    }
-}
 function clear_inputs(){
-  $('#parsley_reg #item_name').val('');
-  $('#parsley_reg #sku').val('');
-  $('#parsley_reg #quantity').val('');
-  $('#parsley_reg #free').val('');
+  $('#parsley_reg #decomposition_guid').val('');
+  $('#parsley_reg #formula').val('');
+  $('#parsley_reg #demo_formula').val('');
+  $('#parsley_reg #decomposition_value').val('');
   $('#parsley_reg #total').val('');
-  $('#parsley_reg #sub_total').val('');
   $('#parsley_reg #price').val('');
-  $('#parsley_reg #mrp').val('');
-  $('#parsley_reg #tax').val('');
-  $('#parsley_reg #tax_value').val('');
-  $('#parsley_reg #tax_type').val('');
-  $('#parsley_reg #tax_Inclusive').val('');
-  $('#parsley_reg #extra_elements').val('');
-  $('#parsley_reg #item_id').val('')
-  $('#parsley_reg #dummy_discount_amount').val('')
-  $('#parsley_reg #hidden_dis_amt').val('')
-  $('#parsley_reg #hidden_dis').val('')
-  $('#parsley_reg #tax_label').text('<?php echo $this->lang->line('tax')?>');
-  $('#parsley_reg #dummy_discount').val('')
-  $("#parsley_reg #items").select2('data', {id:'',text: 'Search Item'});
-  $('#parsley_reg #items').select2('open');
+  $('#parsley_reg #quantity').val('');
+  $("#parsley_reg #decomposition_type").select2('data', {id:'',text: '<?php  echo $this->lang->line('search')." ".$this->lang->line('decomposition_type') ?>'});
+  $('#parsley_reg #decomposition_type').select2('open');
    
-         window.setTimeout(function ()
-    {
-       //$('#parsley_reg #delivery_date').focus();
-       $('#parsley_reg #tax').val(0);
-    $('#parsley_reg #item_discount').val(0);
-    }, 0);
+     
 }
-function new_grand_total(){
-         if(parseFloat($("#parsley_reg #total_amount").val())>0){
-var discount=parseFloat($("#parsley_reg #discount_amount").val());
-var frieight=parseFloat($("#parsley_reg #freight").val());
-var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
-    if (isNaN(discount) || discount=="") {
-    discount=0;}
-        if (isNaN(frieight)|| frieight=="") {
-    frieight=00;}
-        if (isNaN(round_amt)|| round_amt=="") {
-    round_amt=00;}
-    if($('#parsley_reg #item_discount').val()==0 || isNaN($('#parsley_reg #item_discount').val())){
-       var item_dis=0;
-    }else{
-        item_dis=parseFloat($('#parsley_reg #total_amount').val())*parseFloat($('#parsley_reg #item_discount').val())/100;
-         var item_dis = parseFloat(item_dis);
-        $('#demo_item_discount_amount').val(item_dis.toFixed(point));
-        $('#item_discount_amount').val(item_dis.toFixed(point));
-    }
 
-     $("#parsley_reg #demo_grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount+frieight+round_amt-item_dis);
-     $("#parsley_reg #grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount+frieight+round_amt-item_dis);
-       
-        var num = parseFloat($('#demo_grand_total').val());
-    $('#demo_grand_total').val(num.toFixed(point));
-    
-    var num = parseFloat($('#grand_total').val());
-    $('#grand_total').val(num.toFixed(point));
-    var num = parseFloat($('#demo_total_amount').val());
-    $('#demo_total_amount').val(num.toFixed(point));
-    var num = parseFloat($('#total_amount').val());
-    $('#total_amount').val(num.toFixed(point));
-        }
-   if (isNaN($("#parsley_reg #total_amount").val())) 
-    $("#parsley_reg #total_amount").val(0)    
-        if (isNaN($("#parsley_reg #discount_amount").val())) 
-    $("#parsley_reg #discount_amount").val(0);
-        if (isNaN($("#parsley_reg #round_off_amount").val())) 
-    $("#parsley_reg #round_off_amount").val(0);
-        if (isNaN($("#parsley_reg #freight").val())) 
-    $("#parsley_reg #freight").val(0)
-        if (isNaN($("#parsley_reg #demo_total_amount").val())) 
-    $("#parsley_reg #demo_total_amount").val(0)
-    
-        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #demo_grand_total").val(0)
-    
-        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #grand_total").val(0)
-    
-}
 
 </script>
 
@@ -1111,7 +770,7 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                                                    
                                                                                     'value'=>set_value('select_item'));
                                                                      echo form_input($select_item)?>
-                                                        <input type="hidden" id="decomposition_guid" name="decomposition_guid">
+                                                        
                                                   </div>
                                                </div>
                                                <div class="col col-sm-2" >
@@ -1136,6 +795,7 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                                                         'value'=>set_value('item_stock'));
                                                                          echo form_input($item_stock)?>
                                                             <input type="hidden" name="item_stock" id="item_stock">
+                                                            <input type="text" name="current_stock_weight" id="current_stock_weight">
                                                        </div>
                                                </div>
                                                <div class="col col-sm-2" >
@@ -1147,7 +807,7 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                                                         'disabled'=>'disabled',
                                                                                         'value'=>set_value('item_stock'));
                                                                          echo form_input($demo_item_weight_stock)?>
-                                                            <input type="hidden" name="item_weight_stock" id="item_weight_stock">
+                                                            <input type="text" name="item_weight_stock" id="item_weight_stock">
                                                        </div>
                                                </div>
                                                <div class="col col-sm-2" >
@@ -1211,21 +871,35 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                     <input type="hidden" name="decomposition_guid" id="decomposition_guid">
                                                     <input type="hidden" name="formula" id="formula">
                                                     <input type="hidden" name="decomposition_value" id="decomposition_value">                                                 
+                                                    <input type="hidden" name="decomposition_type_val" id="decomposition_type_val">                                                 
                                                     
                                                         </div>
                                                 
+                                                 <div class="col col-lg-1" style="padding:1px;">
+                                                   <div class="form_sep">
+                                                            
+                                                                <label for="demo_formula" class="text-center" ><?php echo $this->lang->line('formula') ?></label>
+
+                                                                 <?php $demo_formula=array('name'=>'demo_formula',
+                                                                                            'class'=>' form-control text-center',
+                                                                                            'id'=>'demo_formula',
+                                                                                            'disabled'=>'disabled',
+                                                                                            'value'=>set_value('demo_formula'));
+                                                                             echo form_input($demo_formula)?>
+                                                               
+                                                        </div>
+                                                        </div>
                                                  <div class="col col-lg-1" style="padding:1px;width: 160px;">
                                                    <div class="form_sep">
                                                             
-                                                                <label for="stock_quantity" class="text-center" ><?php echo $this->lang->line('stock') ." ". $this->lang->line('quantity') ?></label>
+                                                                <label for="total_weight" class="text-center" ><?php echo $this->lang->line('total_weight') ?></label>
 
-                                                                 <?php $stock_quantity=array('name'=>'stock_quantity',
+                                                                 <?php $total_weight=array('name'=>'total_weight',
                                                                                             'class'=>' form-control text-center',
-                                                                                            'id'=>'stock_quantity',
-                                                                                            'onkeyup'=>"net_amount()", 
-                                                                     'onKeyPress'=>"add_new_quty(event); return numbersonly(event)",
-                                                                                            'value'=>set_value('stock_quantity'));
-                                                                             echo form_input($stock_quantity)?>
+                                                                                            'id'=>'total_weight',
+                                                                                            'disabled'=>'disabled',
+                                                                                            'value'=>set_value('total_weight'));
+                                                                             echo form_input($total_weight)?>
                                                                
                                                         </div>
                                                         </div>
@@ -1237,7 +911,8 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                                  <?php $quantity=array('name'=>'quantity',
                                                                                             'class'=>' form-control text-center',
                                                                                             'id'=>'quantity',
-                                                                                            'disabled'=>'disabled',
+                                                                                            'onkeyup'=>"net_amount()", 
+                                                                                            'onKeyPress'=>"add_new_quty(event); return numbersonly(event)",
                                                                                             'value'=>set_value('quantity'));
                                                                              echo form_input($quantity)?>
                                                                
@@ -1256,8 +931,8 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                                  <?php $price=array('name'=>'price',
                                                                                             'class'=>' form-control small_length text-right',
                                                                                             'id'=>'price',
-                                                                                           
-                                                                  
+                                                                                            'onkeyup'=>"net_amount()", 
+                                                                                            'onKeyPress'=>"add_new_price(event); return numbersonly(event)",
                                                                                             'value'=>set_value('price'));
                                                                              echo form_input($price)?>
                                                         </div>
@@ -1268,32 +943,7 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                   
                                                
                                              
-                                                          <div class="col col-lg-1" style="padding:1px;width:120px">
-                                                   <div class="form_sep">
-                                                            
-                                                                <label for="tax" class="text-center" id="tax_label"  ><?php echo $this->lang->line('tax_type') ?></label>
-
-                                                                 <?php $tax_type=array('name'=>'tax_type',
-                                                                                            'class'=>' form-control text-right',
-                                                                                            'id'=>'tax_type',
-                                                                                            'disabled'=>'disabled',
-                                                                                            'value'=>set_value('tax_type'));
-                                                                             echo form_input($tax_type)?>
-                                                        </div>
-                                                    </div>
-                                                          <div class="col col-lg-1" style="padding:1px;width:120px">
-                                                   <div class="form_sep">
-                                                            
-                                                                <label for="tax" class="text-center" id="tax_label"  ><?php echo $this->lang->line('tax') ?></label>
-
-                                                                 <?php $tax=array('name'=>'tax',
-                                                                                            'class'=>' form-control text-right',
-                                                                                            'id'=>'tax',
-                                                                                            'disabled'=>'disabled',
-                                                                                            'value'=>set_value('tax'));
-                                                                             echo form_input($tax)?>
-                                                        </div>
-                                                    </div>
+                                                          
                                                
                                                
                                                 <div class="col col-lg-2" style="padding:1px;">
@@ -1346,12 +996,12 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                         <tr>
                                             
                                      <th><?php echo $this->lang->line('no') ?></th>
-                                    <th><?php echo $this->lang->line('name') ?></th>
-                                        <th><?php echo $this->lang->line('sku') ?></th>
+                                    <th><?php echo $this->lang->line('decomposition_type') ?></th>
+                                    <th><?php echo $this->lang->line('formula') ?></th>
+                                    <th><?php echo $this->lang->line('weight') ?></th>
                                     <th><?php echo $this->lang->line('quantity') ?></th>                                  
                                     <th><?php echo $this->lang->line('price') ?></th>
-                                    <th><?php echo $this->lang->line('tax') ?></th>
-                                    <th><?php echo $this->lang->line('discount') ?></th>
+                                 
                                     <th><?php echo $this->lang->line('total') ?></th>
                                     <th><?php echo $this->lang->line('action') ?></th>
                                     </tr>
@@ -1425,28 +1075,19 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                         <div class="row" style="margin-left: 5px">
                                                      <div class="panel panel-default">
                                                     <div class="panel-heading" >
-                                     <h4 class="panel-title"><?php echo $this->lang->line('amount') ?></h4>                                                                               
+                                     <h4 class="panel-title"><?php echo $this->lang->line('amount')." & ".$this->lang->line('weight') ?></h4>                                                                               
                               </div>
                                                          <div class="form_sep " style="padding: 0 25px">
-                                                        <label for="total_item_discount_amount" ><?php echo $this->lang->line('total_item_discount_amount') ?></label>													
-                                                                  <?php $total_item_discount_amount=array('name'=>'total_item_discount_amount',
+                                                        <label for="total_item_weight" ><?php echo $this->lang->line('total_weight') ?></label>													
+                                                                  <?php $total_item_weight=array('name'=>'demo_total_item_weight',
                                                                                     'class'=>' form-control',
-                                                                                    'id'=>'total_item_discount_amount',
+                                                                                    'id'=>'demo_total_item_weight',
                                                                                     'disabled'=>'disabled',
-                                                                                    'value'=>set_value('total_item_discount_amount'));
-                                                                     echo form_input($total_item_discount_amount)?>
+                                                                                    'value'=>set_value('total_item_weight'));
+                                                                     echo form_input($total_item_weight)?>
                                                         
-                                                  </div>
-                                                         <div class="form_sep " style="padding: 0 25px">
-                                                        <label for="total_tax" ><?php echo $this->lang->line('total_tax') ?></label>													
-                                                                  <?php $total_item_discount_amount=array('name'=>'total_tax',
-                                                                                    'class'=>' form-control',
-                                                                                    'id'=>'total_tax',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('total_tax'));
-                                                                     echo form_input($total_item_discount_amount)?>
-                                                        
-                                                  </div>
+                                                  </div> <input type="hidden" name="total_item_weight" id="total_item_weight">
+                                                         
                                                          <div class="form_sep " style="padding: 0 25px">
                                                         <label for="total_amount" ><?php echo $this->lang->line('total_amount') ?></label>													
                                                                   <?php $total_amount=array('name'=>'demo_total_amount',
@@ -1458,17 +1099,7 @@ var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
                                                         <input type="hidden" name="total_amount" id="total_amount">
                                                         
                                                   </div>
-                                                         <div class="form_sep " style="padding: 0 25px">
-                                                        <label for="grand_total" ><?php echo $this->lang->line('grand_total') ?></label>													
-                                                                  <?php $grand_total=array('name'=>'demo_grand_total',
-                                                                                    'class'=>'required  form-control',
-                                                                                    'id'=>'demo_grand_total',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('grand_total'));
-                                                                     echo form_input($grand_total)?>
-                                                        <input type="hidden" name="grand_total" id="grand_total">
-                                                        
-                                                  </div><br>
+                                                         <br>
                                                   </div>
                                                </div>
                         <div class="row" style="margin-left: 5px">
