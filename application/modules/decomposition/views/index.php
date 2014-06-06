@@ -234,7 +234,7 @@
             }
         $('#parsley_reg #select_item').change(function() {           
                 var guid = $('#parsley_reg #select_item').select2('data').item;
-                $('#parsley_reg #decomposition_guid').val(guid);
+                $('#parsley_reg #decomposition_item_guid').val(guid);
                 $('#parsley_reg #item_sku').val($('#parsley_reg #select_item').select2('data').value);              
                 $('#parsley_reg #demo_item_stock').val($('#parsley_reg #select_item').select2('data').quty);
                 $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
@@ -782,6 +782,7 @@ function clear_inputs(){
                                                                                         'disabled'=>'disabled',
                                                                                         'value'=>set_value('item_sku'));
                                                                          echo form_input($item_sku)?>
+                                                            <input type="hidden" name="decomposition_item_guid" id="decomposition_item_guid">
                                                </div>
                                                </div>
                                               
@@ -795,7 +796,7 @@ function clear_inputs(){
                                                                                         'value'=>set_value('item_stock'));
                                                                          echo form_input($item_stock)?>
                                                             <input type="hidden" name="item_stock" id="item_stock">
-                                                            <input type="text" name="current_stock_weight" id="current_stock_weight">
+                                                            <input type="hidden" name="current_stock_weight" id="current_stock_weight">
                                                        </div>
                                                </div>
                                                <div class="col col-sm-2" >
@@ -807,7 +808,7 @@ function clear_inputs(){
                                                                                         'disabled'=>'disabled',
                                                                                         'value'=>set_value('item_stock'));
                                                                          echo form_input($demo_item_weight_stock)?>
-                                                            <input type="text" name="item_weight_stock" id="item_weight_stock">
+                                                            <input type="hidden" name="item_weight_stock" id="item_weight_stock">
                                                        </div>
                                                </div>
                                                <div class="col col-sm-2" >

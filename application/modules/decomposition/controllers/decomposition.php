@@ -17,7 +17,7 @@ class Decomposition extends MX_Controller{
     }
     // sales quotation decomposition data table
     function data_table(){
-        $aColumns = array( 'guid','code','code','c_name','s_name','date','total_items','total_amt','active_status','quotation_status' );	
+        $aColumns = array( 'guid','code','code','code','code','date','code','code','active_status','code' );	
 	$start = "";
 			$end="";
 		
@@ -99,55 +99,45 @@ class Decomposition extends MX_Controller{
     
  
 function save(){      
-     if($this->session->userdata['sales_quotation_per']['add']==1){
-        $this->form_validation->set_rules('customers_guid',$this->lang->line('customers_guid'), 'required');
-        $this->form_validation->set_rules('expiry_date',$this->lang->line('expiry_date'), 'required');
+    if($this->session->userdata['decomposition_per']['add']==1){
+        $this->form_validation->set_rules('decomposition_item_guid',$this->lang->line('decomposition_item_guid'), 'required');
         $this->form_validation->set_rules('decomposition_number', $this->lang->line('decomposition_number'), 'required');
-        $this->form_validation->set_rules('quotation_date', $this->lang->line('quotation_date'), 'required');                      
-        $this->form_validation->set_rules('grand_total', $this->lang->line('grand_total'), 'numeric');                      
-        $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric'); 
-        $this->form_validation->set_rules('round_off_amount', $this->lang->line('round_off_amount'), 'numeric');                      
-        $this->form_validation->set_rules('discount', $this->lang->line('discount'), 'numeric');                      
-        $this->form_validation->set_rules('freight', $this->lang->line('freight'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'), 'required');                      
-        $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'required|numeric');                      
-        $this->form_validation->set_rules('new_item_discount[]', $this->lang->line('new_item_discount'), 'required|numeric');                      
-        $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id'), 'required');                      
+        $this->form_validation->set_rules('decomposition_date', $this->lang->line('decomposition_date'), 'required');                    
+        $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric|required');                  
+        $this->form_validation->set_rules('total_item_weight', $this->lang->line('total_item_weight'), 'numeric|required');                  
+        $this->form_validation->set_rules('new_decomposition_id[]', $this->lang->line('new_decomposition_id'), 'required');                      
+        $this->form_validation->set_rules('new_decomposition_weight[]', $this->lang->line('new_decomposition_weight'), 'required|numeric');                      
+        $this->form_validation->set_rules('new_decomposition_quty[]', $this->lang->line('new_decomposition_quty'), 'required|numeric');                      
+        $this->form_validation->set_rules('new_decomposition_formula[]', $this->lang->line('new_decomposition_formula'), 'required');                      
+        $this->form_validation->set_rules('new_decomposition_price[]', $this->lang->line('new_decomposition_price'), 'required');                      
+        $this->form_validation->set_rules('new_decomposition_total[]', $this->lang->line('new_decomposition_total'), 'required');                      
            
             if ( $this->form_validation->run() !== false ) {    
-                $customer=  $this->input->post('customers_guid');
+                $item=  $this->input->post('decomposition_item_guid');
                 $decomposition_number=  $this->input->post('decomposition_number');
-                $expdate=strtotime($this->input->post('expiry_date'));
-                $quotation_date= strtotime($this->input->post('quotation_date'));
-                $discount=  $this->input->post('discount');
-                $discount_amount=  $this->input->post('discount_amount');
-                $freight=  $this->input->post('freight');
-                $round_amt=  $this->input->post('round_off_amount');
-                $total_items=$this->input->post('index');
+                $decomposition_date= strtotime($this->input->post('quotation_date'));
+                $total_types=$this->input->post('index');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');
-                $grand_total=  $this->input->post('grand_total');
-                $customer_discount=  $this->input->post('customer_discount');
-                $customer_discount_amount=  $this->input->post('customer_discount_amount');
-  
-     
-              $value=array('customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'exp_date'=>$expdate,'code'=>$decomposition_number,'date'=>$quotation_date,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'remark'=>$remark,'note'=>$note,'total_item_amt'=>$total_amount);
-              $guid=   $this->posnic->posnic_add_record($value,'sales_quotation');
-          
-                $item=  $this->input->post('new_item_id');
-                $quty=  $this->input->post('new_item_quty');
-                $stock=  $this->input->post('new_item_stock_id');
-                $item_discount=  $this->input->post('new_item_discount');
+                $total_weight=  $this->input->post('total_item_weight');  
+                $value=array('item_id'=>$item,'code'=>$decomposition_number,'date'=>$decomposition_date,'total_types'=>$total_types,'total_amount'=>$total_amount,'total_weight'=>$total_weight,'remark'=>$remark,'note'=>$note);
+                $guid=   $this->posnic->posnic_add_record($value,'decomposition');          
+                $decomposition=  $this->input->post('new_decomposition_id');
+                $weight=  $this->input->post('new_decomposition_weight');
+                $quty=  $this->input->post('new_decomposition_quty');
+                $formula=  $this->input->post('new_decomposition_formula');
+                $price=  $this->input->post('new_decomposition_price');
+                $total=  $this->input->post('new_decomposition_total');
            
-                for($i=0;$i<count($item);$i++){
+                for($i=0;$i<count($decomposition);$i++){
               
                     $this->load->model('items');
-                    $this->items->add_sales_quotation($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i);
+                    $this->items->add_decomposition($guid,$decomposition[$i],$weight[$i],$quty[$i],$formula[$i],$price[$i],$total[$i],$i);
                 
                         
                 }
-                $this->posnic->posnic_master_increment_max('sales_quotation')  ;
+                $this->posnic->posnic_master_increment_max('decomposition')  ;
                  echo 'TRUE';
     
                 }else{
@@ -159,8 +149,8 @@ function save(){
            
     }
     function update(){
-            if(isset($_POST['sales_quotation_guid'])){
-      if($this->session->userdata['sales_quotation_per']['edit']==1){
+            if(isset($_POST['decomposition_guid'])){
+      if($this->session->userdata['decomposition_per']['edit']==1){
         $this->form_validation->set_rules('customers_guid',$this->lang->line('customers_guid'), 'required');
         $this->form_validation->set_rules('expiry_date',$this->lang->line('expiry_date'), 'required');
         $this->form_validation->set_rules('quotation_date', $this->lang->line('quotation_date'), 'required');                      
@@ -198,9 +188,9 @@ function save(){
                 $customer_discount_amount=  $this->input->post('customer_discount_amount');
      
               $value=array('customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'exp_date'=>$expdate,'date'=>$podate,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'remark'=>$remark,'note'=>$note,'total_item_amt'=>$total_amount);
-              $guid=  $this->input->post('sales_quotation_guid');
+              $guid=  $this->input->post('decomposition_guid');
               $update_where=array('guid'=>$guid);
-             $this->posnic->posnic_update_record($value,$update_where,'sales_quotation');
+             $this->posnic->posnic_update_record($value,$update_where,'decomposition');
           
                 $sq=  $this->input->post('sq_items');
                 $quty=  $this->input->post('items_quty');
@@ -225,7 +215,7 @@ function save(){
            if(count($stock)>0){
                 for($i=0;$i<count($stock);$i++){
                     if($item[$i]!="" || $item[$i]!=0){
-                    $this->items->add_sales_quotation($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i);
+                    $this->items->add_decomposition($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i);
                     }
                         
                 }
@@ -257,7 +247,7 @@ function delete(){
                 $guid=$this->input->post('guid');
                 $status=$this->items->check_approve($guid);// check if the purchase decomposition was already apparoved or what
                     if($status!=FALSE){
-                        $this->posnic->posnic_delete($guid,'sales_quotation'); // delete the purchase decomposition
+                        $this->posnic->posnic_delete($guid,'decomposition'); // delete the purchase decomposition
                         echo 'TRUE';
                     }else{
                         echo 'Approved';
@@ -271,16 +261,16 @@ function delete(){
 }
 // function end
 
-function  get_sales_quotation($guid){
-    if($this->session->userdata['sales_quotation_per']['edit']==1){
+function  get_decomposition($guid){
+    if($this->session->userdata['decomposition_per']['edit']==1){
     $this->load->model('items');
-    $data=  $this->items->get_sales_quotation($guid);
+    $data=  $this->items->get_decomposition($guid);
     echo json_encode($data);
     }
 }
 
-function sales_quotation_approve(){
-     if($this->session->userdata['sales_quotation_per']['approve']==1){
+function decomposition_approve(){
+     if($this->session->userdata['decomposition_per']['approve']==1){
             $id=  $this->input->post('guid');
             $this->load->model('items');
             $this->items->approve_decomposition($id);
@@ -290,7 +280,7 @@ function sales_quotation_approve(){
      }
     }
 function decomposition_number(){
-       $data[]= $this->posnic->posnic_master_max('decomposition_number')    ;
+       $data[]= $this->posnic->posnic_master_max('decomposition')    ;
        echo json_encode($data);
 }
 /*
