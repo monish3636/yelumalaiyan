@@ -1,12 +1,10 @@
-<?php
-
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Items extends CI_Model{
     function __construct() {
         parent::__construct();
     }
     function get($end,$start,$like,$branch){
-                $this->db->select('decomposition.* ,items.guid as i_guid,items.name');
-             
+                $this->db->select('decomposition.* ,items.guid as i_guid,items.name');             
                 $this->db->from('decomposition')->where('decomposition.branch_id',$branch)->where('decomposition.delete_status',0);
                 $this->db->join('items', 'items.guid=decomposition.item_id','left');
                 $this->db->limit($end,$start); 
@@ -21,59 +19,46 @@ class Items extends CI_Model{
         $sql=  $this->db->get();
         return $sql->num_rows();
     }
-   
-
     
     function search_items($search){
-         $this->db->select('items.decomposition,items.weight,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata['branch_id'])->where('items.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',1)->where('items.decomposition',1);
-         $this->db->join('items', "items.guid=stock.item ",'left');
-         $this->db->join('items_category', 'items.category_id=items_category.guid','left');
-         $this->db->join('items_setting', 'items.guid=items_setting.item_id AND items_setting.purchase=1','left');
-         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=stock.item ",'left');
-         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=stock.item ",'left');
-         $this->db->join('brands', 'items.brand_id=brands.guid','left');
-         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-         $like=array('items.active_status'=>$search,'items.name'=>$search,'items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
-                $this->db->or_like($like);
-                $this->db->limit($this->session->userdata['data_limit']);
-                $sql=  $this->db->get();
-                $data=array();
-                foreach ($sql->result_array() as $row){
-                   if($row['decomposition']==1){
-                  
-                       $data[]=$row;
-                    }
-               
-                   // print_r($row);
+        $this->db->select('items.decomposition,items.weight,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata['branch_id'])->where('items.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',1)->where('items.decomposition',1);
+        $this->db->join('items', "items.guid=stock.item ",'left');
+        $this->db->join('items_category', 'items.category_id=items_category.guid','left');
+        $this->db->join('items_setting', 'items.guid=items_setting.item_id AND items_setting.purchase=1','left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=stock.item ",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=stock.item ",'left');
+        $this->db->join('brands', 'items.brand_id=brands.guid','left');
+        $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
+        $like=array('items.active_status'=>$search,'items.name'=>$search,'items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
+            $this->db->or_like($like);
+            $this->db->limit($this->session->userdata['data_limit']);
+            $sql=  $this->db->get();
+            $data=array();
+            foreach ($sql->result_array() as $row){
+                if($row['decomposition']==1){                  
+                   $data[]=$row;
                 }
-              
-         
+            }
+        return $data;     
+     }
+    function get_decomposition($guid){
+        $this->db->select('decomposition.*,decomposition_x_items.guid as deco_guid,stock.quty,decomposition_type.value,decomposition_type.type_name as type,items.name,items.code as sku,items.weight as item_weight,decomposition_x_items.price,decomposition_x_items.quantity,decomposition_x_items.formula,decomposition_x_items.weight as weight,decomposition_x_items.total,decomposition_x_items.type_id')->from('decomposition')->where('decomposition.guid',$guid)->where('decomposition.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->join('items', 'items.guid=decomposition.item_id','left');
+        $this->db->join('stock','stock.item=items.guid AND stock.guid=decomposition.stock_id','left');
+        $this->db->join('decomposition_x_items', 'decomposition_x_items.decomposition_id=decomposition.guid','left');
+        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_x_items.type_id','left');
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){
+         $row['date']=date('d-m-Y',$row['date']);         
+         $data[]=$row;
+        }
         return $data;
-     
-     }
-     function get_decomposition($guid){
-         $this->db->select('decomposition.*,decomposition_x_items.guid as deco_guid,stock.quty,decomposition_type.value,decomposition_type.type_name as type,items.name,items.code as sku,items.weight as item_weight,decomposition_x_items.price,decomposition_x_items.quantity,decomposition_x_items.formula,decomposition_x_items.weight as weight,decomposition_x_items.total,decomposition_x_items.type_id')->from('decomposition')->where('decomposition.guid',$guid)->where('decomposition.branch_id',  $this->session->userdata('branch_id'));
-         $this->db->join('items', 'items.guid=decomposition.item_id','left');
-         $this->db->join('stock','stock.item=items.guid AND stock.guid=decomposition.stock_id','left');
-         $this->db->join('decomposition_x_items', 'decomposition_x_items.decomposition_id=decomposition.guid','left');
-         $this->db->join('decomposition_type','decomposition_type.guid=decomposition_x_items.type_id','left');
-         $sql=  $this->db->get();
-         $data=array();
-         foreach($sql->result_array() as $row){
-             
-          
-       
-         
-          $row['date']=date('d-m-Y',$row['date']);
-         
-          $data[]=$row;
-         }
-         return $data;
-     }
-     function delete_decomposition_item($guid){      
-          $this->db->where('guid',$guid);
-          $this->db->delete('decomposition_x_items');
-     }
+    }
+    function delete_decomposition_item($guid){      
+        $this->db->where('guid',$guid);
+        $this->db->delete('decomposition_x_items');
+    }
     function approve_decomposition($guid,$item_id){
         $this->db->where('guid',$guid);
         $this->db->update('decomposition',array('decomposition_status'=>1));
