@@ -289,7 +289,8 @@ class Users extends MX_Controller{
                 $this->form_validation->set_rules('user_groups[]',$this->lang->line('user_groups'),"required");
                 $this->form_validation->set_rules('user_branchs[]',$this->lang->line('user_branchs'),"required");	
                 $this->form_validation->set_rules('userfile', 'userfile', 'callback_add_user_image');
-	    if ( $this->form_validation->run() !== false ) {        
+	    if ( $this->form_validation->run() !== false ) {    
+                $this->add_user_image();
 			  $this->load->model('pos_users_model');
                           $first_name=$this->input->post('first_name');
                           $last_name=  $this->input->post('last_name');

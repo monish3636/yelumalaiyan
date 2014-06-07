@@ -532,65 +532,7 @@
                        
             });
        
-        
-        $('#add_new_item').click(function() { 
-                <?php if($this->session->userdata['items_per']['add']==1){ ?>
-                var inputs = $('#add_item').serialize();
-                if($('#add_item').valid()){
-                      $.ajax ({
-                            url: "<?php echo base_url('index.php/items/add_new_item')?>",
-                            data: inputs,
-                            type:'POST',
-                            complete: function(response) {
-                                if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('item').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#add_item").trigger('reset');
-                                       posnic_items_lists();
-                                    }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#items_name').val()+' <?php echo $this->lang->line('item').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                                    }else  if(response['responseText']=='FALSE'){
-                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('item');?>', { type: "error" });                           
-                                    }
-                       }
-                });}else{
-                        $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                }<?php }else{ ?>
-                  bootbox.alert("<?php echo $this->lang->line('You Have NO Permission To Add Record')?>");  
-                    <?php }?>
-        });
-         $('#update_items').click(function() { 
-                <?php if($this->session->userdata['items_per']['edit']==1){ ?>
-                var inputs = $('#parsley_reg').serialize();
-                 if($('#parsley_reg').valid()){
-                      $.ajax ({
-                            url: "<?php echo base_url('index.php/items/update_items')?>",
-                            data: inputs,
-                            type:'POST',
-                            complete: function(response) {
-                                  if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('item').' '.$this->lang->line('updated');?>', { type: "success" });                                                                                  
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#parsley_reg").trigger('reset');
-                                       posnic_items_lists();
-                                    }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#items_name').val()+' <?php echo $this->lang->line('item').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                                    }else  if(response['responseText']=='FALSE'){
-                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('item');?>', { type: "error" });                           
-                                    }
-                       }
-                 });
-                 }else{
-                        $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                }
-                 <?php }else{ ?>
-                  bootbox.alert("<?php echo $this->lang->line('You Have NO permission To Edit This Records')?>");  
-                    <?php }?>
-        });
+     
      });
 function posnic_add_new(){
     <?php if($this->session->userdata['items_per']['add']==1){ ?>
