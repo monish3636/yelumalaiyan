@@ -80,7 +80,7 @@ class Items extends CI_Model{
                     $item_guid=$item_row->guid;
                 }
                 $this->db->where('guid',$item_guid);
-                $this->db->update('decomposition_items',array('price'=>$row['price']));
+                $this->db->update('decomposition_items',array('price'=>$row['price'],'tax_inclusive'=>$row['tax_inclusive']));
                 $this->db->select()->from('stock')->where('item',$item_guid)->where('price',$row['price']);
                 $stock=  $this->db->get();
                 if($stock->num_rows()>0){
@@ -96,7 +96,7 @@ class Items extends CI_Model{
             }else{
                 $j++;
                 $item_guid=md5($j.uniqid().$guid.$row['guid']);
-                $this->db->insert('decomposition_items',array('item_id'=>$item_id,'guid'=> $item_guid ,'code'=>$prefix."".$max,'price'=>$row['price'],'type_id'=>$row['type_id'],'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid')));
+                $this->db->insert('decomposition_items',array('tax_inclusive'=>$row['tax_inclusive'],'item_id'=>$item_id,'guid'=> $item_guid ,'code'=>$prefix."".$max,'price'=>$row['price'],'type_id'=>$row['type_id'],'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid')));
                 $this->db->insert('stock',array('guid'=>  md5('stock'.$item_guid.$item_id.$guid.$row['guid'].$j),'item'=>$item_guid,'quty'=>$row['quantity'],'price'=>$row['price'],'branch_id'=>  $this->session->userdata('branch_id')));
                
 
@@ -114,12 +114,12 @@ class Items extends CI_Model{
             }
             
      }
-    function add_decomposition($guid,$decomposition,$weight,$quantity,$formula,$price,$total,$i){         
-        $this->db->insert('decomposition_x_items',array('guid'=>  md5($i.$guid.$decomposition),'price'=>$price,'weight'=>$weight,'type_id'=>$decomposition,'formula'=>$formula,'quantity'=>$quantity,'total'=>$total,'decomposition_id'=>$guid));         
+    function add_decomposition($guid,$decomposition,$weight,$quantity,$formula,$price,$total,$tax_inclusive,$i){         
+        $this->db->insert('decomposition_x_items',array('guid'=>  md5($i.$guid.$decomposition),'tax_inclusive'=>$tax_inclusive,'price'=>$price,'weight'=>$weight,'type_id'=>$decomposition,'formula'=>$formula,'quantity'=>$quantity,'total'=>$total,'decomposition_id'=>$guid));         
     }
-     function update_decomposition($deco_guid,$quty,$price,$weight,$total){
+     function update_decomposition($deco_guid,$quty,$price,$weight,$total,$tax_inclusive){
          $this->db->where('guid',$deco_guid);
-         $this->db->update('decomposition_x_items',array('quantity'=>$quty,'weight'=>$weight,'price'=>$price,'total'=>$total));
+         $this->db->update('decomposition_x_items',array('tax_inclusive'=>$tax_inclusive,'quantity'=>$quty,'weight'=>$weight,'price'=>$price,'total'=>$total));
      }
     
      function search_decomposition_type($search){

@@ -692,5 +692,8 @@ $lang['credit_days']='Credit Days';
     $lang['kit_category']='Item Kit Category';
     $lang['item_kit_date']='Item Kit Date';
     $lang['item_kit_name']='Item Kit Name';
+    $lang['exclusive']='Exclusive';
+    $lang['inclusive']='Inclusive';
+    $lang['selling']='Selling';
    
 ?>

@@ -231,10 +231,24 @@
             $('#parsley_reg #current_stock_weight').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
             $('#parsley_reg #demo_item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').quty)*parseFloat($('#parsley_reg #select_item').select2('data').weight));
             $('#parsley_reg #item_weight_stock').val(parseFloat($('#parsley_reg #select_item').select2('data').weight));
+            //$('#parsley_reg #tax_value').val(parseFloat($('#parsley_reg #select_item').select2('data').tax_value));
+            
+            if($('#parsley_reg #select_item').select2('data').tax_Inclusive==1){
+                $('#parsley_reg #tax_inclusive').val('<?php echo $this->lang->line('no') ?>');
+                $('#parsley_reg #hidden_tax_inclusive').val(1);
+                $('#selling_tax_type').val(1);
+            }else{
+                $('#parsley_reg #tax_inclusive').val('<?php echo $this->lang->line('yes') ?>');
+                $('#parsley_reg #hidden_tax_inclusive').val(0);
+                $('#selling_tax_type').val(0);
+            }
+            $('#parsley_reg #tax_type').val($('#parsley_reg #select_item').select2('data').tax_type+" : "+$('#parsley_reg #select_item').select2('data').tax_value +"%");
+            $('#parsley_reg #tax').val($('#parsley_reg #select_item').select2('data').tax_value);
+            
             window.setTimeout(function ()
             {
                 $('#parsley_reg #decomposition_date').focus();
-            }, 100);
+            }, 0);
         });
         $('#parsley_reg #select_item').select2({
             dropdownCssClass : 'item_select',
@@ -554,7 +568,24 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                     $('#parsley_reg #total_amount').val();
                     $('#parsley_reg #total_amount').val(amount)
                     $('#parsley_reg #total_item_weight').val(total_weight); 
+                
+                    if($('#selling_tax_type').val()==1){
+                        var total_tax=parseFloat(amount)* parseFloat($('#tax').val())/100;
+                        total_tax=total_tax.toFixed(point);
+                        $('#total_tax').val(total_tax);
+                        $('#demo_total_tax').val(total_tax);
+                        var grand=parseFloat(amount)+parseFloat(total_tax);
+                        grand=grand.toFixed(point);
+                        $('#grand_total').val(grand);
+                        $('#demo_grand_total').val(grand);
+                    }else{
+                        $('#grand_total').val(amount);
+                        $('#demo_grand_total').val(amount);
+                    }
                 }
+                
+                
+                
                 $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
                 $('#parsley_reg #demo_total_item_weight').val($('#parsley_reg #total_item_weight').val()); 
                 formula=eval(formula);
@@ -614,6 +645,20 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                 }
                 $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
                 $('#parsley_reg #demo_total_item_weight').val($('#parsley_reg #total_item_weight').val());
+                var amount=$('#parsley_reg #total_amount').val();
+                if($('#selling_tax_type').val()==1){
+                    var total_tax=parseFloat(amount)* parseFloat($('#tax').val())/100;
+                    total_tax=total_tax.toFixed(point);
+                    $('#total_tax').val(total_tax);
+                    $('#demo_total_tax').val(total_tax);
+                    var grand=parseFloat(amount)+parseFloat(total_tax);
+                    grand=grand.toFixed(point);
+                    $('#grand_total').val(grand);
+                    $('#demo_grand_total').val(grand);
+                }else{
+                    $('#grand_total').val(amount);
+                    $('#demo_grand_total').val(amount);
+                }
                 formula=eval(formula);
                 var stock=(parseFloat(quty)*parseFloat(formula));        
                 $('#current_stock_weight').val(parseFloat($('#current_stock_weight').val())-stock);
@@ -658,6 +703,24 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
         $('#decomposition_type').select2('close');
         $('#quantity').focus();
 
+    }
+    function grand_total(){
+        var amount=$('#parsley_reg #total_amount').val();
+        if($('#selling_tax_type').val()==1){
+            var total_tax=parseFloat(amount)* parseFloat($('#tax').val())/100;
+            total_tax=total_tax.toFixed(point);
+            $('#total_tax').val(total_tax);
+            $('#demo_total_tax').val(total_tax);
+            var grand=parseFloat(amount)+parseFloat(total_tax);
+            grand=grand.toFixed(point);
+            $('#grand_total').val(grand);
+            $('#demo_grand_total').val(grand);
+            $('#hidden_tax_inclusive').val(1);
+        }else{
+            $('#grand_total').val(amount);
+            $('#demo_grand_total').val(amount);
+            $('#hidden_tax_inclusive').val(0);
+        }
     }
     
     function delete_decomposition_item(guid){
@@ -800,6 +863,36 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                               
                                               
                                                </div>
+                                           <div class="row">
+                                               <div class="col col-lg-2">
+                                                    <label for="tax_inclusive" ><?php echo $this->lang->line('tax_Inclusive') ?></label>
+                                                     <?php $tax_inclusive=array('name'=>'tax_inclusive',
+                                                                    'class'=>'required  form-control',
+                                                                    'id'=>'tax_inclusive',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('tax_inclusive'));
+                                                     echo form_input($tax_inclusive)?>
+                                               </div>
+                                               <div class="col col-lg-2">
+                                                    <label for="tax_type" ><?php echo $this->lang->line('tax_type') ?></label>
+                                                     <?php $tax=array('name'=>'tax_type',
+                                                                    'class'=>'required  form-control',
+                                                                    'id'=>'tax_type',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('tax'));
+                                                     echo form_input($tax)?>
+                                                    <input type="hidden"  id="tax" name="tax">
+                                                    <input type="hidden"  id="hidden_tax_inclusive" name="hidden_tax_inclusive">
+                                               </div>
+                                               <div class="col col-lg-2">
+                                                    <label for="tax_type" ><?php echo $this->lang->line('selling') ?></label>	
+                                                    <select class="form-control" id="selling_tax_type">
+                                                        <option value="0" onclick="grand_total()"><?php echo $this->lang->line('inclusive') ?></option>
+                                                        <option value="1" onclick="grand_total()"><?php echo $this->lang->line('exclusive') ?></option>
+                                                        
+                                                    </select>
+                                               </div>
+                                           </div>
                                            
                                      <br>
                                         </div>                              
@@ -1038,6 +1131,16 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                      <h4 class="panel-title"><?php echo $this->lang->line('amount')." & ".$this->lang->line('weight') ?></h4>                                                                               
                               </div>
                                                          <div class="form_sep " style="padding: 0 25px">
+                                                        <label for="total_tax" ><?php echo $this->lang->line('total')." ".$this->lang->line('tax') ?></label>													
+                                                                  <?php $total_tax=array('name'=>'demo_total_tax',
+                                                                                    'class'=>' form-control',
+                                                                                    'id'=>'demo_total_tax',
+                                                                                    'disabled'=>'disabled',
+                                                                                    'value'=>set_value('total_tax'));
+                                                                     echo form_input($total_tax)?>
+                                                        
+                                                  </div> <input type="hidden" name="total_tax" id="total_tax">
+                                                         <div class="form_sep " style="padding: 0 25px">
                                                         <label for="total_item_weight" ><?php echo $this->lang->line('total_weight') ?></label>													
                                                                   <?php $total_item_weight=array('name'=>'demo_total_item_weight',
                                                                                     'class'=>' form-control',
@@ -1059,6 +1162,17 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                         <input type="hidden" name="total_amount" id="total_amount">
                                                         
                                                   </div>
+                                                         <div class="form_sep " style="padding: 0 25px">
+                                                        <label for="grand_total" ><?php echo $this->lang->line('grand_total') ?></label>													
+                                                                  <?php $grand_total=array('name'=>'demo_grand_total',
+                                                                                    'class'=>'required  form-control',
+                                                                                    'id'=>'demo_grand_total',
+                                                                                    'disabled'=>'disabled',
+                                                                                    'value'=>set_value('grand_total'));
+                                                                     echo form_input($grand_total)?>
+                                                        <input type="hidden" name="grand_total" id="grand_total">
+                                                        
+                                                  </div>
                                                          <br>
                                                   </div>
                                                </div>
@@ -1073,7 +1187,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                        <a href="javascript:update_decomposition()" class="btn btn-default"  ><i class="icon icon-edit"></i> <?php echo " ".$this->lang->line('update') ?></a>
                                                   </div>
                                                </div>
-                                          <div class="col col-sm-6"  >
+                                            <div class="col col-sm-6"  >
                                                    <div class="form_sep " id="save_clear">
                                                        <label for="remark" >&nbsp;</label>	
                                                         <a href="javascript:clear_add_decomposition()" class="btn btn-default"  ><i class="icon icon-refresh"></i> <?php echo " ".$this->lang->line('clear') ?></a>
