@@ -17,7 +17,7 @@ class Decomposition extends MX_Controller{
     }
     // sales quotation decomposition data table
     function data_table(){
-        $aColumns = array( 'guid','code','code','name','date','total_types','total_weight','total_amount','decomposition_status','guid' );	
+        $aColumns = array( 'guid','code','code','name','date','total_types','total_weight','total_amount','decomposition_status','guid','item_id','decomposition_status' );	
 	$start = "";
         $end="";
 
@@ -256,8 +256,9 @@ function  get_decomposition($guid){
 function decomposition_approve(){
      if($this->session->userdata['decomposition_per']['approve']==1){
             $id=  $this->input->post('guid');
+            $item_id=  $this->input->post('item');
             $this->load->model('items');
-            $this->items->approve_decomposition($id);
+            $this->items->approve_decomposition($id,$item_id);
             echo 'TRUE';
      }else{
          echo 'FALSE';

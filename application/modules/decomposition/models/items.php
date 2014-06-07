@@ -74,12 +74,52 @@ class Items extends CI_Model{
           $this->db->where('guid',$guid);
           $this->db->delete('decomposition_x_items');
      }
-     function approve_order($guid){
-         $this->db->where('guid',$guid);
-         $this->db->update('decomposition',array('decomposition_status'=>1));
+    function approve_decomposition($guid,$item_id){
+        $this->db->where('guid',$guid);
+        $this->db->update('decomposition',array('decomposition_status'=>1));
+        $this->db->select()->from('master_data')->where('key','decomposition_items');
+        $mas=  $this->db->get();
+        $prefix;
+        foreach ($mas->result() as $row){
+            $prefix=$row->prefix ; 
+            $max=$row->max;
+        }
+        $this->db->select()->from('decomposition_x_items')->where('decomposition_id',$guid);
+        $sql=  $this->db->get();
+        $j=0;
+        foreach ($sql->result_array() as $row){
+            $this->db->select('guid')->from('decomposition_items')->where('type_id',$row['type_id'])->where('item_id',$item_id);
+            $item=  $this->db->get();         
+            if($item->num_rows()>0){
+                foreach ($item->result() as $item_row){
+                    $item_guid=$item_row->guid;
+                }
+                $this->db->where('guid',$item_guid);
+                $this->db->update('decomposition_items',array('price'=>$row['price']));
+                $this->db->select()->from('stock')->where('item',$item_guid)->where('price',$row['price']);
+                $stock=  $this->db->get();
+                if($stock->num_rows()>0){
+                    foreach ($stock->result_array() as $s_row){
+                        $this->db->where(array('item'=>$item_guid,'price'=>$row['price']));
+                        $this->db->update('stock',array('quty'=>$row['quantity']+$s_row['quty']));                        
+                    }
+                    
+                }else{
+                    $item_guid=md5($j.uniqid().$guid.$row['guid']);
+                    $this->db->insert('stock',array('guid'=>  md5('stock'.$item_guid.$guid.$row['guid'].$j),'item'=>$item_guid,'quty'=>$row['quantity'],'price'=>$row['price'],'branch_id'=>  $this->session->userdata('branch_id')));                    
+                }
+            }else{
+                $j++;
+                $item_guid=md5($j.uniqid().$guid.$row['guid']);
+                $this->db->insert('decomposition_items',array('item_id'=>$item_id,'guid'=> $item_guid ,'code'=>$prefix."".$max,'price'=>$row['price'],'type_id'=>$row['type_id'],'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid')));
+                $this->db->insert('stock',array('guid'=>  md5('stock'.$item_guid.$item_id.$guid.$row['guid'].$j),'item'=>$item_guid,'quty'=>$row['quantity'],'price'=>$row['price'],'branch_id'=>  $this->session->userdata('branch_id')));
+               
+
+            }
+        }
         
-     }
-     function  check_approve($guid){
+    }
+    function  check_approve($guid){
           $this->db->select()->from('decomposition')->where('guid',$guid)->where('decomposition_status',1);
             $sql=  $this->db->get();
             if($sql->num_rows()>0){
