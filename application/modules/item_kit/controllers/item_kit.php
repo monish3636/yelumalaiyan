@@ -11,8 +11,7 @@ class Item_kit extends MX_Controller{
         $data['active']='item_kit';
         $this->load->view('index',$data);
         $this->load->view('template/app/navigation',$this->posnic->modules());
-        $this->load->view('template/app/footer');
-        
+        $this->load->view('template/app/footer');        
         
     }
     // sales quotation item_kit data table

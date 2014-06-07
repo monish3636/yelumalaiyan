@@ -161,7 +161,7 @@ class Items extends MX_Controller{
                                     'supplier_id'=>$this->input->post('supplier'),
                                     'tax_id'=>$this->input->post('taxes'),
                                     'image'=>$this->user_image,
-                                    'no_of_unit'=>$this->input->post('no_of_unit')==""?0:$this->input->post('no_of_unit'),
+                                    'no_of_unit'=>$this->input->post('no_of_unit')==""?1:$this->input->post('no_of_unit'),
                                     'decomposition'=>$this->input->post('weight')==""?0:1,
                                     'weight'=>$this->input->post('weight'),
                                     'uom'=>$this->input->post('unit_of_mes'),
@@ -173,8 +173,8 @@ class Items extends MX_Controller{
                                           'name'=>$this->input->post('name'),
                                          );
                                  if($this->posnic->check_unique($value,'items')){ 
-                                     echo  $this->user_image;
-                                     echo 'TRUE1';
+                                      $this->user_image;
+                                     echo 'TRUE';
                                      $this->user_image="";
                                      $id=$this->posnic->posnic_add_record($data,'items');
                                      $this->load->model('core_model');
@@ -239,7 +239,7 @@ class Items extends MX_Controller{
                                     'category_id'=>$this->input->post('category'),
                                     'supplier_id'=>$this->input->post('supplier'),
                                     'tax_id'=>$this->input->post('taxes'),
-                                    'no_of_unit'=>$this->input->post('no_of_unit'),
+                                    'no_of_unit'=>$this->input->post('no_of_unit')==""?1:$this->input->post('no_of_unit'),
                                     'decomposition'=>$this->input->post('weight')==""?0:1,
                                     'weight'=>$this->input->post('weight'),
                                     'uom'=>$this->input->post('unit_of_mes'),
@@ -260,7 +260,7 @@ class Items extends MX_Controller{
                                     'tax_Inclusive'=>$this->input->post('tax_Inclusive'),
                                     'location'=>$this->input->post('location'),
                                     'image'=>$this->user_image,
-                                    'no_of_unit'=>$this->input->post('no_of_unit'),
+                                    'no_of_unit'=>$this->input->post('no_of_unit')==""?1:$this->input->post('no_of_unit'),
                                     'decomposition'=>$this->input->post('weight')==""?0:1,
                                     'weight'=>$this->input->post('weight'),
                                     'uom'=>$this->input->post('unit_of_mes'),
