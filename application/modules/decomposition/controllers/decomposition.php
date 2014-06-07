@@ -97,7 +97,8 @@ function save(){
         $this->form_validation->set_rules('decomposition_number', $this->lang->line('decomposition_number'), 'required');
         $this->form_validation->set_rules('decomposition_date', $this->lang->line('decomposition_date'), 'required');                    
         $this->form_validation->set_rules('stock_id', $this->lang->line('stock_id'), 'required');                    
-        $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric|required');                  
+        $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric|required');   
+        $this->form_validation->set_rules('hidden_tax_inclusive', $this->lang->line('hidden_tax_inclusive'), 'numeric|required'); 
         $this->form_validation->set_rules('total_item_weight', $this->lang->line('total_item_weight'), 'numeric|required');                  
         $this->form_validation->set_rules('new_decomposition_id[]', $this->lang->line('new_decomposition_id'), 'required');                      
         $this->form_validation->set_rules('new_decomposition_weight[]', $this->lang->line('new_decomposition_weight'), 'required|numeric');                      
@@ -124,7 +125,7 @@ function save(){
                 $total=  $this->input->post('new_decomposition_total');           
                 for($i=0;$i<count($decomposition);$i++){              
                     $this->load->model('items');
-                    $this->items->add_decomposition($guid,$decomposition[$i],$weight[$i],$quty[$i],$formula[$i],$price[$i],$total[$i],$i);
+                    $this->items->add_decomposition($guid,$decomposition[$i],$weight[$i],$quty[$i],$formula[$i],$price[$i],$total[$i],$this->input->post('hidden_tax_inclusive'),$i);
                 }
                 $this->posnic->posnic_master_increment_max('decomposition')  ;
                     echo 'TRUE';    
@@ -144,6 +145,7 @@ function save(){
         $this->form_validation->set_rules('decomposition_date', $this->lang->line('decomposition_date'), 'required');                 
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric|required');                  
         $this->form_validation->set_rules('total_item_weight', $this->lang->line('total_item_weight'), 'numeric|required');                  
+        $this->form_validation->set_rules('hidden_tax_inclusive', $this->lang->line('hidden_tax_inclusive'), 'numeric|required');                  
         $this->form_validation->set_rules('deco_guid[]', $this->lang->line('deco_guid'));                      
         $this->form_validation->set_rules('decomposition_id[]', $this->lang->line('new_decomposition_id'));                      
         $this->form_validation->set_rules('decomposition_weight[]', $this->lang->line('decomposition_weight'), 'numeric');                      
@@ -177,10 +179,9 @@ function save(){
                 $weight=  $this->input->post('decompositions_weight');
                 $total=  $this->input->post('decompositions_total');
                 $this->load->model('items');
-                for($i=0;$i<count($deco_guid);$i++){
-                 
-                    $this->items->update_decomposition($deco_guid[$i],$quty[$i],$price[$i],$weight[$i],$total[$i]);                
-                        
+                for($i=0;$i<count($deco_guid);$i++){                 
+                    $this->items->update_decomposition($deco_guid[$i],$quty[$i],$price[$i],$weight[$i],$total[$i],$this->input->post('hidden_tax_inclusive'));                
+                       
                 }
                 $delete=  $this->input->post('r_items');
                     for($j=0;$j<count($delete);$j++){                      
@@ -198,7 +199,7 @@ function save(){
                      for($i=0;$i<count($decomposition);$i++){
                          if($decomposition[$i]!="" || $decomposition[$i]!=0){
 
-                         $this->items->add_decomposition($guid,$decomposition[$i],$weight[$i],$quantity[$i],$formula[$i],$price[$i],$total[$i],$i);
+                         $this->items->add_decomposition($guid,$decomposition[$i],$weight[$i],$quantity[$i],$formula[$i],$price[$i],$total[$i],$this->input->post('hidden_tax_inclusive'),$i);
 
                          }
 
