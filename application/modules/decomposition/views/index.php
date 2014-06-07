@@ -316,8 +316,6 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                              dataType: 'json',               
                              success: function(data)        
                              {    
-                                 
-                                
                                  $('#parsley_reg #decomposition_number').val(data[0][0]['prefix']+data[0][0]['max']);
                                  $('#parsley_reg #demo_decomposition_number').val(data[0][0]['prefix']+data[0][0]['max']);
                              }
@@ -341,36 +339,35 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                     $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition');?>', { type: "error" });                         
                     <?php }?>
 }
-function posnic_decomposition_lists(){
-      $('#edit_decomposition_form').hide('hide');
-      $('#add_new_decomposition').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#active').removeAttr("disabled");
-      $('#deactive').removeAttr("disabled");
-      $('#posnic_add_decomposition').removeAttr("disabled");
-      $('#decomposition_lists').attr("disabled",'disabled');
-}
-function clear_add_decomposition(){
-      $("#parsley_reg").trigger('reset');
-      refresh_items_table();
-}
-function clear_update_decomposition(){
-      $("#parsley_reg").trigger('reset');
-      refresh_items_table();
-      edit_function($('#decomposition_guid').val());
-}
-function reload_update_user(){
-    var id=$('#guid').val();
-    items_function(id);
-}
+    function posnic_decomposition_lists(){
+        $('#edit_decomposition_form').hide('hide');
+        $('#add_new_decomposition').hide('hide');      
+        $("#user_list").show('slow');
+        $('#delete').removeAttr("disabled");
+        $('#active').removeAttr("disabled");
+        $('#deactive').removeAttr("disabled");
+        $('#posnic_add_decomposition').removeAttr("disabled");
+        $('#decomposition_lists').attr("disabled",'disabled');
+    }
+    function clear_add_decomposition(){
+        $("#parsley_reg").trigger('reset');
+        refresh_items_table();
+    }
+    function clear_update_decomposition(){
+        $("#parsley_reg").trigger('reset');
+        refresh_items_table();
+        edit_function($('#decomposition_guid').val());
+    }
+    function reload_update_user(){
+        var id=$('#guid').val();
+        items_function(id);
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
             <div class="row">
                 <div class="col col-lg-7">
-                        <a href="javascript:posnic_add_new()" id="posnic_add_decomposition" class="btn btn-default" ><i class="icon icon-user"></i> <?php echo $this->lang->line('addnew') ?></a>  
-                     
+                        <a href="javascript:posnic_add_new()" id="posnic_add_decomposition" class="btn btn-default" ><i class="icon icon-user"></i> <?php echo $this->lang->line('addnew') ?></a>                       
                         <a href="javascript:decomposition_group_approve()" class="btn btn-default" id="deactive"  ><i class="icon icon-play"></i> <?php echo $this->lang->line('approve') ?></a>
                         <a href="javascript:posnic_delete()" class="btn btn-default" id="delete"><i class="icon icon-trash"></i> <?php echo $this->lang->line('delete') ?></a>
                         <a href="javascript:posnic_decomposition_lists()" class="btn btn-default" id="decomposition_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('decomposition') ?></a>
@@ -1098,95 +1095,8 @@ function reload_update_user(){
            </div>
 		</div>
 	
-                <script type="text/javascript">
-                    function decomposition_group_approve(){
-              <?php if($this->session->userdata['decomposition_per']['approve']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                              $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('decomposition');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/decomposition/decomposition_approve',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value
-
-                                },
-                                complete: function(response) {
-                                    if(response['responseText']=='TRUE'){
-                                           $.bootstrapGrowl($('#decomposition__number_'+guid).val()+ ' <?php echo $this->lang->line('decomposition') ?>  <?php echo $this->lang->line('approved');?>', { type: "success" });
-                                        $("#dt_table_tools").dataTable().fnDraw();
-                                    }else if(response['responseText']=='Approved'){
-                                         $.bootstrapGrowl($('#decomposition__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>   <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('decomposition');?>', { type: "error" });                              
-                                    }
-                                    }
-                            });
-
-                          }
-
-                      }
-                  
-
-                      }   
-                       <?php }else{?>
-                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('decomposition');?>', { type: "error" });                       
-                            <?php }
-                         ?>
-                      }
-                    function posnic_group_item_active(){
-                     var flag=0;
-                     var field=document.forms.items_form;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                              $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('decomposition');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.items_form;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
-                                url: '<?php echo base_url() ?>index.php/decomposition/item_active',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value
-
-                                },
-                                success: function(response)
-                                {
-                                    if(response){
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('activated');?>', { type: "success" });
-                                        $("#selected_item_table").dataTable().fnDraw();
-                                    }
-                                }
-                            });
-
-                          }
-
-                      }
-                  
-
-                      }    
-                      }
+                <script type="text/javascript">               
+                    
      function posnic_delete(){
             <?php if($this->session->userdata['decomposition_per']['delete']==1){ ?>
                      var flag=0;

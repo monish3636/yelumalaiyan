@@ -1,5 +1,7 @@
 
 <script type="text/javascript" charset="utf-8">
+    
+
     var point=3;
           $(document).ready( function () {
               
@@ -44,10 +46,10 @@
                    						"bSortable": false,
                                                                 
                    						"fnRender": function (oObj) {
-                                                                    if(oObj.aData[9]==1){
+                                                                    if(oObj.aData[8]==1){
                                                                         return "<input type=checkbox value='"+oObj.aData[0]+"' disabled='disabled' ><input type='hidden' id='decomposition__number_"+oObj.aData[0]+"' value='"+oObj.aData[1]+"'>";
                                                                     }else{
-                   							return "<input type=checkbox value='"+oObj.aData[0]+"' ><input type='hidden' id='decomposition__number_"+oObj.aData[0]+"' value='"+oObj.aData[1]+"'>";
+                   							return "<input type=checkbox value='"+oObj.aData[0]+"' ><input type='hidden' id='decomposition__number_"+oObj.aData[0]+"' value='"+oObj.aData[1]+"'><input type='hidden' id='item_id_"+oObj.aData[0]+"' value='"+oObj.aData[10]+"'>";
                                                                     }
 								},
 								
@@ -73,7 +75,7 @@
                    						"bSortable": false,
                                                                 
                    						"fnRender": function (oObj) {
-                   							if(oObj.aData[9]==1){
+                   							if(oObj.aData[8]==1){
                                                                              return '<span data-toggle="tooltip" class="text-success" ><?php echo $this->lang->line('approved') ?></span>'
                                                                         }else{
                                                                             return '<span data-toggle="tooltip"  class=" text-warning" ><?php echo $this->lang->line('waiting') ?></span>';
@@ -87,7 +89,7 @@
                    						"bSortable": false,
                                                                 
                    						"fnRender": function (oObj) {
-                                                                if(oObj.aData[9]==1){
+                                                                if(oObj.aData[11]==1){
                                                                          	 return '<a  ><span data-toggle="tooltip" class="label label-success hint--top hint--success"  ><i class="icon-play"></i></span></a>&nbsp<a  ><span data-toggle="tooltip" class="label label-info hint--top hint--info" ><i class="icon-edit"></i></span></a>'+"&nbsp;<a><span data-toggle='tooltip' class='label label-danger hint--top hint--error' ><i class='icon-trash'></i></span> </a>"
 								}else{
                                                                         return '<a href=javascript:decomposition_approve("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-success hint--top hint--success" data-hint="<?php echo $this->lang->line('approve') ?>"><i class="icon-play"></i></span></a>&nbsp<a href=javascript:edit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit') ?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete') ?>'><i class='icon-trash'></i></span> </a>";
@@ -158,7 +160,8 @@ function decomposition_approve(guid){
                 url: '<?php echo base_url() ?>index.php/decomposition/decomposition_approve',
                 type: "POST",
                 data: {
-                    guid: guid
+                    guid: guid,
+                    item:$('#item_id_'+guid).val(),
                     
                 },
                 complete: function(response) {
