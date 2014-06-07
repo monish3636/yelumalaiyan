@@ -688,5 +688,6 @@ $lang['credit_days']='Credit Days';
     $lang['no_of_type']='No Of Types';
     $lang['decomposition_item_code']='Decomposition Item Code';
     $lang['print_price_tag']='Print Price Tag';
+    $lang['item_kit']='Item Kit';
    
 ?>
