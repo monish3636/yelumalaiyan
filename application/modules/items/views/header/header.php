@@ -173,7 +173,7 @@
                                         $('#decomposition').attr('checked','checked');
                                     }else{
                                         $('#parsley_reg #hidden_weight').hide();
-                                        $('#parsley_reg #weight').val(0);
+                                        $('#parsley_reg #weight').val("");
                                     }
                                  $('#parsley_reg .fileupload-preview').empty();
                                $('#parsley_reg .fileupload-preview').append('<img src="<?php echo base_url('uploads/items') ?>/'+data[0]['image']+'">');

@@ -690,5 +690,7 @@ $lang['credit_days']='Credit Days';
     $lang['print_price_tag']='Print Price Tag';
     $lang['item_kit']='Item Kit';
     $lang['kit_category']='Item Kit Category';
+    $lang['item_kit_date']='Item Kit Date';
+    $lang['item_kit_name']='Item Kit Name';
    
 ?>

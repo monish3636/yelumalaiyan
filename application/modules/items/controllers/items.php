@@ -173,7 +173,8 @@ class Items extends MX_Controller{
                                           'name'=>$this->input->post('name'),
                                          );
                                  if($this->posnic->check_unique($value,'items')){ 
-                                     echo 'TRUE';
+                                     echo  $this->user_image;
+                                     echo 'TRUE1';
                                      $this->user_image="";
                                      $id=$this->posnic->posnic_add_record($data,'items');
                                      $this->load->model('core_model');
@@ -219,8 +220,9 @@ class Items extends MX_Controller{
                             $this->form_validation->set_rules('brand', $this->lang->line('brand'),'required');
                             $this->form_validation->set_rules('category', $this->lang->line('category'),'required');
                             $this->form_validation->set_rules('item_department', $this->lang->line('item_department'),'required');  
-                               $this->form_validation->set_rules('userfile', 'userfile', 'callback_add_items_image');
+                            $this->form_validation->set_rules('userfile', 'userfile', 'callback_add_items_image');
                           if ( $this->form_validation->run() !== false ) {
+                              $this->add_items_image();
                                if($this->user_image==""){
                                     $data=array('code'=>$this->input->post('sku'),
                                     'barcode'=>$this->input->post('barcode'),
@@ -409,14 +411,14 @@ class Items extends MX_Controller{
     $config['max_size']	= '202100';
     $config['max_width']  = '11024';
     $config['max_height']  = '3768';
-    $randomString = md5(time().date("Y/m/d"));
+    $randomString = md5(time());
     $config['file_name']=$randomString;
   //  $config['overwrite'] = TRUE;
     $this->load->library('upload', $config);
 
     if ( ! $this->upload->do_upload())
     {
-           
+            return false;
     }
     else
     {       
