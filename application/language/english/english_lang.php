@@ -678,6 +678,7 @@ $lang['credit_days']='Credit Days';
     $lang['decomposition_id']='Decomposition Code';
     $lang['decomposition_date']='Deomposition Date';
     $lang['decomposition_type']='Decomposition Type';
+    $lang['decomposition_items']='Decomposition Items';
     $lang['formula']='Formula';
     $lang['uom_name']='U O M Name';
     $lang['weight']='Weight';
@@ -685,5 +686,7 @@ $lang['credit_days']='Credit Days';
     $lang['total_weight']='Total Weight';
     $lang['quantity_is_out_of_stock']='Quantity Is Out Of Stock';
     $lang['no_of_type']='No Of Types';
+    $lang['decomposition_item_code']='Decomposition Item Code';
+    $lang['print_price_tag']='Print Price Tag';
    
 ?>

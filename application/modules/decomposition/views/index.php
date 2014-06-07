@@ -356,7 +356,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
     function clear_update_decomposition(){
         $("#parsley_reg").trigger('reset');
         refresh_items_table();
-        edit_function($('#decomposition_guid').val());
+        edit_function($('#guid').val());
     }
     function reload_update_user(){
         var id=$('#guid').val();
