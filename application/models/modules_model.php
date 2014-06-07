@@ -7,6 +7,7 @@ class Modules_model extends CI_Model{
    
     function get_module_category(){
         $this->db->select()->from('modules_category');
+        $this->db->order_by('order');
         $sql=  $this->db->get();
         return $sql->result();
     }
