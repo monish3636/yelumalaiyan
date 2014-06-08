@@ -377,9 +377,11 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
             <div class="row">
                 <div class="col col-lg-7">
                         <a href="javascript:posnic_add_new()" id="posnic_add_item_kit" class="btn btn-default" ><i class="icon icon-user"></i> <?php echo $this->lang->line('addnew') ?></a>                       
-                        <a href="javascript:item_kit_group_approve()" class="btn btn-default" id="deactive"  ><i class="icon icon-play"></i> <?php echo $this->lang->line('approve') ?></a>
+                         <a href="javascript:posnic_group_deactive()" id="active" class="btn btn-default" ><i class="icon icon-pause"></i> <?php echo $this->lang->line('deactive') ?></a>
+                        <a href="javascript:posnic_group_active()" class="btn btn-default" id="deactive"  ><i class="icon icon-play"></i> <?php echo $this->lang->line('active') ?></a>
                         <a href="javascript:posnic_delete()" class="btn btn-default" id="delete"><i class="icon icon-trash"></i> <?php echo $this->lang->line('delete') ?></a>
                         <a href="javascript:posnic_item_kit_lists()" class="btn btn-default" id="item_kit_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('item_kit') ?></a>
+                        <a href="javascript:posnic_barcode()" class="btn btn-default" id="item_kit_lists"><i class="icon icon-barcode"></i> <?php echo $this->lang->line('barcode') ?></a>
                         
                 </div>
             </div>
@@ -1248,17 +1250,15 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                              
                           
                           </div>
-                                <div id="deleted">
-                                    
+                                <div id="deleted">                                    
                                 </div>
-                                <div id="newly_added">
-                                    
+                                <div id="newly_added">                                    
                                 </div>
                             </div>
-                        </div>
-                    
+                        </div>                    
                     </div>
-                          </div>  </div>
+                </div>  
+    </div>
     <?php echo form_close();?>
 </section>    
            <div id="footer_space">
@@ -1266,156 +1266,117 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
            </div>
 		</div>
 	
-                <script type="text/javascript">               
-                    
-     function posnic_delete(){
-            <?php if($this->session->userdata['item_kit_per']['delete']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                        
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('paruchase_item_kit');?>', { type: "warning" });
-                      }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
-             if(result){
-              
-             
-                        var posnic=document.forms.posnic;
-                        for (i = 0; i < posnic.length; i++){
-                           
-                          if(posnic[i].checked==true){ 
-                              var guid=posnic[i].value;
-                              $.ajax({
+<script type="text/javascript"> 
+    function posnic_delete(){
+        <?php if($this->session->userdata['item_kit_per']['delete']==1){ ?>
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {
+             $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('paruchase_item_kit');?>', { type: "warning" });
+        }else{
+            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
+                if(result){
+                    var posnic=document.forms.posnic;
+                    for (i = 0; i < posnic.length; i++){
+                        if(posnic[i].checked==true){ 
+                            var guid=posnic[i].value;
+                            $.ajax({
                                 url: '<?php echo base_url() ?>/index.php/item_kit/delete',
                                 type: "POST",
                                 data: {
                                     guid:posnic[i].value
-
                                 },
-                                  complete: function(response) {
+                                complete: function(response) {
                                     if(response['responseText']=='TRUE'){
-                                           $.bootstrapGrowl($('#item_kit__number_'+guid).val()+ ' <?php echo $this->lang->line('goods_receiving_note') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
+                                        $.bootstrapGrowl($('#item_kit__number_'+guid).val()+ ' <?php echo $this->lang->line('goods_receiving_note') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
                                         $("#dt_table_tools").dataTable().fnDraw();
                                     }else if(response['responseText']=='Approved'){
-                                         $.bootstrapGrowl($('#item_kit__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>  <?php echo $this->lang->line('is');?> <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
+                                        $.bootstrapGrowl($('#item_kit__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>  <?php echo $this->lang->line('is');?> <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
                                     }else{
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('goods_receiving_note');?>', { type: "error" });                       
+                                        $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('goods_receiving_note');?>', { type: "error" });                       
                                     }
-                                    }
+                                }
                             });
-
-                          }
-
-                      }    
-                      }
-                      });
-                      }    
-                      <?php }else{?>
-                                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('item_kit');?>', { type: "error" });                       
-                           <?php }
-                        ?>
-                      }
+                        }
+                    }    
+                }
+            });
+        }    
+        <?php }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('item_kit');?>', { type: "error" });                       
+        <?php } ?>
+    }
+    function posnic_group_deactive(){
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {
+            $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item_kit');?>', { type: "warning" });
+        }else{
+            var posnic=document.forms.posnic;
+            for (i = 0; i < posnic.length-1; i++){
+                if(posnic[i].checked==true){                             
+                    $.ajax({
+                        url: '<?php echo base_url() ?>index.php/item_kit/deactive',
+                        type: "POST",
+                        data: {
+                            guid: posnic[i].value
+                        },
+                        success: function(response)
+                        {
+                            if(response){
+                                 $.bootstrapGrowl('<?php echo $this->lang->line('deactivated');?>', { type: "danger" });
+                                $("#dt_table_tools").dataTable().fnDraw();
+                            }
+                        }
+                    });
+                }
+            }
+        }    
+    }
+    function posnic_group_active(){
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {
+            $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item_kit');?>', { type: "warning" });
+        }else{
+            var posnic=document.forms.posnic;
+            for (i = 0; i < posnic.length-1; i++){
+                if(posnic[i].checked==true){                             
+                    $.ajax({
+                        url: '<?php echo base_url() ?>index.php/item_kit/active',
+                        type: "POST",
+                        data: {
+                            guid: posnic[i].value
+                        },
+                        success: function(response)
+                        {
+                            if(response){
+                                 $.bootstrapGrowl('<?php echo $this->lang->line('deactivated');?>', { type: "danger" });
+                                $("#dt_table_tools").dataTable().fnDraw();
+                            }
+                        }
+                    });
+                }
+            }
+        }    
+    }
                     
-                    
-                    
-    function item_kit_group_approve(){
-         <?php if($this->session->userdata['item_kit_per']['approve']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                                               $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item_kit');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                           var guid=posnic[i].value;
-                          if(posnic[i].checked==true){                             
-                                 $.ajax({
-                                    url: '<?php echo base_url() ?>/index.php/item_kit/item_kit_approve',
-                                    type: "POST",
-                                    data: {
-                                        guid: posnic[i].value
-
-                                    },
-                                     complete: function(response) {
-                                        if(response['responseText']=='TRUE'){
-                                               $.bootstrapGrowl($('#item_kit__number_'+guid).val()+ ' <?php echo $this->lang->line('item_kit') ?>  <?php echo $this->lang->line('approved');?>', { type: "success" });
-                                            $("#dt_table_tools").dataTable().fnDraw();
-                                        }else if(response['responseText']=='Approved'){
-                                             $.bootstrapGrowl($('#item_kit__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>   <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
-                                        }else{
-                                              $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('item_kit');?>', { type: "error" });                        
-                                        }
-                                        }
-                                });
-
-                          }
-
-                      }
-                  
-
-                      }   
-                        <?php }else{?>
-                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('item_kit');?>', { type: "error" });                       
-                            <?php }
-                         ?>
-                      }
-                    function posnic_group_item_deactive(){
-                     var flag=0;
-                     var field=document.forms.items_form;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                                               $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item_kit');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.items_form;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                                 $.ajax({
-                                    url: '<?php echo base_url() ?>index.php/item_kit/item_deactive',
-                                    type: "POST",
-                                    data: {
-                                        guid: posnic[i].value
-
-                                    },
-                                    success: function(response)
-                                    {
-                                        if(response){
-                                             $.bootstrapGrowl('<?php echo $this->lang->line('deactivated');?>', { type: "danger" });
-                                            $("#selected_item_table").dataTable().fnDraw();
-                                        }
-                                    }
-                                });
-
-                          }
-
-                      }
-                  
-
-                      }    
-                      }
-                    
-                </script>
+</script>
         
 
       
