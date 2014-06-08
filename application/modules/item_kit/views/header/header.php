@@ -202,63 +202,88 @@ function item_kit_approve(guid){
                                 $("#parsley_reg").trigger('reset');
                            
                                
-                                
-                                
-                                $("#parsley_reg #select_item").select2('data', {id:'1',text: data[0]['name']});
-                                $('#select_item').select2('disable');
                                 $('#guid').val(guid)
-                                $('#select_item').val(data[0]['name'])
-                                $("#parsley_reg #item_sku").val(data[0]['sku']);
-                                $("#parsley_reg #demo_item_stock").val(data[0]['quty']);
-                                $("#parsley_reg #item_stock").val(data[0]['quty']);                                
-                                $("#parsley_reg #demo_item_kit_number").val(data[0]['code']);
-                                $("#parsley_reg #item_kit_number").val(data[0]['code']);
+                               
+                                $("#parsley_reg #item_kit_name").val(data[0]['item_kit_name']);                               
+                                $("#parsley_reg #demo_item_kit_number").val(data[0]['item_kit_code']);
+                                $("#parsley_reg #item_kit_number").val(data[0]['item_kit_code']);
                                 $("#parsley_reg #item_kit_date").val(data[0]['date']);
                                 $("#parsley_reg #note").val(data[0]['note']);
-                                $("#parsley_reg #remark").val(data[0]['remark']);                                
-                                $("#parsley_reg #demo_total_amount").val(data[0]['total_amount']);
-                                $("#parsley_reg #total_amount").val(data[0]['total_amount']);
-                                $("#parsley_reg #demo_total_item_weight").val(data[0]['total_weight']);
-                                $("#parsley_reg #total_item_weight").val(data[0]['total_weight']);
-                                $('#demo_item_weight_stock').val(parseFloat(data[0]['quty'])*parseFloat(data[0]['item_weight']))
-                                $('#item_weight_stock').val(parseFloat(data[0]['quty'])*parseFloat(data[0]['item_weight']))
-                                $('#current_stock_weight').val(parseFloat(data[0]['quty'])*parseFloat(data[0]['item_weight'])-data[0]['total_weight'])
+                                $("#parsley_reg #remark").val(data[0]['remark']);     
+                                
+                                $("#parsley_reg #demo_total_amount").val(data[0]['item_total']);
+                                $("#parsley_reg #total_amount").val(data[0]['item_total']);
+                                $("#parsley_reg #kit_price").val(data[0]['kit_price']);
+                                
+                                $("#parsley_reg #demo_selling_kit_price").val(data[0]['selling_price']);
+                                $("#parsley_reg #demo_selling_kit_price").val(data[0]['selling_price']);
+                                $("#parsley_reg #seling_tax_amount").val(data[0]['tax_amount']);
+                                $("#parsley_reg #selling_tax_type").val(data[0]['kit_tax_inclusive']);
+                                $("#parsley_reg #category_id").val(data[0]['kit_category_id']);
+                                $("#parsley_reg #category").select2('data', {id:data[0]['kit_category_id'],text:data[0]['kit_category_name']});
                                
                                 for(i=0;i<data.length;i++){
-                                    if(!$('#'+data[i]['i_guid']).length){
-                                    var weight=data[i]['weight'];
-                                    var quantity=data[i]['quantity'];                                  
+                                    var item_guid=data[i]['guid'];
+                                    var item_id=data[i]['kit_item_id'];
+                                    var quty=data[i]['kit_quty'];
+                                    var sku=data[i]['code'];
+                                    var name=data[i]['name'];
+                                    var stock=data[i]['quty'];
+                                    var stock_id=data[i]['guid'];
+                                    var no_of_unit=data[i]['no_of_unit'];
                                     var price=data[i]['price'];
-                                    var formula=data[i]['formula'];
-                                    var total=data[i]['total'];
-                                    var item_kits_id =data[i]['type_id'];
-                                    var item_kit_value =data[i]['value'];                                  
-                                    var item_kit_type =data[i]['type'];                                  
+                                    console.log(price);
+                                 price=parseFloat(price)/parseFloat(no_of_unit);
+                                    console.log(price);
+                                    var quantity=data[i]['kit_quty'];
+                                    var tax_inclusive=data[i]['tax_Inclusive'];
+                                    var sub_total=quantity*price;
+                                    var tax=0;
+                                    var tax_value=data[i]['tax_value'];
+                                    var tax_type=data[i]['tax_type_name'];
+                                    var tax_inc;
+                                    var tax=parseFloat(sub_total)*tax_value/100;
+                                    if(tax_inclusive==1){
+                                        var total=parseFloat(sub_total)+parseFloat(tax); 
+                                        tax_inc='Exc';
+                                    }else{
+                                        var total=parseFloat(sub_total);     
+                                        tax_inc='Inc'
+                                    }
+                                    tax=tax.toFixed(point); 
+                                    total=total.toFixed(point); 
+                                    sub_total=sub_total.toFixed(point);
+                                   
                                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                                     null,
-                                    item_kit_value,
-                                    formula,
-                                    weight,
-                                    quantity,
+                                    name,
+                                    sku,
                                     price,
+                                    quty,
+                                    sub_total,
+                                    tax_type+':'+tax_value+"%("+tax_inc+")",
+                                    tax,
                                     total,
                                     '<input type="hidden" name="index" id="index">\n\
-                                    <input type="hidden" name="item_kits_value[]" id="item_kits_value" value="'+item_kit_value+'">\n\
-                                    <input type="hidden" name="deco_guid[]" id="deco_guid" value="'+data[i]['deco_guid']+'">\n\
-                                    <input type="hidden" name="item_kits_type[]" id="item_kits_type" value="'+item_kit_type+'">\n\
-                                    <input type="hidden" name="item_kits_id[]" id="item_kits_id" value="'+item_kits_id+'">\n\
-                                    <input type="hidden" name="item_kits_weight[]" id="item_kits_weight" value="'+weight+'">\n\
-                                    <input type="hidden" name="item_kits_quty[]" value="'+quantity+'" id="item_kits_quty"> \n\
-                                    <input type="hidden" name="item_kits_price[]" value="'+price+'" id="item_kits_price">\n\
-                                    <input type="hidden" name="item_kits_formula[]" value="'+formula+'" id="item_kits_formula">\n\
-                                    <input type="hidden" name="item_kits_total[]"  value="'+total+'" id="item_kits_total">\n\
-                                    <a href=javascript:edit_item_kit_item("'+item_kits_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_item_kit_item('"+item_kits_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
-
-                              var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                              theNode.setAttribute('id','new_item_row_id_'+item_kits_id)
+                                    <input type="hidden" name="item_id[]" id="item_id" value="'+item_id+'">\n\
+                                    <input type="hidden" name="item_name[]" id="item_name" value="'+name+'">\n\
+                                    <input type="hidden" name="item_sku[]" id="item_sku" value="'+sku+'">\n\
+                                    <input type="hidden" name="item_quty[]" id="item_quty" value="'+quty+'">\n\
+                                    <input type="hidden" name="item_stocks_id[]" id="item_stocks_id" value="'+stock_id+'">\n\
+                                    <input type="hidden" name="item_stocks[]" id="item_stocks" value="'+stock+'">\n\
+                                    <input type="hidden" name="items_price[]" id="items_price" value="'+price+'">\n\
+                                    <input type="hidden" name="item_tax_inclusive[]" value="'+tax_inclusive+'" id="item_tax_inclusive"> \n\
+                                    <input type="hidden" name="item_tax_value[]" value="'+tax_value+'" id="item_tax_value">\n\
+                                    <input type="hidden" name="item_tax_type[]" value="'+tax_type+'" id="item_tax_type">\n\
+                                    <input type="hidden" name="item_tax_amount[]" value="'+tax+'" id="item_tax_amount">\n\
+                                    <input type="hidden" name="item_sub_total[]"  value="'+total+'" id="item_sub_total">\n\
+                                    <input type="hidden" name="item_total[]"  value="'+total+'" id="item_total">\n\
+                                    <a href=javascript:edit_item_item("'+item_guid+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_item_item('"+item_guid+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
+                                    var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
+                                    theNode.setAttribute('id','new_item_row_id_'+item_guid)
                                 }
                                 }
-                             } 
+                              
                            });
                       
                         

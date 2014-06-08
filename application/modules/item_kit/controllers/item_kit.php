@@ -144,75 +144,74 @@ function save(){
     function update(){
             if(isset($_POST['guid'])){
       if($this->session->userdata['item_kit_per']['edit']==1){
-        
-        $this->form_validation->set_rules('item_kit_number', $this->lang->line('item_kit_number'), 'required');
-        $this->form_validation->set_rules('item_kit_date', $this->lang->line('item_kit_date'), 'required');                 
+         $this->form_validation->set_rules('item_kit_number',$this->lang->line('item_kit_number'), 'required');
+        $this->form_validation->set_rules('item_kit_name', $this->lang->line('item_kit_name'), 'required');
+        $this->form_validation->set_rules('category_id', $this->lang->line('category_id'), 'required');                    
+        $this->form_validation->set_rules('item_kit_date', $this->lang->line('item_kit_date'), 'required');                    
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric|required');                  
-        $this->form_validation->set_rules('total_item_weight', $this->lang->line('total_item_weight'), 'numeric|required');                  
-        $this->form_validation->set_rules('deco_guid[]', $this->lang->line('deco_guid'));                      
-        $this->form_validation->set_rules('item_kit_id[]', $this->lang->line('new_item_kit_id'));                      
-        $this->form_validation->set_rules('item_kit_weight[]', $this->lang->line('item_kit_weight'), 'numeric');                      
-        $this->form_validation->set_rules('item_kit_quty[]', $this->lang->line('item_kit_quty'), 'numeric');                      
-        $this->form_validation->set_rules('item_kit_formula[]', $this->lang->line('item_kit_formula'));                      
-        $this->form_validation->set_rules('item_kit_price[]', $this->lang->line('item_kit_price'));                      
-        $this->form_validation->set_rules('item_kit_total[]', $this->lang->line('item_kit_total')); 
+        $this->form_validation->set_rules('kit_price', $this->lang->line('kit_price'), 'numeric|required');                  
+        $this->form_validation->set_rules('selling_kit_price', $this->lang->line('selling_kit_price'), 'numeric|required'); 
+    
         
-        $this->form_validation->set_rules('new_item_kit_id[]', $this->lang->line('new_item_kit_id'));                      
-        $this->form_validation->set_rules('new_item_kit_weight[]', $this->lang->line('new_item_kit_weight'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_kit_quty[]', $this->lang->line('new_item_kit_quty'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_kit_formula[]', $this->lang->line('new_item_kit_formula'));                      
-        $this->form_validation->set_rules('new_item_kit_price[]', $this->lang->line('new_item_kit_price'));                      
-        $this->form_validation->set_rules('new_item_kit_total[]', $this->lang->line('new_item_kit_total')); 
+        $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));                      
+        $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'numeric');                       
+        $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id'));  
+        
+        $this->form_validation->set_rules('item_id[]', $this->lang->line('item_id'));                      
+        $this->form_validation->set_rules('item_quty[]', $this->lang->line('item_quty'), 'numeric');                       
+        $this->form_validation->set_rules('item_stocks_id[]', $this->lang->line('item_stocks_id'));  
         
         
-            if ( $this->form_validation->run() !== false ) {    
+            if ( $this->form_validation->run() !== false ) {  
+                $guid=  $this->input->post('guid');
+                $item_kit_number=  $this->input->post('item_kit_number');
+                $item_kit_name=  $this->input->post('item_kit_name');
+                $category_id=  $this->input->post('category_id');
                 $item_kit_date= strtotime($this->input->post('item_kit_date'));
                 $total_types=$this->input->post('index');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');
-                $total_weight=  $this->input->post('total_item_weight');     
-                $value=array('date'=>$item_kit_date,'total_types'=>$total_types,'total_amount'=>$total_amount,'total_weight'=>$total_weight,'remark'=>$remark,'note'=>$note);
-                $guid=  $this->input->post('guid');
-                $update_where=array('guid'=>$guid);
-                $this->posnic->posnic_update_record($value,$update_where,'item_kit');          
-                $deco_guid=  $this->input->post('deco_guid');
-                $quty=  $this->input->post('item_kits_quty');
-                $price=  $this->input->post('item_kits_price');
-                $weight=  $this->input->post('item_kits_weight');
-                $total=  $this->input->post('item_kits_total');
-                $this->load->model('items');
-                for($i=0;$i<count($deco_guid);$i++){
-                 
-                    $this->items->update_item_kit($deco_guid[$i],$quty[$i],$price[$i],$weight[$i],$total[$i]);                
-                        
-                }
-                $delete=  $this->input->post('r_items');
-                    for($j=0;$j<count($delete);$j++){                      
-                         $this->items->delete_item_kit_item($delete[$j]);
+                $kit_price=  $this->input->post('kit_price');  
+                $seling_tax_amount=  $this->input->post('seling_tax_amount');
+                $selling_price=  $this->input->post('selling_kit_price');
+                $tax_inclusive=  $this->input->post('selling_tax_type');               
+                $where=array('guid !='=>$guid,'name'=>$item_kit_name);  
+                if($this->posnic->check_record_unique($where,'item_kit')){
+                    $value=array('code'=>$item_kit_number,'name'=>$item_kit_name,'selling_price'=>$selling_price,'date'=>$item_kit_date,'category_id'=>$category_id,'no_of_items'=>$total_types,'item_total'=>$total_amount,'tax_inclusive'=>$tax_inclusive,'tax_amount'=>$seling_tax_amount,'kit_price'=>$kit_price,'remark'=>$remark,'note'=>$note);
+                    $guid=  $this->input->post('guid');
+                    $update_where=array('guid'=>$guid);
+                    $this->posnic->posnic_update_record($value,$update_where,'item_kit');  
+                    
+                    $item_id=  $this->input->post('item_id');
+                    $item_quty=  $this->input->post('item_quty');
+                    $item_stocks_id=  $this->input->post('item_stocks_id');
+                    $this->load->model('items');
+                    for($i=0;$i<count($item_id);$i++){
+
+                        $this->items->update_item_kit($guid,$item_id[$i],$item_quty[$i]);                
+
                     }
+                    $delete=  $this->input->post('r_items');
+                        for($j=0;$j<count($delete);$j++){                      
+                             $this->items->delete_item_kit_item($delete[$j]);
+                        }
+
+                    $item=  $this->input->post('new_item_id');
+                    $quty=  $this->input->post('new_item_quty');
+                    $stock=  $this->input->post('new_item_stock_id'); 
+                    if(count($item)>0){
+                        for($i=0;$i<count($item);$i++){        
+                            if($item[$i]!=""){
+                                $this->items->add_item_kit($guid,$item[$i],$quty[$i],$stock[$i],$i);
+                            }
+                        }
+                    }
+                    echo 'TRUE';
                     
-                $item_kit=  $this->input->post('new_item_kit_id');
-                $weight=  $this->input->post('new_item_kit_weight');
-                $quantity=  $this->input->post('new_item_kit_quty');
-                $formula=  $this->input->post('new_item_kit_formula');
-                $price=  $this->input->post('new_item_kit_price');
-                $total=  $this->input->post('new_item_kit_total');           
-               
-                if(count($item_kit)>0){
-                     for($i=0;$i<count($item_kit);$i++){
-                         if($item_kit[$i]!="" || $item_kit[$i]!=0){
-
-                         $this->items->add_item_kit($guid,$item_kit[$i],$weight[$i],$quantity[$i],$formula[$i],$price[$i],$total[$i],$i);
-
-                         }
-
-                     }
-
+                
+                
                 }
-                    
-                 echo 'TRUE';
-    
                 }else{
                    echo 'FALSE';
                 }

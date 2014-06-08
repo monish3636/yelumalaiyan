@@ -342,7 +342,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
             window.setTimeout(function ()
        {
 
-           $('#parsley_reg #select_item').select2('open');
+           $('#parsley_reg #item_kit_name').focus();
        }, 500);
       <?php }else{ ?>
                     $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('item_kit');?>', { type: "error" });                         
@@ -435,24 +435,20 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
 </div>
 <script type="text/javascript">
     function new_item_kit_date(e){
-        if($('#parsley_reg #items_guid').val()!=""){
             var unicode=e.charCode? e.charCode : e.keyCode
             if($('#parsley_reg #item_kit_date').value!=""){
                 if (unicode!=13 && unicode!=9){
                 }
                 else{
-                    $('#parsley_reg #item_kit_type').select2('open');
+                    $('#parsley_reg #select_item').select2('open');
                 }
                 if (unicode!=27){
                 }
                 else{        
-                    $('#parsley_reg #select_item').select2('open');
+                    $('#parsley_reg #category').select2('open');
                 }
             }
-        }else{
-            $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-            $('#parsley_reg #select_item').select2('open');
-        }
+       
     }
     
     function add_new_quty(e){
@@ -486,12 +482,6 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
             }
         }
         var quantity=$('#quantity').val();
-        var stock=$('#item_stock').val();
-        if(parseFloat(quantity)>parseFloat(stock)){
-            $.bootstrapGrowl('<?php echo $this->lang->line('quantity_is_out_of_stock')?>', { type: "warning" });          
-            $('#quantity').val($('#item_stock').val());
-        }       
-        var quantity=$('#quantity').val();
         var tax_inclusive=$('#tax_inclusive').val();
         var price=$('#item_price').val();  
         var sub_total=parseFloat(quantity)*parseFloat(price);
@@ -524,7 +514,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
             $('#parsley_reg #tax_amount').val(0);
         if(isNaN($('#parsley_reg #total').val()))
             $('#parsley_reg #total').val(0);
-        
+        selling_item_kit_price();
     }
     function copy_items(){
         if( $('#parsley_reg #item_guid').val()!=""   && $('#parsley_reg #quantity').val()!=""){
@@ -646,7 +636,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                 tax,
                 total,
                 '<input type="hidden" name="index" id="index">\n\
-                <input type="hidden" name="item_id[]" id="item_id" value="'+item_guid+'">\n\
+                <input type="hidden" name="item_id[]" id="item_id" value="'+item_id+'">\n\
                 <input type="hidden" name="item_name[]" id="item_name" value="'+name+'">\n\
                 <input type="hidden" name="item_sku[]" id="item_sku" value="'+sku+'">\n\
                 <input type="hidden" name="item_quty[]" id="item_quty" value="'+quty+'">\n\
@@ -728,18 +718,16 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
     }
     
     function delete_item_item(guid){
-        var net=$('#selected_item_table #new_item_row_id_'+guid+' #item_kits_total').val(); 
+        var net=$('#selected_item_table #new_item_row_id_'+guid+' #item_total').val(); 
         var total=$("#parsley_reg #total_amount").val();
         $("#parsley_reg #total_amount").val(parseFloat(total)-parseFloat(net));
         $("#parsley_reg #demo_total_amount").val(parseFloat(total)-parseFloat(net));
-        var weight=$('#selected_item_table #new_item_row_id_'+guid+' #item_kits_weight').val(); 
-        var total_weight=$("#parsley_reg #total_item_weight").val();
-        $("#parsley_reg #total_item_weight").val(parseFloat(total_weight)-parseFloat(weight));
-        $("#parsley_reg #demo_total_item_weight").val(parseFloat(total_weight)-parseFloat(weight));        
+           
         var num = parseFloat($('#demo_total_amount').val());
         $('#demo_total_amount').val(num.toFixed(point));
         var num = parseFloat($('#total_amount').val());
-        $('#total_amount').val(num.toFixed(point));    
+        $('#total_amount').val(num.toFixed(point));
+        
         if($('#selected_item_table #new_item_row_id_'+guid+' #deco_guid').length>0){
             $('#deleted').append('<input type="text" id="r_items" name="r_items[]" value="'+$('#selected_item_table #new_item_row_id_'+guid+' #deco_guid').val()+'">');
         }
@@ -808,12 +796,27 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
             if (unicode!=13 && unicode!=9){
             }
             else{
-                    ;
+                    
             }
             if (unicode!=27){
             }
             else{
                 $('#parsley_reg #selling_tax_type').focus();
+            }
+        }               
+    }
+    function item_kit_name_key_press(e){
+        var unicode=e.charCode? e.charCode : e.keyCode
+        if($('#parsley_reg #item_kit_name').value!=""){
+            if (unicode!=13 && unicode!=9){
+            }
+            else{
+                    $('#parsley_reg #category').select2('open');
+            }
+            if (unicode!=27){
+            }
+            else{
+              
             }
         }               
     }
@@ -861,7 +864,9 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                                      <?php $item_kit_name=array('name'=>'item_kit_name',
                                                                                         'class'=>'required  form-control',
                                                                                         'id'=>'item_kit_name',
+                                                                                    'onKeyPress'=>'item_kit_name_key_press(event)'   ,
                                                                                         'value'=>set_value('item_kit_name'));
+                                                                                         
                                                                          echo form_input($item_kit_name)?>
                                                        </div>
                                                </div>
