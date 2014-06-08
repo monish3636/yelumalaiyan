@@ -402,13 +402,14 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                         <tr>
                                             <th>Id</th>
                                             <th ><?php echo $this->lang->line('select') ?></th>
-                                            <th ><?php echo $this->lang->line('item_kit_id') ?></th>
-                                            <th><?php echo $this->lang->line('item')." ".$this->lang->line('name') ?></th>
-                                            <th><?php echo $this->lang->line('item_kit_date') ?></th>
-                                            <th><?php echo $this->lang->line('no_of_type') ?></th>                                            
+                                            <th ><?php echo $this->lang->line('kit_id') ?></th>
+                                            <th><?php echo $this->lang->line('kit_name') ?></th>
+                                            <th><?php echo $this->lang->line('date') ?></th>
+                                            <th><?php echo $this->lang->line('no_of_items') ?></th>                                            
                                             
-                                            <th><?php echo $this->lang->line('weight') ?></th>
-                                            <th><?php echo $this->lang->line('total_amount') ?></th>
+                                            <th><?php echo $this->lang->line('kit_price') ?></th>
+                                            <th><?php echo $this->lang->line('tax') ?></th>
+                                            <th><?php echo $this->lang->line('selling_price') ?></th>
                                             <th><?php echo $this->lang->line('status') ?></th>
                                             <th style="width: 120px"><?php echo $this->lang->line('action') ?></th>
                                         </tr>
