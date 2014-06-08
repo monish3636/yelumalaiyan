@@ -171,35 +171,39 @@
             }
            
         }
-        $('#parsley_reg #select_item').change(function() {           
-            var guid = $('#parsley_reg #select_item').select2('data').item;
-            $('#parsley_reg #item_guid').val(guid);
+        $('#parsley_reg #select_item').change(function() { 
             if($('#parsley_reg #select_item').select2('data').deco_code){
-                $('#parsley_reg #sku').val($('#parsley_reg #select_item').select2('data').deco_code);                
-                $('#tax_inclusive').val($('#parsley_reg #select_item').select2('data').deco_tax);
-                $('#tax_value').val($('#parsley_reg #select_item').select2('data').tax_value);
-                $('#tax_type').val($('#parsley_reg #select_item').select2('data').tax_type);
-                $('#parsley_reg #price').val($('#parsley_reg #select_item').select2('data').price);
-                $('#parsley_reg #item_price').val($('#parsley_reg #select_item').select2('data').price);
+                var item = $('#parsley_reg #select_item').select2('data').deco_guid;
             }else{
-                $('#parsley_reg #sku').val($('#parsley_reg #select_item').select2('data').value);
-                $('#tax_inclusive').val($('#parsley_reg #select_item').select2('data').tax_inclusive);
-                $('#tax_value').val($('#parsley_reg #select_item').select2('data').tax_value);
-                $('#tax_type').val($('#parsley_reg #select_item').select2('data').tax_type);
-                $('#parsley_reg #price').val(parseFloat($('#parsley_reg #select_item').select2('data').price)/parseFloat($('#parsley_reg #select_item').select2('data').no_of_unit));
-                $('#parsley_reg #item_price').val(parseFloat($('#parsley_reg #select_item').select2('data').price)/parseFloat($('#parsley_reg #select_item').select2('data').no_of_unit));
+                var item = $('#parsley_reg #select_item').select2('data').item;
             }
-            $('#parsley_reg #stock_id').val($('#parsley_reg #select_item').select2('data').sid);      
-            $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
-          
-           
             
-            
-            window.setTimeout(function ()
-            {
-                $('#parsley_reg #quantity').focus();
-            }, 0);
-           
+             if($('#new_item_row_id_'+$('#parsley_reg #select_item').select2('data').sid+' #item_stocks_id').val()==$('#parsley_reg #select_item').select2('data').sid){
+                 $.bootstrapGrowl('<?php echo $this->lang->line('This Record Already Added');?>', { type: "warning" });                         
+             }else{
+                $('#parsley_reg #item_guid').val(item);
+                if($('#parsley_reg #select_item').select2('data').deco_code){
+                    $('#parsley_reg #sku').val($('#parsley_reg #select_item').select2('data').deco_code);                
+                    $('#tax_inclusive').val($('#parsley_reg #select_item').select2('data').deco_tax);
+                    $('#tax_value').val($('#parsley_reg #select_item').select2('data').tax_value);
+                    $('#tax_type').val($('#parsley_reg #select_item').select2('data').tax_type);
+                    $('#parsley_reg #price').val($('#parsley_reg #select_item').select2('data').price);
+                    $('#parsley_reg #item_price').val($('#parsley_reg #select_item').select2('data').price);
+                }else{
+                    $('#parsley_reg #sku').val($('#parsley_reg #select_item').select2('data').value);
+                    $('#tax_inclusive').val($('#parsley_reg #select_item').select2('data').tax_inclusive);
+                    $('#tax_value').val($('#parsley_reg #select_item').select2('data').tax_value);
+                    $('#tax_type').val($('#parsley_reg #select_item').select2('data').tax_type);
+                    $('#parsley_reg #price').val(parseFloat($('#parsley_reg #select_item').select2('data').price)/parseFloat($('#parsley_reg #select_item').select2('data').no_of_unit));
+                    $('#parsley_reg #item_price').val(parseFloat($('#parsley_reg #select_item').select2('data').price)/parseFloat($('#parsley_reg #select_item').select2('data').no_of_unit));
+                }
+                $('#parsley_reg #stock_id').val($('#parsley_reg #select_item').select2('data').sid);      
+                $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
+                window.setTimeout(function ()
+                {
+                    $('#parsley_reg #quantity').focus();
+                }, 0);
+             }
 
         });
         $('#parsley_reg #select_item').select2({
@@ -247,6 +251,7 @@
                           tax_type: item.tax_type_name,
                           tax_value: item.tax_value,
                           tax_inclusive:item.tax_Inclusive ,
+                          deco_guid:item.deco_guid ,
                           deco_tax:item.deco_tax
                         });
                     });   
@@ -522,64 +527,9 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
     }
     function copy_items(){
         if( $('#parsley_reg #item_guid').val()!=""   && $('#parsley_reg #quantity').val()!=""){
-            if(document.getElementById('new_item_row_id_'+$('#parsley_reg #item_guid').val())){
-                var item_guid=$('#parsley_reg #item_guid').val();
-                var quty=$('#parsley_reg #quantity').val();
-                var stock=$('#parsley_reg #item_stock').val();
-                var stock_id=$('#parsley_reg #stock_id').val(); 
-                var price=$('#parsley_reg #item_price').val();
-                if(isNaN($('#parsley_reg #tax_value').val()))
-                    $('#parsley_reg #tax_value').val(0);
-                if(isNaN($('#parsley_reg #item_price').val()))
-                    $('#parsley_reg #item_price').val(0);
-                var quantity=$('#quantity').val();
-                var tax_inclusive=$('#tax_inclusive').val();
-                var price=$('#item_price').val();  
-                var sub_total=parseFloat(quantity)*parseFloat(price);
-                var tax=0;
-                var tax_value=$('#tax_value').val();
-                var tax_type=$('#tax_type').val();
-                var tax_inc;
-                var tax=parseFloat(sub_total)*tax_value/100;
-                if(tax_inclusive==1){
-                    var total=parseFloat(sub_total)+parseFloat(tax); 
-                    tax_inc='Exc';
-                }else{
-                    var total=parseFloat(sub_total);     
-                    tax_inc='Inc'
-                }
-                tax=tax.toFixed(point); 
-                total=total.toFixed(point); 
-                var old_total= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' #item_kits_total').val();
-                var old_weight= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' #item_kits_weight').val();
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' td:nth-child(4)').html(weight);
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' td:nth-child(5)').html(quty); 
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' td:nth-child(6)').html(price);
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' td:nth-child(7)').html(total); 
-                $('#newly_added #new_item_kit_price_'+item_guid).val(price);
-                $('#newly_added #new_item_kit_weight_'+item_guid).val(weight);
-                $('#newly_added #new_item_kit_total_'+item_guid).val(total);
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' #item_kits_quty').val(quty);
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' #item_kits_price').val(price);
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' #item_kits_total').val(total);  
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_kit_guid').val()+' #item_kits_weight').val(weight);
-                $.bootstrapGrowl($('#item_kit_type_val').val()+' <?php echo $this->lang->line('updated');?> ', { type: "success" });  
-                if(total!=old_total){    
-                    var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
-                    var total_weight=parseFloat($('#parsley_reg #total_item_weight').val())+parseFloat(weight)-parseFloat(old_weight)
-                    amount=amount.toFixed(point);
-                    $('#parsley_reg #total_amount').val();
-                    $('#parsley_reg #total_amount').val(amount)
-                    $('#parsley_reg #total_item_weight').val(total_weight); 
-                }
-                $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
-                $('#parsley_reg #demo_total_item_weight').val($('#parsley_reg #total_item_weight').val()); 
-                formula=eval(formula);
-                var stock=(parseFloat(quty)*parseFloat(formula));        
-                $('#current_stock_weight').val(parseFloat($('#current_stock_weight').val())-stock);
-                clear_inputs();
-            }else{
-                var item_guid=$('#parsley_reg #item_guid').val();
+            if($('#new_item_row_id_'+$('#parsley_reg #item_guid').val()+' #item_stocks_id').val()==$('#stock_id').val()){
+                var item_guid=$('#parsley_reg #stock_id').val();
+                var item_id=$('#parsley_reg #item_guid').val();
                 var quty=$('#parsley_reg #quantity').val();
                 var sku=$('#parsley_reg #sku').val();
                 var name=$('#parsley_reg #select_item').select2('data').text;
@@ -608,9 +558,69 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                 }
                 tax=tax.toFixed(point); 
                 total=total.toFixed(point); 
+                var old_total= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' #item_total').val();                
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' td:nth-child(5)').html(quty);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' td:nth-child(6)').html(sub_total); 
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' td:nth-child(7)').html(tax_type+':'+tax_value+"%("+tax_inc+")");
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' td:nth-child(8)').html(tax); 
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' td:nth-child(9)').html(total); 
+                $('#newly_added #new_item_quty_'+item_guid).val(quty);
+                $('#newly_added #new_item_tax_amount'+item_guid).val(tax);
+                $('#newly_added #new_item_total_'+item_guid).val(total);
+                $('#newly_added #new_item_sub_total_'+item_guid).val(sub_total);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' #item_quty').val(quty);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' #item_tax_amount').val(tax);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' #item_total').val(total);  
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_guid').val()+' #item_sub_total').val(sub_total);
+                $.bootstrapGrowl($('#item_kit_type_val').val()+' <?php echo $this->lang->line('updated');?> ', { type: "success" });  
+                if(total!=old_total){    
+                    var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
+                  
+                    amount=amount.toFixed(point);
+                    $('#parsley_reg #total_amount').val();
+                    $('#parsley_reg #total_amount').val(amount)
+                }
+                var total_amount=parseFloat($('#parsley_reg #total_amount').val());
+                total_amount=total_amount.toFixed(point);
+                $('#parsley_reg #total_amount').val(total_amount);
+                $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
+                
+                clear_inputs();
+            }else{
+                var item_guid=$('#parsley_reg #stock_id').val();
+                var item_id=$('#parsley_reg #item_guid').val();
+                var quty=$('#parsley_reg #quantity').val();
+                var sku=$('#parsley_reg #sku').val();
+                var name=$('#parsley_reg #select_item').select2('data').text;
+                var stock=$('#parsley_reg #item_stock').val();
+                var stock_id=$('#parsley_reg #stock_id').val(); 
+                var price=$('#parsley_reg #item_price').val();
+                if(isNaN($('#parsley_reg #tax_value').val()))
+                    $('#parsley_reg #tax_value').val(0);
+                if(isNaN($('#parsley_reg #item_price').val()))
+                    $('#parsley_reg #item_price').val(0);
+                var quantity=$('#quantity').val();
+                var tax_inclusive=$('#tax_inclusive').val();
+                var price=$('#item_price').val();  
+                var sub_total=parseFloat(quantity)*parseFloat(price);
+                var tax=0;
+                var tax_value=$('#tax_value').val();
+                var tax_type=$('#tax_type').val();
+                var tax_inc;
+                var tax=parseFloat(sub_total)*tax_value/100;
+                if(tax_inclusive==1){
+                    var total=parseFloat(sub_total)+parseFloat(tax); 
+                    tax_inc='Exc';
+                }else{
+                    var total=parseFloat(sub_total);     
+                    tax_inc='Inc'
+                }
+                tax=tax.toFixed(point); 
+                total=total.toFixed(point); 
+                sub_total=sub_total.toFixed(point); 
                 $('#newly_added').append('<div id="newly_added_item_kits_list_'+item_guid+'"> \n\
                 \n\
-                <input type="hidden" name="new_item_id[]" value="'+item_guid+'"  id="new_item_id_'+item_guid+'">\n\
+                <input type="hidden" name="new_item_id[]" value="'+item_id+'"  id="new_item_id_'+item_guid+'">\n\
                 <input type="hidden" name="new_item_name[]" value="'+name+'"  id="new_item_name_'+item_guid+'">\n\
                 <input type="hidden" name="new_item_sku[]" value="'+sku+'"  id="new_item_sku_'+item_guid+'">\n\
                 <input type="hidden" name="new_item_quty[]" value="'+quty+'" id="new_item_quty_'+item_guid+'"> \n\
@@ -619,7 +629,10 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                 <input type="hidden" name="new_item_price[]" value="'+price+'" id="new_item_price_'+item_guid+'"> \n\
                 <input type="hidden" name="new_item_tax_inclusive[]" value="'+price+'" id="new_item_tax_inclusive_'+item_guid+'">\n\
                 <input type="hidden" name="new_item_tax_value[]"  value="'+tax_value+'" id="new_item_tax_value_'+item_guid+'">\n\
+                <input type="hidden" name="new_item_tax_amount[]"  value="'+tax+'" id="new_item_tax_amount_'+item_guid+'">\n\
                 <input type="hidden" name="new_item_tax_type[]"  value="'+tax_value+'" id="new_item_tax_type_'+item_guid+'">\n\
+                <input type="hidden" name="new_item_sub_total[]"  value="'+sub_total+'" id="new_item_sub_total_'+item_guid+'">\n\
+                <input type="hidden" name="new_item_total[]"  value="'+total+'" id="new_item_total_'+item_guid+'">\n\
                 </div>');
                 var addId = $('#selected_item_table').dataTable().fnAddData( [
                 null,
@@ -632,19 +645,19 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                 tax,
                 total,
                 '<input type="hidden" name="index" id="index">\n\
-                <input type="text" name="item_id[]" id="item_id" value="'+item_guid+'">\n\
-                <input type="text" name="item_name[]" id="item_name" value="'+name+'">\n\
-                <input type="text" name="item_sku[]" id="item_sku" value="'+sku+'">\n\
-                <input type="text" name="item_quty[]" id="item_quty" value="'+quty+'">\n\
-                <input type="text" name="item_stocks_id[]" id="item_stocks_id" value="'+stock_id+'">\n\
-                <input type="text" name="item_stocks[]" id="item_stocks" value="'+stock+'">\n\
-                <input type="text" name="items_price[]" id="items_price" value="'+price+'">\n\
-                <input type="text" name="item_tax_inclusive[]" value="'+tax_inclusive+'" id="item_tax_inclusive"> \n\
-                <input type="text" name="item_tax_value[]" value="'+tax_value+'" id="item_tax_value">\n\
-                <input type="text" name="item_tax_type[]" value="'+tax_type+'" id="item_tax_type">\n\
-                <input type="text" name="item_tax_amount[]" value="'+tax+'" id="item_tax_amount">\n\
-                <input type="text" name="item_sub_total[]"  value="'+total+'" id="item_sub_total">\n\
-                <input type="text" name="item_total[]"  value="'+total+'" id="item_total">\n\
+                <input type="hidden" name="item_id[]" id="item_id" value="'+item_guid+'">\n\
+                <input type="hidden" name="item_name[]" id="item_name" value="'+name+'">\n\
+                <input type="hidden" name="item_sku[]" id="item_sku" value="'+sku+'">\n\
+                <input type="hidden" name="item_quty[]" id="item_quty" value="'+quty+'">\n\
+                <input type="hidden" name="item_stocks_id[]" id="item_stocks_id" value="'+stock_id+'">\n\
+                <input type="hidden" name="item_stocks[]" id="item_stocks" value="'+stock+'">\n\
+                <input type="hidden" name="items_price[]" id="items_price" value="'+price+'">\n\
+                <input type="hidden" name="item_tax_inclusive[]" value="'+tax_inclusive+'" id="item_tax_inclusive"> \n\
+                <input type="hidden" name="item_tax_value[]" value="'+tax_value+'" id="item_tax_value">\n\
+                <input type="hidden" name="item_tax_type[]" value="'+tax_type+'" id="item_tax_type">\n\
+                <input type="hidden" name="item_tax_amount[]" value="'+tax+'" id="item_tax_amount">\n\
+                <input type="hidden" name="item_sub_total[]"  value="'+total+'" id="item_sub_total">\n\
+                <input type="hidden" name="item_total[]"  value="'+total+'" id="item_total">\n\
                 <a href=javascript:edit_item_item("'+item_guid+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_item_item('"+item_guid+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
                 var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                 theNode.setAttribute('id','new_item_row_id_'+item_guid)
@@ -656,7 +669,9 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                 }else{
                     $('#parsley_reg #total_amount').val(parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total));
                 }
-                
+                var total_amount=parseFloat($('#parsley_reg #total_amount').val());
+                total_amount=total_amount.toFixed(point);
+                $('#parsley_reg #total_amount').val(total_amount);
                 $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
                 clear_inputs();
                 
@@ -665,7 +680,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
         }else{
             if($('#parsley_reg #item_guid').val()==""){
                 $.bootstrapGrowl('<?php echo $this->lang->line('please_select')." ".$this->lang->line('item_type') ;?>', { type: "warning" });          
-                $('#parsley_reg #item_type').select2('open');
+                $('#parsley_reg #select_item').select2('open');
             }
             else if($('#parsley_reg #quantity').val()==""){
                 $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('quantity');?>', { type: "warning" });          
@@ -753,6 +768,54 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
       $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php  echo $this->lang->line('search')." ".$this->lang->line('item') ?>'});
       $('#parsley_reg #select_item').select2('open');
     }
+    function selling_item_kit_price(){
+        var total=$('#kit_price').val();
+        var tax=$('#selling_tax_type').val();
+        var tax_amount=$('#seling_tax_amount').val();
+        if(tax_amount==""){ 
+            tax_amount=0;
+        }
+        if(total==""){ 
+            total=0;
+        }
+        if(tax!=1){ 
+            tax_amount=0;
+        }
+        total=parseFloat(total)+parseFloat(tax_amount);
+        $('#demo_selling_kit_price').val(total);
+        $('#selling_kit_price').val(total);               
+        
+    }
+    function add_seling_kit_amount(e){
+        var unicode=e.charCode? e.charCode : e.keyCode
+        if($('#parsley_reg #quantity').value!=""){
+            if (unicode!=13 && unicode!=9){
+            }
+            else{
+                       $('#parsley_reg #selling_tax_type').focus();
+            }
+            if (unicode!=27){
+            }
+            else{
+                $('#parsley_reg #select_item').select2('open');
+            }
+        }               
+    }
+    function add_seling_tax_amount(e){
+        var unicode=e.charCode? e.charCode : e.keyCode
+        if($('#parsley_reg #quantity').value!=""){
+            if (unicode!=13 && unicode!=9){
+            }
+            else{
+                    ;
+            }
+            if (unicode!=27){
+            }
+            else{
+                $('#parsley_reg #selling_tax_type').focus();
+            }
+        }               
+    }
 
 
 </script>
@@ -828,7 +891,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                                 </div>
                                                        </div>
                                                    </div>
-                                               
+                                             
                                               
                                               
                                                </div>
@@ -859,13 +922,13 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                                      echo form_input($select_item)?>
                                                   </div>
                                          
-                                             <input type="text" name="item_stock" id="item_stock">
-                                             <input type="text" name="stock_id" id="stock_id">
-                                             <input type="text" name="item_guid" id="item_guid">
-                                             <input type="text" name="item_price" id="item_price">
-                                             <input type="text" name="tax_inclusive" id="tax_inclusive">
-                                             <input type="text" name="tax_value" id="tax_value">
-                                             <input type="text" name="tax_type" id="tax_type">
+                                             <input type="hidden" name="item_stock" id="item_stock">
+                                             <input type="hidden" name="stock_id" id="stock_id">
+                                             <input type="hidden" name="item_guid" id="item_guid">
+                                             <input type="hidden" name="item_price" id="item_price">
+                                             <input type="hidden" name="tax_inclusive" id="tax_inclusive">
+                                             <input type="hidden" name="tax_value" id="tax_value">
+                                             <input type="hidden" name="tax_type" id="tax_type">
                                                     
                                                         </div>
                                                 
@@ -1089,18 +1152,9 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                         <div class="row" style="margin-left: 5px">
                                                      <div class="panel panel-default">
                                                     <div class="panel-heading" >
-                                     <h4 class="panel-title"><?php echo $this->lang->line('amount')." & ".$this->lang->line('weight') ?></h4>                                                                               
+                                     <h4 class="panel-title"><?php echo $this->lang->line('amount') ?></h4>                                                                               
                               </div>
-                                                         <div class="form_sep " style="padding: 0 25px">
-                                                        <label for="total_item_weight" ><?php echo $this->lang->line('total_weight') ?></label>													
-                                                                  <?php $total_item_weight=array('name'=>'demo_total_item_weight',
-                                                                                    'class'=>' form-control',
-                                                                                    'id'=>'demo_total_item_weight',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('total_item_weight'));
-                                                                     echo form_input($total_item_weight)?>
-                                                        
-                                                  </div> <input type="hidden" name="total_item_weight" id="total_item_weight">
+                                                         
                                                          
                                                          <div class="form_sep " style="padding: 0 25px">
                                                         <label for="total_amount" ><?php echo $this->lang->line('total_amount') ?></label>													
@@ -1111,6 +1165,48 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                                                     'value'=>set_value('total_amount'));
                                                                      echo form_input($total_amount)?>
                                                         <input type="hidden" name="total_amount" id="total_amount">
+                                                        
+                                                  </div>
+                                                          <div class="form_sep " style="padding: 0 25px">
+                                                        <label for="kit_price" ><?php echo $this->lang->line('kit_price') ?></label>													
+                                                                  <?php $kit_price=array('name'=>'kit_price',
+                                                                                    'class'=>' form-control',
+                                                                                    'id'=>'kit_price',
+                                                                                    'onkeyup'=>"selling_item_kit_price()", 
+                                                                                   'onKeyPress'=>"add_seling_kit_amount(event); return numbersonly(event)",
+                                                                                    'value'=>set_value('kit_price'));
+                                                                     echo form_input($kit_price)?>
+                                                        
+                                                  </div>
+                                                           <div class="form_sep" style="padding: 0 25px">
+                                                    <label for="tax_type" ><?php echo $this->lang->line('selling') ?></label>	
+                                                    <select class="form-control" id="selling_tax_type" name="selling_tax_type">
+                                                        <option value="0" onclick="selling_item_kit_price()"><?php echo $this->lang->line('inclusive') ?></option>
+                                                        <option value="1" onclick="selling_item_kit_price()"><?php echo $this->lang->line('exclusive') ?></option>
+                                                        
+                                                    </select>
+                                               </div>
+                                                          <div class="form_sep " style="padding: 0 25px">
+                                                        <label for="seling_tax_amount" ><?php echo $this->lang->line('seling_tax_amount') ?></label>													
+                                                                  <?php $seling_tax_amount=array('name'=>'seling_tax_amount',
+                                                                                    'class'=>' form-control',
+                                                                                    'id'=>'seling_tax_amount',
+                                                                                    'onkeyup'=>"selling_item_kit_price()", 
+                                                                                    'onKeyPress'=>"add_seling_tax_amount(event); return numbersonly(event)",
+                                                                                    'value'=>set_value('seling_tax_amount'));
+                                                                     echo form_input($seling_tax_amount)?>
+                                                        
+                                                  </div>
+                                                          <div class="form_sep " style="padding: 0 25px">
+                                                        <label for="selling_kit_price" ><?php echo $this->lang->line('kit_selling_price') ?></label>													
+                                                                  <?php $selling_kit_price=array('name'=>'selling_kit_price',
+                                                                                    'class'=>' form-control',
+                                                                                    'id'=>'demo_selling_kit_price',
+                                                                                    'disabled'=>'disabled',
+                                                                                 
+                                                                                    'value'=>set_value('selling_kit_price'));
+                                                                     echo form_input($selling_kit_price)?>
+                                                        <input type="hidden" name="selling_kit_price" id="selling_kit_price">
                                                         
                                                   </div>
                                                          <br>

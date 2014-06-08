@@ -695,5 +695,8 @@ $lang['credit_days']='Credit Days';
     $lang['exclusive']='Exclusive';
     $lang['inclusive']='Inclusive';
     $lang['selling']='Selling';
+    $lang['kit_price']='Kit Price';
+    $lang['seling_tax_amount']='Kit Tax Amount';
+    $lang['kit_selling_price']='Kit Selling Price';
    
 ?>

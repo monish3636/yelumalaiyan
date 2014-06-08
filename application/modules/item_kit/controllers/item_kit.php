@@ -92,41 +92,46 @@ class Item_kit extends MX_Controller{
  
 function save(){      
     if($this->session->userdata['item_kit_per']['add']==1){
-        $this->form_validation->set_rules('item_kit_item_guid',$this->lang->line('item_kit_item_guid'), 'required');
-        $this->form_validation->set_rules('item_kit_number', $this->lang->line('item_kit_number'), 'required');
+        $this->form_validation->set_rules('item_kit_number',$this->lang->line('item_kit_number'), 'required');
+        $this->form_validation->set_rules('item_kit_name', $this->lang->line('item_kit_name'), 'required');
+        $this->form_validation->set_rules('category_id', $this->lang->line('category_id'), 'required');                    
         $this->form_validation->set_rules('item_kit_date', $this->lang->line('item_kit_date'), 'required');                    
-        $this->form_validation->set_rules('stock_id', $this->lang->line('stock_id'), 'required');                    
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric|required');                  
-        $this->form_validation->set_rules('total_item_weight', $this->lang->line('total_item_weight'), 'numeric|required');                  
-        $this->form_validation->set_rules('new_item_kit_id[]', $this->lang->line('new_item_kit_id'), 'required');                      
-        $this->form_validation->set_rules('new_item_kit_weight[]', $this->lang->line('new_item_kit_weight'), 'required|numeric');                      
-        $this->form_validation->set_rules('new_item_kit_quty[]', $this->lang->line('new_item_kit_quty'), 'required|numeric');                      
-        $this->form_validation->set_rules('new_item_kit_formula[]', $this->lang->line('new_item_kit_formula'), 'required');                      
-        $this->form_validation->set_rules('new_item_kit_price[]', $this->lang->line('new_item_kit_price'), 'required');                      
-        $this->form_validation->set_rules('new_item_kit_total[]', $this->lang->line('new_item_kit_total'), 'required');          
-            if ( $this->form_validation->run() !== false ) {    
-                $item=  $this->input->post('item_kit_item_guid');
+        $this->form_validation->set_rules('kit_price', $this->lang->line('kit_price'), 'numeric|required');                  
+        $this->form_validation->set_rules('selling_kit_price', $this->lang->line('selling_kit_price'), 'numeric|required');  
+        
+        $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'), 'required');                      
+        $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'required|numeric');                       
+        $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id'), 'required');          
+            if ( $this->form_validation->run() !== false ) {  
                 $item_kit_number=  $this->input->post('item_kit_number');
+                $item_kit_name=  $this->input->post('item_kit_name');
+                $category_id=  $this->input->post('category_id');
                 $item_kit_date= strtotime($this->input->post('item_kit_date'));
                 $total_types=$this->input->post('index');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');
-                $total_weight=  $this->input->post('total_item_weight');  
-                $value=array('item_id'=>$item,'stock_id'=>$this->input->post('stock_id'),'code'=>$item_kit_number,'date'=>$item_kit_date,'total_types'=>$total_types,'total_amount'=>$total_amount,'total_weight'=>$total_weight,'remark'=>$remark,'note'=>$note);
-                $guid=   $this->posnic->posnic_add_record($value,'item_kit');          
-                $item_kit=  $this->input->post('new_item_kit_id');
-                $weight=  $this->input->post('new_item_kit_weight');
-                $quty=  $this->input->post('new_item_kit_quty');
-                $formula=  $this->input->post('new_item_kit_formula');
-                $price=  $this->input->post('new_item_kit_price');
-                $total=  $this->input->post('new_item_kit_total');           
-                for($i=0;$i<count($item_kit);$i++){              
+                $kit_price=  $this->input->post('kit_price');  
+                $seling_tax_amount=  $this->input->post('seling_tax_amount');
+                $tax_inclusive=  $this->input->post('selling_tax_type');               
+                $where=array('name'=>$item_kit_name);
+                if($this->posnic->check_record_unique($where,'item_kit')){
+                    $value=array('code'=>$item_kit_number,'name'=>$item_kit_name,'date'=>$item_kit_date,'category_id'=>$category_id,'no_of_items'=>$total_types,'item_total'=>$total_amount,'tax_inclusive'=>$tax_inclusive,'tax_amount'=>$seling_tax_amount,'kit_price'=>$kit_price,'remark'=>$remark,'note'=>$note);
+                    $guid=   $this->posnic->posnic_add_record($value,'item_kit');
+
+                    $item=  $this->input->post('new_item_id');
+                    $quty=  $this->input->post('new_item_quty');
+                    $stock=  $this->input->post('new_item_stock_id'); 
                     $this->load->model('items');
-                    $this->items->add_item_kit($guid,$item_kit[$i],$weight[$i],$quty[$i],$formula[$i],$price[$i],$total[$i],$i);
-                }
-                $this->posnic->posnic_master_increment_max('item_kit')  ;
+                    for($i=0;$i<count($item);$i++){                                
+                        $this->items->add_item_kit($guid,$item[$i],$quty[$i],$stock[$i],$i);
+                    }
+                    $this->posnic->posnic_master_increment_max('item_kit')  ;
                     echo 'TRUE';    
+                }else{
+                    echo 'ALREADY';
+                }
                 }else{
                    echo 'FALSE';
                 }

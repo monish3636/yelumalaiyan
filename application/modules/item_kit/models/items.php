@@ -20,20 +20,20 @@ class Items extends CI_Model{
     }
     
     function search_items($search){
-        $this->db->select('decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,items.tax_id,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,items.decomposition,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata['branch_id'])->where('items.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',1)->where('items.decomposition',1);
-        
+        $this->db->select('decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,items.tax_id,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,items.decomposition,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata['branch_id'])->where('items.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',1)->where('items.decomposition',1);
         $this->db->join('decomposition_items', "decomposition_items.guid=stock.item",'left');
         $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
         $this->db->join('items', "items.guid=stock.item OR items.guid=decomposition_items.item_id ",'left');
         $this->db->join('items_category', 'items.category_id=items_category.guid','left');
         $this->db->join('items_setting', 'items.guid=items_setting.item_id','left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=stock.item ",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=stock.item ",'left');
+        $this->db->join('taxes', "taxes.guid=items.tax_id AND items.guid=stock.item OR taxes.guid=items.tax_id AND items.guid=decomposition_items.item_id",'left');
+        $this->db->join('tax_types', "tax_types.guid=taxes.type AND items.tax_id=taxes.guid AND items.guid=stock.item OR tax_types.guid=taxes.type AND items.tax_id=taxes.guid AND items.guid=decomposition_items.item_id",'left');
         $this->db->join('brands', 'items.brand_id=brands.guid','left');
         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
         $like=array('items.active_status'=>$search,'items.name'=>$search,'items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
             $this->db->or_like($like);
             $this->db->order_by('items.id');
+            $this->db->group_by('stock.guid');
             $this->db->limit($this->session->userdata['data_limit']);
             $sql=  $this->db->get();
             $data=array();
@@ -118,8 +118,8 @@ class Items extends CI_Model{
             }
             
      }
-    function add_decomposition($guid,$decomposition,$weight,$quantity,$formula,$price,$total,$i){         
-        $this->db->insert('decomposition_x_items',array('guid'=>  md5($i.$guid.$decomposition),'price'=>$price,'weight'=>$weight,'type_id'=>$decomposition,'formula'=>$formula,'quantity'=>$quantity,'total'=>$total,'decomposition_id'=>$guid));         
+    function add_item_kit($guid,$item,$quty,$stock,$i){         
+        $this->db->insert('item_kit_x_items',array('guid'=>  md5($i.$guid.uniqid()),'item_id'=>$item,'quty'=>$quty,'stock_id'=>$stock,'item_kit_id'=>$guid));         
     }
     function update_decomposition($deco_guid,$quty,$price,$weight,$total){
         $this->db->where('guid',$deco_guid);
