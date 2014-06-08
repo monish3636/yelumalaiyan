@@ -5,10 +5,18 @@ class Customers extends MX_Controller
     function __construct() {
         parent::__construct();
             $this->load->library('posnic'); 
+           // $this->load->library('csvimport');
          
     }
     function index(){
         $this->get(); 
+//        $this->load->library('csvreader');
+//        $result =   $this->csvreader->parse_file('uploads/import/import_customers.csv');//path to csv file
+//        echo '<pre>';
+//        $data['csvData'] =  $result;
+//       // $this->load->view('view_csv', $data); 
+//       print_r($result);
+       
         
     }
      function get(){
@@ -284,6 +292,35 @@ class Customers extends MX_Controller
     function language($lang){
        $lang= $this->lang->load($lang);
        return $lang;
+    }
+    function import(){
+      $config['upload_path'] = './uploads/import';
+		$config['allowed_types'] = 'csv|xlsx';
+		$config['max_size']	= '1002';
+		$config['max_width']  = '102422';
+		$config['max_height']  = '7682';
+
+		$this->load->library('upload', $config);
+
+		if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
+echo '<pre>';
+print_r($error);
+			//$this->load->view('upload_form', $error);
+		}
+		else
+		{
+			
+                        $upload_data = $this->upload->data();
+			$this->load->library('csvreader');
+                        $result =   $this->csvreader->parse_file('uploads/import/'.$upload_data['file_name']);//path to csv file
+                        echo '<pre>';
+                        $data['csvData'] =  $result;
+                       // $this->load->view('view_csv', $data); 
+                        print_r($result);
+		}
+    
     }
 }
 

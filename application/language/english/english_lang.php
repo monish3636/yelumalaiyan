@@ -701,5 +701,10 @@ $lang['credit_days']='Credit Days';
     $lang['no_of_items']="No Of Items";
     $lang['kit_id']='Kit ID';
     $lang['kit_name']='Kit Name';
+    $lang['import']='Import';
+    $lang['export']='Export';
+    $lang['download_csv_template']='Download CSV Template';
+    $lang['download_excel_template']='Download Excel Template';
+    $lang['back_to_list']='back To List';
    
 ?>
