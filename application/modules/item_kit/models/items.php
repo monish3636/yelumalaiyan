@@ -4,9 +4,9 @@ class Items extends CI_Model{
         parent::__construct();
     }
     function get($end,$start,$like,$branch){
-                $this->db->select('decomposition.* ,items.guid as i_guid,items.name');             
-                $this->db->from('decomposition')->where('decomposition.branch_id',$branch)->where('decomposition.delete_status',0);
-                $this->db->join('items', 'items.guid=decomposition.item_id','left');
+                $this->db->select('item_kit.* ');             
+                $this->db->from('item_kit')->where('item_kit.branch_id',$branch)->where('item_kit.delete_status',0);
+                $this->db->join('kit_category', 'kit_category.guid=item_kit.category_id','left');
                 $this->db->limit($end,$start); 
                 $this->db->or_like($like);     
                 $query=$this->db->get();

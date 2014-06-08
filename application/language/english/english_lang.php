@@ -698,5 +698,8 @@ $lang['credit_days']='Credit Days';
     $lang['kit_price']='Kit Price';
     $lang['seling_tax_amount']='Kit Tax Amount';
     $lang['kit_selling_price']='Kit Selling Price';
+    $lang['no_of_items']="No Of Items";
+    $lang['kit_id']='Kit ID';
+    $lang['kit_name']='Kit Name';
    
 ?>

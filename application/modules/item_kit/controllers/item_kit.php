@@ -14,9 +14,9 @@ class Item_kit extends MX_Controller{
         $this->load->view('template/app/footer');        
         
     }
-    // sales quotation item_kit data table
+    // item_kit data table
     function data_table(){
-        $aColumns = array( 'guid','code','code','name','date','total_types','total_weight','total_amount','guid','guid','item_id','guid' );	
+        $aColumns = array( 'guid','code','code','name','date','no_of_items','kit_price','tax_amount','selling_price','guid','no_of_items','guid' );	
 	$start = "";
         $end="";
 
@@ -114,10 +114,11 @@ function save(){
                 $total_amount=  $this->input->post('total_amount');
                 $kit_price=  $this->input->post('kit_price');  
                 $seling_tax_amount=  $this->input->post('seling_tax_amount');
+                $selling_price=  $this->input->post('selling_kit_price');
                 $tax_inclusive=  $this->input->post('selling_tax_type');               
                 $where=array('name'=>$item_kit_name);
                 if($this->posnic->check_record_unique($where,'item_kit')){
-                    $value=array('code'=>$item_kit_number,'name'=>$item_kit_name,'date'=>$item_kit_date,'category_id'=>$category_id,'no_of_items'=>$total_types,'item_total'=>$total_amount,'tax_inclusive'=>$tax_inclusive,'tax_amount'=>$seling_tax_amount,'kit_price'=>$kit_price,'remark'=>$remark,'note'=>$note);
+                    $value=array('code'=>$item_kit_number,'name'=>$item_kit_name,'selling_price'=>$selling_price,'date'=>$item_kit_date,'category_id'=>$category_id,'no_of_items'=>$total_types,'item_total'=>$total_amount,'tax_inclusive'=>$tax_inclusive,'tax_amount'=>$seling_tax_amount,'kit_price'=>$kit_price,'remark'=>$remark,'note'=>$note);
                     $guid=   $this->posnic->posnic_add_record($value,'item_kit');
 
                     $item=  $this->input->post('new_item_id');
