@@ -23,239 +23,280 @@
 }
 </style>	
 <script type="text/javascript">
-     $(document).ready( function () {
-          $('#add_customer_details_form #customer_category').change(function() {
-                var guid = $('#add_customer_details_form #customer_category').select2('data').id;                  
-                $('#add_customer_details_form #category').val(guid);
-          });
-          $('#add_customer_details_form #customer_category').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/customers/get_category',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
-                        results.push({
-                          id: item.guid,
-                          text: item.category_name
-                        });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+    $(document).ready( function () {
+        var options = { 
+            complete: function(response) { 
+                if(response['responseText']=='TRUE'){
+                    $.bootstrapGrowl('<?php echo $this->lang->line('items').' '.$this->lang->line('added');?>', { type: "success" });                                                                                    
+                    $("#dt_table_tools").dataTable().fnDraw();
+                    $("#add_item").trigger('reset');
+                    posnic_items_lists();
+                }else  if(response['responseText']=='ALREADY'){
+                    $.bootstrapGrowl($('#add_item #name').val()+' <?php echo $this->lang->line('items').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                }else if(response['responseText']=='FALSE'){
+                     $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                }else{
+                     $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items');?>', { type: "error" });                           
                 }
-            });
+
+
+            },
+            error: function()
+            {
+                    $("#message").html("<font color='red'> ERROR: unable to upload files</font>");
+
+            }
+
+        }; 
+        $("#import_form").ajaxForm(options);
+        $('#add_customer_details_form #customer_category').change(function() {
+            var guid = $('#add_customer_details_form #customer_category').select2('data').id;                  
+            $('#add_customer_details_form #category').val(guid);
+        });
+        $('#add_customer_details_form #customer_category').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/customers/get_category',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.category_name
+                        });
+                    });
+                    return {
+                        results: results
+                    };
+                }
+            }
+        });
         
-          $('#add_customer_details_form #payment_type').change(function() {
-                   var guid = $('#add_customer_details_form #payment_type').select2('data').id;
+        $('#add_customer_details_form #payment_type').change(function() {
+                var guid = $('#add_customer_details_form #payment_type').select2('data').id;
                 $('#add_customer_details_form #payment').val(guid);
-          });
-          $('#add_customer_details_form #payment_type').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/customers/get_payment',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        });
+        $('#add_customer_details_form #payment_type').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/customers/get_payment',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.type
+                            id: item.guid,
+                            text: item.type
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
+            }
+        });
         
-          $('#parsley_reg #customer_category').change(function() {
-                var guid = $('#parsley_reg #customer_category').select2('data').id;                
-                $('#parsley_reg #category').val(guid);
-          });
-          $('#parsley_reg #customer_category').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/customers/get_category',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        $('#parsley_reg #customer_category').change(function() {
+            var guid = $('#parsley_reg #customer_category').select2('data').id;                
+            $('#parsley_reg #category').val(guid);
+        });
+        $('#parsley_reg #customer_category').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/customers/get_category',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.category_name
+                            id: item.guid,
+                            text: item.category_name
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
+            }
+        });
         
-          $('#parsley_reg #payment_type').change(function() {
-                   var guid = $('#parsley_reg #payment_type').select2('data').id;
+        $('#parsley_reg #payment_type').change(function() {
+                var guid = $('#parsley_reg #payment_type').select2('data').id;
                 $('#parsley_reg #payment').val(guid);
-          });
-          $('#parsley_reg #payment_type').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/customers/get_payment',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        });
+        $('#parsley_reg #payment_type').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/customers/get_payment',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.type
+                            id: item.guid,
+                            text: item.type
                         });
-                      });
-                      return {
+                    });
+                    return {
                           results: results
-                      };
-                    }
+                    };
                 }
-            });
+            }
+        });
         
         
         
         $('#add_new_customer').click(function() { 
-                <?php if($this->session->userdata['customers_per']['add']==1){ ?>
+            <?php if($this->session->userdata['customers_per']['add']==1){ ?>
                 var inputs = $('#add_customer_form').serialize();
-                      $.ajax ({
-                            url: "<?php echo base_url('index.php/customers/add_customers')?>",
-                            data: inputs,
-                            type:'POST',
-                            complete: function(response) {
-                                if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('customer').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#add_customer_details").trigger('reset');
-                                       posnic_customers_lists();
-                                    }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#customers_name').val()+' <?php echo $this->lang->line('customer').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                                    }else  if(response['responseText']=='FALSE'){
-                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                           
-                                    }
-                       }
-                });<?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                       
-                    <?php }?>
+                $.ajax ({
+                    url: "<?php echo base_url('index.php/customers/add_customers')?>",
+                    data: inputs,
+                    type:'POST',
+                    complete: function(response) {
+                        if(response['responseText']=='TRUE'){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('customer').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                            $("#dt_table_tools").dataTable().fnDraw();
+                            $("#add_customer_details").trigger('reset');
+                            posnic_customers_lists();
+                        }else  if(response['responseText']=='ALREADY'){
+                            $.bootstrapGrowl($('#customers_name').val()+' <?php echo $this->lang->line('customer').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                        }else  if(response['responseText']=='FALSE'){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                        }else{
+                            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                           
+                        }
+                    }
+                });
+            <?php }else{ ?>
+                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                       
+            <?php }?>
         });
-         $('#update_customers').click(function() { 
-                <?php if($this->session->userdata['customers_per']['edit']==1){ ?>
+        $('#update_customers').click(function() { 
+            <?php if($this->session->userdata['customers_per']['edit']==1){ ?>
                 var inputs = $('#parsley_reg').serialize();
-                      $.ajax ({
-                            url: "<?php echo base_url('index.php/customers/update_customers')?>",
-                            data: inputs,
-                            type:'POST',
-                            complete: function(response) {
-                                  if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('customer').' '.$this->lang->line('updated');?>', { type: "success" });                                                                                  
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#parsley_reg").trigger('reset');
-                                       posnic_customers_lists();
-                                    }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#customers_name').val()+' <?php echo $this->lang->line('customer').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                                    }else  if(response['responseText']=='FALSE'){
-                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('customer');?>', { type: "error" });                           
-                                    }
-                       }
-                 });
-                 <?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('customer');?>', { type: "error" });                        
-                    <?php }?>
+                $.ajax ({
+                    url: "<?php echo base_url('index.php/customers/update_customers')?>",
+                    data: inputs,
+                    type:'POST',
+                    complete: function(response) {
+                        if(response['responseText']=='TRUE'){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('customer').' '.$this->lang->line('updated');?>', { type: "success" });                                                                                  
+                            $("#dt_table_tools").dataTable().fnDraw();
+                            $("#parsley_reg").trigger('reset');
+                            posnic_customers_lists();
+                        }else  if(response['responseText']=='ALREADY'){
+                            $.bootstrapGrowl($('#customers_name').val()+' <?php echo $this->lang->line('customer').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                        }else  if(response['responseText']=='FALSE'){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                        }else{
+                            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('customer');?>', { type: "error" });                           
+                        }
+                    }
+                });
+            <?php }else{ ?>
+                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('customer');?>', { type: "error" });                        
+            <?php }?>
         });
      });
-function posnic_add_new(){
-    <?php if($this->session->userdata['customers_per']['add']==1){ ?>
-      $("#user_list").hide();
-      $('#add_customer_details_form').show('slow');
-      $('#delete').attr("disabled", "disabled");
-      $('#posnic_add_customers').attr("disabled", "disabled");
-      $('#active').attr("disabled", "disabled");
-      $('#deactive').attr("disabled", "disabled");
-      $('#customers_lists').removeAttr("disabled");
-      <?php }else{ ?>
-                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                         
-                    <?php }?>
-}
-function posnic_customers_lists(){
-      $('#edit_customer_form').hide('hide');
-      $('#add_customer_details_form').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#active').removeAttr("disabled");
-      $('#deactive').removeAttr("disabled");
-      $('#posnic_add_customers').removeAttr("disabled");
-      $('#customers_lists').attr("disabled",'disabled');
-}
-function clear_add_customers(){
-      $("#posnic_user_2").trigger('reset');
-}
-function reload_update_user(){
-    var id=$('#guid').val();
-    edit_function(id);
-}
+    function posnic_add_new(){
+        <?php if($this->session->userdata['customers_per']['add']==1){ ?>
+            $("#user_list").hide();
+            $('#import_section').hide();
+            $('#export_section').hide();
+            $('#add_customer_details_form').show('slow');
+            $('#delete').attr("disabled", "disabled");
+            $('#posnic_add_customers').attr("disabled", "disabled");
+            $('#active').attr("disabled", "disabled");
+            $('#deactive').attr("disabled", "disabled");
+            $('#customers_lists').removeAttr("disabled");
+        <?php }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                         
+        <?php }?>
+    }
+    function posnic_customers_lists(){
+        $('#import_section').hide();
+        $('#export_section').hide();
+        $('#edit_customer_form').hide('hide');
+        $('#add_customer_details_form').hide('hide');      
+        $("#user_list").show('slow');
+        $('#delete').removeAttr("disabled");
+        $('#active').removeAttr("disabled");
+        $('#deactive').removeAttr("disabled");
+        $('#posnic_add_customers').removeAttr("disabled");
+        $('#customers_lists').attr("disabled",'disabled');
+    }
+    function clear_add_customers(){
+        $("#posnic_user_2").trigger('reset');
+    }
+    function reload_update_user(){
+        var id=$('#guid').val();
+        edit_function(id);
+    }
+    function posnic_import(){
+        $('#edit_customer_form').hide('hide');
+        $('#add_customer_details_form').hide('hide');      
+        $("#user_list").hide();
+        $('#import_section').show('slow');
+        $('#customers_lists').attr("disabled",'disabled');
+        $('#posnic_add_customers').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
@@ -266,9 +307,15 @@ function reload_update_user(){
                         <a href="javascript:posnic_group_active()" class="btn btn-default" id="deactive"  ><i class="icon icon-play"></i> <?php echo $this->lang->line('active') ?></a>
                         <a href="javascript:posnic_delete()" class="btn btn-default" id="delete"><i class="icon icon-trash"></i> <?php echo $this->lang->line('delete') ?></a>
                         <a href="javascript:posnic_customers_lists()" class="btn btn-default" id="customers_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('customers') ?></a>
+                        <a href="javascript:posnic_import()" class="btn btn-default" id="inport"><i class="icon icon-upload"></i> <?php echo $this->lang->line('import') ?></a>
+                        <a href="javascript:posnic_export()" class="btn btn-default" id="export"><i class="icon icon-download"></i> <?php echo $this->lang->line('export') ?></a>
+                        
+
+
+</div>
                 </div>
             </div>
-    </div>
+    
 </nav>
 <nav id="mobile_navigation"></nav>
               
@@ -314,6 +361,84 @@ function reload_update_user(){
                     
         </div>
 </div>
+<section id="import_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'import_form1',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('customers/import/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-3">
+                        
+                    </div>
+                    <div  class="col-lg-6" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
+                               <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('import')." ".$this->lang->line('customer') ?></h4>                                                                               
+                               </div>
+                              <div class="row" style="padding: 20px 0px">
+                                  <div class="col col-lg-1">
+                                      
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="javascript:download_csv_template()" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('download_csv_template') ?></a>
+                                      </div>
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="javascript:download_excel_template()" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('download_excel_template') ?></a>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-3">
+                                      
+                                  </div>
+                                  <div class="col col-lg-6">
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <input type="hidden" value="" name="">
+                                        <div class="input-group">
+                                            <div class="form-control">
+                                                <i class="icon-file fileupload-exists"></i>
+                                                <span class="fileupload-preview"></span>
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <a class="btn btn-default fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                                                <span class="btn btn-default btn-file">
+                                                <span class="fileupload-new">Select file</span>
+                                                <span class="fileupload-exists">Change</span>
+                                                <input type="file" name="userfile">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                       
+                                  </div>
+                              </div>
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-4">
+                                      
+                                  </div>
+                                  <div class="col col-lg-6">
+                                      <input type="submit" name="import" class="btn btn-default " value="<?php echo $this->lang->line('import'); ?>">
+                                      <a href="javascript:posnic_customers_lists" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
+                                       
+                                  </div>
+                              </div>
+                          </div>
+                         </div>                             
+                    </div>
+                </div>
+          </div>
+        </div>
+    <?php echo form_close();?>
+</section>
 <section id="add_customer_details_form" class="container clearfix main_section">
      <?php   $form =array('id'=>'add_customer_form',
                           'runat'=>'server',
@@ -1127,74 +1252,60 @@ function reload_update_user(){
            </div>
 		</div>
 	
-                <script type="text/javascript">
-                    function posnic_group_active(){
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                              $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('customer');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/customers/active',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value
-
-                                },
-                                success: function(response)
-                                {
-                                    if(response){
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('activated');?>', { type: "success" });
-                                        $("#dt_table_tools").dataTable().fnDraw();
-                                    }
-                                }
-                            });
-
-                          }
-
-                      }
-                  
-
-                      }    
-                      }
-                    function posnic_delete(){
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                        
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('customer');?>', { type: "warning" });
-                      }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
-             if(result){
-              
-             
-                        var posnic=document.forms.posnic;
-                        for (i = 0; i < posnic.length; i++){
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
+<script type="text/javascript">
+    function posnic_group_active(){
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {
+            $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('customer');?>', { type: "warning" });
+        }else{
+            var posnic=document.forms.posnic;
+            for (i = 0; i < posnic.length-1; i++){
+                if(posnic[i].checked==true){                             
+                    $.ajax({
+                        url: '<?php echo base_url() ?>/index.php/customers/active',
+                        type: "POST",
+                        data: {
+                            guid:posnic[i].value
+                        },
+                        success: function(response)
+                        {
+                            if(response){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('activated');?>', { type: "success" });
+                                $("#dt_table_tools").dataTable().fnDraw();
+                            }
+                        }
+                    });
+                }
+            }
+        }    
+    }
+    function posnic_delete(){
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {
+            $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('customer');?>', { type: "warning" });
+        }else{
+            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
+            if(result){
+                var posnic=document.forms.posnic;
+                    for (i = 0; i < posnic.length; i++){
+                        if(posnic[i].checked==true){                             
+                            $.ajax({
                                 url: '<?php echo base_url() ?>/index.php/customers/delete',
                                 type: "POST",
                                 data: {
                                     guid:posnic[i].value
-
                                 },
                                 success: function(response)
                                 {
@@ -1205,58 +1316,47 @@ function reload_update_user(){
                                 }
                             });
 
-                          }
-
-                      }    
-                      }
-                      });
-                      }    
-                      }
+                        }
+                    }    
+                }
+            });
+        }    
+    }
                     
-                    
-                    
-                    function posnic_group_deactive(){
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
+    function posnic_group_deactive(){
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {
+            $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('customer');?>', { type: "warning" });
+        }else{
+            var posnic=document.forms.posnic;
+            for (i = 0; i < posnic.length-1; i++){
+                if(posnic[i].checked==true){                             
+                    $.ajax({
+                        url: '<?php echo base_url() ?>/index.php/customers/deactive',
+                        type: "POST",
+                        data: {
+                            guid: posnic[i].value
 
-                          }
-
-                      }
-                      if (flag<1) {
-                                               $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('customer');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                                 $.ajax({
-                                    url: '<?php echo base_url() ?>/index.php/customers/deactive',
-                                    type: "POST",
-                                    data: {
-                                        guid: posnic[i].value
-
-                                    },
-                                    success: function(response)
-                                    {
-                                        if(response){
-                                             $.bootstrapGrowl('<?php echo $this->lang->line('deactivated');?>', { type: "danger" });
-                                            $("#dt_table_tools").dataTable().fnDraw();
-                                        }
-                                    }
-                                });
-
-                          }
-
-                      }
-                  
-
-                      }    
-                      }
-                    
-                </script>
+                        },
+                        success: function(response)
+                        {
+                            if(response){
+                                 $.bootstrapGrowl('<?php echo $this->lang->line('deactivated');?>', { type: "danger" });
+                                $("#dt_table_tools").dataTable().fnDraw();
+                            }
+                        }
+                    });
+                }
+            }
+        }    
+    }
+</script>
         
 
       
