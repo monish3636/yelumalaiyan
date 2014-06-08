@@ -16,7 +16,7 @@ class Item_kit extends MX_Controller{
     }
     // item_kit data table
     function data_table(){
-        $aColumns = array( 'guid','code','code','name','date','no_of_items','kit_price','tax_amount','selling_price','guid','no_of_items','guid' );	
+        $aColumns = array( 'guid','code','code','name','date','no_of_items','kit_price','tax_amount','selling_price','guid','active_status','guid' );	
 	$start = "";
         $end="";
 
@@ -226,27 +226,19 @@ function save(){
 
 
 /*
-Delete purchase item_kit if the user have permission  */
+Delete  item_kit if the user have permission  */
 // function start
-function delete(){
-   if($this->session->userdata['brands_per']['delete']==1){ // check permission of current user for delete purchase  item_kit
-            if($this->input->post('guid')){ 
-                $this->load->model('items');
-                $guid=$this->input->post('guid');
-                $status=$this->items->check_approve($guid);// check if the purchase item_kit was already apparoved or what
-                    if($status!=FALSE){
-                        $this->posnic->posnic_delete($guid,'item_kit'); // delete the purchase item_kit
-                        echo 'TRUE';
-                    }else{
-                        echo 'Approved';
-                    }
-            
+    function delete(){
+        if($this->session->userdata['item_kit_per']['delete']==1){
+            if($this->input->post('guid')){
+             $guid=  $this->input->post('guid');
+              $this->posnic->posnic_delete($guid,'item_kit');
+             echo 'TRUE';
             }
            }else{
             echo 'FALSE';
         }
-    
-}
+    }
 // function end
 
 function  get_item_kit($guid){
@@ -304,6 +296,24 @@ function item_kit_number(){
         $this->load->model('items');
         $data= $this->items->search_category($search);      
         echo json_encode($data);
+    }
+    function active(){
+        $id=  $this->input->post('guid');
+        $report= $this->posnic->posnic_module_active($id,'item_kit'); 
+        if (!$report['error']) {
+            echo 'TRUE';
+        } else {
+            echo 'FALSE';
+        }
+    }
+    function deactive(){
+        $id=  $this->input->post('guid');
+        $report= $this->posnic->posnic_module_deactive($id,'item_kit'); 
+        if (!$report['error']) {
+            echo 'TRUE';
+        } else {
+            echo 'FALSE';
+        }
     }
 }
 ?>
