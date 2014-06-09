@@ -23,24 +23,24 @@
 }
 </style>	
 <script type="text/javascript">
+    function processJson(data){
+        for(var i=0;i<data.length;i++){
+          $('#import_fields').append("<div class='row field_class' style='padding-bottom: 12px !important'><div class='col col-lg-1'><label>"+data[i][0]+"</label></div><div class='col col-lg-6'><label>"+data[i][1]+"</label></div></div>")
+        }
+    }
     $(document).ready( function () {
         var options = { 
             complete: function(response) { 
-                if(response['responseText']=='TRUE'){
-                    $.bootstrapGrowl('<?php echo $this->lang->line('items').' '.$this->lang->line('added');?>', { type: "success" });                                                                                    
-                    $("#dt_table_tools").dataTable().fnDraw();
-                    $("#add_item").trigger('reset');
-                    posnic_items_lists();
-                }else  if(response['responseText']=='ALREADY'){
-                    $.bootstrapGrowl($('#add_item #name').val()+' <?php echo $this->lang->line('items').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
-                }else if(response['responseText']=='FALSE'){
-                     $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                if(response['responseText']=='Noop'){
+                     $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('items');?>', { type: "error" });                           
                 }else{
-                     $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items');?>', { type: "error" });                           
+                         
                 }
 
 
             },
+            dataType:  'json',
+            success:   processJson ,
             error: function()
             {
                     $("#message").html("<font color='red'> ERROR: unable to upload files</font>");
@@ -362,7 +362,7 @@
         </div>
 </div>
 <section id="import_section" class="container clearfix main_section">
-     <?php   $form =array('id'=>'import_form1',
+     <?php   $form =array('id'=>'import_form',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
        echo form_open_multipart('customers/import/',$form);?>
@@ -421,6 +421,163 @@
                                        
                                   </div>
                               </div>
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-4">
+                                      
+                                  </div>
+                                  <div class="col col-lg-6">
+                                      <input type="submit" name="import" class="btn btn-default " value="<?php echo $this->lang->line('import'); ?>">
+                                      <a href="javascript:posnic_customers_lists" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
+                                       
+                                  </div>
+                              </div>
+                          </div>
+                         </div>                             
+                    </div>
+                </div>
+          </div>
+        </div>
+    <?php echo form_close();?>
+</section>
+<section id="mapping_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'mapping_form',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('customers/import/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-2">
+                        
+                    </div>
+                    <div  class="col-lg-8" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
+                               <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('mapping')." ".$this->lang->line('import') ?></h4>                                                                               
+                               </div>
+                                <div class="row" style="padding: 20px 0px">
+                                    <div class="col col-lg-6 data_class" id="data_fields" >
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('first_name') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('last_name') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('address1') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('address2') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('birthday') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('Marragedate') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('city') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('state') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('zip') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('country') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('company') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('website') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('email') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('phone') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control" id="first_name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                  <div class="col col-lg-6" id="import_fields">
+                                      
+                                  </div>
+                                  
+                              </div>
+                           
                               <div class="row" style="padding: 10px 0px">
                                   <div class="col col-lg-4">
                                       
