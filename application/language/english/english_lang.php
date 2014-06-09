@@ -706,5 +706,7 @@ $lang['credit_days']='Credit Days';
     $lang['download_csv_template']='Download CSV Template';
     $lang['download_excel_template']='Download Excel Template';
     $lang['back_to_list']='back To List';
+    $lang['You_Have_NO_Permission_To_Import']='You Have NO Permission To Import';
+    $lang['mapping']='Mapping';
    
 ?>

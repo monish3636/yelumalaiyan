@@ -28,5 +28,8 @@ class Customer extends CI_Model{
                 }
                 return $query->result_array(); 
     }
+    function get_fields(){
+        return $this->db->list_fields('customers');
+    }
 }
 ?>

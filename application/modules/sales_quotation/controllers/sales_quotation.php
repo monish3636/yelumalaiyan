@@ -93,9 +93,9 @@ class Sales_quotation extends MX_Controller{
 		   echo json_encode($output1);
     }
     
-    function  set_seleted_item_suppier($suid){
-        $this->session->userdata['supplier_guid']=$suid;
-    }
+function  set_seleted_item_suppier($suid){
+    $this->session->userdata['supplier_guid']=$suid;
+}
     
  
 function save(){      
@@ -310,7 +310,6 @@ function order_number(){
 
 function search_items(){
     $search= $this->input->post('term');
-    $guid= $this->input->post('suppler');
     $this->load->model('sales');
     $data= $this->sales->search_items($search);      
     echo json_encode($data);
