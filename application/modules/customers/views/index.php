@@ -24,6 +24,10 @@
 </style>	
 <script type="text/javascript">
     function processJson(data){
+        $('#mapping_section').show('slow');
+        $('#import_section').hide();
+        $('#import_fields').remove();
+        $('#parent_field').append('<div class="col col-lg-6" id="import_fields"></div>');
         for(var i=0;i<data.length;i++){
           $('#import_fields').append("<div class='row field_class' style='padding-bottom: 12px !important'><div class='col col-lg-1'><label>"+data[i][0]+"</label></div><div class='col col-lg-6'><label>"+data[i][1]+"</label></div></div>")
         }
@@ -199,6 +203,8 @@
         
         
         
+        
+        
         $('#add_new_customer').click(function() { 
             <?php if($this->session->userdata['customers_per']['add']==1){ ?>
                 var inputs = $('#add_customer_form').serialize();
@@ -252,6 +258,32 @@
             <?php }?>
         });
      });
+    function posnic_mapping_import() { 
+            <?php if($this->session->userdata['customers_per']['add']==1){ ?>
+                var inputs = $('#mapping_form').serialize();
+                $.ajax ({
+                    url: "<?php echo base_url('index.php/customers/posnic_mapping_import')?>",
+                    data: inputs,
+                    type:'POST',
+                    complete: function(response) {
+                        if(response['responseText']=='TRUE'){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('customer').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                            $("#dt_table_tools").dataTable().fnDraw();
+                            $("#add_customer_details").trigger('reset');
+                            posnic_customers_lists();
+                        }else  if(response['responseText']=='ALREADY'){
+                            $.bootstrapGrowl($('#customers_name').val()+' <?php echo $this->lang->line('customer').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                        }else  if(response['responseText']=='FALSE'){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                        }else{
+                            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                           
+                        }
+                    }
+                });
+            <?php }else{ ?>
+                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                       
+            <?php }?>
+        } 
     function posnic_add_new(){
         <?php if($this->session->userdata['customers_per']['add']==1){ ?>
             $("#user_list").hide();
@@ -290,6 +322,7 @@
         $('#edit_customer_form').hide('hide');
         $('#add_customer_details_form').hide('hide');      
         $("#user_list").hide();
+        $('#mapping_section').hide();
         $('#import_section').show('slow');
         $('#customers_lists').attr("disabled",'disabled');
         $('#posnic_add_customers').attr("disabled",'disabled');
@@ -397,10 +430,10 @@
                                   </div>
                               </div>
                               <div class="row" style="padding: 10px 0px">
-                                  <div class="col col-lg-3">
+                                  <div class="col col-lg-2">
                                       
                                   </div>
-                                  <div class="col col-lg-6">
+                                  <div class="col col-lg-8">
                                     <div class="fileupload fileupload-new" data-provides="fileupload">
                                         <input type="hidden" value="" name="">
                                         <div class="input-group">
@@ -426,8 +459,8 @@
                                       
                                   </div>
                                   <div class="col col-lg-6">
-                                      <input type="submit" name="import" class="btn btn-default " value="<?php echo $this->lang->line('import'); ?>">
-                                      <a href="javascript:posnic_customers_lists" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
+                                      <input type="submit" name="import" class="btn btn-default " value="<?php echo $this->lang->line('upload_file'); ?>">
+                                      <a href="javascript:posnic_customers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
                                        
                                   </div>
                               </div>
@@ -457,14 +490,22 @@
                                <div class="panel-heading">
                                      <h4 class="panel-title"><?php echo $this->lang->line('mapping')." ".$this->lang->line('import') ?></h4>                                                                               
                                </div>
-                                <div class="row" style="padding: 20px 0px">
+                              <div class="row" style="padding: 0px 20px" >
+                                  <div class="col col-lg-6 ">
+                                        <h5><?php  echo $this->lang->line('customer')." ".$this->lang->line('fields') ?></h5>
+                                  </div>
+                                  <div class="col col-lg-6 ">
+                                      <h5>  <?php  echo $this->lang->line('excel_csv_fields') ?></h5>
+                                  </div>
+                              </div>
+                                <div class="row" style="padding: 20px 0px" id="parent_field">
                                     <div class="col col-lg-6 data_class" id="data_fields" >
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
                                                 <label><?php echo $this->lang->line('first_name') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text" class="form-control" maxlength="1" id="first_name" name="first_name">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -472,7 +513,7 @@
                                                 <label><?php echo $this->lang->line('last_name') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="last_name" name="last_name">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -480,7 +521,7 @@
                                                 <label><?php echo $this->lang->line('address1') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="address1" name="address1">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -488,7 +529,7 @@
                                                 <label><?php echo $this->lang->line('address2') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="address2" name="address2">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -496,7 +537,7 @@
                                                 <label><?php echo $this->lang->line('birthday') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="birthday" name="birthday">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -504,7 +545,7 @@
                                                 <label><?php echo $this->lang->line('Marragedate') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="Marragedate" name="Marragedate">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -512,7 +553,7 @@
                                                 <label><?php echo $this->lang->line('city') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="city" name="city">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -520,7 +561,7 @@
                                                 <label><?php echo $this->lang->line('state') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="state" name="state">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -528,7 +569,7 @@
                                                 <label><?php echo $this->lang->line('zip') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="zip" name="zip">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -536,7 +577,7 @@
                                                 <label><?php echo $this->lang->line('country') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="country" name="country">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -544,7 +585,7 @@
                                                 <label><?php echo $this->lang->line('company') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="company" name="company">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -552,7 +593,7 @@
                                                 <label><?php echo $this->lang->line('website') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="website" name="website">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -560,7 +601,7 @@
                                                 <label><?php echo $this->lang->line('email') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="email" name="email">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
@@ -568,7 +609,7 @@
                                                 <label><?php echo $this->lang->line('phone') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control" id="first_name">
+                                                <input type="text"  class="form-control" maxlength="1" id="phone" name="phone">
                                             </div>
                                         </div>
                                     </div>
@@ -583,8 +624,8 @@
                                       
                                   </div>
                                   <div class="col col-lg-6">
-                                      <input type="submit" name="import" class="btn btn-default " value="<?php echo $this->lang->line('import'); ?>">
-                                      <a href="javascript:posnic_customers_lists" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
+                                      <a href="javascript:posnic_mapping_import()" class="btn btn-default"><i class="icon icon-upload"></i> <?php echo $this->lang->line('import') ?></a>
+                                      <a href="javascript:posnic_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')."".$this->lang->line('upload') ?></a>
                                        
                                   </div>
                               </div>

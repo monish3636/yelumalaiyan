@@ -30,6 +30,7 @@ class Customer extends CI_Model{
     }
     function get_fields(){
         return $this->db->list_fields('customers');
+        
     }
 }
 ?>
