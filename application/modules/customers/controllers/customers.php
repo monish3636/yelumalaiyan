@@ -372,11 +372,11 @@ class Customers extends MX_Controller
                         $arr_data[$row][$column] = $data_value;
                     }           
                 }
+                $fail=0;
             for($i=2;$i<count($arr_data)+2;$i++){
-                $non_post=array('fist_name' =>$arr_data[$i][$first_name],
+                $non_post=array('first_name' =>$arr_data[$i][$first_name],
                             'last_name' =>$arr_data[$i][$first_name],
-                            'address1' =>$arr_data[$i][$address1],
-                            'address2' =>$arr_data[$i][$address2],
+                            'address' =>$arr_data[$i][$address1],
                             'birthday' =>$arr_data[$i][$birthday],
                             'Marragedate' =>$arr_data[$i][$Marragedate],
                             'city' =>$arr_data[$i][$city],
@@ -391,19 +391,13 @@ class Customers extends MX_Controller
                 $this->load->library('form_validation');
                 $this->form_validation->set_rules("first_name",$this->lang->line('first_name'),"required"); 
                 $this->form_validation->set_rules("last_name",$this->lang->line('last_name'),"required"); 
-                $this->form_validation->set_rules("category",$this->lang->line('category'),"required"); 
                 $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
-                $this->form_validation->set_rules("payment",$this->lang->line('payment'),"required"); 
                 $this->form_validation->set_rules("city",$this->lang->line('city'),"required"); 
                 $this->form_validation->set_rules("state",$this->lang->line('state'),"required"); 
                 $this->form_validation->set_rules("zip",$this->lang->line('zip'),"required"); 
                 $this->form_validation->set_rules("country",$this->lang->line('country'),"required"); 
-                $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
                 $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'max_length[12]|regex_match[/^[0-9]+$/]|xss_clean');
-                $this->form_validation->set_rules('credit_days', $this->lang->line('credit_days'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
-                $this->form_validation->set_rules('credit_limit', $this->lang->line('credit_limit'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
-                $this->form_validation->set_rules('balance', $this->lang->line('balance'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
-                $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');
+               $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');
                 if ( $this->form_validation->run() !== false ) {
                     $values=array(
                         'first_name'=>$this->input->post('first_name'),
@@ -414,7 +408,6 @@ class Customers extends MX_Controller
                         'state'=>$this->input->post('state'),
                         'country'=>$this->input->post('country'),
                         'zip'=>$this->input->post('zip'),
-                        'comments'=>$this->input->post('comments'),
                         'website'=>$this->input->post('website'),
                         'address'=>$this->input->post('address'),
                         'company_name'=>$this->input->post('company'),                                   
@@ -428,9 +421,14 @@ class Customers extends MX_Controller
                 }else{
                     echo "ALREADY";
                 }
+                }  else {
+                ++$fail;
                 }
                
-            }   
+            }
+            if($fail>0){
+                echo 'FALSE';
+            }
         }
     }
 }

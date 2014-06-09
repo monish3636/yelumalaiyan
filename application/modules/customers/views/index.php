@@ -524,14 +524,7 @@
                                                 <input type="text"  class="form-control" maxlength="1" id="address1" name="address1">
                                             </div>
                                         </div>
-                                        <div class="row" style="padding: 0px 10px">                                                                               
-                                            <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('address2') ?></label>
-                                            </div>
-                                            <div class="col col-lg-6">
-                                                <input type="text"  class="form-control" maxlength="1" id="address2" name="address2">
-                                            </div>
-                                        </div>
+                                     
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
                                                 <label><?php echo $this->lang->line('birthday') ?></label>
