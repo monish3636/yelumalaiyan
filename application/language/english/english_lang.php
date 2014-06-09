@@ -708,5 +708,10 @@ $lang['credit_days']='Credit Days';
     $lang['back_to_list']='back To List';
     $lang['You_Have_NO_Permission_To_Import']='You Have NO Permission To Import';
     $lang['mapping']='Mapping';
+    $lang['upload_file']='Upload File';
+    $lang['back_to']='Back To ';
+    $lang['fields']='Fields';
+    $lang['imported_fields']='Imported Fields';
+    $lang['excel_csv_fields']='Excel / CSV Fields';
    
 ?>

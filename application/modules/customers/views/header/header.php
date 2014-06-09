@@ -3,6 +3,7 @@
     $(document).ready( function () {
         $('#add_customer_details_form').hide();
         $('#edit_customer_form').hide();
+        $('#mapping_section').hide();
         $('#add_customer_form').validate();
         $('#import_section').hide();
         $('#export_section').hide()

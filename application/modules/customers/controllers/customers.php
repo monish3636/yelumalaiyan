@@ -339,6 +339,11 @@ class Customers extends MX_Controller
          }
     
     }
+    function posnic_mapping_import(){
+        if($this->session->userdata['customers_per']['import']==1){
+
+        }
+    }
 }
 
 ?>
