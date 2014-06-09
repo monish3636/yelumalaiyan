@@ -2,10 +2,11 @@
 
 class Customers extends MX_Controller
 {   
-    var $import_data = array();
+    var $my_global_var_1;
     function __construct() {
         parent::__construct();
             $this->load->library('posnic'); 
+            $this->my_global_var_1;
            // $this->load->library('csvimport');
          
     }
@@ -319,18 +320,15 @@ class Customers extends MX_Controller
                     $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();    
                     //header will/should be in row 1 only. of course this can be modified to suit your need.
                     if ($row == 1) {
-                        $header[$row][$column] = $data_value;
+                      
                         $field[$j][]=$column;
                         $field[$j][]=$data_value;
                         $j++;
                        
-                    } else {
-                        $arr_data[$row][$column] = $data_value;
                     }           
                 }
-                $data['header'] = $header;
-                $data['values'] = $arr_data;
-                $this->import_data=$data;                       
+                $this->session->set_userdata(array('import_file'=>$upload_data['file_name']));
+               
                 echo json_encode($field);
 
             }
@@ -340,8 +338,99 @@ class Customers extends MX_Controller
     
     }
     function posnic_mapping_import(){
-        if($this->session->userdata['customers_per']['import']==1){
-
+        if($this->session->userdata['customers_per']['import']==1){           
+            $first_name=  $this->input->post('first_name');
+            $last_name=  $this->input->post('last_name');
+            $address1=  $this->input->post('address1');
+            $address2=  $this->input->post('address2');
+            $birthday=  $this->input->post('birthday');
+            $Marragedate=  $this->input->post('Marragedate');
+            $city=  $this->input->post('city');
+            $state=  $this->input->post('state');
+            $zip=  $this->input->post('zip');
+            $country=  $this->input->post('country');
+            $company=  $this->input->post('company');
+            $website=  $this->input->post('website');
+            $email=  $this->input->post('email');
+            $phone=  $this->input->post('phone');
+            $file =  './uploads/import/'.$this->session->userdata('import_file') ;
+                //load the excel library
+                $this->load->library('excel'); 
+                $objPHPExcel = PHPExcel_IOFactory::load($file); 
+                //get only the Cell Collection
+                $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection(); 
+                //extract to a PHP readable array format
+                foreach ($cell_collection as $cell) {
+                    $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+                    $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+                    $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();    
+                    //header will/should be in row 1 only. of course this can be modified to suit your need.
+                    if ($row == 1) {
+                        $header[$row][$column] = $data_value;
+                        
+                    } else {
+                        $arr_data[$row][$column] = $data_value;
+                    }           
+                }
+            for($i=2;$i<count($arr_data)+2;$i++){
+                $non_post=array('fist_name' =>$arr_data[$i][$first_name],
+                            'last_name' =>$arr_data[$i][$first_name],
+                            'address1' =>$arr_data[$i][$address1],
+                            'address2' =>$arr_data[$i][$address2],
+                            'birthday' =>$arr_data[$i][$birthday],
+                            'Marragedate' =>$arr_data[$i][$Marragedate],
+                            'city' =>$arr_data[$i][$city],
+                            'state' =>$arr_data[$i][$state],
+                            'zip' =>$arr_data[$i][$zip],
+                            'country' =>$arr_data[$i][$country],
+                            'website' =>$arr_data[$i][$website],
+                            'company' =>$arr_data[$i][$company],
+                            'email' =>$arr_data[$i][$email],
+                            'phone' =>$arr_data[$i][$phone]);
+                $_POST=$non_post;
+                $this->load->library('form_validation');
+                $this->form_validation->set_rules("first_name",$this->lang->line('first_name'),"required"); 
+                $this->form_validation->set_rules("last_name",$this->lang->line('last_name'),"required"); 
+                $this->form_validation->set_rules("category",$this->lang->line('category'),"required"); 
+                $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
+                $this->form_validation->set_rules("payment",$this->lang->line('payment'),"required"); 
+                $this->form_validation->set_rules("city",$this->lang->line('city'),"required"); 
+                $this->form_validation->set_rules("state",$this->lang->line('state'),"required"); 
+                $this->form_validation->set_rules("zip",$this->lang->line('zip'),"required"); 
+                $this->form_validation->set_rules("country",$this->lang->line('country'),"required"); 
+                $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
+                $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'max_length[12]|regex_match[/^[0-9]+$/]|xss_clean');
+                $this->form_validation->set_rules('credit_days', $this->lang->line('credit_days'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
+                $this->form_validation->set_rules('credit_limit', $this->lang->line('credit_limit'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
+                $this->form_validation->set_rules('balance', $this->lang->line('balance'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
+                $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');
+                if ( $this->form_validation->run() !== false ) {
+                    $values=array(
+                        'first_name'=>$this->input->post('first_name'),
+                        'last_name'=>  $this->input->post('last_name'),
+                        'email'=>$this->input->post('email'),
+                        'phone'=>$this->input->post('phone'),
+                        'city'=>$this->input->post('city'),
+                        'state'=>$this->input->post('state'),
+                        'country'=>$this->input->post('country'),
+                        'zip'=>$this->input->post('zip'),
+                        'comments'=>$this->input->post('comments'),
+                        'website'=>$this->input->post('website'),
+                        'address'=>$this->input->post('address'),
+                        'company_name'=>$this->input->post('company'),                                   
+                        'bday'=>strtotime($this->input->post('dob')),
+                        'mday'=>strtotime($this->input->post('marragedate')),
+                       );
+                         $where=array('phone'=>$this->input->post('phone'),'email'=>$this->input->post('email'));
+                    if($this->posnic->check_record_unique($where,'customers')){                   
+                            $this->posnic->posnic_add_record($values,'customers');
+                    echo 'TRUE';
+                }else{
+                    echo "ALREADY";
+                }
+                }
+               
+            }   
         }
     }
 }
