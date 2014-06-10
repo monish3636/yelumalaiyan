@@ -373,7 +373,11 @@ class Customers extends MX_Controller
                     }           
                 }
                 $fail=0;
+                $success=0;
+                $already=0;
+                $this->load->library('form_validation');
             for($i=2;$i<count($arr_data)+2;$i++){
+                
                 $non_post=array('first_name' =>$arr_data[$i][$first_name],
                             'last_name' =>$arr_data[$i][$first_name],
                             'address' =>$arr_data[$i][$address1],
@@ -387,8 +391,9 @@ class Customers extends MX_Controller
                             'company' =>$arr_data[$i][$company],
                             'email' =>$arr_data[$i][$email],
                             'phone' =>$arr_data[$i][$phone]);
+                
                 $_POST=$non_post;
-                $this->load->library('form_validation');
+                
                 $this->form_validation->set_rules("first_name",$this->lang->line('first_name'),"required"); 
                 $this->form_validation->set_rules("last_name",$this->lang->line('last_name'),"required"); 
                 $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
@@ -397,7 +402,7 @@ class Customers extends MX_Controller
                 $this->form_validation->set_rules("zip",$this->lang->line('zip'),"required"); 
                 $this->form_validation->set_rules("country",$this->lang->line('country'),"required"); 
                 $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'max_length[12]|regex_match[/^[0-9]+$/]|xss_clean');
-               $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');
+                $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');
                 if ( $this->form_validation->run() !== false ) {
                     $values=array(
                         'first_name'=>$this->input->post('first_name'),
@@ -416,19 +421,23 @@ class Customers extends MX_Controller
                        );
                          $where=array('phone'=>$this->input->post('phone'),'email'=>$this->input->post('email'));
                     if($this->posnic->check_record_unique($where,'customers')){                   
-                            $this->posnic->posnic_add_record($values,'customers');
-                    echo 'TRUE';
+                          //  $this->posnic->posnic_add_record($values,'customers');
+                    ++$success;
                 }else{
-                    echo "ALREADY";
+                   ++$already;
                 }
                 }  else {
+                    echo $arr_data[$i][$email];
+                     echo validation_errors() ;
                 ++$fail;
                 }
                
             }
-            if($fail>0){
-                echo 'FALSE';
-            }
+            $status['success']=$success;
+            $status['fail']=$fail+1;
+            $status['already']=$already+1;
+            $status['no']=$row;
+            echo json_encode($status);
         }
     }
 }
