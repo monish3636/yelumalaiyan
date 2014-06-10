@@ -558,8 +558,8 @@
         $('#items_lists').attr("disabled",'disabled');
     }
   function posnic_import(){
-        $('#edit_customer_form').hide();
-        $('#add_customer_details_form').hide();      
+        $('#edit_item_form').hide();
+        $('#add_item_form').hide();      
         $("#item_list_section").hide();
         $('#import_message_section').hide();
         $('#mapping_section').hide();
@@ -587,8 +587,8 @@
         $('#delete').attr("disabled",'disabled');
     }
     function posnic_export(){
-        $('#edit_customer_form').hide();
-        $('#add_customer_details_form').hide();      
+        $('#edit_item_form').hide();
+        $('#add_item_form').hide();      
         $("#item_list_section").hide();
         $('#import_message_section').hide();
         $('#mapping_section').hide();
@@ -689,7 +689,7 @@
                          <div class="row">
                           <div class="panel panel-default">
                                <div class="panel-heading">
-                                     <h4 class="panel-title"><?php echo $this->lang->line('import')." ".$this->lang->line('customer') ?></h4>                                                                               
+                                     <h4 class="panel-title"><?php echo $this->lang->line('import')." ".$this->lang->line('items') ?></h4>                                                                               
                                </div>
                               <div class="row" style="padding: 20px 0px">
                                   <div class="col col-lg-1">
@@ -775,7 +775,7 @@
                     </div>
                     <div  class="col-lg-6" style="padding:0px 25px;" >
                         <div class="row">
-                            <a href="javascript:posnic_items_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('customer')." ".$this->lang->line('list') ?></a>
+                            <a href="javascript:posnic_items_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('items')." ".$this->lang->line('list') ?></a>
                             <a href="javascript:posnic_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('upload') ?></a>
                             <a href="javascript:mapping_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('mapping') ?></a>
                          </div>
@@ -786,7 +786,7 @@
     <?php echo form_close(); ?>
 </section>
 <section id="export_section" class="container clearfix main_section">
-     <?php   $form =array('id'=>'export_customer',
+     <?php   $form =array('id'=>'export_items',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
        echo form_open_multipart('items/export/',$form);?>
@@ -826,7 +826,7 @@
                     </div>
                     <div  class="col-lg-4" style="padding:20px 25px;" >
                         <div class="row">
-                            <a href="javascript:posnic_items_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('customer')." ".$this->lang->line('list') ?></a>                           
+                            <a href="javascript:posnic_items_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('items')." ".$this->lang->line('list') ?></a>                           
                          </div>
                     </div>
                 </div>
@@ -841,7 +841,7 @@
 </section>
     
     
-<section id="mapping_section" class="container clearfix main_section">
+<section id="mapping_section1" class="container clearfix main_section">
      <?php   $form =array('id'=>'mapping_form',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -861,7 +861,7 @@
                                </div>
                               <div class="row" style="padding: 0px 20px" >
                                   <div class="col col-lg-6 ">
-                                        <h5><?php  echo $this->lang->line('customer')." ".$this->lang->line('fields') ?></h5>
+                                        <h5><?php  echo $this->lang->line('items')." ".$this->lang->line('fields') ?></h5>
                                   </div>
                                   <div class="col col-lg-6 ">
                                       <h5>  <?php  echo $this->lang->line('excel_csv_fields') ?></h5>
@@ -871,107 +871,107 @@
                                     <div class="col col-lg-6 data_class" id="data_fields" >
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('first_name') ?></label>
+                                                <label><?php echo $this->lang->line('sku') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text" class="form-control required" maxlength="1" id="first_name" name="first_name">
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding: 0px 10px">                                                                               
-                                            <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('last_name') ?></label>
-                                            </div>
-                                            <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="last_name" name="last_name">
+                                                <input type="text" class="form-control required" maxlength="1" id="sku" name="sku">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('address1') ?></label>
+                                                <label><?php echo $this->lang->line('barcode') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="address1" name="address1">
+                                                <input type="text"  class="form-control required" maxlength="1" id="barcode" name="barcode">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('name') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="name" name="name">
                                             </div>
                                         </div>
                                      
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('birthday') ?></label>
+                                                <label><?php echo $this->lang->line('item_department') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="birthday" name="birthday">
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding: 0px 10px">                                                                               
-                                            <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('Marragedate') ?></label>
-                                            </div>
-                                            <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="Marragedate" name="Marragedate">
+                                                <input type="text"  class="form-control required" maxlength="1" id="department" name="department">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('city') ?></label>
+                                                <label><?php echo $this->lang->line('brand') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="city" name="city">
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding: 0px 10px">                                                                               
-                                            <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('state') ?></label>
-                                            </div>
-                                            <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="state" name="state">
+                                                <input type="text"  class="form-control required" maxlength="1" id="brand" name="brand">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('zip') ?></label>
+                                                <label><?php echo $this->lang->line('category') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="zip" name="zip">
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding: 0px 10px">                                                                               
-                                            <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('country') ?></label>
-                                            </div>
-                                            <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="country" name="country">
+                                                <input type="text"  class="form-control required" maxlength="1" id="category" name="category">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('company') ?></label>
+                                                <label><?php echo $this->lang->line('tax_Inclusive') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="company" name="company">
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding: 0px 10px">                                                                               
-                                            <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('website') ?></label>
-                                            </div>
-                                            <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="website" name="website">
+                                                <input type="text"  class="form-control required" maxlength="1" id="tax_Inclusive" name="tax_Inclusive">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('email') ?></label>
+                                                <label><?php echo $this->lang->line('tax_type') ?></label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="email" name="email">
+                                                <input type="text"  class="form-control required" maxlength="1" id="tax_type" name="tax_type">
                                             </div>
                                         </div>
                                         <div class="row" style="padding: 0px 10px">                                                                               
                                             <div class="col col-lg-6">
-                                                <label><?php echo $this->lang->line('phone') ?></label>
+                                                <label><?php echo $this->lang->line('tax') ?> %</label>
                                             </div>
                                             <div class="col col-lg-6">
-                                                <input type="text"  class="form-control required" maxlength="1" id="phone" name="phone">
+                                                <input type="text"  class="form-control required" maxlength="1" id="tax" name="tax">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('cost') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="company" name="cost">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('mrp') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="mrp" name="mrp">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('price') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="price" name="price">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('location') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="location" name="location">
                                             </div>
                                         </div>
                                     </div>
@@ -1140,7 +1140,7 @@
                                                         <div class="panel-heading">\n\
                                                         <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
                                                         </div>\n\
-                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('items_details_is_alredy_added')?></div>\n\
                                                         </div>\n\
                                                         </div>');                    
                             
@@ -1156,7 +1156,7 @@
                                                         <div class="panel-heading">\n\
                                                         <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
                                                         </div>\n\
-                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('items_details_is_alredy_added')?></div>\n\
                                                         </div>\n\
                                                         </div>');                           
                         
@@ -1172,7 +1172,7 @@
                                                         <div class="panel-heading">\n\
                                                         <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
                                                         </div>\n\
-                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('items_details_not_in_correct_format')?></div>\n\
                                                         </div>\n\
                                                         </div>');
                             
@@ -1189,14 +1189,14 @@
                                                         <div class="panel-heading">\n\
                                                         <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
                                                         </div>\n\
-                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('items_details_is_alredy_added')?></div>\n\
                                                         </div>\n\
                                                         </div>');
                             $('#import_message_box1').append('<div class="panel panel-danger">\n\
                                                         <div class="panel-heading">\n\
                                                         <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
                                                         </div>\n\
-                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('items_details_not_in_correct_format')?></div>\n\
                                                         </div>\n\
                                                         </div>');
     
@@ -1206,14 +1206,14 @@
                                                         <div class="panel-heading">\n\
                                                         <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
                                                         </div>\n\
-                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('items_details_is_alredy_added')?></div>\n\
                                                         </div>\n\
                                                         </div>');
                             $('#import_message_box1').append('<div class="panel panel-danger">\n\
                                                         <div class="panel-heading">\n\
                                                         <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
                                                         </div>\n\
-                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('items_details_not_in_correct_format')?></div>\n\
                                                         </div>\n\
                                                         </div>');
                         }
@@ -1222,7 +1222,7 @@
                 });
             }
         <?php }else{ ?>
-            $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('customer');?>', { type: "error" });                       
+            $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('items');?>', { type: "error" });                       
         <?php }?>
     } 
     function new_no_of_unit(e){    
