@@ -10,6 +10,82 @@ class Items extends MX_Controller{
       $this->get_items();
        
     }
+    function export($type){
+            $this->load->library('Excel'); 
+              // Create new PHPExcel object
+            $objPHPExcel = new PHPExcel();
+
+            // Set document properties
+            $objPHPExcel->getProperties()->setCreator("posnic.com")
+                 ->setLastModifiedBy( $this->session->userdata('first_name'))
+                 ->setTitle("Item Deatils")
+                 ->setSubject("Item Deatils")
+                 ->setDescription("Item Deatils")
+                 ->setKeywords("Item Deatils")
+                 ->setCategory("Item");
+
+         
+         $data=  $this->posnic->posnic_module('customers');
+    // Add some data
+         $j=1;
+              $objPHPExcel->setActiveSheetIndex(0)
+                               ->setCellValue("A$j",  $this->lang->line('first_name') )
+                               ->setCellValue("B$j", $this->lang->line('last_name'))
+                               ->setCellValue("C$j", $this->lang->line('birthday'))
+                               ->setCellValue("D$j", $this->lang->line('marragedate'))
+                               ->setCellValue("E$j",$this->lang->line('address'))
+                               ->setCellValue("F$j",$this->lang->line('city'))
+                               ->setCellValue("G$j", $this->lang->line('state'))
+                               ->setCellValue("H$j", $this->lang->line('country'))
+                               ->setCellValue("I$j", $this->lang->line('zip'))
+                               ->setCellValue("J$j", $this->lang->line('company'))
+                               ->setCellValue("K$j", $this->lang->line('website'))
+                               ->setCellValue("L$j",$this->lang->line('email'))
+                               ->setCellValue("M$j", $this->lang->line('phone'));
+         
+            for($i=0;$i<count($data);$i++){
+                 
+                $j++;
+
+                    $objPHPExcel->setActiveSheetIndex(0)
+                               ->setCellValue("A$j", $data[$i]['first_name'])
+                               ->setCellValue("B$j", $data[$i]['last_name'])
+                               ->setCellValue("C$j", date('d-m-Y',$data[$i]['dob']))
+                               ->setCellValue("D$j", date('d-m-Y',$data[$i]['marragedate']))
+                               ->setCellValue("E$j", $data[$i]['address'])
+                               ->setCellValue("F$j", $data[$i]['city'])
+                               ->setCellValue("G$j", $data[$i]['state'])
+                               ->setCellValue("H$j", $data[$i]['country'])
+                               ->setCellValue("I$j", $data[$i]['zip'])
+                               ->setCellValue("J$j", $data[$i]['company'])
+                               ->setCellValue("K$j", $data[$i]['website'])
+                               ->setCellValue("L$j", $data[$i]['email'])
+                               ->setCellValue("M$j", $data[$i]['phone']);
+            }
+
+
+            // Rename worksheet (worksheet, not filename)
+            $objPHPExcel->getActiveSheet()->setTitle('createdUsingPHPExcel');
+
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a client’s web browser (Excel2007)
+            //clean the output buffer
+            ob_end_clean();
+
+            //this is the header given from PHPExcel examples. but the output seems somewhat corrupted in some cases.
+            //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            //so, we use this header instead.
+            header('Content-type: application/vnd.ms-excel');
+            header("Content-Disposition: attachment;filename=customer_details.$type");
+            header('Cache-Control: max-age=0');
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            $objWriter->save('php://output');
+
+    }
     function get_items(){                  
         $this->load->view('template/app/header'); 
         $this->load->view('header/header');         
@@ -120,7 +196,7 @@ class Items extends MX_Controller{
               $this->load->model('core_model');
               $this->core_model->delete_item_setting($guid,$this->session->userdata['branch_id']);
               echo 'TRUE';
-               // redirect('items');
+               
             }
     }
     }
@@ -143,9 +219,9 @@ class Items extends MX_Controller{
                             $this->form_validation->set_rules('brand', $this->lang->line('brand'),'required');
                             $this->form_validation->set_rules('category', $this->lang->line('category'),'required');
                             $this->form_validation->set_rules('item_department', $this->lang->line('item_department'),'required'); 
-                               $this->form_validation->set_rules('userfile', 'userfile', 'callback_add_items_image');
-                          if ( $this->form_validation->run() !== false ) {
-                                   $data=array('code'=>$this->input->post('sku'),
+                            $this->form_validation->set_rules('userfile', 'userfile', 'callback_add_items_image');
+                            if ( $this->form_validation->run() !== false ) {
+                                    $data=array('code'=>$this->input->post('sku'),
                                     'barcode'=>$this->input->post('barcode'),
                                     'name'=>$this->input->post('name'),
                                     'description'=>$this->input->post('description'),
@@ -204,11 +280,10 @@ class Items extends MX_Controller{
             echo 'FALSE';
         }
     }
-    function update_items(){
-       
+    function update_items(){       
         if($this->session->userdata['items_per']['edit']==1){
              $guid=$this->input->post('guid');
-                          $this->form_validation->set_rules("name",$this->lang->line('name'),"required");
+                            $this->form_validation->set_rules("name",$this->lang->line('name'),"required");
                             $this->form_validation->set_rules("sku",$this->lang->line('sku'),'required');                           
                             $this->form_validation->set_rules('cost', $this->lang->line('cost'),'required|numeric|xss_clean'); 
                             $this->form_validation->set_rules('selling_price', $this->lang->line('selling_price'),'required|numeric|xss_clean'); 
@@ -222,8 +297,8 @@ class Items extends MX_Controller{
                             $this->form_validation->set_rules('item_department', $this->lang->line('item_department'),'required');  
                             $this->form_validation->set_rules('userfile', 'userfile', 'callback_add_items_image');
                           if ( $this->form_validation->run() !== false ) {
-                              $this->add_items_image();
-                               if($this->user_image==""){
+                                $this->add_items_image();
+                                if($this->user_image==""){
                                     $data=array('code'=>$this->input->post('sku'),
                                     'barcode'=>$this->input->post('barcode'),
                                     'name'=>$this->input->post('name'),
@@ -364,16 +439,13 @@ class Items extends MX_Controller{
         $search= $this->input->post('term');
         $like=array('department_name'=>$search);
         $data= $this->posnic->posnic_select2('items_department',$like);      
-        echo json_encode($data);
-        
+        echo json_encode($data);        
     }
     function get_category(){
         $search= $this->input->post('term');
         $like=array('category_name'=>$search);
         $data= $this->posnic->posnic_select2('items_category',$like);      
-        echo json_encode($data);
-        
-        
+        echo json_encode($data);            
     }
     function get_brand(){
         $search= $this->input->post('term');
@@ -404,33 +476,179 @@ class Items extends MX_Controller{
         echo json_encode($data);
         
     }
-      function add_items_image(){
-        
-    $config['upload_path'] = './uploads/items';
-    $config['allowed_types'] = 'gif|jpg|png';
-    $config['max_size']	= '202100';
-    $config['max_width']  = '11024';
-    $config['max_height']  = '3768';
-    $randomString = md5(time());
-    $config['file_name']=$randomString;
-  //  $config['overwrite'] = TRUE;
-    $this->load->library('upload', $config);
+    function add_items_image(){
+        $config['upload_path'] = './uploads/items';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size']	= '202100';
+        $config['max_width']  = '11024';
+        $config['max_height']  = '3768';
+        $randomString = md5(time());
+        $config['file_name']=$randomString;
+        $this->load->library('upload', $config);
 
-    if ( ! $this->upload->do_upload())
-    {
-            return false;
+        if ( ! $this->upload->do_upload())
+        {
+                return false;
+        }
+        else
+        {       
+                $upload_data = $this->upload->data();
+                $this->user_image =$upload_data['file_name'];
+                return true; 
+        }
     }
-    else
-    {       
-            $upload_data = $this->upload->data();
-            $this->user_image =$upload_data['file_name'];
-            return true; 
+    function import(){
+        if($this->session->userdata['customers_per']['import']==1){
+            $config['upload_path'] = './uploads/import';
+            $config['allowed_types'] = 'csv|xlsx|xls';
+            $config['max_size']	= '9999999';
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload())
+            {
+                $error = array('error' => $this->upload->display_errors());
+                print_r($error['error']);
+                
+            }
+            else
+            {
+
+                $upload_data = $this->upload->data();
+                $upload_data['file_name'];
+                $file = './uploads/import/'.$upload_data['file_name']; 
+                //load the excel library
+                $this->load->library('excel'); 
+                $objPHPExcel = PHPExcel_IOFactory::load($file); 
+                //get only the Cell Collection
+                $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection(); 
+                //extract to a PHP readable array format
+                $j=0;
+                foreach ($cell_collection as $cell) {
+                    $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+                    $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+                    $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();    
+                    //header will/should be in row 1 only. of course this can be modified to suit your need.
+                    if ($row == 1) {
+                      
+                        $field[$j][]=$column;
+                        $field[$j][]=$data_value;
+                        $j++;
+                       
+                    }           
+                }
+                $this->session->set_userdata(array('import_file'=>$upload_data['file_name']));
+               
+                echo json_encode($field);
+
+            }
+         }else{
+             echo 'Noop';
+         }
+    
     }
- }
-    function language($lang){
-       $lang= $this->lang->load($lang);
-       return $lang;
-    }
+    function posnic_mapping_import(){
+        if($this->session->userdata['customers_per']['import']==1){           
+            $first_name=  $this->input->post('first_name');
+            $last_name=  $this->input->post('last_name');
+            $address1=  $this->input->post('address1');
+            $address2=  $this->input->post('address2');
+            $birthday=  $this->input->post('birthday');
+            $Marragedate=  $this->input->post('Marragedate');
+            $city=  $this->input->post('city');
+            $state=  $this->input->post('state');
+            $zip=  $this->input->post('zip');
+            $country=  $this->input->post('country');
+            $company=  $this->input->post('company');
+            $website=  $this->input->post('website');
+            $email=  $this->input->post('email');
+            $phone=  $this->input->post('phone');
+            $file =  './uploads/import/'.$this->session->userdata('import_file') ;
+                //load the excel library
+                $this->load->library('excel'); 
+                $objPHPExcel = PHPExcel_IOFactory::load($file); 
+                //get only the Cell Collection
+                $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection(); 
+                //extract to a PHP readable array format
+                foreach ($cell_collection as $cell) {
+                    $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+                    $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+                    $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();    
+                    //header will/should be in row 1 only. of course this can be modified to suit your need.
+                    if ($row == 1) {
+                        $header[$row][$column] = $data_value;
+                        
+                    } else {
+                        $arr_data[$row][$column] = $data_value;
+                    }           
+                }
+                $fail=0;
+                $success=0;
+                $already=0;
+                $this->load->library('form_validation');
+            for($i=2;$i<count($arr_data)+2;$i++){
+                
+                $non_post=array('first_name' =>$arr_data[$i][$first_name],
+                            'last_name' =>$arr_data[$i][$first_name],
+                            'address' =>$arr_data[$i][$address1],
+                            'birthday' =>$arr_data[$i][$birthday],
+                            'Marragedate' =>$arr_data[$i][$Marragedate],
+                            'city' =>$arr_data[$i][$city],
+                            'state' =>$arr_data[$i][$state],
+                            'zip' =>$arr_data[$i][$zip],
+                            'country' =>$arr_data[$i][$country],
+                            'website' =>$arr_data[$i][$website],
+                            'company' =>$arr_data[$i][$company],
+                            'email' =>$arr_data[$i][$email],
+                            'phone' =>$arr_data[$i][$phone]);
+                
+                $_POST=$non_post;
+                
+                $this->form_validation->set_rules("first_name",$this->lang->line('first_name'),"required"); 
+                $this->form_validation->set_rules("last_name",$this->lang->line('last_name'),"required"); 
+                $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
+                $this->form_validation->set_rules("city",$this->lang->line('city'),"required"); 
+                $this->form_validation->set_rules("state",$this->lang->line('state'),"required"); 
+                $this->form_validation->set_rules("zip",$this->lang->line('zip'),"required"); 
+                $this->form_validation->set_rules("country",$this->lang->line('country'),"required"); 
+                $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'max_length[12]|regex_match[/^[0-9]+$/]|xss_clean');
+                $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');
+                if ( $this->form_validation->run() !== false ) {
+                    $values=array(
+                        'first_name'=>$this->input->post('first_name'),
+                        'last_name'=>  $this->input->post('last_name'),
+                        'email'=>$this->input->post('email'),
+                        'phone'=>$this->input->post('phone'),
+                        'city'=>$this->input->post('city'),
+                        'state'=>$this->input->post('state'),
+                        'country'=>$this->input->post('country'),
+                        'zip'=>$this->input->post('zip'),
+                        'website'=>$this->input->post('website'),
+                        'address'=>$this->input->post('address'),
+                        'company_name'=>$this->input->post('company'),                                   
+                        'bday'=>strtotime($this->input->post('dob')),
+                        'mday'=>strtotime($this->input->post('marragedate')),
+                       );
+                         $where=array('phone'=>$this->input->post('phone'),'email'=>$this->input->post('email'));
+                    if($this->posnic->check_record_unique($where,'customers')){                   
+                            $this->posnic->posnic_add_record($values,'customers');
+                    ++$success;
+                }else{
+                   ++$already;
+                }
+                }  else {
+                    echo $arr_data[$i][$email];
+                     echo validation_errors() ;
+                ++$fail;
+                }
+               
+            }
+            $status['success']=$success;
+            $status['fail']=$fail;
+            $status['already']=$already;
+            $status['no']=$row-1;
+            echo json_encode($status);
+        }
+    }    
     
 }
 ?>

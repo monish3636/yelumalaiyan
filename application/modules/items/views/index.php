@@ -31,552 +31,595 @@
         return false
           }
     }
-     $(document).ready( function () {
-        
-         $('#parsley_reg #search_department').change(function() {
-                   var guid = $('#parsley_reg #search_department').select2('data').id;
-                $('#parsley_reg #item_department').val(guid);
-          });
-          $('#parsley_reg #search_department').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('item_department') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_department',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+    $(document).ready( function () {
+        $('#parsley_reg #search_department').change(function() {
+            var guid = $('#parsley_reg #search_department').select2('data').id;
+            $('#parsley_reg #item_department').val(guid);
+       });
+        $('#parsley_reg #search_department').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('item_department') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_department',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.department_name
+                            id: item.guid,
+                            text: item.department_name
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
-        
-        
-         $('#parsley_reg #search_category').change(function() {
-                   var guid = $('#parsley_reg #search_category').select2('data').id;
-                $('#parsley_reg #category').val(guid);
-          });
-          $('#parsley_reg #search_category').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_category',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
-                        results.push({
-                          id: item.guid,
-                          text: item.category_name
-                        });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
-                }
-            });
-        
-        
-         $('#parsley_reg #search_brand').change(function() {
-                   var guid = $('#parsley_reg #search_brand').select2('data').id;
-                $('#parsley_reg #brand').val(guid);
-          });
-          $('#parsley_reg #search_brand').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('brand') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_brand',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
-                        results.push({
-                          id: item.guid,
-                          text: item.name
-                        });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
-                }
-            });
-        
-        
-         $('#parsley_reg #search_taxes_area').change(function() {
-                   var guid = $('#parsley_reg #search_taxes_area').select2('data').id;
-                $('#parsley_reg #taxes_area').val(guid);
-          });
-          $('#parsley_reg #search_taxes_area').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes_area') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_taxes_area',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
-                        results.push({
-                          id: item.guid,
-                          text: item.name
-                        });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
-                }
-            });
-        
-        
-         $('#parsley_reg #search_taxes').change(function() {
-                   var guid = $('#parsley_reg #search_taxes').select2('data').id;
-                $('#parsley_reg #taxes').val(guid);
-          });
-           function format_tax(sup) {
-            if (!sup.id) return sup.text; // optgroup
-          //  return "<img class='flag' src='images/flags/" + state.id.toLowerCase() + ".png'/>" + state.text;
-          return  sup.text+" ( "+sup.value+" )";
             }
-          $('#parsley_reg #search_taxes').select2({
-                formatResult: format_tax,
-                formatSelection: format_tax,
-                escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_taxes',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        });
+        $('#parsley_reg #search_category').change(function() {
+            var guid = $('#parsley_reg #search_category').select2('data').id;
+            $('#parsley_reg #category').val(guid);
+        });
+        $('#parsley_reg #search_category').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_category',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.name,
-                          value: item.value
+                            id: item.guid,
+                            text: item.category_name
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                       results: results
+                    };
                 }
-            });
+           }
+        });
         
         
-         $('#parsley_reg #search_supplier').change(function() {
-                   var guid = $('#parsley_reg #search_supplier').select2('data').id;
-                $('#parsley_reg #supplier').val(guid);
-          });
-          function format(sup) {
-            if (!sup.id) return sup.text; // optgroup
-          //  return "<img class='flag' src='images/flags/" + state.id.toLowerCase() + ".png'/>" + state.text;
-          return  sup.text+" "+sup.first+" "+sup.phone+" "+sup.email;
+        $('#parsley_reg #search_brand').change(function() {
+            var guid = $('#parsley_reg #search_brand').select2('data').id;
+            $('#parsley_reg #brand').val(guid);
+        });
+        $('#parsley_reg #search_brand').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('brand') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_brand',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.name
+                        });
+                    });
+                    return {
+                       results: results
+                    };
+                }
             }
-          $('#parsley_reg #search_supplier').select2({
-               formatResult: format,
-               formatSelection: format,
-               escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('supplier') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_supplier',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        });
+        
+        
+        $('#parsley_reg #search_taxes_area').change(function() {
+            var guid = $('#parsley_reg #search_taxes_area').select2('data').id;
+            $('#parsley_reg #taxes_area').val(guid);
+        });
+        $('#parsley_reg #search_taxes_area').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes_area') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_taxes_area',
+                data: function(term, page) {
+                    return {
+                        types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.company_name,
-                          first: item.first_name,
-                          phone: item.phone,
-                          email: item.email
+                            id: item.guid,
+                            text: item.name
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                       
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
+            }
+        });
+        
+        
+        $('#parsley_reg #search_taxes').change(function() {
+            var guid = $('#parsley_reg #search_taxes').select2('data').id;
+            $('#parsley_reg #taxes').val(guid);
+        });
+        function format_tax(sup) {
+            if (!sup.id) return sup.text; 
+                return  sup.text+" ( "+sup.value+" )";
+        }
+        $('#parsley_reg #search_taxes').select2({
+            formatResult: format_tax,
+            formatSelection: format_tax,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_taxes',
+                data: function(term, page) {
+                    return {
+                        types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                        return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.name,
+                            value: item.value
+                        });
+                    });
+                    return {
+                        results: results
+                    };
+                }
+            }
+        });
+        
+        
+        $('#parsley_reg #search_supplier').change(function() {
+            var guid = $('#parsley_reg #search_supplier').select2('data').id;
+            $('#parsley_reg #supplier').val(guid);
+        });
+        function format(sup) {
+            if (!sup.id) return sup.text; 
+                return  sup.text+" "+sup.first+" "+sup.phone+" "+sup.email;
+        }
+        $('#parsley_reg #search_supplier').select2({
+            formatResult: format,
+            formatSelection: format,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('supplier') ?>",
+            ajax: {
+                    url: '<?php echo base_url() ?>index.php/items/get_supplier',
+                    data: function(term, page) {
+                        return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.company_name,
+                            first: item.first_name,
+                            phone: item.phone,
+                            email: item.email
+                        });
+                    });
+                    return {
+                        results: results
+                    };
+                }
+            }
                        
-            });
+        });
        
         
-         $('#add_item #search_department').change(function() {
-                   var guid = $('#add_item #search_department').select2('data').id;
-                $('#add_item #item_department').val(guid);
-          });
-          $('#add_item #search_department').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('item_department') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_department',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        $('#add_item #search_department').change(function() {
+            var guid = $('#add_item #search_department').select2('data').id;
+            $('#add_item #item_department').val(guid);
+         });
+        $('#add_item #search_department').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('item_department') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_department',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.department_name
+                            id: item.guid,
+                            text: item.department_name
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
+            }
+        });
         
         
-         $('#add_item #search_category').change(function() {
-                   var guid = $('#add_item #search_category').select2('data').id;
-                $('#add_item #category').val(guid);
-          });
-          $('#add_item #search_category').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_category',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
+        $('#add_item #search_category').change(function() {
+            var guid = $('#add_item #search_category').select2('data').id;
+            $('#add_item #category').val(guid);
+         });
+        $('#add_item #search_category').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_category',
+                data: function(term, page) {
+                        return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
                         return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.category_name
+                            id: item.guid,
+                            text: item.category_name
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
+            }
+        });
         
         
-         $('#add_item #search_brand').change(function() {
-                   var guid = $('#add_item #search_brand').select2('data').id;
-                $('#add_item #brand').val(guid);
-          });
-          $('#add_item #search_brand').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('brand') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_brand',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        $('#add_item #search_brand').change(function() {
+            var guid = $('#add_item #search_brand').select2('data').id;
+            $('#add_item #brand').val(guid);
+        });
+        $('#add_item #search_brand').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('brand') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_brand',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.name
+                            id: item.guid,
+                            text: item.name
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
+            }
+        });
         
         
          $('#add_item #search_taxes_area').change(function() {
-                   var guid = $('#add_item #search_taxes_area').select2('data').id;
+                var guid = $('#add_item #search_taxes_area').select2('data').id;
                 $('#add_item #taxes_area').val(guid);
           });
-          $('#add_item #search_taxes_area').select2({
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes_area') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_taxes_area',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        $('#add_item #search_taxes_area').select2({
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes_area') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_taxes_area',
+                data: function(term, page) {
+                        return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.name
+                            id: item.guid,
+                            text: item.name
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
-        
-        
-         $('#add_item #search_taxes').change(function() {
-                   var guid = $('#add_item #search_taxes').select2('data').id;
-                $('#add_item #taxes').val(guid);
-          });
-           function format_tax(sup) {
-            if (!sup.id) return sup.text; // optgroup
-          //  return "<img class='flag' src='images/flags/" + state.id.toLowerCase() + ".png'/>" + state.text;
-          return  sup.text+" ( "+sup.value+" )";
             }
-          $('#add_item #search_taxes').select2({
-                formatResult: format_tax,
-                formatSelection: format_tax,
-                escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_taxes',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        });
+        
+        
+        $('#add_item #search_taxes').change(function() {
+            var guid = $('#add_item #search_taxes').select2('data').id;
+            $('#add_item #taxes').val(guid);
+        });
+        function format_tax(sup) {
+            if (!sup.id) return sup.text; 
+                return  sup.text+" ( "+sup.value+" )";
+        }
+        $('#add_item #search_taxes').select2({
+            formatResult: format_tax,
+            formatSelection: format_tax,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_taxes',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.name,
-                          value: item.value
+                            id: item.guid,
+                            text: item.name,
+                            value: item.value
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
-        
-        
-         $('#add_item #search_supplier').change(function() {
-                   var guid = $('#add_item #search_supplier').select2('data').id;
-                $('#add_item #supplier').val(guid);
-          });
-          function format(sup) {
-            if (!sup.id) return sup.text; // optgroup
-          //  return "<img class='flag' src='images/flags/" + state.id.toLowerCase() + ".png'/>" + state.text;
-          return  sup.text+" "+sup.first+" "+sup.phone+" "+sup.email;
             }
-          $('#add_item #search_supplier').select2({
-               formatResult: format,
-               formatSelection: format,
-               escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('supplier') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/items/get_supplier',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        });
+        
+        
+        $('#add_item #search_supplier').change(function() {
+            var guid = $('#add_item #search_supplier').select2('data').id;
+            $('#add_item #supplier').val(guid);
+         });
+        function format(sup) {
+            if (!sup.id) return sup.text; 
+            return  sup.text+" "+sup.first+" "+sup.phone+" "+sup.email;
+        }
+        $('#add_item #search_supplier').select2({
+            formatResult: format,
+            formatSelection: format,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('supplier') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_supplier',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.company_name,
-                          first: item.first_name,
-                          phone: item.phone,
-                          email: item.email
+                            id: item.guid,
+                            text: item.company_name,
+                            first: item.first_name,
+                            phone: item.phone,
+                            email: item.email
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                       
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-                       
-            });
+            }                       
+        });
        
      
      });
-function posnic_add_new(){
-    <?php if($this->session->userdata['items_per']['add']==1){ ?>
-      $("#user_list").hide();
-      $('#add_item_form').show('slow');
-      $('#delete').attr("disabled", "disabled");
-      $('#posnic_add_items').attr("disabled", "disabled");
-      $('#active').attr("disabled", "disabled");
-      $('#deactive').attr("disabled", "disabled");
-      $('#items_lists').removeAttr("disabled");
-      change_orm_to_unit();
-      <?php }else{ ?>
-                  bootbox.alert("<?php echo $this->lang->line('You Have NO Permission To Add User')?>");  
-                    <?php }?>
-}
-function posnic_items_lists(){
-      $('#edit_item_form').hide('hide');
-      $('#add_items_image').hide('hide');
-      $('#add_item_form').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#active').removeAttr("disabled");
-      $('#deactive').removeAttr("disabled");
-      $('#posnic_add_items').removeAttr("disabled");
-      $('#items_lists').attr("disabled",'disabled');
-}
-function clear_add_items(){
-      $("#posnic_user_2").trigger('reset');
-}
-function reload_update_user(){
-    var id=$('#guid').val();
-    edit_function(id);
-}
-function change_orm_to_unit(){
-    $('#add_item_form #hidden_no_unit').hide();
+    function posnic_add_new(){
+        <?php if($this->session->userdata['items_per']['add']==1){ ?>
+            $("#item_list_section").hide();
+            $('#add_item_form').show('slow');
+            $('#delete').attr("disabled", "disabled");
+            $('#posnic_add_items').attr("disabled", "disabled");
+            $('#active').attr("disabled", "disabled");
+            $('#deactive').attr("disabled", "disabled");
+            $('#items_lists').removeAttr("disabled");
+            change_orm_to_unit();
+        <?php }else{ ?>
+            bootbox.alert("<?php echo $this->lang->line('You Have NO Permission To Add User')?>");  
+        <?php }?>
     }
-function change_orm_to_case(){
-    $('#add_item_form #hidden_no_unit').show();
+    function posnic_items_lists(){
+        $('#import_section').hide();
+        $('#export_section').hide();
+        $('#edit_item_form').hide('hide');
+        $('#add_items_image').hide('hide');
+        $('#add_item_form').hide('hide');      
+        $("#item_list_section").show('slow');
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#export').removeAttr("disabled");
+        $('#import').removeAttr("disabled");
+        $('#delete').removeAttr("disabled");
+        $('#active').removeAttr("disabled");
+        $('#deactive').removeAttr("disabled");
+        $('#posnic_add_items').removeAttr("disabled");
+        $('#items_lists').attr("disabled",'disabled');
     }
-function change_orm_to_unit_update(){
-    $('#parsley_reg #hidden_no_unit').hide();
+  function posnic_import(){
+        $('#edit_customer_form').hide();
+        $('#add_customer_details_form').hide();      
+        $("#item_list_section").hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#import_section').show('slow');
+        $('#items_lists').removeAttr("disabled");
+        $('#posnic_add_items').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#export').attr("disabled",'disabled');
+        $('#import').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
     }
-function change_orm_to_case_update(){
-    $('#parsley_reg #hidden_no_unit').show();
+    function mapping_import(){
+        $('#edit_item_form').hide('hide');
+        $('#add_items_image').hide('hide');
+        $('#add_item_form').hide('hide');     
+        $("#item_list_section").hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').show();
+        $('#import_section').hide();
+        $('#items_lists').attr("disabled",'disabled');
+        $('#posnic_add_items').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
+    }
+    function posnic_export(){
+        $('#edit_customer_form').hide();
+        $('#add_customer_details_form').hide();      
+        $("#item_list_section").hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#import_section').hide();
+        $('#export_section').show('slow');
+        $('#items_lists').attr("disabled",'disabled');
+        $('#posnic_add_items').attr("disabled",'disabled');
+        $('#import').attr("disabled",'disabled');
+        $('#export').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
+    }
+    function clear_add_items(){
+        $("#posnic_user_2").trigger('reset');
+    }
+    function reload_update_user(){
+        var id=$('#guid').val();
+        edit_function(id);
+    }
+    function change_orm_to_unit(){
+        $('#add_item_form #hidden_no_unit').hide();
+    }
+    function change_orm_to_case(){
+        $('#add_item_form #hidden_no_unit').show();
+    }
+    function change_orm_to_unit_update(){
+        $('#parsley_reg #hidden_no_unit').hide();
+    }
+    function change_orm_to_case_update(){
+        $('#parsley_reg #hidden_no_unit').show();
     }
 </script>
 <nav id="top_navigation">
@@ -588,6 +631,8 @@ function change_orm_to_case_update(){
                         <a href="javascript:posnic_group_active()" class="btn btn-default" id="deactive"  ><i class="icon icon-play"></i> <?php echo $this->lang->line('active') ?></a>
                         <a href="javascript:posnic_delete()" class="btn btn-default" id="delete"><i class="icon icon-trash"></i> <?php echo $this->lang->line('delete') ?></a>
                         <a href="javascript:posnic_items_lists()" class="btn btn-default" id="items_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('items') ?></a>
+                        <a href="javascript:posnic_import()" class="btn btn-default" id="import"><i class="icon icon-upload"></i> <?php echo $this->lang->line('import') ?></a>
+                        <a href="javascript:posnic_export()" class="btn btn-default" id="export"><i class="icon icon-download"></i> <?php echo $this->lang->line('export') ?></a>
                 </div>
             </div>
     </div>
@@ -600,7 +645,7 @@ function change_orm_to_case_update(){
                         <?php $form =array('name'=>'posnic'); 
                     echo form_open('items/items_manage',$form) ?>
                         <div class="row">
-                            <div class="col-sm-12" id="user_list"><br>
+                            <div class="col-sm-12" id="item_list_section"><br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                             <h4 class="panel-title"><?php echo $this->lang->line('items') ?></h4>                                                                               
@@ -614,8 +659,7 @@ function change_orm_to_case_update(){
                                           <th ><?php echo $this->lang->line('location') ?></th>
                                           <th ><?php echo $this->lang->line('brand') ?></th>
                                           <th ><?php echo $this->lang->line('category') ?> </th>
-                                          <th ><?php echo $this->lang->line('item_department') ?></th>
-                                          
+                                          <th ><?php echo $this->lang->line('item_department') ?></th>                                          
                                           <th><?php echo $this->lang->line('status') ?></th>
                                           <th ><?php echo $this->lang->line('action') ?></th>
                                          </tr>
@@ -629,85 +673,366 @@ function change_orm_to_case_update(){
              </div>
         </div>
 </section>    
-<section id="add_items_image" class="container clearfix main_section">
-       <form id="add_image_form" action="<?php echo base_url() ?>index.php/items/add_item_image" method="post" enctype="multipart/form-data">
+<section id="import_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'import_form',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('items/import/',$form);?>
         <div id="main_content_outer" class="clearfix">
-           <div id="main_content">
-                 <div class="row">
-                     <div class="col col-lg-3"></div>
-                     <div class="col col-lg-6">
-                         <div class="panel panel-default">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-3">
+                        
+                    </div>
+                    <div  class="col-lg-6" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
                                <div class="panel-heading">
-                                     <h4 class="panel-title"><?php echo $this->lang->line('item_details') ?></h4>  
-                                   
+                                     <h4 class="panel-title"><?php echo $this->lang->line('import')." ".$this->lang->line('customer') ?></h4>                                                                               
                                </div>
-                         <div class="row">
-                             <div class="col col-lg-2"> </div>
-                             <div class="col col-lg-4">
-                                 <div class="form_sep">
-                                                         <label for="name" ><?php echo $this->lang->line('name') ?></label>                                                                                                       
-                                                           <?php $name=array('name'=>'name',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'name',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('mrp'));
-                                                           echo form_input($name)?> 
-                                                    </div>
-                             </div>
-                             <div class="col col-lg-4">
-                                                    <div class="form_sep">
-                                                         <label for="sku" ><?php echo $this->lang->line('sku') ?></label>                                                                                                       
-                                                           <?php $sku=array('name'=>'sku',
-                                                                                    'class'=>'required form-control',
-                                                                                    'id'=>'sku',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('sku'));
-                                                           echo form_input($sku)?> 
-                                                    </div>
-                                                   </div>
-                             
-                         </div>
-                         <div class="row">
-                             <div class="col col-lg-4"> 
-                                 <div  id="preview_image" style="width: 95%;height: 95%;margin-left: 25px;;margin-top: 25px;"></div>
-                             </div>
-                             <div class="col col-lg-1"></div>
-                             <div class="col col-lg-6">
-                          
-                              <br>
-
-                              <div class="step_info" style="margin: auto">
-                                                <label for="firstname" ><?php echo $this->lang->line('image') ?></label>                     
-                                                <div class="fileupload fileupload-new " data-provides="fileupload">
-                                                     <div class="fileupload-new img-thumbnail" style="width: 178px; height: 120px;"><img src="img/no_img_180.png" alt=""></div>
-                                                       <div  class="fileupload-preview fileupload-exists img-thumbnail" style="width: 178px; height: 120px"></div>
-                                                       <div>
-                                                            <span class="btn btn-default btn-file"><span class="fileupload-new"><?php echo $this->lang->line('select_image') ?></span><span class="fileupload-exists"><?php echo $this->lang->line('change') ?></span>
-                                                            <input type="file" name="userfile" /></span>
-                                                            <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload"><?php echo $this->lang->line('remove') ?></a>
-                                                       </div>
-                                                 </div>
+                              <div class="row" style="padding: 20px 0px">
+                                  <div class="col col-lg-1">
+                                      
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="javascript:download_csv_template()" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('download_csv_template') ?></a>
+                                      </div>
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="javascript:download_excel_template()" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('download_excel_template') ?></a>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-2">
+                                      
+                                  </div>
+                                  <div class="col col-lg-8">
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <input type="hidden" value="" name="">
+                                        <div class="input-group">
+                                            <div class="form-control">
+                                                <i class="icon-file fileupload-exists"></i>
+                                                <span class="fileupload-preview"></span>
                                             </div>
-                          </div></div>
+                                            <div class="input-group-btn">
+                                                <a class="btn btn-default fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                                                <span class="btn btn-default btn-file">
+                                                <span class="fileupload-new">Select file</span>
+                                                <span class="fileupload-exists">Change</span>
+                                                <input type="file" name="userfile">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                       
+                                  </div>
+                              </div>
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-4">
+                                      
+                                  </div>
+                                  <div class="col col-lg-6">
+                                        <a href="javascript:posnic_items_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
+                                      <input type="submit" name="import" class="btn btn-default " value="<?php echo $this->lang->line('upload_file'); ?>">
+                                    
+                                       
+                                  </div>
+                              </div>
                           </div>
-                         <input type="hidden" name="guid" id="guid" value="78678687b6879698">
-                     </div>
-                 </div>
-               <div class="row">
-                     <div class="col col-lg-4"></div>
-                     <div class="col col-lg-4">
-                         <input type="submit" name="add_item" class="form-control btn btn-default" value="Upload">
-                     </div>
-               </div>
-           </div>
+                         </div>                             
+                    </div>
+                </div>
+          </div>
         </div>
-       </form>
+    <?php echo form_close();?>
+</section>
+<section id="import_message_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'import_message',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('items/import_message/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-4">
+                        
+                    </div>
+                    <div  class="col-lg-4" style="padding:0px 25px;" id="parent_messgae">
+                        <div class="row" id="import_message_box1">
+                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div  class="col-lg-3">
+                        
+                    </div>
+                    <div  class="col-lg-6" style="padding:0px 25px;" >
+                        <div class="row">
+                            <a href="javascript:posnic_items_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('customer')." ".$this->lang->line('list') ?></a>
+                            <a href="javascript:posnic_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('upload') ?></a>
+                            <a href="javascript:mapping_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('mapping') ?></a>
+                         </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+    <?php echo form_close(); ?>
+</section>
+<section id="export_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'export_customer',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('items/export/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+               <div class="row">
+                    <div  class="col-lg-2">
+                        
+                    </div>
+                    <div  class="col-lg-8" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
+                                 <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('export')." ".$this->lang->line('items') ?></h4>                                                                               
+                               </div>
+                                <div class="row" style="padding: 20px 0px">
+                                  <div class="col col-lg-2">
+                                      
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="items/export/csv" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('export_to_csv') ?></a>
+                                      </div>
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="items/export/xlsx" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('export_to_xlsx') ?></a>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row">
+                    <div  class="col-lg-4">
+                        
+                    </div>
+                    <div  class="col-lg-4" style="padding:20px 25px;" >
+                        <div class="row">
+                            <a href="javascript:posnic_items_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('customer')." ".$this->lang->line('list') ?></a>                           
+                         </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+                
+          </div>
+        </div>
+              </div>
+            </div>
+    <?php echo form_close(); ?>
+</section>
+    
+    
+<section id="mapping_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'mapping_form',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('items/import/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-2">
+                        
+                    </div>
+                    <div  class="col-lg-8" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
+                               <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('mapping')." ".$this->lang->line('import') ?></h4>                                                                               
+                               </div>
+                              <div class="row" style="padding: 0px 20px" >
+                                  <div class="col col-lg-6 ">
+                                        <h5><?php  echo $this->lang->line('customer')." ".$this->lang->line('fields') ?></h5>
+                                  </div>
+                                  <div class="col col-lg-6 ">
+                                      <h5>  <?php  echo $this->lang->line('excel_csv_fields') ?></h5>
+                                  </div>
+                              </div>
+                                <div class="row" style="padding: 20px 0px" id="parent_field">
+                                    <div class="col col-lg-6 data_class" id="data_fields" >
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('first_name') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control required" maxlength="1" id="first_name" name="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('last_name') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="last_name" name="last_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('address1') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="address1" name="address1">
+                                            </div>
+                                        </div>
+                                     
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('birthday') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="birthday" name="birthday">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('Marragedate') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="Marragedate" name="Marragedate">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('city') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="city" name="city">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('state') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="state" name="state">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('zip') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="zip" name="zip">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('country') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="country" name="country">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('company') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="company" name="company">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('website') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="website" name="website">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('email') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="email" name="email">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('phone') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="phone" name="phone">
+                                            </div>
+                                        </div>
+                                    </div>
+                                  <div class="col col-lg-6" id="import_fields">
+                                      
+                                  </div>
+                                  
+                              </div>
+                           
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-4">
+                                      
+                                  </div>
+                                  <div class="col col-lg-6">
+                                      <a href="javascript:posnic_mapping_import()" class="btn btn-default"><i class="icon icon-upload"></i> <?php echo $this->lang->line('import') ?></a>
+                                      <a href="javascript:posnic_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')."".$this->lang->line('upload') ?></a>
+                                       
+                                  </div>
+                              </div>
+                          </div>
+                         </div>                             
+                    </div>
+                </div>
+          </div>
+        </div>
+    <?php echo form_close();?>
 </section>
 <script type="text/javascript">
-    
-$(document).ready(function()
-{
- $('#hidden_weight').hide();
+    function processJson(data){
+        $('#mapping_section').show('slow');
+        $('#import_section').hide();
+        $('#import_fields').remove();
+        $('#parent_field').append('<div class="col col-lg-6" id="import_fields"></div>');
+        for(var i=0;i<data.length;i++){
+          $('#import_fields').append("<div class='row field_class' style='padding-bottom: 12px !important'><div class='col col-lg-1'><label>"+data[i][0]+"</label></div><div class='col col-lg-6'><label>"+data[i][1]+"</label></div></div>")
+        }
+    }
+    $(document).ready(function()
+    {
+        var upload = { 
+            complete: function(response) { 
+                var res=response['responseText'];
+                if(response['responseText']=='Noop'){
+                     $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('items');?>', { type: "error" });                           
+                }else if(res[0]!='['){
+                        $.bootstrapGrowl(response['responseText'], { type: "error" });                   
+                }
+                
+
+            },
+            dataType:  'json',
+            success:   processJson ,
+            error: function()
+            {
+                    $("#message").html("<font color='red'> ERROR: unable to upload files</font>");
+
+            }
+
+        }; 
+        $("#import_form").ajaxForm(upload);
+        $('#hidden_weight').hide();
         $('#weight').val(0);
 	var options = { 
 	complete: function(response) { 
@@ -774,19 +1099,142 @@ $(document).ready(function()
        <?php }?>
 
 });
-function new_no_of_unit(e){    
-     var unicode=e.charCode? e.charCode : e.keyCode
-   
-                  if (unicode!=13 && unicode!=9){
+ function posnic_mapping_import() { 
+        <?php if($this->session->userdata['items_per']['add']==1){ ?>
+            if($('#mapping_form').valid()){
+                var inputs = $('#mapping_form').serialize();
+                $.ajax ({
+                    url: "<?php echo base_url('index.php/items/posnic_mapping_import')?>",
+                    data: inputs,
+                    type:'POST',
+                    dataType: 'json',               
+                    success: function(data)        
+                    { 
+                        $('#mapping_section').hide();
+                        $('#import_message_section').show();
+                        var success=data['success'];
+                        var fail=data['fail'];
+                        var already=data['already'];
+                        var count=data['no'];
+                        $('#import_message_box1').remove();
+                        $('#parent_messgae').append('<div class="row" id="import_message_box1"></div>;')
+                        if(count==success){
+                           $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('items').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                        }else if(fail==count){
+                                                      
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body"> <?php echo $this->lang->line('please_check_your_mapping_and_data_in_incorrect_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                        }else if(already==count){
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');                    
+                            
+                        }else if(fail==0 && count!=success){
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('items').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');                           
+                        
+                        }else if(already==0 && count!=success){
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('items').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            
+                        }else if(success!=0 && already!=0 && fail!=0){
+                           
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('items')." ".$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+    
+    
+                        }else{
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                        }
+                    
+                    }
+                });
+            }
+        <?php }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('customer');?>', { type: "error" });                       
+        <?php }?>
+    } 
+    function new_no_of_unit(e){    
+        var unicode=e.charCode? e.charCode : e.keyCode
+            if (unicode!=13 && unicode!=9){
         }
-       else{
-           $('#add_item .fileupload .fileupload-new ').focus();
-           
+        else{
+            $('#add_item .fileupload .fileupload-new ').focus();           
         }
-         if (unicode!=27){
+        if (unicode!=27){
         }
-       else{
-               
+        else{
             $('#add_item #unit_of_mes').focus();
         }
             
@@ -1876,139 +2324,118 @@ function items_decomposition(){
            </div>
 		</div>
 	
-                <script type="text/javascript">
-                    function posnic_group_active(){
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                              $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/items/active',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value
-
-                                },
-                                success: function(response)
-                                {
-                                    if(response){
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('activated');?>', { type: "success" });
-                                        $("#dt_table_tools").dataTable().fnDraw();
-                                    }
-                                }
-                            });
-
-                          }
-
-                      }
-                  
-
-                      }    
-                      }
-                    function posnic_delete(){
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                        
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item');?>', { type: "warning" });
-                      }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
-             if(result){
-              
-             
-                        var posnic=document.forms.posnic;
-                        for (i = 0; i < posnic.length; i++){
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
+<script type="text/javascript">
+    function posnic_group_active(){
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {
+            $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item');?>', { type: "warning" });
+        }else{
+            var posnic=document.forms.posnic;
+            for (i = 0; i < posnic.length-1; i++){
+                if(posnic[i].checked==true){                             
+                    $.ajax({
+                        url: '<?php echo base_url() ?>/index.php/items/active',
+                        type: "POST",
+                        data: {
+                            guid:posnic[i].value
+                        },
+                        success: function(response)
+                        {
+                            if(response){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('activated');?>', { type: "success" });
+                                $("#dt_table_tools").dataTable().fnDraw();
+                            }
+                        }
+                    });
+                }
+            }
+        }    
+    }
+    function posnic_delete(){
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {                        
+            $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item');?>', { type: "warning" });
+        }
+        else{
+            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
+                if(result)
+                {
+                    var posnic=document.forms.posnic;
+                    for (i = 0; i < posnic.length; i++){
+                        if(posnic[i].checked==true){                             
+                            $.ajax({
                                 url: '<?php echo base_url() ?>/index.php/items/delete',
                                 type: "POST",
                                 data: {
                                     guid:posnic[i].value
-
                                 },
                                 success: function(response)
                                 {
                                     if(response){
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('deleted');?>', { type: "success" });
+                                        $.bootstrapGrowl('<?php echo $this->lang->line('deleted');?>', { type: "success" });
                                         $("#dt_table_tools").dataTable().fnDraw();
                                     }
                                 }
                             });
 
-                          }
-
-                      }    
-                      }
-                      });
-                      }    
-                      }
+                        }
+                    }    
+                }
+            });
+        }    
+    }
                     
                     
                     
-                    function posnic_group_deactive(){
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                                               $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                                 $.ajax({
-                                    url: '<?php echo base_url() ?>/index.php/items/deactive',
-                                    type: "POST",
-                                    data: {
-                                        guid: posnic[i].value
-
-                                    },
-                                    success: function(response)
-                                    {
-                                        if(response){
-                                             $.bootstrapGrowl('<?php echo $this->lang->line('deactivated');?>', { type: "danger" });
-                                            $("#dt_table_tools").dataTable().fnDraw();
-                                        }
-                                    }
-                                });
-
-                          }
-
-                      }
-                  
-
-                      }    
-                      }
-                    
-                </script>
+    function posnic_group_deactive(){
+        var flag=0;
+        var field=document.forms.posnic;
+        for (i = 0; i < field.length; i++){
+            if(field[i].checked==true){
+                flag=flag+1;
+            }
+        }
+        if (flag<1) {
+            $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('item');?>', { type: "warning" });
+        }else{
+            var posnic=document.forms.posnic;
+            for (i = 0; i < posnic.length-1; i++){
+                if(posnic[i].checked==true){                             
+                    $.ajax({
+                        url: '<?php echo base_url() ?>/index.php/items/deactive',
+                        type: "POST",
+                        data: {
+                            guid: posnic[i].value
+                        },
+                        success: function(response)
+                        {
+                            if(response){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('deactivated');?>', { type: "danger" });
+                                $("#dt_table_tools").dataTable().fnDraw();
+                            }
+                        }
+                    });
+                }
+            }
+        }    
+    }
+          
+</script>
         
  <script type="text/javascript">                
-                    $(document).ready(function() {
-                    $('#add_item').validate();});
-                </script>
+    $(document).ready(function() {
+    $('#add_item').validate();});
+</script>
       

@@ -5,6 +5,11 @@
                     $('#add_item_form').hide();
                     $('#edit_item_form').hide();
                     $('#add_items_image').hide();
+                    $('#import_message_section').hide();
+                    $('#mapping_section').hide();
+                    $('#add_customer_form').validate();
+                    $('#import_section').hide();
+                    $('#export_section').hide()
                               posnic_table();
                              
                              
@@ -144,7 +149,7 @@
                              dataType: 'json',               
                              success: function(data)        
                              {    
-                                 $("#user_list").hide();
+                                 $("#item_list_section").hide();
                                  $('#edit_item_form').show('slow');
                                  $('#delete').attr("disabled", "disabled");
                                  $('#posnic_add_items').attr("disabled", "disabled");
@@ -225,7 +230,7 @@
                              dataType: 'json',               
                              success: function(data)        
                              {    
-                                 $("#user_list").hide();
+                                 $("#item_list_section").hide();
                                  $('#delete').attr("disabled", "disabled");
                                  $('#posnic_add_items').attr("disabled", "disabled");
                                  $('#active').attr("disabled", "disabled");
