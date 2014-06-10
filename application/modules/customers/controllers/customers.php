@@ -421,7 +421,7 @@ class Customers extends MX_Controller
                        );
                          $where=array('phone'=>$this->input->post('phone'),'email'=>$this->input->post('email'));
                     if($this->posnic->check_record_unique($where,'customers')){                   
-                          //  $this->posnic->posnic_add_record($values,'customers');
+                            $this->posnic->posnic_add_record($values,'customers');
                     ++$success;
                 }else{
                    ++$already;
@@ -434,9 +434,9 @@ class Customers extends MX_Controller
                
             }
             $status['success']=$success;
-            $status['fail']=$fail+1;
-            $status['already']=$already+1;
-            $status['no']=$row;
+            $status['fail']=$fail;
+            $status['already']=$already;
+            $status['no']=$row-1;
             echo json_encode($status);
         }
     }
