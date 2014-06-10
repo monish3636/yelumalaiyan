@@ -3,7 +3,8 @@
     $(document).ready( function () {
         $('#add_customer_details_form').hide();
         $('#edit_customer_form').hide();
-    //    $('#mapping_section').hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
         $('#add_customer_form').validate();
         $('#import_section').hide();
         $('#export_section').hide()
@@ -154,6 +155,8 @@
                 $('#posnic_add_customers').attr("disabled", "disabled");
                 $('#active').attr("disabled", "disabled");
                 $('#deactive').attr("disabled", "disabled");
+                $('#export').attr("disabled", "disabled");
+                $('#import').attr("disabled", "disabled");
                 $('#customers_lists').removeAttr("disabled");
                 $('#parsley_reg #guid').val(data[0]['guid']);
                 $('#parsley_reg #first_name').val(data[0]['first_name']);

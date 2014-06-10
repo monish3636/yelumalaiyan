@@ -269,33 +269,112 @@
                     dataType: 'json',               
                     success: function(data)        
                     { 
+                        $('#mapping_section').hide();
+                        $('#import_message_section').show();
                         var success=data['success'];
                         var fail=data['fail'];
                         var already=data['already'];
                         var count=data['no'];
+                        $('#import_message_box1').remove();
+                        $('#parent_messgae').append('<div class="row" id="import_message_box1"></div>;')
                         if(count==success){
-                            $.bootstrapGrowl(success+' <?php echo $this->lang->line('new')." ".$this->lang->line('customers')." ".$this->lang->line('added') ;?>', { type: "success" });                           
+                           $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('customers').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
                         }else if(fail==count){
-                            $.bootstrapGrowl('<?php echo $this->lang->line('please_check_your_mapping_and_data_in_incorrect_format')?>', { type: "error" });                           
+                                                      
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body"> <?php echo $this->lang->line('please_check_your_mapping_and_data_in_incorrect_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
                         }else if(already==count){
-                             $.bootstrapGrowl('<?php echo $this->lang->line('customer_details_is_alredy_added')?>', { type: "warning" });                    
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');                    
                             
                         }else if(fail==0 && count!=success){
-                            
-                            $.bootstrapGrowl(success+ ' <?php echo $this->lang->line('customers').$this->lang->line('added') ;?> ', { type: "success" });                           
-                            $.bootstrapGrowl(already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?>', { type: "warning" });
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('customers').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');                           
                         
                         }else if(already==0 && count!=success){
-                            $.bootstrapGrowl(success+ ' <?php echo $this->lang->line('customers').$this->lang->line('added') ;?> ', { type: "success" });                           
-                            $.bootstrapGrowl(fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?>', { type: "error" });
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('customers').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
                             
                         }else if(success!=0 && already!=0 && fail!=0){
-                            $.bootstrapGrowl(success+ ' <?php echo $this->lang->line('customers').$this->lang->line('added') ;?> ', { type: "success" });                           
-                            $.bootstrapGrowl(already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?>', { type: "warning" });
-                            $.bootstrapGrowl(fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?>', { type: "error" });
+                           
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('customers')." ".$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+    
+    
                         }else{
-                            $.bootstrapGrowl(already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?>', { type: "warning" });
-                            $.bootstrapGrowl(fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?>', { type: "error" });
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('customer_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('customer_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
                         }
                     
                     }
@@ -315,6 +394,8 @@
             $('#posnic_add_customers').attr("disabled", "disabled");
             $('#active').attr("disabled", "disabled");
             $('#deactive').attr("disabled", "disabled");
+            $('#export').attr("disabled", "disabled");
+            $('#import').attr("disabled", "disabled");
             $('#customers_lists').removeAttr("disabled");
         <?php }else{ ?>
             $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                         
@@ -323,9 +404,12 @@
     function posnic_customers_lists(){
         $('#import_section').hide();
         $('#export_section').hide();
-        $('#edit_customer_form').hide('hide');
-        $('#add_customer_details_form').hide('hide');      
+        $('#edit_customer_form').hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#add_customer_details_form').hide();      
         $("#user_list").show('slow');
+        $('#export').removeAttr("disabled");
         $('#delete').removeAttr("disabled");
         $('#active').removeAttr("disabled");
         $('#deactive').removeAttr("disabled");
@@ -340,11 +424,26 @@
         edit_function(id);
     }
     function posnic_import(){
-        $('#edit_customer_form').hide('hide');
-        $('#add_customer_details_form').hide('hide');      
+        $('#edit_customer_form').hide();
+        $('#add_customer_details_form').hide();      
         $("#user_list").hide();
+        $('#import_message_section').hide();
         $('#mapping_section').hide();
         $('#import_section').show('slow');
+        $('#customers_lists').removeAttr("disabled");
+        $('#posnic_add_customers').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#export').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
+    }
+    function posnic_mapping_import(){
+        $('#edit_customer_form').hide();
+        $('#add_customer_details_form').hide();      
+        $("#user_list").hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').show();
+        $('#import_section').hide();
         $('#customers_lists').attr("disabled",'disabled');
         $('#posnic_add_customers').attr("disabled",'disabled');
         $('#deactive').attr("disabled",'disabled');
@@ -361,7 +460,7 @@
                         <a href="javascript:posnic_group_active()" class="btn btn-default" id="deactive"  ><i class="icon icon-play"></i> <?php echo $this->lang->line('active') ?></a>
                         <a href="javascript:posnic_delete()" class="btn btn-default" id="delete"><i class="icon icon-trash"></i> <?php echo $this->lang->line('delete') ?></a>
                         <a href="javascript:posnic_customers_lists()" class="btn btn-default" id="customers_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('customers') ?></a>
-                        <a href="javascript:posnic_import()" class="btn btn-default" id="inport"><i class="icon icon-upload"></i> <?php echo $this->lang->line('import') ?></a>
+                        <a href="javascript:posnic_import()" class="btn btn-default" id="import"><i class="icon icon-upload"></i> <?php echo $this->lang->line('import') ?></a>
                         <a href="javascript:posnic_export()" class="btn btn-default" id="export"><i class="icon icon-download"></i> <?php echo $this->lang->line('export') ?></a>
                         
 
@@ -493,6 +592,41 @@
         </div>
     <?php echo form_close();?>
 </section>
+<section id="import_message_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'import_message',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('customers/import_message/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-4">
+                        
+                    </div>
+                    <div  class="col-lg-4" style="padding:0px 25px;" id="parent_messgae">
+                        <div class="row" id="import_message_box1">
+                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div  class="col-lg-3">
+                        
+                    </div>
+                    <div  class="col-lg-6" style="padding:0px 25px;" >
+                        <div class="row">
+                            <a href="javascript:posnic_customers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('customer')." ".$this->lang->line('list') ?></a>
+                            <a href="javascript:posnic_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('upload') ?></a>
+                            <a href="javascript:posnic_mapping_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('mapping') ?></a>
+                         </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+    <?php echo form_close(); ?>
+</section>
+    
+    
 <section id="mapping_section" class="container clearfix main_section">
      <?php   $form =array('id'=>'mapping_form',
                           'runat'=>'server',
@@ -1039,8 +1173,11 @@
                          
                          
                          <div  class="row">
-                          
-                                  <div class="col col-lg-6 text-center"><br><br>
+                             <div class="col col-lg-2">
+                                 
+                             </div>
+                                  <div class="col col-lg-8 text-center"><br><br>
+                                      <a href="javascript:posnic_customers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('list') ?></a>
                                       <button id="add_new_customer"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
                                       <a href="javascript:clear_add_users()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
                                   </div>
@@ -1443,8 +1580,9 @@
                          </div>
                          
                           <div class="row">
-                        <div class="col-lg-4"></div>
-                      <div class="col col-lg-12 text-center"><br><br>
+                        <div class="col-lg-2"></div>
+                      <div class="col col-lg-8 text-center"><br><br>
+                          <a href="javascript:posnic_customers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('list') ?></a>
                           <button id="update_customers"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('update') ?></button>
                           <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('reload') ?></a>
                       </div>
