@@ -2,19 +2,16 @@
 
 class Customers extends MX_Controller
 {   
-    var $my_global_var_1;
     function __construct() {
         parent::__construct();
             $this->load->library('posnic'); 
-            $this->my_global_var_1;
-           // $this->load->library('csvimport');
          
     }
     function index(){     
-        $this->export();
+        $this->get();
 
     }
-    function export(){
+    function export($type){
             $this->load->library('Excel'); 
               // Create new PHPExcel object
             $objPHPExcel = new PHPExcel();
@@ -83,7 +80,7 @@ class Customers extends MX_Controller
             //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             //so, we use this header instead.
             header('Content-type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="mohamadikhwan_dot_com_phpexcel_tut.csv"');
+            header("Content-Disposition: attachment;filename=customer_details.$type");
             header('Cache-Control: max-age=0');
 
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

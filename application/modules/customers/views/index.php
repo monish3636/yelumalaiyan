@@ -200,11 +200,7 @@
                     };
                 }
             }
-        });
-        
-        
-        
-        
+        });      
         
         $('#add_new_customer').click(function() { 
             <?php if($this->session->userdata['customers_per']['add']==1){ ?>
@@ -259,9 +255,10 @@
             <?php }?>
         });
      });
+    
     function posnic_mapping_import() { 
-            <?php if($this->session->userdata['customers_per']['add']==1){ ?>
-                    if($('#mapping_form').valid()){
+        <?php if($this->session->userdata['customers_per']['add']==1){ ?>
+            if($('#mapping_form').valid()){
                 var inputs = $('#mapping_form').serialize();
                 $.ajax ({
                     url: "<?php echo base_url('index.php/customers/posnic_mapping_import')?>",
@@ -380,11 +377,11 @@
                     
                     }
                 });
-                }
-            <?php }else{ ?>
-                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                       
-            <?php }?>
-        } 
+            }
+        <?php }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('customer');?>', { type: "error" });                       
+        <?php }?>
+    } 
     function posnic_add_new(){
         <?php if($this->session->userdata['customers_per']['add']==1){ ?>
             $("#user_list").hide();
@@ -411,6 +408,7 @@
         $('#add_customer_details_form').hide();      
         $("#user_list").show('slow');
         $('#export').removeAttr("disabled");
+        $('#import').removeAttr("disabled");
         $('#delete').removeAttr("disabled");
         $('#active').removeAttr("disabled");
         $('#deactive').removeAttr("disabled");
@@ -448,6 +446,22 @@
         $('#import_section').hide();
         $('#customers_lists').attr("disabled",'disabled');
         $('#posnic_add_customers').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
+    }
+    function posnic_export(){
+        $('#edit_customer_form').hide();
+        $('#add_customer_details_form').hide();      
+        $("#user_list").hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#import_section').hide();
+        $('#export_section').show('slow');
+        $('#customers_lists').attr("disabled",'disabled');
+        $('#posnic_add_customers').attr("disabled",'disabled');
+        $('#import').attr("disabled",'disabled');
+        $('#export').attr("disabled",'disabled');
         $('#deactive').attr("disabled",'disabled');
         $('#active').attr("disabled",'disabled');
         $('#delete').attr("disabled",'disabled');
@@ -625,6 +639,60 @@
                 </div>
           </div>
         </div>
+    <?php echo form_close(); ?>
+</section>
+<section id="export_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'export_customer',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('customers/export/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+               <div class="row">
+                    <div  class="col-lg-2">
+                        
+                    </div>
+                    <div  class="col-lg-8" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
+                                 <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('export')." ".$this->lang->line('customers') ?></h4>                                                                               
+                               </div>
+                                <div class="row" style="padding: 20px 0px">
+                                  <div class="col col-lg-2">
+                                      
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="customers/export/csv" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('export_to_csv') ?></a>
+                                      </div>
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="customers/export/xlsx" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('export_to_xlsx') ?></a>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row">
+                    <div  class="col-lg-4">
+                        
+                    </div>
+                    <div  class="col-lg-4" style="padding:20px 25px;" >
+                        <div class="row">
+                            <a href="javascript:posnic_customers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('customer')." ".$this->lang->line('list') ?></a>                           
+                         </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+                
+          </div>
+        </div>
+              </div>
+            </div>
     <?php echo form_close(); ?>
 </section>
     
