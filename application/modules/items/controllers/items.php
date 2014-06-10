@@ -17,7 +17,7 @@ class Items extends MX_Controller{
 
             // Set document properties
             $objPHPExcel->getProperties()->setCreator("posnic.com")
-                 ->setLastModifiedBy( $this->session->userdata('first_name'))
+                 ->setLastModifiedBy( $this->session->userdata('sku'))
                  ->setTitle("Item Deatils")
                  ->setSubject("Item Deatils")
                  ->setDescription("Item Deatils")
@@ -29,18 +29,18 @@ class Items extends MX_Controller{
     // Add some data
          $j=1;
               $objPHPExcel->setActiveSheetIndex(0)
-                               ->setCellValue("A$j",  $this->lang->line('first_name') )
-                               ->setCellValue("B$j", $this->lang->line('last_name'))
-                               ->setCellValue("C$j", $this->lang->line('birthday'))
-                               ->setCellValue("D$j", $this->lang->line('marragedate'))
+                               ->setCellValue("A$j",  $this->lang->line('sku') )
+                               ->setCellValue("B$j", $this->lang->line('barcode'))
+                               ->setCellValue("C$j", $this->lang->line('name'))
+                               ->setCellValue("D$j", $this->lang->line('department'))
                                ->setCellValue("E$j",$this->lang->line('address'))
-                               ->setCellValue("F$j",$this->lang->line('city'))
-                               ->setCellValue("G$j", $this->lang->line('state'))
-                               ->setCellValue("H$j", $this->lang->line('country'))
-                               ->setCellValue("I$j", $this->lang->line('zip'))
-                               ->setCellValue("J$j", $this->lang->line('company'))
-                               ->setCellValue("K$j", $this->lang->line('website'))
-                               ->setCellValue("L$j",$this->lang->line('email'))
+                               ->setCellValue("F$j",$this->lang->line('tax_Inclusive'))
+                               ->setCellValue("G$j", $this->lang->line('tax_type'))
+                               ->setCellValue("H$j", $this->lang->line('cost'))
+                               ->setCellValue("I$j", $this->lang->line('tax'))
+                               ->setCellValue("J$j", $this->lang->line('mrp'))
+                               ->setCellValue("K$j", $this->lang->line('price'))
+                               ->setCellValue("L$j",$this->lang->line('location'))
                                ->setCellValue("M$j", $this->lang->line('phone'));
          
             for($i=0;$i<count($data);$i++){
@@ -48,18 +48,18 @@ class Items extends MX_Controller{
                 $j++;
 
                     $objPHPExcel->setActiveSheetIndex(0)
-                               ->setCellValue("A$j", $data[$i]['first_name'])
-                               ->setCellValue("B$j", $data[$i]['last_name'])
-                               ->setCellValue("C$j", date('d-m-Y',$data[$i]['dob']))
-                               ->setCellValue("D$j", date('d-m-Y',$data[$i]['marragedate']))
+                               ->setCellValue("A$j", $data[$i]['code'])
+                               ->setCellValue("B$j", $data[$i]['barcode'])
+                               ->setCellValue("C$j", $data[$i]['name'])
+                               ->setCellValue("D$j", date('d-m-Y',$data[$i]['department']))
                                ->setCellValue("E$j", $data[$i]['address'])
-                               ->setCellValue("F$j", $data[$i]['city'])
-                               ->setCellValue("G$j", $data[$i]['state'])
-                               ->setCellValue("H$j", $data[$i]['country'])
-                               ->setCellValue("I$j", $data[$i]['zip'])
-                               ->setCellValue("J$j", $data[$i]['company'])
-                               ->setCellValue("K$j", $data[$i]['website'])
-                               ->setCellValue("L$j", $data[$i]['email'])
+                               ->setCellValue("F$j", $data[$i]['tax_Inclusive'])
+                               ->setCellValue("G$j", $data[$i]['tax_type'])
+                               ->setCellValue("H$j", $data[$i]['cost'])
+                               ->setCellValue("I$j", $data[$i]['tax'])
+                               ->setCellValue("J$j", $data[$i]['mrp'])
+                               ->setCellValue("K$j", $data[$i]['price'])
+                               ->setCellValue("L$j", $data[$i]['location'])
                                ->setCellValue("M$j", $data[$i]['phone']);
             }
 
@@ -371,7 +371,7 @@ class Items extends MX_Controller{
         }
     }
     function items_list(){
-        $aColumns = array( 'guid','code','code',  'name','description','phone', 'company_name',  'active', 'guid','guid', );	
+        $aColumns = array( 'guid','code','code',  'name','description','phone', 'mrp_name',  'active', 'guid','guid', );	
 	$start = "";
         $end="";
 	if ( $this->input->get_post('iDisplayLength') != '-1' )	{
@@ -548,19 +548,19 @@ class Items extends MX_Controller{
     }
     function posnic_mapping_import(){
         if($this->session->userdata['customers_per']['import']==1){           
-            $first_name=  $this->input->post('first_name');
-            $last_name=  $this->input->post('last_name');
-            $address1=  $this->input->post('address1');
-            $address2=  $this->input->post('address2');
-            $birthday=  $this->input->post('birthday');
-            $Marragedate=  $this->input->post('Marragedate');
-            $city=  $this->input->post('city');
-            $state=  $this->input->post('state');
-            $zip=  $this->input->post('zip');
-            $country=  $this->input->post('country');
-            $company=  $this->input->post('company');
-            $website=  $this->input->post('website');
-            $email=  $this->input->post('email');
+            $code=  $this->input->post('sku');
+            $barcode=  $this->input->post('barcode');
+            $brand=  $this->input->post('brand');
+            $name=  $this->input->post('name');
+            $department=  $this->input->post('department');
+            $category=  $this->input->post('category');
+            $tax_Inclusive=  $this->input->post('tax_Inclusive');
+            $tax_type=  $this->input->post('tax_type');
+            $tax=  $this->input->post('tax');
+            $cost=  $this->input->post('cost');
+            $mrp=  $this->input->post('mrp');
+            $price=  $this->input->post('price');
+            $location=  $this->input->post('location');
             $phone=  $this->input->post('phone');
             $file =  './uploads/import/'.$this->session->userdata('import_file') ;
                 //load the excel library
@@ -587,48 +587,48 @@ class Items extends MX_Controller{
                 $this->load->library('form_validation');
             for($i=2;$i<count($arr_data)+2;$i++){
                 
-                $non_post=array('first_name' =>$arr_data[$i][$first_name],
-                            'last_name' =>$arr_data[$i][$first_name],
-                            'address' =>$arr_data[$i][$address1],
-                            'birthday' =>$arr_data[$i][$birthday],
-                            'Marragedate' =>$arr_data[$i][$Marragedate],
-                            'city' =>$arr_data[$i][$city],
-                            'state' =>$arr_data[$i][$state],
-                            'zip' =>$arr_data[$i][$zip],
-                            'country' =>$arr_data[$i][$country],
-                            'website' =>$arr_data[$i][$website],
-                            'company' =>$arr_data[$i][$company],
-                            'email' =>$arr_data[$i][$email],
+                $non_post=array('sku' =>$arr_data[$i][$sku],
+                            'barcode' =>$arr_data[$i][$sku],
+                            'address' =>$arr_data[$i][$brand],
+                            'name' =>$arr_data[$i][$name],
+                            'category' =>$arr_data[$i][$category],
+                            'tax_Inclusive' =>$arr_data[$i][$tax_Inclusive],
+                            'tax_type' =>$arr_data[$i][$tax_type],
+                            'tax' =>$arr_data[$i][$tax],
+                            'cost' =>$arr_data[$i][$cost],
+                            'price' =>$arr_data[$i][$price],
+                            'mrp' =>$arr_data[$i][$mrp],
+                            'location' =>$arr_data[$i][$location],
                             'phone' =>$arr_data[$i][$phone]);
                 
                 $_POST=$non_post;
                 
-                $this->form_validation->set_rules("first_name",$this->lang->line('first_name'),"required"); 
-                $this->form_validation->set_rules("last_name",$this->lang->line('last_name'),"required"); 
+                $this->form_validation->set_rules("sku",$this->lang->line('sku'),"required"); 
+                $this->form_validation->set_rules("barcode",$this->lang->line('barcode'),"required"); 
                 $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
-                $this->form_validation->set_rules("city",$this->lang->line('city'),"required"); 
-                $this->form_validation->set_rules("state",$this->lang->line('state'),"required"); 
-                $this->form_validation->set_rules("zip",$this->lang->line('zip'),"required"); 
-                $this->form_validation->set_rules("country",$this->lang->line('country'),"required"); 
+                $this->form_validation->set_rules("tax_Inclusive",$this->lang->line('tax_Inclusive'),"required"); 
+                $this->form_validation->set_rules("tax_type",$this->lang->line('tax_type'),"required"); 
+                $this->form_validation->set_rules("tax",$this->lang->line('tax'),"required"); 
+                $this->form_validation->set_rules("cost",$this->lang->line('cost'),"required"); 
                 $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'max_length[12]|regex_match[/^[0-9]+$/]|xss_clean');
-                $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');
+                $this->form_validation->set_rules('location', $this->lang->line('location'), 'required|valid_location');
                 if ( $this->form_validation->run() !== false ) {
                     $values=array(
-                        'first_name'=>$this->input->post('first_name'),
-                        'last_name'=>  $this->input->post('last_name'),
-                        'email'=>$this->input->post('email'),
-                        'phone'=>$this->input->post('phone'),
-                        'city'=>$this->input->post('city'),
-                        'state'=>$this->input->post('state'),
-                        'country'=>$this->input->post('country'),
-                        'zip'=>$this->input->post('zip'),
-                        'website'=>$this->input->post('website'),
-                        'address'=>$this->input->post('address'),
-                        'company_name'=>$this->input->post('company'),                                   
-                        'bday'=>strtotime($this->input->post('dob')),
-                        'mday'=>strtotime($this->input->post('marragedate')),
+                        'sku'=>$this->input->post('sku'),
+                        'barcode'=>  $this->input->post('barcode'),
+                        'name'=>$this->input->post('name'),
+                        'location'=>$this->input->post('location'),
+                        'tax_Inclusive'=>$this->input->post('tax_Inclusive'),
+                        'tax_type'=>$this->input->post('tax_type'),
+                        'cost'=>$this->input->post('cost'),
+                        'mrp'=>$this->input->post('mrp'),
+                        'price'=>$this->input->post('price'),
+                        'tax'=>$this->input->post('tax'),
+                        'category'=>$this->input->post('category'),                                  
+                        'brand'=>strtotime($this->input->post('brand')),
+                        'department'=>strtotime($this->input->post('department')),
                        );
-                         $where=array('phone'=>$this->input->post('phone'),'email'=>$this->input->post('email'));
+                         $where=array('phone'=>$this->input->post('phone'),'location'=>$this->input->post('location'));
                     if($this->posnic->check_record_unique($where,'customers')){                   
                             $this->posnic->posnic_add_record($values,'customers');
                     ++$success;
@@ -636,7 +636,7 @@ class Items extends MX_Controller{
                    ++$already;
                 }
                 }  else {
-                    echo $arr_data[$i][$email];
+                    echo $arr_data[$i][$location];
                      echo validation_errors() ;
                 ++$fail;
                 }
