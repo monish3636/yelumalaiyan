@@ -35,12 +35,13 @@
     $(document).ready( function () {
         var options = { 
             complete: function(response) { 
+                var res=response['responseText'];
                 if(response['responseText']=='Noop'){
                      $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('items');?>', { type: "error" });                           
-                }else{
-                         
+                }else if(res[0]!='['){
+                        $.bootstrapGrowl(response['responseText'], { type: "error" });                   
                 }
-
+                
 
             },
             dataType:  'json',
@@ -434,10 +435,11 @@
         $('#posnic_add_customers').attr("disabled",'disabled');
         $('#deactive').attr("disabled",'disabled');
         $('#export').attr("disabled",'disabled');
+        $('#import').attr("disabled",'disabled');
         $('#active').attr("disabled",'disabled');
         $('#delete').attr("disabled",'disabled');
     }
-    function posnic_mapping_import(){
+    function mapping_import(){
         $('#edit_customer_form').hide();
         $('#add_customer_details_form').hide();      
         $("#user_list").hide();
@@ -487,8 +489,7 @@
                                         <tr>
                                          <th>Id</th>
                                           <th ><?php echo $this->lang->line('select') ?></th>
-                                          <th ><?php echo $this->lang->line('name') ?></th>
-                                          
+                                          <th ><?php echo $this->lang->line('name') ?></th>                                          
                                           <th><?php echo $this->lang->line('company') ?></th>
                                           <th><?php echo $this->lang->line('phone') ?></th>
                                           <th><?php echo $this->lang->line('email') ?></th>
@@ -579,8 +580,9 @@
                                       
                                   </div>
                                   <div class="col col-lg-6">
+                                        <a href="javascript:posnic_customers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
                                       <input type="submit" name="import" class="btn btn-default " value="<?php echo $this->lang->line('upload_file'); ?>">
-                                      <a href="javascript:posnic_customers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
+                                    
                                        
                                   </div>
                               </div>
@@ -617,7 +619,7 @@
                         <div class="row">
                             <a href="javascript:posnic_customers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('customer')." ".$this->lang->line('list') ?></a>
                             <a href="javascript:posnic_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('upload') ?></a>
-                            <a href="javascript:posnic_mapping_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('mapping') ?></a>
+                            <a href="javascript:mapping_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('mapping') ?></a>
                          </div>
                     </div>
                 </div>

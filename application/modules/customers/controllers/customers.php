@@ -11,10 +11,86 @@ class Customers extends MX_Controller
          
     }
     function index(){     
-        $this->get();
+        $this->export();
 
     }
-     function get(){
+    function export(){
+            $this->load->library('Excel'); 
+              // Create new PHPExcel object
+            $objPHPExcel = new PHPExcel();
+
+            // Set document properties
+            $objPHPExcel->getProperties()->setCreator("posnic.com")
+                 ->setLastModifiedBy( $this->session->userdata('first_name'))
+                 ->setTitle("Customer Deatils")
+                 ->setSubject("Customer Deatils")
+                 ->setDescription("Customer Deatils")
+                 ->setKeywords("Customer Deatils")
+                 ->setCategory("Customer");
+
+         $this->load->model('customer');
+         $data=  $this->customer->export_customer();
+    // Add some data
+         $j=1;
+              $objPHPExcel->setActiveSheetIndex(0)
+                               ->setCellValue("A$j",  $this->lang->line('first_name') )
+                               ->setCellValue("B$j", $this->lang->line('last_name'))
+                               ->setCellValue("C$j", $this->lang->line('birthday'))
+                               ->setCellValue("D$j", $this->lang->line('marragedate'))
+                               ->setCellValue("E$j",$this->lang->line('address'))
+                               ->setCellValue("F$j",$this->lang->line('city'))
+                               ->setCellValue("G$j", $this->lang->line('state'))
+                               ->setCellValue("H$j", $this->lang->line('country'))
+                               ->setCellValue("I$j", $this->lang->line('zip'))
+                               ->setCellValue("J$j", $this->lang->line('company'))
+                               ->setCellValue("K$j", $this->lang->line('website'))
+                               ->setCellValue("L$j",$this->lang->line('email'))
+                               ->setCellValue("M$j", $this->lang->line('phone'));
+         
+            for($i=0;$i<count($data);$i++){
+                 
+                $j++;
+
+                    $objPHPExcel->setActiveSheetIndex(0)
+                               ->setCellValue("A$j", $data[$i]['first_name'])
+                               ->setCellValue("B$j", $data[$i]['last_name'])
+                               ->setCellValue("C$j", date('d-m-Y',$data[$i]['dob']))
+                               ->setCellValue("D$j", date('d-m-Y',$data[$i]['marragedate']))
+                               ->setCellValue("E$j", $data[$i]['address'])
+                               ->setCellValue("F$j", $data[$i]['city'])
+                               ->setCellValue("G$j", $data[$i]['state'])
+                               ->setCellValue("H$j", $data[$i]['country'])
+                               ->setCellValue("I$j", $data[$i]['zip'])
+                               ->setCellValue("J$j", $data[$i]['company'])
+                               ->setCellValue("K$j", $data[$i]['website'])
+                               ->setCellValue("L$j", $data[$i]['email'])
+                               ->setCellValue("M$j", $data[$i]['phone']);
+            }
+
+
+            // Rename worksheet (worksheet, not filename)
+            $objPHPExcel->getActiveSheet()->setTitle('createdUsingPHPExcel');
+
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a client’s web browser (Excel2007)
+            //clean the output buffer
+            ob_end_clean();
+
+            //this is the header given from PHPExcel examples. but the output seems somewhat corrupted in some cases.
+            //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            //so, we use this header instead.
+            header('Content-type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="mohamadikhwan_dot_com_phpexcel_tut.csv"');
+            header('Cache-Control: max-age=0');
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            $objWriter->save('php://output');
+
+    }
+    function get(){
         $this->load->view('template/app/header'); 
         $this->load->view('header/header');         
         $this->load->view('template/branch',$this->posnic->branches());
@@ -291,15 +367,15 @@ class Customers extends MX_Controller
     function import(){
         if($this->session->userdata['customers_per']['import']==1){
             $config['upload_path'] = './uploads/import';
-            $config['allowed_types'] = 'csv|xlsx';
+            $config['allowed_types'] = 'csv|xlsx|xls';
             $config['max_size']	= '9999999';
             $this->load->library('upload', $config);
 
             if ( ! $this->upload->do_upload())
             {
                 $error = array('error' => $this->upload->display_errors());
-                print_r($error);
-                    //$this->load->view('upload_form', $error);
+                print_r($error['error']);
+                
             }
             else
             {

@@ -32,5 +32,10 @@ class Customer extends CI_Model{
         return $this->db->list_fields('customers');
         
     }
+    function export_customer(){
+        $this->db->select()->from('customers')->where('branch_id',  $this->session->userdata('branch_id'))->where('active_status',1);
+        $sql=  $this->db->get();
+        return $sql->result_array();
+    }
 }
 ?>
