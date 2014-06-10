@@ -713,5 +713,8 @@ $lang['credit_days']='Credit Days';
     $lang['fields']='Fields';
     $lang['imported_fields']='Imported Fields';
     $lang['excel_csv_fields']='Excel / CSV Fields';
+    $lang['please_check_your_mapping_and_data_in_incorrect_format']='Please Check Your Mapping And Data In Incorrect Format';
+    $lang['customer_details_is_alredy_added']='Customer Details Is Already Added';
+    $lang['customer_details_not_in_correct_format']='Customer Details Not In Correct Format';
    
 ?>
