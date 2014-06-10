@@ -720,5 +720,7 @@ $lang['credit_days']='Credit Days';
     $lang['warning']='Warning';
     $lang['error']='Error';
     $lang['list']='List';
+    $lang['export_to_xlsx']='Export To xlsx';
+    $lang['export_to_csv']='Export To csv';
    
 ?>
