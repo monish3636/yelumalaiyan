@@ -500,8 +500,7 @@ class Customers extends MX_Controller
                    ++$already;
                 }
                 }  else {
-                    echo $arr_data[$i][$email];
-                     echo validation_errors() ;
+                   
                 ++$fail;
                 }
                

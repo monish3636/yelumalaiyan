@@ -548,7 +548,7 @@
         $('#add_item_form').hide('hide');      
         $("#item_list_section").show('slow');
         $('#import_message_section').hide();
-        $('#mapping_section').hide();
+        $('#mapping_section').hide(); 
         $('#export').removeAttr("disabled");
         $('#import').removeAttr("disabled");
         $('#delete').removeAttr("disabled");
@@ -556,6 +556,7 @@
         $('#deactive').removeAttr("disabled");
         $('#posnic_add_items').removeAttr("disabled");
         $('#items_lists').attr("disabled",'disabled');
+        $("#dt_table_tools").dataTable().fnDraw();
     }
   function posnic_import(){
         $('#edit_item_form').hide();
@@ -841,7 +842,7 @@
 </section>
     
     
-<section id="mapping_section1" class="container clearfix main_section">
+<section id="mapping_section" class="container clearfix main_section">
      <?php   $form =array('id'=>'mapping_form',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -972,6 +973,14 @@
                                             </div>
                                             <div class="col col-lg-6">
                                                 <input type="text"  class="form-control required" maxlength="1" id="location" name="location">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('supplier') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="supplier" name="supplier">
                                             </div>
                                         </div>
                                     </div>
@@ -1659,7 +1668,7 @@ function items_decomposition(){
                                                     <div class="form_sep">
                                                          <label for="taxes_area" class="req"><?php echo $this->lang->line('taxes_area') ?></label>                                                                                                       
                                                            <?php $taxes_area=array('name'=>'search_taxes_area',
-                                                                                    'class'=>'required form-control',
+                                                                                    'class'=>'form-control',
                                                                                     'id'=>'search_taxes_area',
                                                                                     'value'=>set_value('taxes_area'));
                                                            echo form_input($taxes_area)?> 
