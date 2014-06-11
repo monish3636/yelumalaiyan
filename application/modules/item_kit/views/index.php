@@ -297,12 +297,13 @@
                     };
                 }
             }
-        });  
-        
+        });     
         $('#parsley_reg #search_taxes').change(function() {
             var guid = $('#parsley_reg #search_taxes').select2('data').id;
             $('#parsley_reg #taxes').val(guid);
             $('#parsley_reg #kit_tax_value').val($('#parsley_reg #search_taxes').select2('data').value);
+            $('#parsley_reg #kit_tax_type').val($('#parsley_reg #search_taxes').select2('data').text);
+            selling_item_kit_price();
         });
         function format_tax(sup) {
             if (!sup.id) return sup.text; 
@@ -316,8 +317,7 @@
             ajax: {
                 url: '<?php echo base_url() ?>index.php/items/get_taxes',
                 data: function(term, page) {
-                    return {
-                        types: ["exercise"],
+                    return {types: ["exercise"],
                         limit: -1,
                         term: term
                     };
@@ -326,7 +326,7 @@
                 dataType: 'json',
                 quietMillis: 100,
                 data: function (term) {
-                        return {
+                    return {
                         term: term
                     };
                 },
@@ -345,9 +345,6 @@
                 }
             }
         });
-        
-        
-        
     });
     
 function posnic_add_new(){
@@ -455,9 +452,11 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                             <th ><?php echo $this->lang->line('select') ?></th>
                                             <th ><?php echo $this->lang->line('kit_id') ?></th>
                                             <th><?php echo $this->lang->line('kit_name') ?></th>
-                                            <th><?php echo $this->lang->line('date') ?></th>
+                                         
                                             <th><?php echo $this->lang->line('no_of_items') ?></th>                                            
+                                            
                                             <th><?php echo $this->lang->line('kit_price') ?></th>
+                                               <th><?php echo $this->lang->line('tax_type') ?></th>
                                             <th><?php echo $this->lang->line('tax') ?></th>
                                             <th><?php echo $this->lang->line('selling_price') ?></th>
                                             <th><?php echo $this->lang->line('status') ?></th>
@@ -523,8 +522,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
     }
     
 
-    function net_amount(){ 
-    alert('jibi');
+    function net_amount(){     
         if(isNaN($('#parsley_reg #item_stock').val()) || isNaN($('#parsley_reg #quantity').val())){
             if(isNaN($('#parsley_reg #item_stock').val())){
                 $('#parsley_reg #item_stock').val(0);
@@ -565,9 +563,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
             $('#parsley_reg #tax_amount').val(0);
         if(isNaN($('#parsley_reg #total').val()))
             $('#parsley_reg #total').val(0);
-        console.log()
-        alert('jibi');
-       // selling_item_kit_price();
+        selling_item_kit_price();
     }
     function copy_items(){
         if( $('#parsley_reg #item_guid').val()!=""   && $('#parsley_reg #quantity').val()!=""){
@@ -717,8 +713,10 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                 total_amount=total_amount.toFixed(point);
                 $('#parsley_reg #total_amount').val(total_amount);
                 $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
-                clear_inputs();                
+                clear_inputs();
+                
             }  
+
         }else{
             if($('#parsley_reg #item_guid').val()==""){
                 $.bootstrapGrowl('<?php echo $this->lang->line('please_select')." ".$this->lang->line('item_type') ;?>', { type: "warning" });          
@@ -765,17 +763,20 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
         $('#parsley_reg #tax_type').val($('#selected_item_table #new_item_row_id_'+guid+' #item_tax_type').val());
         $('#select_item').select2('data', {id:guid,text: $('#selected_item_table #new_item_row_id_'+guid+' #item_name').val()});
         $('#quantity').focus();
+
     }
     
     function delete_item_item(guid){
         var net=$('#selected_item_table #new_item_row_id_'+guid+' #item_total').val(); 
         var total=$("#parsley_reg #total_amount").val();
         $("#parsley_reg #total_amount").val(parseFloat(total)-parseFloat(net));
-        $("#parsley_reg #demo_total_amount").val(parseFloat(total)-parseFloat(net));           
+        $("#parsley_reg #demo_total_amount").val(parseFloat(total)-parseFloat(net));
+           
         var num = parseFloat($('#demo_total_amount').val());
         $('#demo_total_amount').val(num.toFixed(point));
         var num = parseFloat($('#total_amount').val());
-        $('#total_amount').val(num.toFixed(point));        
+        $('#total_amount').val(num.toFixed(point));
+        
         if($('#selected_item_table #new_item_row_id_'+guid+' #deco_guid').length>0){
             $('#deleted').append('<input type="text" id="r_items" name="r_items[]" value="'+$('#selected_item_table #new_item_row_id_'+guid+' #deco_guid').val()+'">');
         }
@@ -784,7 +785,8 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
         anSelected.fnDeleteRow(index-1);
         if(document.getElementById('newly_added_items_list_'+guid)){
             $('#newly_added_items_list_'+guid).remove();
-        }        
+        }
+        
     }
     function clear_inputs(){
       $('#parsley_reg #item_guid').val('');
@@ -805,25 +807,23 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
       $('#parsley_reg #select_item').select2('open');
     }
     function selling_item_kit_price(){
-        var total=$('#kit_price').val();
-        var tax=$('#selling_tax_type').val();
-        var tax_value=$('#kit_tax_value').val();
-       
-        if(total==""){ 
-            total=0;
-        }    
-        var tax_amount=total*tax_value/100;
-        if(tax==1){
-            total=parseFloat(total)+parseFloat(tax_amount);
+        if($('#parsley_reg #kit_price').val()!=""){
+            var total=$('#kit_price').val();
+            var tax=$('#selling_tax_type').val();
+            var tax_value=$('#kit_tax_value').val();
+            var tax_amount=total*tax_value/100;
+            if(tax==1){
+                total=parseFloat(total)+parseFloat(tax_amount);
+            }  
+            var num = parseFloat(total);
+            total=num.toFixed(point);
+            var num = parseFloat(tax_amount);
+            tax_amount=num.toFixed(point);
+            $('#demo_selling_kit_price').val(total);
+            $('#selling_kit_price').val(total);               
+            $('#demo_seling_tax_amount').val(tax_amount); 
+            $('#seling_tax_amount').val(tax_amount); 
         }
-        var num = parseFloat(total);
-        total=num.toFixed(point));  
-        var num = parseFloat(tax_amount);
-        tax_amount=num.toFixed(point));  
-        
-        $('#seling_tax_amount').val(tax_amount);
-        $('#demo_selling_kit_price').val(total);
-        $('#selling_kit_price').val(total);               
         
     }
     function add_seling_kit_amount(e){
@@ -932,21 +932,17 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                             <input type="hidden" name="category_id" id="category_id">
                                                        </div>
                                                </div>
-                                               
-                                               
-                                               
-                                               <div class="col col-lg-2" >
-                                                    <div class="form_sep">
-                                                        <label for="tax_type" ><?php echo $this->lang->line('selling') ?></label>	
-                                                        <select class="form-control" id="selling_tax_type" name="selling_tax_type">
-                                                            <option value="0" onclick="selling_item_kit_price()"><?php echo $this->lang->line('inclusive') ?></option>
-                                                            <option value="1" onclick="selling_item_kit_price()"><?php echo $this->lang->line('exclusive') ?></option>
-
-                                                        </select>
-                                                    </div>
-                                                  
-                                                </div>
-                                               <div class="col col-lg-2" >
+                                               <div class="col col-sm-2" >
+                                                     <div class="form_sep" >
+                                                    <label for="tax_type" ><?php echo $this->lang->line('selling')." ".$this->lang->line('tax') ?></label>	
+                                                    <select class="form-control" id="selling_tax_type" name="selling_tax_type">
+                                                        <option value="0" onclick="selling_item_kit_price()"><?php echo $this->lang->line('inclusive') ?></option>
+                                                        <option value="1" onclick="selling_item_kit_price()"><?php echo $this->lang->line('exclusive') ?></option>
+                                                        
+                                                    </select>
+                                               </div>
+                                               </div>
+                                                <div class="col col-lg-2" >
                                                     <div class="form_sep">
                                                          <label for="taxes" class="req"><?php echo $this->lang->line('taxes') ?></label>                                                                                                       
                                                            <?php $taxes=array('name'=>'search_taxes',
@@ -956,10 +952,12 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                            echo form_input($taxes)?> 
                                                            <input type="hidden" name='taxes' id='taxes'>
                                                            <input type="hidden" name='kit_tax_value' id='kit_tax_value'>
-                                                         
+                                                           <input type="hidden" name='kit_tax_type' id='kit_tax_type'>
                                                     </div>
                                                   
-                                                </div>
+                                        </div>
+                                               
+                                               
                                              
                                               
                                               
@@ -1039,7 +1037,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                                                             'class'=>' form-control text-center',
                                                                                             'id'=>'quantity',
                                                                                             'onkeyup'=>"net_amount()", 
-                                                                                            'onKeyPress'=>"return numbersonly(event)",
+                                                                                            'onKeyPress'=>"add_new_quty(event); return numbersonly(event)",
                                                                                             'value'=>set_value('quantity'));
                                                                              echo form_input($quantity)?>
                                                                
@@ -1250,12 +1248,13 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                                          
                                                           <div class="form_sep " style="padding: 0 25px">
                                                         <label for="seling_tax_amount" ><?php echo $this->lang->line('seling_tax_amount') ?></label>													
-                                                                  <?php $seling_tax_amount=array('name'=>'seling_tax_amount',
+                                                                  <?php $seling_tax_amount=array('name'=>'demo_seling_tax_amount',
                                                                                     'class'=>' form-control',
-                                                                                    'id'=>'seling_tax_amount',
-                                                                                     'disabled'=>'disabled',
+                                                                                    'id'=>'demo_seling_tax_amount',
+                                                                                   'disabled'=>'disabled',
                                                                                     'value'=>set_value('seling_tax_amount'));
                                                                      echo form_input($seling_tax_amount)?>
+                                                        <input type="hidden" name="seling_tax_amount" id="seling_tax_amount">
                                                         
                                                   </div>
                                                           <div class="form_sep " style="padding: 0 25px">

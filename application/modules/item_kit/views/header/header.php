@@ -225,11 +225,16 @@
                                 
                                 $("#parsley_reg #demo_selling_kit_price").val(data[0]['selling_price']);
                                 $("#parsley_reg #demo_selling_kit_price").val(data[0]['selling_price']);
+                                $("#parsley_reg #demo_seling_tax_amount").val(data[0]['tax_amount']);
                                 $("#parsley_reg #seling_tax_amount").val(data[0]['tax_amount']);
                                 $("#parsley_reg #selling_tax_type").val(data[0]['kit_tax_inclusive']);
                                 $("#parsley_reg #category_id").val(data[0]['kit_category_id']);
                                 $("#parsley_reg #category").select2('data', {id:data[0]['kit_category_id'],text:data[0]['kit_category_name']});
-                               
+                                $("#parsley_reg #search_taxes").select2('data', {id:data[0]['kit_tax_id'],text:data[0]['kit_tax_type'],value:data[0]['kit_tax_value']+"%" });
+                                $('#parsley_reg #taxes').val(data[0]['kit_tax_id']);
+                                $('#parsley_reg #kit_tax_value').val(data[0]['kit_tax_value']);
+                                $('#parsley_reg #kit_tax_type').val(data[0]['kit_tax_type']);
+
                                 for(i=0;i<data.length;i++){
                                     var item_guid=data[i]['guid'];
                                     var item_id=data[i]['kit_item_id'];
@@ -240,9 +245,8 @@
                                     var stock_id=data[i]['guid'];
                                     var no_of_unit=data[i]['no_of_unit'];
                                     var price=data[i]['price'];
-                                    console.log(price);
-                                 price=parseFloat(price)/parseFloat(no_of_unit);
-                                    console.log(price);
+                                
+                                    price=parseFloat(price)/parseFloat(no_of_unit);
                                     var quantity=data[i]['kit_quty'];
                                     var tax_inclusive=data[i]['tax_Inclusive'];
                                     var sub_total=quantity*price;
