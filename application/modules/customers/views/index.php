@@ -414,6 +414,7 @@
         $('#deactive').removeAttr("disabled");
         $('#posnic_add_customers').removeAttr("disabled");
         $('#customers_lists').attr("disabled",'disabled');
+        $("#dt_table_tools").dataTable().fnDraw();
     }
     function clear_add_customers(){
         $("#posnic_user_2").trigger('reset');

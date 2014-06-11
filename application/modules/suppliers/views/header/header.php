@@ -1,10 +1,14 @@
 
 <script type="text/javascript" charset="utf-8">
-          $(document).ready( function () {
+    $(document).ready( function () {
            
-                    $('#add_supplier_details_form').hide();
-                    $('#edit_supplier_form').hide();
-                  $('#add_supplier_form').validate();
+        $('#add_supplier_details_form').hide();
+        $('#edit_supplier_form').hide();
+        $('#add_supplier_form').validate();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#import_section').hide();
+        $('#export_section').hide()
                   
                               posnic_table();
                                 add_supplier_form.onsubmit=function()
@@ -149,7 +153,7 @@
                              dataType: 'json',               
                              success: function(data)        
                              {    
-                                 $("#user_list").hide();
+                                 $("#supplier_list_section").hide();
                                  $('#edit_supplier_form').show('slow');
                                  $('#delete').attr("disabled", "disabled");
                                  $('#posnic_add_suppliers').attr("disabled", "disabled");
@@ -210,7 +214,7 @@
                         <?php }?>
                        }
 		</script>
-                <script type="text/javascript" charset="utf-8" language="javascript" src="<?php echo base_url() ?>template/data_table/js/DT_bootstrap.js"></script>
-
+<script type="text/javascript" charset="utf-8" language="javascript" src="<?php echo base_url() ?>template/data_table/js/DT_bootstrap.js"></script>
+<script type="text/javascript" src="<?php echo base_url('template/form_post/jquery.form.js') ?>"></script>
 
   

@@ -35,5 +35,32 @@ class Supplier extends CI_Model{
         $this->db->where('supplier',$guid);
         $this->db->delete('supplier_contacts');
     }
+    function category($val){
+        $this->db->select('guid')->from('suppliers_category')->where('category_name',$val)->where('branch_id',$this->session->userdata('branch_id'))->where('active_status',1);
+        $sql=  $this->db->get();
+        if($sql->num_rows()>0){
+            foreach ($sql->result() as $row){
+                return $row->guid;
+            }
+        }else{
+            $this->db->insert('suppliers_category',array('category_name'=>$val,'branch_id'=>$this->session->userdata('branch_id')));
+            $id=  $this->db->insert_id();
+            $this->db->where('id',$id);
+            $this->db->update('suppliers_category',array('guid'=>  md5('suppliers_category'.$val.$id)));
+            return  md5('suppliers_category'.$val.$id);
+        }
+    }
+    function get_suplier($guid){
+        $this->db->select()->from('suppliers')->where('guid',$guid);
+        $sql=  $this->db->get();
+        foreach ($sql->result() as $row){
+            return $row->first_name;
+        }
+    }
+    function export_supplier(){
+        $this->db->select()->from('suppliers')->where('active_status',1);
+        $sql=  $this->db->get();
+        return $sql->result_array();
+    }
 }
 ?>
