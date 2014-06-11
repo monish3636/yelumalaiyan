@@ -21,7 +21,40 @@
  
 </style>	
 <script type="text/javascript">
+    function processJson(data){
+        $('#mapping_section').show('slow');
+        $('#import_section').hide();
+        $('#import_fields').remove();
+        $('#parent_field').append('<div class="col col-lg-6" id="import_fields"></div>');
+        for(var i=0;i<data.length;i++){
+          $('#import_fields').append("<div class='row field_class' style='padding-bottom: 12px !important'><div class='col col-lg-1'><label>"+data[i][0]+"</label></div><div class='col col-lg-6'><label>"+data[i][1]+"</label></div></div>")
+        }
+    }
      $(document).ready( function () {
+         
+         
+         var options = { 
+            complete: function(response) { 
+                var res=response['responseText'];
+                if(response['responseText']=='Noop'){
+                     $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('items');?>', { type: "error" });                           
+                }else if(res[0]!='['){
+                        $.bootstrapGrowl(response['responseText'], { type: "error" });                   
+                }
+                
+
+            },
+            dataType:  'json',
+            success:   processJson ,
+            error: function()
+            {
+                    $("#message").html("<font color='red'> ERROR: unable to upload files</font>");
+
+            }
+
+        }; 
+        $("#import_form").ajaxForm(options); 
+         
           $('#add_supplier_details_form #supplier_category').change(function() {
                    var guid = $('#add_supplier_details_form #supplier_category').select2('data').id;
                  
@@ -164,9 +197,135 @@
                     <?php }?>
         });
      });
+    function posnic_mapping_import() { 
+        <?php if($this->session->userdata['suppliers_per']['add']==1){ ?>
+            if($('#mapping_form').valid()){
+                var inputs = $('#mapping_form').serialize();
+                $.ajax ({
+                    url: "<?php echo base_url('index.php/suppliers/posnic_mapping_import')?>",
+                    data: inputs,
+                    type:'POST',
+                    dataType: 'json',               
+                    success: function(data)        
+                    { 
+                        $('#mapping_section').hide();
+                        $('#import_message_section').show();
+                        var success=data['success'];
+                        var fail=data['fail'];
+                        var already=data['already'];
+                        var count=data['no'];
+                        $('#import_message_box1').remove();
+                        $('#parent_messgae').append('<div class="row" id="import_message_box1"></div>;')
+                        if(count==success){
+                           $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('suppliers').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                        }else if(fail==count){
+                                                      
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body"> <?php echo $this->lang->line('please_check_your_mapping_and_data_in_incorrect_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                        }else if(already==count){
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('supplier_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');                    
+                            
+                        }else if(fail==0 && count!=success){
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('suppliers').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('supplier_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');                           
+                        
+                        }else if(already==0 && count!=success){
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('suppliers').$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('supplier_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            
+                        }else if(success!=0 && already!=0 && fail!=0){
+                           
+                            $('#import_message_box1').append('<div class="panel panel-success">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('success') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+success+' <?php echo $this->lang->line('new')." ".$this->lang->line('suppliers')." ".$this->lang->line('added') ;?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('supplier_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('supplier_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+    
+    
+                        }else{
+                            $('#import_message_box1').append('<div class="panel panel-warning">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('warning') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+already+ ' <?php echo $this->lang->line('supplier_details_is_alredy_added')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                            $('#import_message_box1').append('<div class="panel panel-danger">\n\
+                                                        <div class="panel-heading">\n\
+                                                        <h4 class="panel-title"><?php echo $this->lang->line('error') ?></h4>\n\
+                                                        </div>\n\
+                                                        <div class="panel-body">'+fail+ ' <?php echo $this->lang->line('supplier_details_not_in_correct_format')?></div>\n\
+                                                        </div>\n\
+                                                        </div>');
+                        }
+                    
+                    }
+                });
+            }
+        <?php }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Import')." ".$this->lang->line('supplier');?>', { type: "error" });                       
+        <?php }?>
+    } 
 function posnic_add_new(){
     <?php if($this->session->userdata['suppliers_per']['add']==1){ ?>
-      $("#user_list").hide();
+      $("#supplier_list_section").hide();
       $('#add_supplier_details_form').show('slow');
       $('#delete').attr("disabled", "disabled");
       $('#posnic_add_suppliers').attr("disabled", "disabled");
@@ -177,16 +336,67 @@ function posnic_add_new(){
                     $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('supplier');?>', { type: "error" });                         
                     <?php }?>
 }
-function posnic_suppliers_lists(){
-      $('#edit_supplier_form').hide('hide');
-      $('#add_supplier_details_form').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#active').removeAttr("disabled");
-      $('#deactive').removeAttr("disabled");
-      $('#posnic_add_suppliers').removeAttr("disabled");
-      $('#suppliers_lists').attr("disabled",'disabled');
-}
+    function posnic_suppliers_lists(){
+        $('#import_section').hide();
+        $('#export_section').hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#edit_supplier_form').hide('hide');
+        $('#add_supplier_details_form').hide('hide');      
+        $("#supplier_list_section").show('slow');
+        $('#delete').removeAttr("disabled");
+        $('#active').removeAttr("disabled");
+        $('#export').removeAttr("disabled");
+        $('#import').removeAttr("disabled");
+        $('#deactive').removeAttr("disabled");
+        $('#posnic_add_suppliers').removeAttr("disabled");
+        $('#suppliers_lists').attr("disabled",'disabled');
+        $("#dt_table_tools").dataTable().fnDraw();
+    }
+    function posnic_import(){
+        $('#edit_supplier_form').hide();
+        $('#add_supplier_details_form').hide();      
+        $("#supplier_list_section").hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#import_section').show('slow');
+        $('#suppliers_lists').removeAttr("disabled");
+        $('#posnic_add_suppliers').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#export').attr("disabled",'disabled');
+        $('#import').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
+    }
+    function mapping_import(){
+        $('#edit_supplier_form').hide();
+        $('#add_supplier_details_form').hide();      
+        $("#supplier_list_section").hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').show();
+        $('#import_section').hide();
+        $('#suppliers_lists').attr("disabled",'disabled');
+        $('#posnic_add_suppliers').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
+    }
+    function posnic_export(){
+        $('#edit_supplier_form').hide();
+        $('#add_supplier_details_form').hide();      
+        $("#supplier_list_section").hide();
+        $('#import_message_section').hide();
+        $('#mapping_section').hide();
+        $('#import_section').hide();
+        $('#export_section').show('slow');
+        $('#suppliers_lists').attr("disabled",'disabled');
+        $('#posnic_add_suppliers').attr("disabled",'disabled');
+        $('#import').attr("disabled",'disabled');
+        $('#export').attr("disabled",'disabled');
+        $('#deactive').attr("disabled",'disabled');
+        $('#active').attr("disabled",'disabled');
+        $('#delete').attr("disabled",'disabled');
+    }
 function clear_add_suppliers(){
       $("#posnic_user_2").trigger('reset');
 }
@@ -204,6 +414,9 @@ function reload_update_user(){
                         <a href="javascript:posnic_group_active()" class="btn btn-default" id="deactive"  ><i class="icon icon-play"></i> <?php echo $this->lang->line('active') ?></a>
                         <a href="javascript:posnic_delete()" class="btn btn-default" id="delete"><i class="icon icon-trash"></i> <?php echo $this->lang->line('delete') ?></a>
                         <a href="javascript:posnic_suppliers_lists()" class="btn btn-default" id="suppliers_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('suppliers') ?></a>
+                        <a href="javascript:posnic_import()" class="btn btn-default" id="import"><i class="icon icon-upload"></i> <?php echo $this->lang->line('import') ?></a>
+                        <a href="javascript:posnic_export()" class="btn btn-default" id="export"><i class="icon icon-download"></i> <?php echo $this->lang->line('export') ?></a>
+                        
                 </div>
             </div>
     </div>
@@ -216,7 +429,7 @@ function reload_update_user(){
                         <?php $form =array('name'=>'posnic'); 
                     echo form_open('suppliers/suppliers_manage',$form) ?>
                         <div class="row">
-                            <div class="col-sm-12" id="user_list"><br>
+                            <div class="col-sm-12" id="supplier_list_section"><br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                             <h4 class="panel-title"><?php echo $this->lang->line('suppliers') ?></h4>                                                                               
@@ -251,6 +464,326 @@ function reload_update_user(){
                     
         </div>
 </div>
+<section id="import_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'import_form',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('suppliers/import/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-3">
+                        
+                    </div>
+                    <div  class="col-lg-6" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
+                               <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('import')." ".$this->lang->line('supplier') ?></h4>                                                                               
+                               </div>
+                              <div class="row" style="padding: 20px 0px">
+                                  <div class="col col-lg-1">
+                                      
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="javascript:download_csv_template()" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('download_csv_template') ?></a>
+                                      </div>
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="javascript:download_excel_template()" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('download_excel_template') ?></a>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-2">
+                                      
+                                  </div>
+                                  <div class="col col-lg-8">
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <input type="hidden" value="" name="">
+                                        <div class="input-group">
+                                            <div class="form-control">
+                                                <i class="icon-file fileupload-exists"></i>
+                                                <span class="fileupload-preview"></span>
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <a class="btn btn-default fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                                                <span class="btn btn-default btn-file">
+                                                <span class="fileupload-new">Select file</span>
+                                                <span class="fileupload-exists">Change</span>
+                                                <input type="file" name="userfile">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                       
+                                  </div>
+                              </div>
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-4">
+                                      
+                                  </div>
+                                  <div class="col col-lg-6">
+                                        <a href="javascript:posnic_suppliers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to_list') ?></a>
+                                      <input type="submit" name="import" class="btn btn-default " value="<?php echo $this->lang->line('upload_file'); ?>">
+                                    
+                                       
+                                  </div>
+                              </div>
+                          </div>
+                         </div>                             
+                    </div>
+                </div>
+          </div>
+        </div>
+    <?php echo form_close();?>
+</section>
+<section id="import_message_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'import_message',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('suppliers/import_message/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-4">
+                        
+                    </div>
+                    <div  class="col-lg-4" style="padding:0px 25px;" id="parent_messgae">
+                        <div class="row" id="import_message_box1">
+                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div  class="col-lg-3">
+                        
+                    </div>
+                    <div  class="col-lg-6" style="padding:0px 25px;" >
+                        <div class="row">
+                            <a href="javascript:posnic_suppliers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('supplier')." ".$this->lang->line('list') ?></a>
+                            <a href="javascript:posnic_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('upload') ?></a>
+                            <a href="javascript:mapping_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('mapping') ?></a>
+                         </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+    <?php echo form_close(); ?>
+</section>
+<section id="export_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'export_supplier',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('suppliers/export/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+               <div class="row">
+                    <div  class="col-lg-2">
+                        
+                    </div>
+                    <div  class="col-lg-8" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
+                                 <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('export')." ".$this->lang->line('suppliers') ?></h4>                                                                               
+                               </div>
+                                <div class="row" style="padding: 20px 0px">
+                                  <div class="col col-lg-2">
+                                      
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="suppliers/export/csv" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('export_to_csv') ?></a>
+                                      </div>
+                                  </div>
+                                  <div class="col col-lg-5">
+                                        <div class="form_sep">
+                                            												
+                                            <a href="suppliers/export/xlsx" class="btn btn-default"><i  class="icon icon-download"></i> <?php echo $this->lang->line('export_to_xlsx') ?></a>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row">
+                    <div  class="col-lg-4">
+                        
+                    </div>
+                    <div  class="col-lg-4" style="padding:20px 25px;" >
+                        <div class="row">
+                            <a href="javascript:posnic_suppliers_lists()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('supplier')." ".$this->lang->line('list') ?></a>                           
+                         </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+                
+          </div>
+        </div>
+              </div>
+            </div>
+    <?php echo form_close(); ?>
+</section>
+    
+    
+<section id="mapping_section" class="container clearfix main_section">
+     <?php   $form =array('id'=>'mapping_form',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('suppliers/import/',$form);?>
+        <div id="main_content_outer" class="clearfix">
+          <div id="main_content">
+                     
+                <div class="row">
+                    <div  class="col-lg-2">
+                        
+                    </div>
+                    <div  class="col-lg-8" style="padding:0px 25px;">
+                         <div class="row">
+                          <div class="panel panel-default">
+                               <div class="panel-heading">
+                                     <h4 class="panel-title"><?php echo $this->lang->line('mapping')." ".$this->lang->line('import') ?></h4>                                                                               
+                               </div>
+                              <div class="row" style="padding: 0px 20px" >
+                                  <div class="col col-lg-6 ">
+                                        <h5><?php  echo $this->lang->line('supplier')." ".$this->lang->line('fields') ?></h5>
+                                  </div>
+                                  <div class="col col-lg-6 ">
+                                      <h5>  <?php  echo $this->lang->line('excel_csv_fields') ?></h5>
+                                  </div>
+                              </div>
+                                <div class="row" style="padding: 20px 0px" id="parent_field">
+                                    <div class="col col-lg-6 data_class" id="data_fields" >
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('first_name') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text" class="form-control required" maxlength="1" id="first_name" name="first_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('last_name') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="last_name" name="last_name">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('category') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="category" name="category">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('address1') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="address1" name="address1">
+                                            </div>
+                                        </div>
+                                     
+                                       
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('city') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="city" name="city">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('state') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="state" name="state">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('zip') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="zip" name="zip">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('country') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="country" name="country">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('company') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="company" name="company">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('website') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="website" name="website">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('email') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="email" name="email">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 0px 10px">                                                                               
+                                            <div class="col col-lg-6">
+                                                <label><?php echo $this->lang->line('phone') ?></label>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <input type="text"  class="form-control required" maxlength="1" id="phone" name="phone">
+                                            </div>
+                                        </div>
+                                    </div>
+                                  <div class="col col-lg-6" id="import_fields">
+                                      
+                                  </div>
+                                  
+                              </div>
+                           
+                              <div class="row" style="padding: 10px 0px">
+                                  <div class="col col-lg-4">
+                                      
+                                  </div>
+                                  <div class="col col-lg-6">
+                                       <a href="javascript:posnic_import()" class="btn btn-default"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')."".$this->lang->line('upload') ?></a>
+                                      <a href="javascript:posnic_mapping_import()" class="btn btn-default"><i class="icon icon-upload"></i> <?php echo $this->lang->line('import') ?></a>
+                                     
+                                       
+                                  </div>
+                              </div>
+                          </div>
+                         </div>                             
+                    </div>
+                </div>
+          </div>
+        </div>
+    <?php echo form_close();?>
+</section>
 <section id="add_supplier_details_form" class="container clearfix main_section">
      <?php   $form =array('id'=>'add_supplier_form',
                           'runat'=>'server',

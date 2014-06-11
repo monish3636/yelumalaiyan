@@ -6,7 +6,6 @@ class Item extends CI_Model{
     }
     function category($val){
         $this->db->select('guid')->from('items_category')->where('category_name',$val)->where('branch_id',$this->session->userdata('branch_id'))->where('active_status',1);
-                ;
         $sql=  $this->db->get();
         if($sql->num_rows()>0){
             foreach ($sql->result() as $row){
