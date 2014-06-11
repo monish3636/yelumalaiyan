@@ -103,6 +103,50 @@ class Item extends CI_Model{
         }
 
     }
+    function get_department($guid){
+        $this->db->select()->from('items_department')->where('guid',$guid);
+        $sql=  $this->db->get();
+        foreach ($sql->result() as $row){
+            return $row->department_name;
+        }
+    }
+    function get_category($guid){
+        $this->db->select()->from('items_category')->where('guid',$guid);
+        $sql=  $this->db->get();
+        foreach ($sql->result() as $row){
+            return $row->category_name;
+        }
+    }
+    function get_brand($guid){
+        $this->db->select()->from('brands')->where('guid',$guid);
+        $sql=  $this->db->get();
+        foreach ($sql->result() as $row){
+            return $row->name;
+        }
+    }
+    function get_tax($guid){
+        $this->db->select('taxes.value,tax_types.type as type_name')->from('taxes')->where('taxes.guid',$guid);
+        $this->db->join('tax_types','tax_types.guid=taxes.type','left');
+        $sql=  $this->db->get();
+        foreach ($sql->result() as $row){
+            $data['type']=$row->type_name;
+            $data['value']=$row->value;
+        }
+        return $data;
+    }
+    function get_supplier($guid){
+        $this->db->select()->from('suppliers')->where('guid',$guid);
+        $sql=  $this->db->get();
+        foreach ($sql->result() as $row){
+            return $row->first_name;
+        }
+                
+    }
+    function export_items(){
+        $this->db->select()->from('items')->where('branch_id',  $this->session->userdata('branch_id'))->where('active_status',1);
+        $sql=  $this->db->get();
+        return $sql->result_array();
+    }
         
     
 }

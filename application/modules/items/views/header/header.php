@@ -154,8 +154,8 @@
                                  $('#delete').attr("disabled", "disabled");
                                  $('#posnic_add_items').attr("disabled", "disabled");
                                  $('#active').attr("disabled", "disabled");
-                                 $('#export').removeAttr("disabled");
-                                 $('#import').removeAttr("disabled");
+                                 $('#export').attr("disabled",'disabled');
+                                 $('#import').attr("disabled",'disabled');
                                  $('#deactive').attr("disabled", "disabled");
                                  $('#items_lists').removeAttr("disabled");
                                  $('#parsley_reg #guid').val(data[0]['guid']);

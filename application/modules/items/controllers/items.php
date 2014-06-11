@@ -7,8 +7,9 @@ class Items extends MX_Controller{
                
     }
     function index(){     
-    $this->get_items();
-   // echo  $this->load->model('item')->tax('vat1',501);
+   $this->get_items();
+  // $data=  $this->load->model('item')->get_tax('5dad9a40f3b35cd3b573fcd3d481ea0b');
+ //  echo $data['value'];
        
     }
     function export($type){
@@ -26,42 +27,46 @@ class Items extends MX_Controller{
                  ->setCategory("Item");
 
          
-         $data=  $this->posnic->posnic_module('customers');
+     
+      $this->load->model('item');
+      $data=  $this->item->export_items();
     // Add some data
          $j=1;
               $objPHPExcel->setActiveSheetIndex(0)
-                               ->setCellValue("A$j",  $this->lang->line('sku') )
+                               ->setCellValue("A$j",  $this->lang->line('code') )
                                ->setCellValue("B$j", $this->lang->line('barcode'))
                                ->setCellValue("C$j", $this->lang->line('name'))
-                               ->setCellValue("D$j", $this->lang->line('department'))
-                               ->setCellValue("E$j",$this->lang->line('address'))
-                               ->setCellValue("F$j",$this->lang->line('tax_Inclusive'))
-                               ->setCellValue("G$j", $this->lang->line('tax_type'))
-                               ->setCellValue("H$j", $this->lang->line('cost'))
+                               ->setCellValue("D$j", $this->lang->line('category'))
+                               ->setCellValue("E$j",$this->lang->line('item_department'))
+                               ->setCellValue("F$j",$this->lang->line('brands'))
+                               ->setCellValue("G$j", $this->lang->line('tax_Inclusive'))
+                               ->setCellValue("H$j", $this->lang->line('tax_type'))
                                ->setCellValue("I$j", $this->lang->line('tax'))
-                               ->setCellValue("J$j", $this->lang->line('mrp'))
-                               ->setCellValue("K$j", $this->lang->line('price'))
-                               ->setCellValue("L$j",$this->lang->line('location'))
-                               ->setCellValue("M$j", $this->lang->line('phone'));
+                               ->setCellValue("J$j", $this->lang->line('cost'))
+                               ->setCellValue("K$j", $this->lang->line('mrp'))
+                               ->setCellValue("L$j",$this->lang->line('price'))
+                               ->setCellValue("M$j", $this->lang->line('location'))                                       
+                               ->setCellValue("N$j", $this->lang->line('supplier'));
          
             for($i=0;$i<count($data);$i++){
                  
                 $j++;
-
+                   //  $tax[1];//$this->item->get_tax($data[$i]['tax_id']);
                     $objPHPExcel->setActiveSheetIndex(0)
                                ->setCellValue("A$j", $data[$i]['code'])
                                ->setCellValue("B$j", $data[$i]['barcode'])
                                ->setCellValue("C$j", $data[$i]['name'])
-                               ->setCellValue("D$j", date('d-m-Y',$data[$i]['department']))
-                               ->setCellValue("E$j", $data[$i]['address'])
-                               ->setCellValue("F$j", $data[$i]['tax_Inclusive'])
-                               ->setCellValue("G$j", $data[$i]['tax_type'])
-                               ->setCellValue("H$j", $data[$i]['cost'])
-                               ->setCellValue("I$j", $data[$i]['tax'])
-                               ->setCellValue("J$j", $data[$i]['mrp'])
-                               ->setCellValue("K$j", $data[$i]['price'])
-                               ->setCellValue("L$j", $data[$i]['location'])
-                               ->setCellValue("M$j", $data[$i]['phone']);
+                               ->setCellValue("D$j", $this->item->get_department($data[$i]['category_id']))
+                               ->setCellValue("E$j", $this->item->get_department($data[$i]['depart_id']))
+                               ->setCellValue("F$j", $this->item->get_department($data[$i]['brand_id']))
+                               ->setCellValue("G$j",$this->get_tax_inclusive($data[$i]['tax_Inclusive']))
+                               ->setCellValue("H$j", $tax['type'])
+                               ->setCellValue("I$j", $tax['value'])
+                               ->setCellValue("J$j", $data[$i]['cost_price'])
+                               ->setCellValue("K$j", $data[$i]['mrp'])
+                               ->setCellValue("L$j", $data[$i]['selling_price'])
+                               ->setCellValue("M$j", $data[$i]['location'])
+                               ->setCellValue("N$j", $this->item->get_supplier($data[$i]['supplier_id']));
             }
 
 
@@ -126,6 +131,7 @@ class Items extends MX_Controller{
 		{
 		$like =array('items.name'=>  $this->input->get_post('sSearch'),
                     'brands.name'=>  $this->input->get_post('sSearch'),
+                    'ean_upc_code.name'=>  $this->input->get_post('sSearch'),
                     'items.code'=>  $this->input->get_post('sSearch'),
                     'items.barcode'=>  $this->input->get_post('sSearch'),
                     'items_category.category_name'=>  $this->input->get_post('sSearch'),
@@ -495,7 +501,7 @@ class Items extends MX_Controller{
         }
     }
     function import(){
-        if($this->session->userdata['customers_per']['import']==1){
+        if($this->session->userdata['items_per']['import']==1){
             $config['upload_path'] = './uploads/import';
             $config['allowed_types'] = 'csv|xlsx|xls';
             $config['max_size']	= '9999999';
@@ -544,7 +550,7 @@ class Items extends MX_Controller{
     
     }
     function posnic_mapping_import(){
-        if($this->session->userdata['customers_per']['import']==1){           
+        if($this->session->userdata['items_per']['import']==1){           
             $sku=  $this->input->post('sku');
             $barcode=  $this->input->post('barcode');
             $name=  $this->input->post('name');
@@ -667,6 +673,12 @@ class Items extends MX_Controller{
         }else{
             return 1;
         }
+    }
+    function get_tax_inclusive($val){
+        if($val==1){
+            return 'No';
+        }
+        return 'Yes';
     }
     
 }
