@@ -6,11 +6,15 @@ class Items extends CI_Model{
     function get($end,$start,$like,$branch){
                 $this->db->select('item_kit.*');             
                 $this->db->from('item_kit')->where('item_kit.branch_id',$branch)->where('item_kit.delete_status',0);
-                $this->db->join('kit_category', 'kit_category.guid=item_kit.category_id','left');
                 $this->db->limit($end,$start); 
                 $this->db->or_like($like);     
                 $query=$this->db->get();
-                return $query->result_array();         
+                $data=array();
+                foreach ($query->result_array() as $row){
+                    $row['tax_value']="$row[tax_value]%";
+                    $data[]=$row;
+                }
+                return $data;         
     }
    
     function count($branch){
@@ -41,12 +45,10 @@ class Items extends CI_Model{
                    $data[]=$row;
            
             }
-//            echo '<pre>';
-//            print_r($data);
        return $data;     
      }
     function get_item_kit($guid){
-        $this->db->select('item_kit.category_id as kit_category_id,kit_category.category_name as kit_category_name,item_kit.note,item_kit.remark,item_kit.date,item_kit.no_of_items,item_kit.kit_price,item_kit.tax_inclusive as kit_tax_inclusive,item_kit.tax_amount,item_kit.selling_price,item_kit.code as item_kit_code,item_kit.item_total,item_kit.name as item_kit_name, item_kit_x_items.quty as kit_quty,item_kit_x_items.stock_id as kit_stock_id,item_kit_x_items.item_id as kit_item_id,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,items.tax_id,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,items.decomposition,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,stock.*')->from('item_kit')->where('item_kit.guid',$guid)->where('item_kit.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->select('item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,item_kit.category_id as kit_category_id,kit_category.category_name as kit_category_name,item_kit.note,item_kit.remark,item_kit.no_of_items,item_kit.kit_price,item_kit.tax_inclusive as kit_tax_inclusive,item_kit.tax_amount,item_kit.selling_price,item_kit.code as item_kit_code,item_kit.item_total,item_kit.name as item_kit_name, item_kit_x_items.quty as kit_quty,item_kit_x_items.stock_id as kit_stock_id,item_kit_x_items.item_id as kit_item_id,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,items.tax_id,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,items.decomposition,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,stock.*')->from('item_kit')->where('item_kit.guid',$guid)->where('item_kit.branch_id',  $this->session->userdata('branch_id'));
         $this->db->join('item_kit_x_items', 'item_kit_x_items.item_kit_id=item_kit.guid','left');
         $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
         $this->db->join('stock','stock.guid=item_kit_x_items.stock_id','left');
@@ -55,14 +57,14 @@ class Items extends CI_Model{
         $this->db->join('items', "items.guid=stock.item OR items.guid=decomposition_items.item_id ",'left');
         $this->db->join('items_category', 'items.category_id=items_category.guid','left');
         $this->db->join('items_setting', 'items.guid=items_setting.item_id','left');
-        $this->db->join('taxes', "taxes.guid=items.tax_id AND items.guid=stock.item OR taxes.guid=items.tax_id AND items.guid=decomposition_items.item_id",'left');
+        $this->db->join('taxes', "taxes.guid=items.tax_id AND items.guid=stock.item OR taxes.guid=items.tax_id AND items.guid=decomposition_items.item_id OR taxes.guid=item_kit.tax_id",'left');
         $this->db->join('tax_types', "tax_types.guid=taxes.type AND items.tax_id=taxes.guid AND items.guid=stock.item OR tax_types.guid=taxes.type AND items.tax_id=taxes.guid AND items.guid=decomposition_items.item_id",'left');
         $this->db->join('brands', 'items.brand_id=brands.guid','left');
         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
         $sql=  $this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){
-       $row['date']=date('d-m-Y',$row['date']);         
+    
          $data[]=$row;
         }
         return $data;
