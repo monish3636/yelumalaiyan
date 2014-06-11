@@ -7,7 +7,8 @@ class Items extends MX_Controller{
                
     }
     function index(){     
-      $this->get_items();
+    $this->get_items();
+   // echo  $this->load->model('item')->tax('vat1',501);
        
     }
     function export($type){
@@ -211,10 +212,8 @@ class Items extends MX_Controller{
                             $this->form_validation->set_rules('selling_price', $this->lang->line('selling_price'),'required|numeric|xss_clean'); 
                             $this->form_validation->set_rules('mrp', $this->lang->line('mrp'),'required|numeric|xss_clean'); 
                             $this->form_validation->set_rules('no_of_unit', $this->lang->line('no_of_unit'),'numeric|xss_clean'); 
-                            $this->form_validation->set_rules('weight', $this->lang->line('weight'),'numeric|xss_clean'); 
-                          
-                            $this->form_validation->set_rules('taxes', $this->lang->line('taxes'),'required');
-                            $this->form_validation->set_rules('taxes_area', $this->lang->line('taxes_area'),'required');
+                            $this->form_validation->set_rules('weight', $this->lang->line('weight'),'numeric|xss_clean');                           
+                            $this->form_validation->set_rules('taxes', $this->lang->line('taxes'),'required');                          
                             $this->form_validation->set_rules('supplier', $this->lang->line('supplier'),'required');
                             $this->form_validation->set_rules('brand', $this->lang->line('brand'),'required');
                             $this->form_validation->set_rules('category', $this->lang->line('category'),'required');
@@ -287,10 +286,8 @@ class Items extends MX_Controller{
                             $this->form_validation->set_rules("sku",$this->lang->line('sku'),'required');                           
                             $this->form_validation->set_rules('cost', $this->lang->line('cost'),'required|numeric|xss_clean'); 
                             $this->form_validation->set_rules('selling_price', $this->lang->line('selling_price'),'required|numeric|xss_clean'); 
-                            $this->form_validation->set_rules('mrp', $this->lang->line('mrp'),'required|numeric|xss_clean'); 
-                          
+                            $this->form_validation->set_rules('mrp', $this->lang->line('mrp'),'required|numeric|xss_clean');                           
                             $this->form_validation->set_rules('taxes', $this->lang->line('taxes'),'required');
-                            $this->form_validation->set_rules('taxes_area', $this->lang->line('taxes_area'),'required');
                             $this->form_validation->set_rules('supplier', $this->lang->line('supplier'),'required');
                             $this->form_validation->set_rules('brand', $this->lang->line('brand'),'required');
                             $this->form_validation->set_rules('category', $this->lang->line('category'),'required');
@@ -548,11 +545,11 @@ class Items extends MX_Controller{
     }
     function posnic_mapping_import(){
         if($this->session->userdata['customers_per']['import']==1){           
-            $code=  $this->input->post('sku');
+            $sku=  $this->input->post('sku');
             $barcode=  $this->input->post('barcode');
-            $brand=  $this->input->post('brand');
             $name=  $this->input->post('name');
             $department=  $this->input->post('department');
+            $brand=  $this->input->post('brand');
             $category=  $this->input->post('category');
             $tax_Inclusive=  $this->input->post('tax_Inclusive');
             $tax_type=  $this->input->post('tax_type');
@@ -561,7 +558,7 @@ class Items extends MX_Controller{
             $mrp=  $this->input->post('mrp');
             $price=  $this->input->post('price');
             $location=  $this->input->post('location');
-            $phone=  $this->input->post('phone');
+            $supplier=  $this->input->post('supplier');
             $file =  './uploads/import/'.$this->session->userdata('import_file') ;
                 //load the excel library
                 $this->load->library('excel'); 
@@ -585,12 +582,15 @@ class Items extends MX_Controller{
                 $success=0;
                 $already=0;
                 $this->load->library('form_validation');
+                $this->load->model('item');
+                $this->load->model('core_model');
             for($i=2;$i<count($arr_data)+2;$i++){
                 
                 $non_post=array('sku' =>$arr_data[$i][$sku],
-                            'barcode' =>$arr_data[$i][$sku],
-                            'address' =>$arr_data[$i][$brand],
+                            'barcode' =>$arr_data[$i][$barcode],
                             'name' =>$arr_data[$i][$name],
+                            'department' =>$arr_data[$i][$department],
+                            'brand' =>$arr_data[$i][$brand],
                             'category' =>$arr_data[$i][$category],
                             'tax_Inclusive' =>$arr_data[$i][$tax_Inclusive],
                             'tax_type' =>$arr_data[$i][$tax_type],
@@ -598,46 +598,58 @@ class Items extends MX_Controller{
                             'cost' =>$arr_data[$i][$cost],
                             'price' =>$arr_data[$i][$price],
                             'mrp' =>$arr_data[$i][$mrp],
-                            'location' =>$arr_data[$i][$location],
-                            'phone' =>$arr_data[$i][$phone]);
+                            'supplier' =>$arr_data[$i][$supplier],
+                            'location' =>$arr_data[$i][$location]);
                 
                 $_POST=$non_post;
                 
                 $this->form_validation->set_rules("sku",$this->lang->line('sku'),"required"); 
                 $this->form_validation->set_rules("barcode",$this->lang->line('barcode'),"required"); 
-                $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
+                $this->form_validation->set_rules("name",$this->lang->line('name'),"required"); 
+                $this->form_validation->set_rules("department",$this->lang->line('department'),"required"); 
+                $this->form_validation->set_rules("brand",$this->lang->line('brand'),"required"); 
+                $this->form_validation->set_rules("category",$this->lang->line('category'),"required"); 
                 $this->form_validation->set_rules("tax_Inclusive",$this->lang->line('tax_Inclusive'),"required"); 
                 $this->form_validation->set_rules("tax_type",$this->lang->line('tax_type'),"required"); 
-                $this->form_validation->set_rules("tax",$this->lang->line('tax'),"required"); 
-                $this->form_validation->set_rules("cost",$this->lang->line('cost'),"required"); 
-                $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'max_length[12]|regex_match[/^[0-9]+$/]|xss_clean');
-                $this->form_validation->set_rules('location', $this->lang->line('location'), 'required|valid_location');
+                $this->form_validation->set_rules("tax",$this->lang->line('tax'),"required|numeric"); 
+                $this->form_validation->set_rules("cost",$this->lang->line('cost'),"required|numeric"); 
+                $this->form_validation->set_rules('mrp', $this->lang->line('mrp'), 'required|numeric');
+                $this->form_validation->set_rules('price', $this->lang->line('price'), 'required|numeric');
+                $this->form_validation->set_rules('supplier', $this->lang->line('supplier'), 'required');
                 if ( $this->form_validation->run() !== false ) {
+                    $supplier_id=$this->item->supplier($this->input->post('supplier'));
+                    $tax_id=$this->item->tax($this->input->post('tax_type'),$this->input->post('tax'));
+                   
                     $values=array(
-                        'sku'=>$this->input->post('sku'),
+                        'code'=>$this->input->post('sku'),
                         'barcode'=>  $this->input->post('barcode'),
                         'name'=>$this->input->post('name'),
-                        'location'=>$this->input->post('location'),
-                        'tax_Inclusive'=>$this->input->post('tax_Inclusive'),
-                        'tax_type'=>$this->input->post('tax_type'),
-                        'cost'=>$this->input->post('cost'),
+                        'depart_id'=>  $this->item->department($this->input->post('department')),
+                        'brand_id'=>  $this->item->brands($this->input->post('brand')),
+                        'category_id'=>  $this->item->category($this->input->post('category')),                                  
+                        'tax_Inclusive'=>  $this->tax_inclusive($this->input->post('tax_Inclusive')),
+                        'tax_id'=>$tax_id,
+                        'supplier_id'=>$supplier_id,
+                        'cost_price'=>$this->input->post('cost'),
                         'mrp'=>$this->input->post('mrp'),
-                        'price'=>$this->input->post('price'),
-                        'tax'=>$this->input->post('tax'),
-                        'category'=>$this->input->post('category'),                                  
-                        'brand'=>strtotime($this->input->post('brand')),
-                        'department'=>strtotime($this->input->post('department')),
+                        'selling_price'=>$this->input->post('price'),
+                        'location'=>$this->input->post('location')
                        );
-                         $where=array('phone'=>$this->input->post('phone'),'location'=>$this->input->post('location'));
-                    if($this->posnic->check_record_unique($where,'customers')){                   
-                            $this->posnic->posnic_add_record($values,'customers');
+                   
+                                   
+                         $where=array('name'=>$this->input->post('name'),'barcode'=>$this->input->post('barcode'),'code'=>$this->input->post('sku'));
+                    if($this->posnic->check_record_unique($where,'items')){                   
+                         $id= $this->posnic->posnic_add_record($values,'items');
+                         $this->core_model->item_setting($id,$this->session->userdata['branch_id']);
+                         $this->core_model->suppliers_x_items($id,$this->session->userdata['branch_id'],$this->input->post('mrp'),$supplier_id,$this->input->post('price'),$this->input->post('cost'));
+                            
+                               
                     ++$success;
                 }else{
                    ++$already;
                 }
                 }  else {
-                    echo $arr_data[$i][$location];
-                     echo validation_errors() ;
+                   
                 ++$fail;
                 }
                
@@ -648,7 +660,14 @@ class Items extends MX_Controller{
             $status['no']=$row-1;
             echo json_encode($status);
         }
-    }    
+    }
+    function tax_inclusive($inc){
+        if($inc=='yes' or $inc=='YES' or $inc=='Yes' or $inc==1){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
     
 }
 ?>
