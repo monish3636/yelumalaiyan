@@ -128,10 +128,10 @@ class Posnic{
         }
     }
     function posnic_module($table){
-        if($this->session->userdata[$table]==='On'){
+       
              $CI=  get_instance();
              return $CI->posnic_model->module_result($table,$this->CI->session->userdata['branch_id']);
-        }
+        
     }
     function posnic_module_where($table,$where){
         if($this->session->userdata[$table]==='On'){

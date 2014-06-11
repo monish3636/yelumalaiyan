@@ -533,6 +533,8 @@
             $('#delete').attr("disabled", "disabled");
             $('#posnic_add_items').attr("disabled", "disabled");
             $('#active').attr("disabled", "disabled");
+            $('#export').attr("disabled",'disabled');
+            $('#import').attr("disabled",'disabled');
             $('#deactive').attr("disabled", "disabled");
             $('#items_lists').removeAttr("disabled");
             change_orm_to_unit();
