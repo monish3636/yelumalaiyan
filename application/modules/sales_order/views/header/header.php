@@ -254,7 +254,16 @@ function sales_order_approve(guid){
                                       if(!$('#'+data[i]['i_guid']).length){
                                   
                                     var  name=data[i]['items_name'];
+                                    if(data[i]['kit_name']){
+                                        name=data[i]['kit_name'];
+                                    }
                                     var  sku=data[i]['i_code'];
+                                    if(data[i]['kit_code']){
+                                        sku=data[i]['kit_code'];
+                                    }
+                                    if(data[i]['deco_code']){
+                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                                    }
                                     var  quty=data[i]['quty'];
                                    
                                     var  tax_type=data[i]['tax_type_name'];
@@ -262,13 +271,25 @@ function sales_order_approve(guid){
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
                                   
                                     var  price=data[i]['price'];
-                                    var uom=data[i]['uom']
-                                    
-                                    if(uom==1){
-                                        var no_of_unit=data[i]['no_of_unit'];
-                                        price=price/no_of_unit;
+                                    if(data[i]['kit_code']){
+                                        tax_type=data[i]['kit_tax_type'];
+                                        tax_value=data[i]['kit_tax_value'];
+                                        tax_Inclusive=data[i]['kit_tax_Inclusive'];
+                                        price=data[i]['kit_price'];
+                                        var  items_id=data[i]['kit_guid'];
+                                    }else  if(data[i]['deco_code']){
+                                        var  price=data[i]['price'];
+                                        var items_id=data[i]['deco_guid'];
                                     }
+                                    else{
                                     var  items_id=data[i]['i_guid'];
+                                    var uom=data[i]['uom']                                    
+                                        if(uom==1){
+                                            var no_of_unit=data[i]['no_of_unit'];
+                                            price=price/no_of_unit;
+                                        }
+                                    }
+                                   
                                     var per =data[i]['item_discount'];
                                     if(per==""){
                                         per=0;
