@@ -107,7 +107,7 @@ function save(){
         $this->form_validation->set_rules('grand_total', $this->lang->line('grand_total'), 'numeric');                      
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric'); 
         $this->form_validation->set_rules('round_off_amount', $this->lang->line('round_off_amount'), 'numeric');                      
-        $this->form_validation->set_rules('discount', $this->lang->line('discount'), 'numeric');                      
+        $this->form_validation->set_rules('discount_percentage', $this->lang->line('discount_percentage'), 'numeric');                      
         $this->form_validation->set_rules('freight', $this->lang->line('freight'), 'numeric');                      
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'), 'required');                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'required|numeric');                      
@@ -119,11 +119,11 @@ function save(){
                 $order_number=  $this->input->post('order_number');
                 $expdate=strtotime($this->input->post('expiry_date'));
                 $quotation_date= strtotime($this->input->post('quotation_date'));
-                $discount=  $this->input->post('discount');
+                $discount=  $this->input->post('discount_percentage');
                 $discount_amount=  $this->input->post('discount_amount');
                 $freight=  $this->input->post('freight');
                 $round_amt=  $this->input->post('round_off_amount');
-                $total_items=$this->input->post('index');
+                $total_items=$this->input->post('no_of_item');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');
@@ -167,7 +167,7 @@ function save(){
         $this->form_validation->set_rules('grand_total', $this->lang->line('grand_total'), 'numeric');                      
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric'); 
         $this->form_validation->set_rules('round_off_amount', $this->lang->line('round_off_amount'), 'numeric');                      
-        $this->form_validation->set_rules('discount', $this->lang->line('discount'), 'numeric');                      
+        $this->form_validation->set_rules('discount_percentage', $this->lang->line('discount'), 'numeric');                      
         $this->form_validation->set_rules('freight', $this->lang->line('freight'), 'numeric');    
         
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));                      
@@ -185,11 +185,11 @@ function save(){
                 $customer=  $this->input->post('customers_guid');
                 $expdate=strtotime($this->input->post('expiry_date'));
                 $podate= strtotime($this->input->post('quotation_date'));
-                $discount=  $this->input->post('discount');
+                $discount=  $this->input->post('discount_percentage');
                 $discount_amount=  $this->input->post('discount_amount');
                 $freight=  $this->input->post('freight');
                 $round_amt=  $this->input->post('round_off_amount');
-             echo   $total_items=count($this->input->post('index'));
+                $total_items=$this->input->post('no_of_item');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');

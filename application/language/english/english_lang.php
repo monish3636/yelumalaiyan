@@ -726,5 +726,6 @@ $lang['credit_days']='Credit Days';
     $lang['list']='List';
     $lang['export_to_xlsx']='Export To xlsx';
     $lang['export_to_csv']='Export To csv';
+    $lang['not_updated']='Not Updated';
    
 ?>

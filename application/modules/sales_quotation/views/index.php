@@ -96,7 +96,7 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
-                var inputs = $('#parsley_reg').serialize();
+                var inputs = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_quotation/save')?>",
                             data: inputs,
@@ -133,7 +133,7 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
-                var inputs = $('#parsley_reg').serialize();
+                var inputs = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_quotation/update')?>",
                             data: inputs,
@@ -170,7 +170,8 @@
          
        
           $('#parsley_reg #items').change(function() {
-              if(data_table_duplicate($('#new_item_row_id_'+$('#parsley_reg #items').select2('data').sid))){
+              if(data_table_duplicate('new_item_row_id_'+$('#parsley_reg #items').select2('data').sid)){
+                //  if(data_table_duplicate('new_item_row_id_'+$('#parsley_reg #stock_id').val())){
                      $.bootstrapGrowl('<?php echo $this->lang->line('this item already added');?> '+$('#parsley_reg #first_name').val(), { type: "warning" });  
                        $('#parsley_reg #items').select2('open');
               }else{
@@ -896,7 +897,7 @@ function copy_items(){
   
       
 if(data_table_duplicate('new_item_row_id_'+$('#parsley_reg #stock_id').val())){
-
+if($('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()).length){
   var  name=$('#parsley_reg #item_name').val();
   var  sku=$('#parsley_reg #sku').val();
   var  quty=$('#parsley_reg #quantity').val();
@@ -1031,6 +1032,10 @@ $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
     clear_inputs();
     $('#parsley_reg #tax').val(0);
     $('#parsley_reg #item_discount').val(0);
+    }else{
+        $.bootstrapGrowl('<?php echo $this->lang->line('item') ?> '+$('#parsley_reg #item_name').val()+' <?php echo $this->lang->line('not_updated');?> ', { type: "warning" });  
+        clear_inputs();
+    }
 }else{
    
 
@@ -1199,7 +1204,8 @@ function edit_order_item(guid){
      $('#parsley_reg #old_tax').val($('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val()*$('#selected_item_table #new_item_row_id_'+guid+' #items_price').val()*$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_value').val()/100);
       $('#parsley_reg #old_discount').val($('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val()*$('#selected_item_table #new_item_row_id_'+guid+' #items_price').val()*$('#selected_item_table #new_item_row_id_'+guid+' #items_discount_per').val()/100);
    
-    $('#parsley_reg #item_id').val(guid);
+    $('#parsley_reg #stock_id').val(guid);
+    $('#parsley_reg #item_id').val($('#selected_item_table #new_item_row_id_'+guid+' #items_id').val());
     $('#parsley_reg #total').val($('#selected_item_table #new_item_row_id_'+guid+' #items_total').val());
      if( $('#parsley_reg #tax_Inclusive').val()==1){
         $('#tax_label').text('Tax(Exc)');
@@ -1472,7 +1478,7 @@ function new_discount_amount(){
                                                 <div class="col col-sm-2" >
                                                    <div class="form_sep">
                                                             <label for="discount" ><?php echo $this->lang->line('discount') ?>%</label>													
-                                                                     <?php $discount=array('name'=>'discount',
+                                                                     <?php $discount=array('name'=>'discount_percentage',
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'id_discount',
                                                                                          
