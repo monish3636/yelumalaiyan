@@ -155,7 +155,7 @@ function save(){
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric|required');                  
         $this->form_validation->set_rules('kit_price', $this->lang->line('kit_price'), 'numeric|required');                  
         $this->form_validation->set_rules('selling_kit_price', $this->lang->line('selling_kit_price'), 'numeric|required'); 
-       $this->form_validation->set_rules('kit_tax_type', $this->lang->line('kit_tax_type'), 'required');  
+        $this->form_validation->set_rules('kit_tax_type', $this->lang->line('kit_tax_type'), 'required');  
         $this->form_validation->set_rules('kit_tax_value', $this->lang->line('kit_tax_value'), 'required'); 
         
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));                      

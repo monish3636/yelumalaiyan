@@ -189,7 +189,7 @@ function save(){
                 $discount_amount=  $this->input->post('discount_amount');
                 $freight=  $this->input->post('freight');
                 $round_amt=  $this->input->post('round_off_amount');
-                $total_items=$this->input->post('index');
+             echo   $total_items=count($this->input->post('index'));
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');

@@ -102,7 +102,7 @@ class Items_setting extends MX_Controller{
                  $data=array(
                     'set'=>1,
                     'sales'=>$this->input->post('sales'),
-                    'salses_return'=>$this->input->post('sales_return'),
+                    'sales_return'=>$this->input->post('sales_return'),
                     'purchase'=>$this->input->post('purchase'),
                     'purchase_return'=>$this->input->post('purchase_return'),
                     'allow_negative'=>$this->input->post('allow_negative'),
