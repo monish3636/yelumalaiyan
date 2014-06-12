@@ -279,10 +279,23 @@ function sales_quotation_approve(guid){
                                         tax_value=data[i]['kit_tax_value'];
                                         tax_Inclusive=data[i]['kit_tax_Inclusive'];
                                         price=data[i]['kit_price'];
+                                        var  items_id=data[i]['kit_guid'];
+                                    }else  if(data[i]['deco_code']){
+                                         var  price=data[i]['price'];
+                                           var items_id=data[i]['deco_guid'];
+                                    }
+                                    else{
+                                    var  items_id=data[i]['i_guid'];
+                                    var uom=data[i]['uom']                                    
+                                        if(uom==1){
+                                            var no_of_unit=data[i]['no_of_unit'];
+                                            price=price/no_of_unit;
+                                        }
+                                        
                                     }
                                   
                                    
-                                    var  items_id=data[i]['i_guid'];
+                                    
                                     var per =data[i]['item_discount'];
                                     if(per==""){
                                         per=0;

@@ -80,9 +80,6 @@
            }
         }
         return false
-     //  / fnAddData
-   //   console.log($("#selected_item_table").dataTable().fnGetData(1).attr('id'))
-    //    console.log(cells);
     }
     function numbersonly(e){
         var unicode=e.charCode? e.charCode : e.keyCode
@@ -325,7 +322,7 @@
                     data: function (term) {
                         return {
                             term: term,
-                                     suppler:$('#parsley_reg #customers_guid').val()
+                            
                         };
                     },
                     results: function (data) {
@@ -786,7 +783,7 @@ function new_round_off_amount(e){
         }
         
         }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
+ $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
          $('#parsley_reg #first_name').select2('open');
 
         }
@@ -899,6 +896,7 @@ function copy_items(){
 if(data_table_duplicate('new_item_row_id_'+$('#parsley_reg #stock_id').val())){
 if($('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()).length){
   var  name=$('#parsley_reg #item_name').val();
+  var  stock=$('#parsley_reg #stock_id').val();
   var  sku=$('#parsley_reg #sku').val();
   var  quty=$('#parsley_reg #quantity').val();
   if($('#parsley_reg #free').val()!=""){
