@@ -21,6 +21,9 @@
                 $('#selected_item_table').dataTable({
                      "bProcessing": true,
                                       "bDestroy": true ,
+                        "paging":   false,
+        "ordering": false,
+        "info":     false,
 				    
                     "sPaginationType": "bootstrap_full",
                     "fnRowCallback" : function(nRow, aData, iDisplayIndex){

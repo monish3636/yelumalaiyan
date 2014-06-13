@@ -81,6 +81,22 @@
         return false
           }
     }
+        function data_table_duplicate(){
+            alert('jibi');
+        var rows = $("#selected_item_table").dataTable().fnGetNodes();
+        for(var i=0;i<rows.length;i++)
+        {
+       // console.log($(rows[i]).attr('id'))
+         //   console.log(rows);delivered_item_quty0
+         // ( "input", oTablefnGetNodes() ).attr('checked', value) 
+         // console.log($("input",rows).attr('id')); 
+      //   console.log($("#delivered_item_quty"+i ,rows).val());
+     //    $("#delivered_item_quty"+i ,rows).val(1000);
+        }
+       var data=$('#parsley_reg').serialize();
+        console.log(data.concat($('input',$('#header_elements')).serialize()));
+        
+    }
     function delivered_quty(e,i){
         var unicode=e.charCode? e.charCode : e.keyCode
             if (unicode!=13 && unicode!=9){          
@@ -369,7 +385,8 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
-                var inputs = $('#parsley_reg').serialize();
+                   var data=$('#parsley_reg').serialize();        
+                var inputs =data.concat($('input',$('#selected_item_table')).serialize());
                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_delivery_note/save')?>",
                             data: inputs,
@@ -410,7 +427,8 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
-                var inputs = $('#parsley_reg').serialize();
+                             var data=$('#parsley_reg').serialize();        
+                var inputs =data.concat($('input',$('#selected_item_table')).serialize());
                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_delivery_note/update')?>",
                             data: inputs,
@@ -505,32 +523,52 @@
                                 for(i=0;i<data.length;i++){
                                       receive=1;
                                     var  name=data[i]['items_name'];
+                                    if(data[i]['kit_name']){
+                                        name=data[i]['kit_name'];
+                                    }
                                     var  sku=data[i]['i_code'];
+                                    if(data[i]['kit_code']){
+                                        sku=data[i]['kit_code'];
+                                    }
+                                    
                                     var  quty=data[i]['quty'];
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
                                   
                                     var  price=data[i]['price'];
-                                    var uom=data[i]['uom']
-                                    
-                                    if(uom==1){
-                                        var no_of_unit=data[i]['no_of_unit'];
-                                        price=price/no_of_unit;
+                                    var  price=data[i]['price'];
+                                    if(data[i]['kit_code']){
+                                        tax_type=data[i]['kit_tax_type'];
+                                        tax_value=data[i]['kit_tax_value'];
+                                        tax_Inclusive=data[i]['kit_tax_Inclusive'];
+                                        price=data[i]['kit_price'];
+                                        var  items_id=data[i]['kit_guid'];
+                                    }else  if(data[i]['deco_code']){
+                                        var  price=data[i]['price'];
+                                        var items_id=data[i]['deco_guid'];
                                     }
-                                    var  o_i_guid=data[i]['o_i_guid'];
-                                    var  items_id=data[i]['item'];
+                                    else{
+                                    var  items_id=data[i]['i_guid'];
+                                    var uom=data[i]['uom']                                    
+                                        if(uom==1){
+                                            var no_of_unit=data[i]['no_of_unit'];
+                                            price=price/no_of_unit;
+                                        }
+                                    }
+                                    //var  o_i_guid=data[i]['o_i_guid'];
+                                    //var  items_id=data[i]['item'];
                                     var discount=0;
                                      var per=0;
-                                    if(data[i]['dis_per']!=0){
-                                         per=data[i]['dis_per'];
+                                    if(data[i]['item_discount']!=0){
+                                         per=data[i]['item_discount'];
                                         discount=(parseFloat(quty)*parseFloat(price))*per/100;
                                          
                                     }
                                     
                                      
                                     total_discount=parseFloat(total_discount)+parseFloat(discount);
-                                   if(data[i]['tax_Inclusive']==1){
+                                   if(tax_Inclusive==1){
                                       var tax_val=data[i]['tax_value'];
                                       var tax=(parseFloat(quty)*parseFloat(price))*tax_val/100;
                                       total_tax=parseFloat(total_tax)+parseFloat(tax);
@@ -547,6 +585,7 @@
                                       var num = parseFloat(total);
                                       total=num.toFixed(point);
                                   }
+                                  
                                     var num = parseFloat(tax);
                                       tax=num.toFixed(point);
                                     var num = parseFloat(discount);
@@ -564,7 +603,7 @@
                                  
                                  type+'('+tax_val+'%): '+tax,
                                   discount,
-                                   "<input type='hidden' id='item_total_"+i+"' value='"+total+"'><input type='hidden' id='item_quty_"+i+"' value='"+quty+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+data[i]['tax_Inclusive']+"' ><input type='hidden' id='tax_value_"+i+"' value='"+data[i]['tax_value']+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' name='items[]' value='"+data[i]['item']+"' ><input type='hidden' id='item_price_"+i+"' value='"+price+"' ><input type='text' id='delivered_item_quty"+i+"' value='"+quty+"' name='delivered_quty[]' onkeyup='delivered_quty_items("+i+")' onKeyPress='delivered_quty(event,"+i+");return numbersonly(event)' class='form-control' style='width:100px'>",
+                                   "<input type='hidden' id='item_total_"+i+"' value='"+total+"'><input type='hidden' id='item_quty_"+i+"' value='"+quty+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+data[i]['tax_Inclusive']+"' ><input type='hidden' id='tax_value_"+i+"' value='"+data[i]['tax_value']+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' name='items[]' value='"+items_id+"' ><input type='hidden' id='item_price_"+i+"' value='"+price+"' ><input type='text' id='delivered_item_quty"+i+"' value='"+quty+"' name='delivered_quty[]' onkeyup='delivered_quty_items("+i+")' onKeyPress='delivered_quty(event,"+i+");return numbersonly(event)' class='form-control' style='width:100px'>",
                                  total
                                  ] );
                                  if(data[0]['discount']==0){
@@ -622,6 +661,7 @@
                      $('#demo_dn_no').val(grn_number);
                      
                     }
+               // data_table_duplicate();
           });
           $('#parsley_reg #demo_order_number').select2({
               dropdownCssClass : 'supplier_select',
@@ -827,7 +867,7 @@ function reload_update_user(){
         <input type="hidden" name="dummy_discount_amount" id="dummy_discount_amount" >
         <input type="hidden" name="sales_delivery_note_guid" id="sales_delivery_note_guid" >
         <input type="hidden" name="guid" id="guid" >
-                         <div class="row">
+                         <div class="row" id="header_elements">
                           <div class="panel panel-default">
                               <div class="panel-heading" >
                                      <h4 class="panel-title"><?php echo $this->lang->line('sales_delivery_note')." ".$this->lang->line('details') ?></h4>                                                                               

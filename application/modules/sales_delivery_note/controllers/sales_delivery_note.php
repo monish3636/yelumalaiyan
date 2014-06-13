@@ -122,6 +122,7 @@ function save(){
                 for($i=0;$i<count($items);$i++){
                         $this->load->model('sales');
                         $this->sales->update_item_receving($items[$i],$quty[$i],$so);
+                        // $quty[$i];
                        
                 }
                 $this->posnic->posnic_master_increment_max('sales_delivery_note')  ;
