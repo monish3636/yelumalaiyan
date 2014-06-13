@@ -309,7 +309,7 @@ function sales_order_approve(guid){
                                   
                                     }
                                     
-                                   if(data[i]['tax_Inclusive']==1){
+                                   if(tax_Inclusive==1){
                                      var tax=(parseFloat(quty)*parseFloat(price))*tax_value/100;
                                     
                                       var total=+tax+ +(parseFloat(quty)*parseFloat(price))-discount;
