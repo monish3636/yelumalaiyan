@@ -151,6 +151,7 @@
             var delivered=  $('#parsley_reg #delivered_item_quty'+i).val();
             var ordered=  $('#parsley_reg #item_quty_'+i).val();
             if(parseFloat(delivered)>parseFloat(ordered)){
+                
                 $('#parsley_reg #delivered_item_quty'+i).val(ordered);  
                 var discount;
                 if($('#discount_per_'+i).val()!=""){
@@ -191,14 +192,15 @@
                 total=total.toFixed(point);
                 var tax = parseFloat(tax);
                 tax=tax.toFixed(point);
-                 
-                $('#selected_item_table #new_item_row_id_'+i+' td:nth-child(6)').html(type+'('+$('#tax_value_'+i).val()+'%): '+tax);
+                     
+                $('#selected_item_table #new_item_row_id_'+i+' td:nth-child(6)').html(tax+' : '+$('#tax_type_'+i).val()+'-'+$('#tax_value_'+i).val()+'%('+type+')');
                 $('#selected_item_table #new_item_row_id_'+i+' td:nth-child(7)').html(discount);
                 $('#selected_item_table #new_item_row_id_'+i+' td:nth-child(9)').html(total);
                 $('#selected_item_table #item_total_'+i).val(total);
                 
                 total_amount();
             }else{
+                
                  var discount;
                 if($('#discount_per_'+i).val()!=""){
                     discount=(parseFloat($('#item_price_'+i).val())*parseFloat($('#delivered_item_quty'+i).val()))*(parseFloat($('#discount_per_'+i).val())/100)
@@ -249,11 +251,14 @@
         }
     }
     function total_amount(){
-        var length=$('#selected_item_table >tbody >tr').length
+       
+        var rows = $("#selected_item_table").dataTable().fnGetNodes();
         var total=0;
-        for(var i=0;i<length;i++){
-            var item_total=parseFloat($('#item_total_'+i).val());
-            if(isNaN(item_total)){
+        var item_total=0;
+        for(var i=0;i<rows.length;i++)
+        {
+        item_total=parseFloat($('#item_total_'+i ,rows).val());
+        if(isNaN(item_total)){
                        item_total=0;  
              }
              if(item_total==""){
@@ -261,6 +266,8 @@
              }
             total=total+item_total;
         }
+        
+        
         var discount;
       
         
