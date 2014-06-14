@@ -81,6 +81,13 @@
         }
         return false
     }
+     function get_table_data(){
+        $('#selected_item_table').dataTable({
+                     "bProcessing": true,
+                     "bDestroy": true ,
+                     "bPaginate": false,
+        });
+    }
     function numbersonly(e){
         var unicode=e.charCode? e.charCode : e.keyCode
         if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40){ //if the key isn't the backspace key (which we should allow)
@@ -93,7 +100,9 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
+                           get_table_data();
                 var inputs = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
+                
                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_quotation/save')?>",
                             data: inputs,
@@ -130,6 +139,7 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
+                           get_table_data();
                 var inputs = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_quotation/update')?>",
