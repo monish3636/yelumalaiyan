@@ -193,8 +193,14 @@
                     $('#tax_inclusive').val($('#parsley_reg #select_item').select2('data').tax_inclusive);
                     $('#tax_value').val($('#parsley_reg #select_item').select2('data').tax_value);
                     $('#tax_type').val($('#parsley_reg #select_item').select2('data').tax_type);
-                    $('#parsley_reg #price').val(parseFloat($('#parsley_reg #select_item').select2('data').price)/parseFloat($('#parsley_reg #select_item').select2('data').no_of_unit));
-                    $('#parsley_reg #item_price').val(parseFloat($('#parsley_reg #select_item').select2('data').price)/parseFloat($('#parsley_reg #select_item').select2('data').no_of_unit));
+                    if($('#parsley_reg #select_item').select2('data').uom==1){
+                        $('#parsley_reg #price').val($('#parsley_reg #select_item').select2('data').price/parseFloat($('#parsley_reg #select_item').select2('data').no_of_unit));
+                        $('#parsley_reg #item_price').val($('#parsley_reg #select_item').select2('data').price/parseFloat($('#parsley_reg #select_item').select2('data').no_of_unit));
+                    }else{
+                        $('#parsley_reg #price').val($('#parsley_reg #select_item').select2('data').price);
+                        $('#parsley_reg #item_price').val($('#parsley_reg #select_item').select2('data').price);
+                    }
+                   
                 }
                 $('#parsley_reg #stock_id').val($('#parsley_reg #select_item').select2('data').sid);      
                 $('#parsley_reg #item_stock').val($('#parsley_reg #select_item').select2('data').quty);
