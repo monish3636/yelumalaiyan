@@ -344,7 +344,7 @@ function sales_order_approve(guid){
                                     sku,
                                     quty,
                                     price,
-                                    tax+' : '+tax_type+'('+type+')',
+                                    tax+' : '+tax_type+'-'+tax_value+'%('+type+')',
                                     discount,
                                     total,
                                     '<input type="hidden" name="index" id="index">\n\

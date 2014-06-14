@@ -71,9 +71,9 @@ class Sales extends CI_Model{
         $this->db->join('decomposition_items','decomposition_items.guid=sales_quotation_x_items.item','left');
         $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
         $this->db->join('items', "items.guid=sales_quotation_x_items.item OR items.guid=decomposition_items.item_id",'left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=sales_quotation_x_items.item  ",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=sales_quotation_x_items.item  ",'left');
-        $this->db->join('customers', "customers.guid=sales_quotation.customer_id AND sales_quotation_x_items.quotation_id='".$guid."'  ",'left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid ",'left');
+        $this->db->join('customers', "customers.guid=sales_quotation.customer_id ",'left');
         $sql=  $this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){

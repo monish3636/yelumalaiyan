@@ -93,7 +93,10 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
-                 var inputs = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
+                           
+                 var data = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
+                       
+                    var inputs =data.concat($('input',$('#selected_item_table')).serialize());
                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_order/save')?>",
                             data: inputs,
@@ -130,7 +133,9 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
-                 var inputs = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
+                var data = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
+                       
+                    var inputs =data.concat($('input',$('#selected_item_table')).serialize());
                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_order/update')?>",
                             data: inputs,
@@ -172,7 +177,7 @@
                    if($('#parsley_reg #items').select2('data').deco_guid){
                         var guid = $('#parsley_reg #items').select2('data').deco_guid;
                         $('#parsley_reg #item_id').val(guid);
-                        $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').deco_code);
+                        $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').deco_code+'-'+$('#parsley_reg #items').select2('data').deco_value);
                         $('#parsley_reg #stock_id').val($('#parsley_reg #items').select2('data').sid);
                         $('#parsley_reg #item_name').val($('#parsley_reg #items').select2('data').text);
                         
@@ -595,7 +600,7 @@
                                     sku,
                                     quty,
                                     price,
-                                    tax+' : '+tax_type+'('+type+')',
+                                    tax+' : '+tax_type+'-'+tax_value+'%('+type+')',
                                     discount,
                                     total,
                                     '<input type="hidden" name="index" id="index">\n\
@@ -1391,7 +1396,7 @@ $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
       sku,
       quty,
       price,
-      tax+' : '+tax_type+'('+type+')',
+      tax+' : '+tax_type+'-'+tax_value+'%('+type+')',
       discount,
       total,
      

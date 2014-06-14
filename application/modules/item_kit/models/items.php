@@ -96,6 +96,16 @@ class Items extends CI_Model{
         $sql=  $this->db->get();
         return $sql->result();
     }
+    function add_kit_to_stock($guid,$selling_price){
+        $this->db->insert('stock',array('item'=>$guid,'price'=>$selling_price,'branch_id'=>  $this->session->userdata('branch_id')));
+        $id=  $this->db->insert_id();
+        $this->db->where('id',$id);
+        $this->db->update('stock',array('guid'=>  md5('item_kit',$guid.$id.$this->session->userdata('branch_id'))));
+    }
+    function update_kit_in_stock($guid,$selling_price){
+        $this->db->where('item',$guid);
+        $this->db->update('stock',array('price'=>$selling_price));
+    }
     
 }
 ?>

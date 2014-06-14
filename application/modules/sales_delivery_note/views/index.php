@@ -81,17 +81,12 @@
         return false
           }
     }
-        function data_table_duplicate(){
+    function data_table_duplicate(){
             alert('jibi');
         var rows = $("#selected_item_table").dataTable().fnGetNodes();
         for(var i=0;i<rows.length;i++)
         {
-       // console.log($(rows[i]).attr('id'))
-         //   console.log(rows);delivered_item_quty0
-         // ( "input", oTablefnGetNodes() ).attr('checked', value) 
-         // console.log($("input",rows).attr('id')); 
-      //   console.log($("#delivered_item_quty"+i ,rows).val());
-     //    $("#delivered_item_quty"+i ,rows).val(1000);
+      
         }
        var data=$('#parsley_reg').serialize();
         console.log(data.concat($('input',$('#header_elements')).serialize()));
@@ -536,28 +531,24 @@
                                     var  tax_value=data[i]['tax_value'];
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
                                   
-                                    var  price=data[i]['price'];
+                                   
                                     var  price=data[i]['price'];
                                     if(data[i]['kit_code']){
                                         tax_type=data[i]['kit_tax_type'];
                                         tax_value=data[i]['kit_tax_value'];
-                                        tax_Inclusive=data[i]['kit_tax_Inclusive'];
-                                        price=data[i]['kit_price'];
-                                        var  items_id=data[i]['kit_guid'];
+                                        tax_Inclusive=data[i]['kit_tax_Inclusive']; 
                                     }else  if(data[i]['deco_code']){
-                                        var  price=data[i]['price'];
                                         var items_id=data[i]['deco_guid'];
                                     }
                                     else{
-                                    var  items_id=data[i]['i_guid'];
+                                    
                                     var uom=data[i]['uom']                                    
                                         if(uom==1){
                                             var no_of_unit=data[i]['no_of_unit'];
                                             price=price/no_of_unit;
                                         }
                                     }
-                                    //var  o_i_guid=data[i]['o_i_guid'];
-                                    //var  items_id=data[i]['item'];
+                                    var  items_id=data[i]['so_item_id'];
                                     var discount=0;
                                      var per=0;
                                     if(data[i]['item_discount']!=0){
@@ -601,9 +592,9 @@
                                     quty,
                                   price,
                                  
-                                 type+'('+tax_val+'%): '+tax,
+                                tax+' : '+tax_type+'-'+tax_value+'%('+type+')',
                                   discount,
-                                   "<input type='hidden' id='item_total_"+i+"' value='"+total+"'><input type='hidden' id='item_quty_"+i+"' value='"+quty+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+data[i]['tax_Inclusive']+"' ><input type='hidden' id='tax_value_"+i+"' value='"+data[i]['tax_value']+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' name='items[]' value='"+items_id+"' ><input type='hidden' id='item_price_"+i+"' value='"+price+"' ><input type='text' id='delivered_item_quty"+i+"' value='"+quty+"' name='delivered_quty[]' onkeyup='delivered_quty_items("+i+")' onKeyPress='delivered_quty(event,"+i+");return numbersonly(event)' class='form-control' style='width:100px'>",
+                                   "<input type='hidden' id='item_total_"+i+"' value='"+total+"'><input type='hidden' id='item_quty_"+i+"' value='"+quty+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+tax_Inclusive+"' ><input type='hidden' id='tax_value_"+i+"' value='"+tax_value+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' name='items[]' value='"+items_id+"' ><input type='hidden' id='item_price_"+i+"' value='"+price+"' ><input type='text' id='delivered_item_quty"+i+"' value='"+quty+"' name='delivered_quty[]' onkeyup='delivered_quty_items("+i+")' onKeyPress='delivered_quty(event,"+i+");return numbersonly(event)' class='form-control' style='width:100px'>",
                                  total
                                  ] );
                                  if(data[0]['discount']==0){
@@ -1333,6 +1324,4 @@ function reload_update_user(){
                  
                     
                 </script>
-              
 
-      

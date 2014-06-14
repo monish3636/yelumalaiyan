@@ -249,24 +249,40 @@
                                
                                       receive=1;
                                     var  name=data[i]['items_name'];
+                                     if(data[i]['kit_name']){
+                                        name=data[i]['kit_name'];
+                                    }
                                     var  sku=data[i]['i_code'];
+                                    if(data[i]['kit_code']){
+                                        sku=data[i]['kit_code'];
+                                    }
+                                    if(data[i]['deco_code']){
+                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                                    }
                                     var  quty=parseFloat(data[i]['quty']);
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
                                   
                                     var  received_quty=data[i]['delivered_quty'];
-                                     var  price=data[i]['price'];
-                                    var uom=data[i]['uom']
-                                    
-                                    if(uom==1){
-                                        var no_of_unit=data[i]['no_of_unit'];
-                                        price=price/no_of_unit;
+                                    var  price=data[i]['price'];
+                                    if(data[i]['kit_code']){
+                                        tax_type=data[i]['kit_tax_type'];
+                                        tax_value=data[i]['kit_tax_value'];
+                                        tax_Inclusive=data[i]['kit_tax_Inclusive'];  
+                                        
                                     }
-                                    var  o_i_guid=data[i]['o_i_guid'];
+                                   
+                                    var uom=data[i]['uom']                                    
+                                        if(uom==1){
+                                            var no_of_unit=data[i]['no_of_unit'];
+                                            price=price/no_of_unit;
+                                        }
+                                    
+                                   
                                     var  items_id=data[i]['item'];
-                                    var discount;
-                                    var per;
+                                    var discount=0;
+                                    var per=0;
                                     if(data[i]['dis_per']!=0){
                                      discount=(parseFloat(quty)*parseFloat(price))*(data[i]['dis_per']/100);
                                      per=data[i]['dis_per'];
@@ -276,11 +292,11 @@
                                      discount=0;
                                     
                                      per="";
-                                  
+                                 
                                     }
                                     
-                                    if(data[i]['tax_Inclusive']==1){
-                                        var tax=parseFloat(data[i]['tax_value']);                                    
+                                    if(tax_Inclusive==1){
+                                        var tax=parseFloat(tax_value);                                    
                                         var tax_amount=(parseFloat(received_quty)*parseFloat(price)*tax)/100;
                                         var type='Exc';
                                         total_tax=parseFloat(total_tax)+parseFloat(tax_amount);
@@ -289,7 +305,7 @@
                                         total=num.toFixed(point);
                                     }else{
                                         var type="Inc";
-                                        var tax=parseFloat(data[i]['tax_value']);
+                                        var tax=parseFloat(tax_value);
                                         var tax_amount=(parseFloat(received_quty)*parseFloat(price)*tax)/100;
                                         var total=(parseFloat(received_quty)*parseFloat(price))-discount;
                                         var num = parseFloat(total);
@@ -311,9 +327,9 @@
                                     quty,
                                   price,
                                  
-                                 type+'('+tax+'%): '+tax_amount,
+                               tax_amount+' : '+tax_type+'-'+tax_value+'%('+type+')',
                                   discount,
-                                   "<input type='hidden' id='item_total_"+i+"' value='"+total+"'><input type='hidden' id='item_quty_"+i+"' value='"+quty+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+data[i]['tax_Inclusive']+"' ><input type='hidden' id='tax_value_"+i+"' value='"+data[i]['tax_value']+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' name='items[]' value='"+data[i]['item']+"' ><input type='hidden' id='item_price_"+i+"' value='"+price+"' ><input type='text' id='delivered_item_quty"+i+"' value='"+received_quty+"' name='delivered_quty[]' onkeyup='delivered_quty_items("+i+")' onKeyPress='delivered_quty(event,"+i+");return numbersonly(event)' class='form-control' style='width:100px'>",
+                                   "<input type='hidden' id='item_total_"+i+"' value='"+total+"'><input type='hidden' id='item_quty_"+i+"' value='"+quty+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+tax_Inclusive+"' ><input type='hidden' id='tax_value_"+i+"' value='"+tax_value+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' name='items[]' value='"+items_id+"' ><input type='hidden' id='item_price_"+i+"' value='"+price+"' ><input type='text' id='delivered_item_quty"+i+"' value='"+received_quty+"' name='delivered_quty[]' onkeyup='delivered_quty_items("+i+")' onKeyPress='delivered_quty(event,"+i+");return numbersonly(event)' class='form-control' style='width:100px'>",
                                  total
                                  ] );
 

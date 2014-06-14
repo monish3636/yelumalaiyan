@@ -124,11 +124,13 @@ function save(){
                 if($this->posnic->check_record_unique($where,'item_kit')){
                     $value=array('tax_type'=>$kit_tax_type,'tax_value'=>$kit_tax_value,'code'=>$item_kit_number,'name'=>$item_kit_name,'selling_price'=>$selling_price,'tax_id'=>$taxes,'category_id'=>$category_id,'no_of_items'=>$total_types,'item_total'=>$total_amount,'tax_inclusive'=>$tax_inclusive,'tax_amount'=>$seling_tax_amount,'kit_price'=>$kit_price,'remark'=>$remark,'note'=>$note);
                     $guid=   $this->posnic->posnic_add_record($value,'item_kit');
+                    $this->load->model('items');
+                    $this->item->add_kit_to_stock($guid,$selling_price);
 
                     $item=  $this->input->post('new_item_id');
                     $quty=  $this->input->post('new_item_quty');
                     $stock=  $this->input->post('new_item_stock_id'); 
-                    $this->load->model('items');
+                 
                     for($i=0;$i<count($item);$i++){                                
                         $this->items->add_item_kit($guid,$item[$i],$quty[$i],$stock[$i],$i);
                     }
@@ -194,6 +196,7 @@ function save(){
                     $item_quty=  $this->input->post('item_quty');
                     $item_stocks_id=  $this->input->post('item_stocks_id');
                     $this->load->model('items');
+                    $this->item->update_kit_in_stock($guid,$selling_price);
                     for($i=0;$i<count($item_id);$i++){
 
                         $this->items->update_item_kit($guid,$item_id[$i],$item_quty[$i]);                

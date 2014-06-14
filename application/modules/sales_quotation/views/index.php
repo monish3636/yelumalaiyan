@@ -175,7 +175,7 @@
                     if($('#parsley_reg #items').select2('data').deco_guid){
                         var guid = $('#parsley_reg #items').select2('data').deco_guid;
                         $('#parsley_reg #item_id').val(guid);
-                        $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').deco_code);
+                       $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').deco_code+'-'+$('#parsley_reg #items').select2('data').deco_value);
                         $('#parsley_reg #stock_id').val($('#parsley_reg #items').select2('data').sid);
                         $('#parsley_reg #item_name').val($('#parsley_reg #items').select2('data').text);
                         
