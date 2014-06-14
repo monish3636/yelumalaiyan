@@ -170,7 +170,7 @@ function save(){
             if(isset($_POST['sales_order_guid'])){
       if($this->session->userdata['sales_order_per']['edit']==1){
         $this->form_validation->set_rules('customers_guid',$this->lang->line('customers_guid'), 'required');
-        $this->form_validation->set_rules('expiry_date',$this->lang->line('expiry_date'), 'required');
+     $this->form_validation->set_rules('expiry_date',$this->lang->line('expiry_date'), 'required');
         $this->form_validation->set_rules('order_date', $this->lang->line('order_date'), 'required');                      
         $this->form_validation->set_rules('grand_total', $this->lang->line('grand_total'), 'numeric');                      
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric'); 

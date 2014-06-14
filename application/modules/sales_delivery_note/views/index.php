@@ -81,17 +81,14 @@
         return false
           }
     }
-    function data_table_duplicate(){
-            alert('jibi');
-        var rows = $("#selected_item_table").dataTable().fnGetNodes();
-        for(var i=0;i<rows.length;i++)
-        {
-      
-        }
-       var data=$('#parsley_reg').serialize();
-        console.log(data.concat($('input',$('#header_elements')).serialize()));
-        
+     function get_table_data(){
+        $('#selected_item_table').dataTable({
+                     "bProcessing": true,
+                     "bDestroy": true ,
+                     "bPaginate": false,
+        });
     }
+ 
     function delivered_quty(e,i){
         var unicode=e.charCode? e.charCode : e.keyCode
             if (unicode!=13 && unicode!=9){          
@@ -380,9 +377,9 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
-                   var data=$('#parsley_reg').serialize();        
-                var inputs =data.concat($('input',$('#selected_item_table')).serialize());
-                      $.ajax ({
+                     get_table_data();
+                 var inputs = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
+                       $.ajax ({
                             url: "<?php echo base_url('index.php/sales_delivery_note/save')?>",
                             data: inputs,
                             type:'POST',
@@ -422,9 +419,9 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
-                             var data=$('#parsley_reg').serialize();        
-                var inputs =data.concat($('input',$('#selected_item_table')).serialize());
-                      $.ajax ({
+                          get_table_data();
+                 var inputs = $('#parsley_reg').serialize()+"&no_of_item="+$("#selected_item_table").dataTable().fnGetNodes().length;
+                    $.ajax ({
                             url: "<?php echo base_url('index.php/sales_delivery_note/update')?>",
                             data: inputs,
                             type:'POST',
