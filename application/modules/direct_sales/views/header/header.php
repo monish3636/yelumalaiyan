@@ -214,6 +214,7 @@ function direct_sales_approve(guid){
                              success: function(data)        
                              { 
                                 $("#user_list").hide();
+                                $("#sales_bill_date_div").hide();
                                 $('#add_new_order').show('slow');
                                 $('#delete').attr("disabled", "disabled");
                                 $('#posnic_add_direct_sales').attr("disabled", "disabled");
@@ -264,23 +265,34 @@ function direct_sales_approve(guid){
                                 var tax;
                                 for(i=0;i<data.length;i++){
                                       if(!$('#'+data[i]['i_guid']).length){
-                                  
+                                      var  stock_id=data[i]['stock_id'];
                                     var  name=data[i]['items_name'];
+                                    if(data[i]['kit_name']){
+                                        name=data[i]['kit_name'];
+                                    }
                                     var  sku=data[i]['i_code'];
+                                    if(data[i]['kit_code']){
+                                        sku=data[i]['kit_code'];
+                                    }
+                                    if(data[i]['deco_code']){
+                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                                    }
                                     var  quty=data[i]['quty'];
                                    
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
-                                     
-                var  price=data[i]['price'];
-                                    var uom=data[i]['uom']
-                                    
-                                    if(uom==1){
-                                        var no_of_unit=data[i]['no_of_unit'];
-                                        price=price/no_of_unit;
+                                    if(data[i]['kit_code']){
+                                        tax_type=data[i]['kit_tax_type'];
+                                        tax_value=data[i]['kit_tax_value'];
+                                        tax_Inclusive=data[i]['kit_tax_Inclusive'];
+                                        price=data[i]['kit_price'];
+                                        var  items_id=data[i]['kit_guid'];
                                     }
-                                    var  items_id=data[i]['i_guid'];
+                                    var  price=data[i]['price'];
+                                    //var uom=data[i]['uom']
+                                    
+                                    var  items_id=data[i]['ds_item'];
                                     var per =data[i]['item_discount'];
                                     if(per==""){
                                         per=0;
@@ -300,7 +312,7 @@ function direct_sales_approve(guid){
                                   
                                     }
                                     
-                                   if(data[i]['tax_Inclusive']==1){
+                                   if(tax_Inclusive==1){
                                      var tax=(parseFloat(quty)*parseFloat(price))*tax_value/100;
                                     
                                       var total=+tax+ +(parseFloat(quty)*parseFloat(price))-discount;
@@ -337,7 +349,7 @@ function direct_sales_approve(guid){
                                     sku,
                                     quty,
                                     price,
-                                    tax+' : '+tax_type+'('+type+')',
+                                      tax+' : '+tax_type+'-'+tax_value+'%('+type+')',
                                     discount,
                                     total,
                                     '<input type="hidden" name="index" id="index">\n\
@@ -353,13 +365,14 @@ function direct_sales_approve(guid){
                                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                                 <input type="hidden" name="items_stock[]" value="'+data[i]['stock_id']+'" id="items_stock">\n\
+                                <input type="hidden" name="items_stock_quty[]" id="items_stock_quty" value="'+data[i]['stock_quty']+'">\n\
                                 <input type="hidden" name="items_order_guid[]" value="'+data[i]['o_i_guid']+'" id="items_order_guid">\n\
                                 <input type="hidden" name="items_sub_total[]"  value="'+parseFloat(quty)*parseFloat(price)+'" id="items_sub_total">\n\
                                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                <a href=javascript:edit_order_item("'+items_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+items_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
+                                <a href=javascript:edit_order_item("'+stock_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+stock_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
 
                               var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                              theNode.setAttribute('id','new_item_row_id_'+items_id)
+                              theNode.setAttribute('id','new_item_row_id_'+stock_id)
                                 }
                                 }
                              } 
@@ -378,6 +391,7 @@ function direct_sales_approve(guid){
         $('#address_div').hide();
         $('#sales_bill_buttons').show();
         $('#sales_bill_number_div').show();
+        $("#sales_bill_date_div").show();
         $('#round_off_amount').attr("disabled", "disabled");
         $('#order_date').attr("disabled", "disabled");
         $('#id_discount').attr("disabled", "disabled");
