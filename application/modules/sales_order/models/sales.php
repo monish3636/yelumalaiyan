@@ -82,8 +82,7 @@ class Sales extends CI_Model{
           $data[]=$row;
          }
          return $data;
-         echo '<pre>';
-         print_r($data);
+        
      }
      /* get sales quotation details to sale order
     function start      */
