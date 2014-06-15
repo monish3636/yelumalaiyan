@@ -303,7 +303,7 @@
                                                    
                                                     <div class="form_sep" >
                                                             <label for="price" ><?php echo $this->lang->line('price') ?></label>													
-                                                                     <?php $price=array('name'=>'sku',
+                                                                     <?php $price=array('name'=>'price',
                                                                                         'class'=>'required  form-control',
                                                                                         'id'=>'price',
                                                                                       
