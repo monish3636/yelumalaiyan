@@ -81,6 +81,13 @@
         return false
           }
     }
+     function get_table_data(){
+        $('#selected_item_table').dataTable({
+                     "bProcessing": true,
+                     "bDestroy": true ,
+                     "bPaginate": false,
+        });
+    }
     function receive_quty(e,i){
         var unicode=e.charCode? e.charCode : e.keyCode
             if (unicode!=13 && unicode!=9){          
@@ -353,6 +360,7 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
+                           get_table_data();
                 var inputs = $('#parsley_reg').serialize();
                       $.ajax ({
                             url: "<?php echo base_url('index.php/goods_receiving_note/save')?>",
@@ -394,6 +402,7 @@
                    if($('#parsley_reg').valid()){
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
+                           get_table_data();
                 var inputs = $('#parsley_reg').serialize();
                       $.ajax ({
                             url: "<?php echo base_url('index.php/goods_receiving_note/update')?>",
