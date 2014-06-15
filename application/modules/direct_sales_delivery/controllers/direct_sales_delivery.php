@@ -111,6 +111,7 @@ function save(){
         $this->form_validation->set_rules('round_off_amount', $this->lang->line('round_off_amount'), 'numeric');                      
         $this->form_validation->set_rules('discount', $this->lang->line('discount'), 'numeric');                      
         $this->form_validation->set_rules('freight', $this->lang->line('freight'), 'numeric');                      
+        $this->form_validation->set_rules('no_of_item', $this->lang->line('no_of_item'), 'numeric');                      
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'), 'required');                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'required|numeric');                      
         $this->form_validation->set_rules('new_item_discount[]', $this->lang->line('new_item_discount'), 'required|numeric');                      
@@ -125,7 +126,7 @@ function save(){
                 $discount_amount=  $this->input->post('discount_amount');
                 $freight=  $this->input->post('freight');
                 $round_amt=  $this->input->post('round_off_amount');
-                $total_items=$this->input->post('index');
+                $total_items=$this->input->post('no_of_item');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');
@@ -169,6 +170,7 @@ function save(){
         $this->form_validation->set_rules('round_off_amount', $this->lang->line('round_off_amount'), 'numeric');                      
         $this->form_validation->set_rules('discount', $this->lang->line('discount'), 'numeric');                      
         $this->form_validation->set_rules('freight', $this->lang->line('freight'), 'numeric');    
+        $this->form_validation->set_rules('no_of_item', $this->lang->line('no_of_item'), 'numeric');    
         
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'numeric');                      
@@ -189,7 +191,7 @@ function save(){
                 $discount_amount=  $this->input->post('discount_amount');
                 $freight=  $this->input->post('freight');
                 $round_amt=  $this->input->post('round_off_amount');
-                $total_items=$this->input->post('index');
+                $total_items=$this->input->post('no_of_item');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');

@@ -253,6 +253,7 @@ function sales_order_approve(guid){
                                 for(i=0;i<data.length;i++){
                                       if(!$('#'+data[i]['i_guid']).length){
                                   
+                                    var  stock_id=data[i]['stock_id'];
                                     var  name=data[i]['items_name'];
                                     if(data[i]['kit_name']){
                                         name=data[i]['kit_name'];
@@ -362,10 +363,10 @@ function sales_order_approve(guid){
                                 <input type="hidden" name="items_order_guid[]" value="'+data[i]['o_i_guid']+'" id="items_order_guid">\n\
                                 <input type="hidden" name="items_sub_total[]"  value="'+parseFloat(quty)*parseFloat(price)+'" id="items_sub_total">\n\
                                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                <a href=javascript:edit_order_item("'+items_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+items_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
+                                <a href=javascript:edit_order_item("'+stock_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+stock_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
 
                               var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                              theNode.setAttribute('id','new_item_row_id_'+items_id)
+                              theNode.setAttribute('id','new_item_row_id_'+stock_id)
                                 }
                                 }
                              } 
