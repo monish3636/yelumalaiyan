@@ -731,6 +731,10 @@ $lang['credit_days']='Credit Days';
     $lang['refresh']='Refresh';
     $lang['previous']='Previous';
     $lang['next']='Next';
-    $lang['qty']='Qty'
+    $lang['qty']='Qty';
+    $lang['total_discount']='Total Discount';
+    $lang['tax_amount']='Tax Discount';
+    $lang['bill_discount']='Bill Discount';
+    $lang['bill']='Bill';
    
 ?>

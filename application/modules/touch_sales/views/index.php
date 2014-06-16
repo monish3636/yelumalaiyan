@@ -47,10 +47,14 @@
         background: #e3eaf3;
     }
     .numbers{
-      margin: 1px;
-      padding: 12px;
-      border-radius: 5px;
-      font-size: 16px;
+        border-radius: 8px;
+        font-size: 16px;
+        margin-bottom: 1px;
+        margin-left: 1px;
+        margin-right: 1px;
+        margin-top: 1px;
+        padding: 12px;
+        width: 32%;
     }
     .numbers hover{
         background: #e3eaf3 !important;
@@ -61,6 +65,20 @@
     }
     .item-list{
         background: #e3eaf3;
+        overflow: auto;
+        height: 548px;
+        overflow-x: hidden;
+        
+    }
+    .item-list h5{
+        font-weight: bold;
+    }
+    .item-amount{
+        background: #e3eaf3;
+        
+    }
+    .quantty{
+        width: 30px;
     }
 </style>
 <body class="header">
@@ -89,11 +107,96 @@
                         </span>
                     </div>
                 </div>
-                <div class="row item-list" style="margin-right: 10px;margin-left: 2px">
-                    <table class="table-striped table-condensed">
-                        <thead><tr><td><?php echo $this->lang->line('item') ?></td><td><?php echo $this->lang->line('price') ?></td><td><?php echo $this->lang->line('qty') ?></td></tr></thead>
-                    </table>
+                <div class="row item-list" style="margin-right: 10px;margin-left:-10px;padding: 10px">
+                    <div class="row">
+                        <div class="col col-lg-1"><h5><?php echo $this->lang->line('no') ?></h5></div>
+                        <div class="col col-lg-4"><h5><?php echo $this->lang->line('item') ?></h5></div>
+                        <div class="col col-lg-3"><h5><?php echo $this->lang->line('price') ?></h5></div>
+                        <div class="col col-lg-3"><h5><?php echo $this->lang->line('qty') ?></h5></div>
+                        <div class="col col-lg-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">1</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">2</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">3</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">4</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">5</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">6</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">7</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">8</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">9</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">10</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-1">11</div>
+                        <div class="col col-lg-4">item 1</div>
+                        <div class="col col-lg-2">59.56</div>
+                        <div class="col col-lg-3"><input type="text" class="form-control"></div>
+                        <div class="col col-lg-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    </div>
+                    
+                  
+                   
                 </div>
+                
             </div>
             <div class="col col-lg-6  ">
                 <div class="row">
@@ -143,26 +246,60 @@
                        
                     </div>
                 </div>
-                <div class="row " >
-                    <div class="col col-lg-2 btn btn-default"><a class=""><i class="icon icon-backward"></i> <?php echo $this->lang->line('previous') ?></a></div>
-                    <div class="col col-lg-8"></div>
-                    <div class="col col-lg-2 btn btn-default"><a ><?php echo $this->lang->line('next') ?> <i class="icon icon-forward"></i></a></div>
-                </div>
+               
                 <div class="row">
-                    <div class="col col-lg-6" style="margin-left: -15px">
-                        <div class="col col-lg-3 btn btn-default numbers" >1</div>
-                        <div class="col col-lg-3 btn btn-default numbers">2</div>
-                        <div class="col col-lg-3 btn btn-default numbers">3</div>
-                        <div class="col col-lg-3 btn btn-default numbers">4</div>
-                        <div class="col col-lg-3 btn btn-default numbers">5</div>
-                        <div class="col col-lg-3 btn btn-default numbers">6</div>
-                        <div class="col col-lg-3 btn btn-default numbers">7</div>
-                        <div class="col col-lg-3 btn btn-default numbers">8</div>
-                        <div class="col col-lg-3 btn btn-default numbers">9</div>
-                        <div class="col col-lg-3 btn btn-default numbers">.</div>
-                        <div class="col col-lg-3 btn btn-default numbers">0</div>
-                        <div class="col col-lg-3 btn btn-default numbers"><?php echo $this->lang->line('clear'); ?></div>
+                    <div class="col col-lg-6" >
+                        <div class="row item-amount" style="margin-right: 10px;margin-left:-15px;padding: 10px">
+                            <div class="col col-lg-1">
+
+                            </div>
+                            <div class="col col-lg-6">
+                                <h5><?php echo $this->lang->line('discount')?></h5>
+                                <h5><?php echo $this->lang->line('tax_amount')?></h5>
+                                <h4><?php echo $this->lang->line('total')?></h4>
+                            </div>
+                            <div class="col col-lg-4">
+                               <h5> 56.98</h5>
+                               <h5> 56.98</h5>
+                               <h4> 56.98</h4>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-right:-5px">
+                            <div class="col col-lg-6 ">
+                                <div class="row " style="width: 100%">
+                                    <a href="" class=" btn btn-info" style="width: 100%;padding-bottom: 14px; padding-top: 14px;"><i class="icon icon-gift"></i> <?php echo $this->lang->line('bill_discount') ?></a>
+                                </div>
+                                <div class="row " style="width: 100%">
+                                    <a href="" class=" btn btn-danger" style="width: 100%;padding-bottom: 14px; padding-top: 14px;"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('clear') ?></a>
+                                </div>
+                               
+                            </div>
+                            <div class="col col-lg-6">
+                                <a href="" class=" btn btn-success" style="width: 100%;padding-bottom: 40px; padding-top: 40px;"><i class="icon icon-save"></i> <?php echo $this->lang->line('bill') ?></a>
+                            </div>
+                        </div>
                       
+                    </div>
+                    <div class="col col-lg-6">
+                        <div class="row" style="margin-right: -15px">
+                            <div class="col col-lg-5 btn btn-default"><a class=""><i class="icon icon-backward"></i> <?php echo $this->lang->line('previous') ?></a></div>
+                            <div class="col col-lg-2"></div>
+                            <div class="col col-lg-5 btn btn-default"><a ><?php echo $this->lang->line('next') ?> <i class="icon icon-forward"></i></a></div>
+                        </div>
+                        <div class="row" style="margin-right: -25px">
+                            <div class="col col-lg-4 btn btn-default numbers" >1</div>
+                            <div class="col col-lg-4 btn btn-default numbers">2</div>
+                            <div class="col col-lg-4 btn btn-default numbers">3</div>
+                            <div class="col col-lg-4 btn btn-default numbers">4</div>
+                            <div class="col col-lg-4 btn btn-default numbers">5</div>
+                            <div class="col col-lg-4 btn btn-default numbers">6</div>
+                            <div class="col col-lg-4 btn btn-default numbers">7</div>
+                            <div class="col col-lg-4 btn btn-default numbers">8</div>
+                            <div class="col col-lg-4 btn btn-default numbers">9</div>
+                            <div class="col col-lg-4 btn btn-default numbers">.</div>
+                            <div class="col col-lg-4 btn btn-default numbers">0</div>
+                            <div class="col col-lg-4 btn btn-default numbers"><?php echo $this->lang->line('clear'); ?></div>
+                        </div>
                     </div>
                 </div>
             </div>
