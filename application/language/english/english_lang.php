@@ -729,5 +729,8 @@ $lang['credit_days']='Credit Days';
     $lang['not_updated']='Not Updated';
     $lang['stock_level']='Stock Level';
     $lang['refresh']='Refresh';
+    $lang['previous']='Previous';
+    $lang['next']='Next';
+    $lang['qty']='Qty'
    
 ?>

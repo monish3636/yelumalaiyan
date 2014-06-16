@@ -4,10 +4,13 @@ class Touch_sales extends MX_Controller{
                 parent::__construct();
                 $this->load->library('posnic');               
     }
-    function index(){          
-          $this->load->view('header/header');  
-          $this->load->view('index');  
-          
+    function index(){  
+        $this->session->set_userdata(array('currency_symbol'=>'$'));
+        $data=array();
+        $this->load->model('stock');
+        $data['row']=  $this->stock->get_items();
+        $this->load->view('header/header');  
+        $this->load->view('index',$data);  
     }
     }
 
