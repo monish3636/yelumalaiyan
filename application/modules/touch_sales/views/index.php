@@ -113,6 +113,39 @@
         margin: 2px;
         padding: 22px;
     }
+    .keyboard-key-enter{
+        height: 66px;
+        width: 117%;
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 2px;
+        padding: 22px;
+    }
+    .keyboard-key-submit{
+        height: 66px;
+        width: 117%;
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 2px;
+        margin-left: 15px;
+        padding: 22px;
+    }
+    .keyboard-key-space{
+        height: 66px;
+        width: 100%;
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 2px;
+        padding: 22px;
+    }
+    .keyboard-key-clear{
+        height: 66px;
+        width: 100%;
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 2px;
+        padding: 22px;
+    }
     .keyboard-key-div{
         padding-left: 0px;
         padding-left: 0px;
@@ -120,6 +153,20 @@
     .keyboard-key-row{
         margin-left: 0;
         margin-right: 0px;
+        margin-top: -22px;
+    }
+    .keyboard-modal
+    {
+        width: 900px;
+        background: #e3eaf3;
+        border-radius: 8px;
+        margin-top: 29.3%;
+    }
+    .modal-dialog {
+        padding-bottom: 8px;
+    }
+    .modal {
+        overflow-y: hidden;
     }
 </style>
 <body class="header">
@@ -348,7 +395,7 @@
     
     
     <div class="modal fade" id="keyboard">
-        <div class="modal-dialog" style="width: 900px;;background: #e3eaf3" >
+        <div class="modal-dialog keyboard-modal"  >
             <div class="row keyboard-key-row">
                 <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">Q</a></div>
                 <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">W</a></div>
@@ -375,8 +422,30 @@
                 <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">I</a></div>
                 <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">O</a></div>
                 <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">P</a></div>
-                <div class="col col-lg-2 keyboard-key-div" style="width: 109px"><a href="" class="btn btn-default keyboard-key-enter">Enter</a></div>
-                
+                <div class="col col-lg-2 keyboard-key-div" style="width: 109px"><a href="" class="btn btn-default keyboard-key-enter">Enter</a></div>               
+             
+            </div>
+             <div class="row keyboard-key-row">
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">abc</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">Z</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">X</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">C</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">V</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">B</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">N</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">M</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">,</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">.</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">'</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">123</a></div>
+             
+            </div>
+            <div class="row keyboard-key-row">
+                <div class="col col-lg-2 keyboard-key-div" style="margin-left: 34px"><a href="" class="btn btn-danger keyboard-key-clear">Clear</a></div>
+              
+                <div class="col col-lg-6 keyboard-key-div"><a href="" class="btn btn-default keyboard-key-space"> </a></div>
+                <div class="col col-lg-2 keyboard-key-div" style="width: 109px"><a href="" class="btn btn-default keyboard-key-enter">#$@</a></div>               
+                <div class="col col-lg-2 keyboard-key-div" style="width: 109px"><a href="" class="btn btn-success keyboard-key-submit">Submit</a></div>               
              
             </div>
         </div>
