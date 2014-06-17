@@ -82,15 +82,15 @@
         width: 30px;
     }
     .customers_select{
-        height: 400px;
+        height: 560px;
     }
     .select2-results {
-        max-height: 359px;
+        max-height: 518px;
     }
     .select2-container .select2-choice {    
         height: 44px;
         line-height: 44px;
-     //   text-align: center;
+      text-align: center;
     }
     .select2-container .select2-choice div {
         width: 36px;
@@ -102,12 +102,29 @@
         width: 100%;
     }
     .item_select{
-        width: 400px !important;
+        height: 559px;
+        width: 393px !important;
+    }
+    .keyboard-key{
+        height: 66px;
+        width: 70px;
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 2px;
+        padding: 22px;
+    }
+    .keyboard-key-div{
+        padding-left: 0px;
+        padding-left: 0px;
+    }
+    .keyboard-key-row{
+        margin-left: 0;
+        margin-right: 0px;
     }
 </style>
 <body class="header">
     <div id="container " >
-        
+
         <br>
         <div class="row header-bar">
             <div class="col col-lg-1 ">
@@ -117,9 +134,7 @@
                     <div class="input-group search-input" >
                         <span class="input-group-addon" style="width:  43px"><i class="icon icon-user icon-2x"></i></span>
                         <input id="customer" class="form-control search-input" type="text">
-                        <span class="input-group-btn">
-<!--                            <button class="btn btn-default " style="height: 44px" type="button"><i class="icon icon-search icon-2x"></i></button>-->
-                        </span>
+                        
                     </div>
                 </div>
                 <div class="row" style="margin: 10px 10px 10px -10px;">
@@ -326,15 +341,51 @@
                 </div>
             </div>
             <div class="col col-lg-1 ">
-                 <a class="btn btn-danger"><i class="icon icon-off  "></i> </a>
+                 <a href="javascript:show_key_board()" class="btn btn-danger"><i class="icon icon-off  "></i> </a>
             </div>
         </div>
     </div>
     
     
-    
+    <div class="modal fade" id="keyboard">
+        <div class="modal-dialog" style="width: 900px;;background: #e3eaf3" >
+            <div class="row keyboard-key-row">
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">Q</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">W</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">E</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">R</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">T</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">Y</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">U</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">I</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">O</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">P</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key"><-</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">DEL</a></div>
+             
+            </div>
+            <div class="row keyboard-key-row">
+                <div class="col col-lg-1 keyboard-key-div" style="margin-left: 34px"><a href="" class="btn btn-default keyboard-key">Q</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">W</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">E</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">R</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">T</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">Y</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">U</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">I</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">O</a></div>
+                <div class="col col-lg-1 keyboard-key-div"><a href="" class="btn btn-default keyboard-key">P</a></div>
+                <div class="col col-lg-2 keyboard-key-div" style="width: 109px"><a href="" class="btn btn-default keyboard-key-enter">Enter</a></div>
+                
+             
+            </div>
+        </div>
+    </div>
     
     <script>
+        function show_key_board(){
+            $('#keyboard').modal('show');
+        }
         var x,y,top,left,down;
         $("#stuff").mousedown(function(e){
             e.preventDefault();

@@ -34,19 +34,37 @@
          <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/timepicker/css/bootstrap-timepicker.min.css">
          <link href="<?php echo base_url() ?>template/app/validation/prettify.css" rel="stylesheet">
          <link rel="stylesheet" href="<?php echo base_url() ?>template/app/validate/css/wizard.css">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/keyboard/style.css">
          <link  rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/dataTables/media/DT_bootstrap.css">
 	 <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/dataTables/extras/TableTools/media/css/TableTools.css">     
+	    
 
 	
 	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.js"></script>
 	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.dataTables.js"></script>
 	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/select2.js"></script>
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script>  
-<script type="text/javascript">
-            $(document).ready( function () {  
+	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script> 
+    <script type="text/javascript">
+            $(document).ready( function () { 
+                   $('#keyboard').modal('show');
                 function format_customers(sup) {
                     if (!sup.id) return sup.text;
                         return  "<p >"+sup.text+"    <br>"+sup.company+"   "+sup.address1+"</p> ";
+                        return   '<p><h4>'+sup.text+'</h4></p>\n\
+                            <div class="row">    \n\
+                                <div class="col col-lg-12"> \n\
+                                    <div class="row"> \n\
+                                        <div class="col col-lg-4"><?php echo $this->lang->line('company') ?></div> \n\
+                                        <div class="col col-lg-4"><?php echo $this->lang->line('address') ?></div> \n\
+                                        <div class="col col-lg-4"><?php echo $this->lang->line('phone') ?></div> \n\
+                                   </div> \n\
+                                    <div class="row"> \n\
+                                        <div class="col col-lg-4">458878</div> \n\
+                                        <div class="col col-lg-4">150.000</div> \n\
+                                        <div class="col col-lg-4">10</div> \n\
+                                   </div> \n\
+                                </div>     \n\
+                            </div>\n\ ';
                 }
                 $('#customer').change(function() {
                     
@@ -93,11 +111,34 @@
                 }
             });
             $('#search_items').change(function() {
-                 $("#search_items").select2('data', {id:'1',text:'jibi'});
+                // $("#search_items").select2('data', {id:'1',text:'jibi'});
             });
             function format_item(sup) {
                 if (!sup.id) return sup.text;
-                    return  "<p >"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:78px'></img>    <br>"+sup.value+"   "+sup.value+"</p> ";
+                   // return  "<p >"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:78px'></img></p><p>"+sup.value+"</p><p>"+sup.category+"</p><p>"+sup.brand+"</p><p>"+sup.department+" </p><p><?php echo ' <br>'.$this->lang->line('price') ?> : "+sup.price+" <?php echo ' '.$this->lang->line('stock') ?> : "+sup.quty+"</p> ";
+                    return   '<p><h4>'+sup.text+'</h4></p>\n\
+                            <div class="row">    \n\
+                                <div class="col col-lg-8"> \n\
+                                    <div class="row"> \n\
+                                        <div class="col col-lg-4"><?php echo $this->lang->line('sku') ?></div> \n\
+                                        <div class="col col-lg-4"><?php echo $this->lang->line('price') ?></div> \n\
+                                        <div class="col col-lg-4"><?php echo $this->lang->line('stock') ?></div> \n\
+                                   </div> \n\
+                                    <div class="row"> \n\
+                                        <div class="col col-lg-4">458878</div> \n\
+                                        <div class="col col-lg-4">150.000</div> \n\
+                                        <div class="col col-lg-4">10</div> \n\
+                                   </div> \n\
+                                </div>     \n\
+                                <div class="col col-lg-4"> \n\
+                                    <img src="http://localhost/posnic//uploads/items/item.gif" style="height:78px"> \n\
+                                </div> \n\
+                            </div>\n\
+                            <div class="row">\n\
+                                <div class="col col-lg-4">Cello Griper</div> \n\
+                                    <div class="col col-lg-4">Office</div> \n\
+                                    <div class="col col-lg-4"> pen</div> \n\
+                                </div> ';
             }
           $('#search_items').select2({
              
@@ -174,7 +215,7 @@
                 }
             });
             
-            
+               
             });
         </script>
              
