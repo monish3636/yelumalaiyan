@@ -3,7 +3,7 @@
     .header{
         background: #405b75;
         overflow-x: hidden;
-        overflow-y: hidden;
+      //  overflow-y: hidden;
     }
     .item_right{
         background: #e3eaf3;
@@ -27,7 +27,7 @@
         color: #ffffff;
     }
     .header-bar{
-        margin-top: 5px;
+        //margin-top: 5px;
     }
     .row + .row {
         margin-top:4px;
@@ -62,6 +62,7 @@
     .search-input{
         height: 44px;
         font-size: 18px;
+        width: 100%;
     }
     .item-list{
         background: #e3eaf3;
@@ -80,11 +81,34 @@
     .quantty{
         width: 30px;
     }
+    .customers_select{
+        height: 400px;
+    }
+    .select2-results {
+        max-height: 359px;
+    }
+    .select2-container .select2-choice {    
+        height: 44px;
+        line-height: 44px;
+     //   text-align: center;
+    }
+    .select2-container .select2-choice div {
+        width: 36px;
+    }
+    .select2-container .select2-choice div b {
+        background: url("template/app/select/Search.png") no-repeat scroll 0 1px rgba(0, 0, 0, 0);
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+    .item_select{
+        width: 400px !important;
+    }
 </style>
 <body class="header">
     <div id="container " >
         
-      
+        <br>
         <div class="row header-bar">
             <div class="col col-lg-1 ">
             </div>
@@ -92,19 +116,17 @@
                 <div class="row" style="margin: 33px 10px 10px -10px;">
                     <div class="input-group search-input" >
                         <span class="input-group-addon" style="width:  43px"><i class="icon icon-user icon-2x"></i></span>
-                        <input id="appendedInputButton" class="form-control search-input" type="text">
+                        <input id="customer" class="form-control search-input" type="text">
                         <span class="input-group-btn">
-                            <button class="btn btn-default " style="height: 44px" type="button"><i class="icon icon-search icon-2x"></i></button>
+<!--                            <button class="btn btn-default " style="height: 44px" type="button"><i class="icon icon-search icon-2x"></i></button>-->
                         </span>
                     </div>
                 </div>
                 <div class="row" style="margin: 10px 10px 10px -10px;">
                     <div class="input-group search-input" >
                         <span class="input-group-addon" style="width:  43px"><i class="icon icon-shopping-cart icon-2x"></i></span>
-                        <input id="appendedInputButton" class="form-control search-input" type="text">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default " style="height: 44px" type="button"><i class="icon icon-search icon-2x"></i></button>
-                        </span>
+                        <input id="search_items" class="form-control search-input" type="text">
+                        
                     </div>
                 </div>
                 <div class="row item-list" style="margin-right: 10px;margin-left:-10px;padding: 10px">
@@ -338,5 +360,5 @@
         $("body").mouseup(function(e){down=false;});
 
     </script>
-</body>
+
 
