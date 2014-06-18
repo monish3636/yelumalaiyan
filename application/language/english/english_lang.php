@@ -736,5 +736,10 @@ $lang['credit_days']='Credit Days';
     $lang['tax_amount']='Tax Discount';
     $lang['bill_discount']='Bill Discount';
     $lang['bill']='Bill';
+    $lang['scan-items']='Scan Items';
+    $lang['close']='Close';
+    $lang['to']='To';
+    $lang['net_total']='Net Total';
+    $lang['total_tax']='Total Tax';
    
 ?>

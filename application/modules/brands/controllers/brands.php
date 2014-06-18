@@ -8,7 +8,7 @@ class Brands extends MX_Controller
     }
     function index(){
       //$this->get_brands(); 
-      redirect('touch_sales');
+      redirect('keyboard_sales');
   //print_r(Modules::load('users/edit_users','7c9888196685a12a83eecf9c0d05a525'));
     }
      function get_brands(){
