@@ -72,6 +72,29 @@
 #main_content {
         margin: 0px;
     }
+     .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+    border-top:none;
+    line-height: 1.42857;
+    padding: 6px;
+    vertical-align: top;
+    }
+    .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+        background-color: #ffffff ;
+    }
+    .panel-default .panel-heading{
+        background: #007da9;
+        color: #ffffff;
+        border: #007da9;
+    }
+    .panel-default {
+    border: medium solid #007da9;
+   
+    }
+    .madal-search {
+      background: #007da9;
+       color: #ffffff;
+   
+    }
 </style>	
 <script type="text/javascript" charset="utf-8">
 
@@ -103,33 +126,128 @@
                 dataType: 'json',               
                 success: function(data)        
                 {               
+                        if($('#parsley_reg #items').select2('data').deco_guid){
+                                var guid = $('#parsley_reg #items').select2('data').deco_guid;
+                                $('#parsley_reg #item_id').val(guid);
+                                $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').deco_code+'-'+$('#parsley_reg #items').select2('data').deco_value);
+                                $('#parsley_reg #stock_id').val($('#parsley_reg #items').select2('data').sid);
+                                $('#parsley_reg #item_name').val($('#parsley_reg #items').select2('data').text);
+
+                                $('#parsley_reg #price').val(parseFloat($('#parsley_reg #items').select2('data').price));
+
+                                $('#parsley_reg #stock_quty').val($('#parsley_reg #items').select2('data').quty);
+                                $('#parsley_reg #tax_value').val($('#parsley_reg #items').select2('data').tax_value);
+                                $('#parsley_reg #tax_type').val($('#parsley_reg #items').select2('data').tax_type+"-"+$('#parsley_reg #items').select2('data').tax_value+"%");
+                                var tax=$('#parsley_reg #items').select2('data').deco_tax;
+                                $('#parsley_reg #tax_Inclusive').val(tax);
+                                if(tax==1){
+                                    $('#tax_label').text('Tax(Exc)');
+                                }else{
+                                    $('#tax_label').text('Tax(Inc)');   
+                                }
+                                if(isNaN($('#parsley_reg #tax_value').val())){
+                                      $('#parsley_reg #tax_value').val(0);
+                                      $('#parsley_reg #tax').val(0);
+                                }
+                                net_amount();
+                                $('#parsley_reg #quantity').focus();
+                                window.setTimeout(function ()
+                                {
+                                    $('#parsley_reg #quantity').focus();
+                                }, 0);
+
+                            }else if($('#parsley_reg #items').select2('data').kit_guid){
+                                var guid = $('#parsley_reg #items').select2('data').kit_guid;
+                                $('#parsley_reg #item_id').val(guid);
+                                $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').kit_code);
+                                $('#parsley_reg #stock_id').val($('#parsley_reg #items').select2('data').sid);
+                                $('#parsley_reg #item_name').val($('#parsley_reg #items').select2('data').kit_name);
+
+                                $('#parsley_reg #price').val(parseFloat($('#parsley_reg #items').select2('data').kit_price));
+
+                                $('#parsley_reg #stock_quty').val($('#parsley_reg #items').select2('data').quty);
+                                $('#parsley_reg #tax_value').val($('#parsley_reg #items').select2('data').kit_tax_value);
+                                $('#parsley_reg #tax_type').val($('#parsley_reg #items').select2('data').kit_tax_type+"-"+$('#parsley_reg #items').select2('data').kit_tax_value+"%");
+                                var tax=$('#parsley_reg #items').select2('data').kit_tax;
+                                var tax_amount=$('#parsley_reg #items').select2('data').kit_tax_amount;
+                                $('#parsley_reg #tax_Inclusive').val(tax);
+                                if(tax==1){
+                                    $('#tax_label').text('Tax(Exc)');
+                                }else{
+                                    $('#tax_label').text('Tax(Inc)');   
+                                }
+                                if(isNaN($('#parsley_reg #tax_value').val())){
+                                      $('#parsley_reg #tax_value').val(0);
+                                      $('#parsley_reg #tax').val(0);
+                                }
+                               // $('#parsley_reg #tax_type').val();
+                                net_amount();
+                                $('#parsley_reg #quantity').focus();
+                                window.setTimeout(function ()
+                                {
+                                    $('#parsley_reg #quantity').focus();
+                                }, 0);
+                            }else{
+                           var guid = $('#parsley_reg #items').select2('data').item;
+
+
+                        $('#parsley_reg #item_id').val(guid);
+                        $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').value);
+                        $('#parsley_reg #stock_id').val($('#parsley_reg #items').select2('data').sid);
+                        $('#parsley_reg #item_name').val($('#parsley_reg #items').select2('data').text);
+                        if($('#parsley_reg #items').select2('data').uom==0){
+                            $('#parsley_reg #price').val(parseFloat($('#parsley_reg #items').select2('data').price));
+                        }else{
+                            $('#parsley_reg #price').val(parseFloat($('#parsley_reg #items').select2('data').price)/parseFloat($('#parsley_reg #items').select2('data').no_of_unit));
+                        }
+                        $('#parsley_reg #stock_quty').val($('#parsley_reg #items').select2('data').quty);
+                        $('#parsley_reg #tax_value').val($('#parsley_reg #items').select2('data').tax_value);
+                        $('#parsley_reg #tax_type').val($('#parsley_reg #items').select2('data').tax_type);
+
+
+                        var start=$('#parsley_reg #items').select2('data').start
+                        var end=$('#parsley_reg #items').select2('data').end
+
+                        var tax=$('#parsley_reg #items').select2('data').tax_Inclusive;
+                        $('#parsley_reg #tax_Inclusive').val(tax);
+                        if(tax==1){
+                            $('#tax_label').text('Tax(Exc)');
+                        }else{
+                            $('#tax_label').text('Tax(Inc)');   
+                        }
+
+                        if(start==0 && end==0){
+                            $('#parsley_reg #discount').val(0);  
+                        }else{
+                            $('#parsley_reg #discount').val($('#parsley_reg #items').select2('data').discount);
+                        }
+                        if(isNaN($('#parsley_reg #tax_value').val())){
+                              $('#parsley_reg #tax_value').val(0);
+                              $('#parsley_reg #tax').val(0);
+                        }
+
+                       net_amount();
+                        $('#parsley_reg #quantity').focus();
+                            window.setTimeout(function ()
+                            {
+
+                                $('#parsley_reg #quantity').focus();
+                            }, 0);
+                        }
+                    
+                    
+                    
                             var  name=data[0]['name'];
                             var  stock=data[0]['stock_id'];
-                            var  quty=data[0]['quty'];
+                            var  quty=1;
                             var  price=data[0]['price'];
                             var  items_id=data[0]['item'];
+                            var  sku=data[0]['code'];
                             var  tax_value=data[0]['tax_value'];
-                            var  tax_type=data[0]['tax_type'];
-                            var  tax_Inclusive=data[0]['tax_inclusive'];    
-                            var  name=$('#parsley_reg #item_name').val();
-                            var  stock=$('#parsley_reg #stock_id').val();
-                            var  sku=$('#parsley_reg #sku').val();
-                            var  quty=$('#parsley_reg #quantity').val();
-                            if($('#parsley_reg #free').val()!=""){
-                            var  free=$('#parsley_reg #free').val();
-                            }else{
-                            var  free=0;
-                            }
-
-                            var  price=$('#parsley_reg #price').val();
-                            var  items_id=$('#parsley_reg #item_id').val();
-                            var  customers=$('#parsley_reg #customers_guid').val();
-                            var  tax_value=$('#parsley_reg #tax_value').val();
-
-                            var  tax_type=$('#parsley_reg #tax_type').val();
-                            var  tax_Inclusive=$('#parsley_reg #tax_Inclusive').val();
-                            var  discount=((parseFloat(quty)*parseFloat(price))*$('#parsley_reg #discount').val())/100;
-                            var  per=$('#parsley_reg #discount').val();
+                            var  tax_type=data[0]['tax_type_name'];
+                            var  tax_Inclusive=data[0]['tax_Inclusive'];
+                            var  discount=((parseFloat(quty)*parseFloat(price))*data[0]['discount'])/100;
+                            var  per=data[0]['discount'];
                             var tax=((parseFloat(quty)*parseFloat(price))*tax_value)/100;
                             var total;
                             var type;
@@ -179,7 +297,6 @@
                           <input type="hidden" name="items_stock_quty[]" id="items_stock_quty" value="'+$('#stock_quty').val()+'">\n\
                           <input type="hidden" name="items_sku[]" value="'+sku+'" id="items_sku">\n\
                           <input type="hidden" name="items_quty[]" value="'+quty+'" id="items_quty"> \n\
-                          <input type="hidden" name="items_free[]" value="'+free+'" id="items_free">\n\
                           <input type="hidden" name="items_price[]" value="'+price+'" id="items_price">\n\
                           <input type="hidden" name="items_order_guid[]" value="" id="items_order_guid">\n\
                           <input type="hidden" name="items_tax[]" value="'+tax+'" id="items_tax">\n\
