@@ -60,5 +60,48 @@
                         return nRow;
                      },
                 });    
+                jQuery(document).bind('keydown', 'f2',function() 
+                {
+                    $('#item_scan_panel').show();
+                    $('#item_search_panel').hide();
+                    $('#items').select2('close');
+                    $('#first_name').select2('close');
+                    window.setTimeout(function ()
+                    {
+                        $('#search_barcode').val("");
+                        $('#search_barcode').focus();
+                    }, 200);
+		});
+                jQuery(document).bind('keydown', 'f3',function() 
+                {
+                    $('#item_scan_panel').hide();
+                    $('#item_search_panel').show();
+                    $('#items').select2('open');
+                    $('#first_name').select2('close');
+		});
+                jQuery(document).bind('keydown', 'Alt+1',function() 
+                {
+                    $('#items').select2('close');
+                    $('#first_name').select2('open');
+		});
+                jQuery(document).bind('keydown', 'Alt+2',function() 
+                {
+                   remove_all();
+                   $('#selected_item_table').focus();
+		});
+                jQuery(document).bind('keydown', 'Alt+3',function() 
+                {
+                   remove_all();
+                   $('#selected_item_table_filter input').focus();
+                  
+		});
+                            
+                
+                
             });
+            function remove_all(){
+                $('#items').select2('close');
+                $('#first_name').select2('close');
+            }
         </script>
+	<script src="<?php echo base_url() ?>template/shortcut/jquery.hotkeys-0.7.9.min.js" type="text/javascript"></script>
