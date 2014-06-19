@@ -272,7 +272,7 @@ $lang['deleted']='Deleted';
 $lang['reload']='Reload';
  $lang['paymenent_type']='Payment Type';
 $lang['code']='Item Code';
- $lang['barcode']='Item Barcode';
+ $lang['barcode']='Barcode';
  $lang['item_name'] 	='Item Name';
  $lang['description']='Item Description';
  $lang['cost_price']='Cost';
@@ -741,5 +741,8 @@ $lang['credit_days']='Credit Days';
     $lang['to']='To';
     $lang['net_total']='Net Total';
     $lang['total_tax']='Total Tax';
+    $lang['scan']='Scan';
+    $lang['item_list']='Item List';
+    $lang['search_added_item']='Search Added Item';
    
 ?>
