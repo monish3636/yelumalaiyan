@@ -68,18 +68,21 @@
     .small_inputs input{
         font-size: 11px;
         padding: 0 1px !important;
+         font-weight:bold;
     }
     #main_content {
            // margin: 0px;
             height: 544px;
             margin: 0;
+          padding-left: 29px;
+          padding-right: 29px;
          //   width: 84%;
             
     }
     .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
         border-top:none;
-        line-height: 1.42857;
-         padding: 0 11px 1px 10px;
+      //  line-height: 1.42857;
+         padding: 0 11px 0px 10px;
         vertical-align: top;
         text-align: center;
     }
@@ -119,6 +122,15 @@
     }
     #selected_item_table tr th:nth-child(9),#selected_item_table tr td:nth-child(9){
       width: 20px;
+    }
+    #selected_item_table tr th:nth-child(8),#selected_item_table tr td:nth-child(8){
+      text-align: right;
+    }
+    #selected_item_table tr th:nth-child(7),#selected_item_table tr td:nth-child(7){
+      text-align: right;
+    }
+    #selected_item_table tr th:nth-child(5),#selected_item_table tr td:nth-child(5){
+      text-align: right;
     }
     #selected_item_table tr th:nth-child(4),#selected_item_table tr td:nth-child(4){
       width: 150px ;
@@ -181,7 +193,10 @@
     .dataTables_scrollBody{
         overflow-x: hidden !important;
     }
-  
+    .amount-input{
+        text-align: right;
+       
+    }
 </style>	
 <script type="text/javascript" charset="utf-8">   
     $(document).ready(function(){
@@ -389,7 +404,7 @@
 <script type="text/javascript">
     function numbersonly(e){
         var unicode=e.charCode? e.charCode : e.keyCode
-        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40){ //if the key isn't the backspace key (which we should allow)
+        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40 && unicode!=16 && unicode!=9){ //if the key isn't the backspace key (which we should allow)
         if (unicode<48||unicode>57)
         return false
           }
@@ -996,8 +1011,33 @@
                 $('#demo_customer_discount_amount').val(customer_dis.toFixed(point));
                 $('#customer_discount_amount').val(customer_dis.toFixed(point));
             }
-            $("#parsley_reg #demo_grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-customer_dis);
-            $("#parsley_reg #grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-customer_dis);
+            var total=parseFloat($("#parsley_reg #total_amount").val())-customer_dis;
+             var  bill_discount=0;
+            if($('#bill_discount').val()=="" || isNaN(parseFloat($('#bill_discount').val()))){
+                 bill_discount=0;
+            }else{
+                bill_discount=parseFloat($('#bill_discount').val());
+            }
+             var  bill_discount_amount=0;
+            if($('#bill_discount_amount').val()=="" || isNaN(parseFloat($('#bill_discount_amount').val()))){
+                 bill_discount_amount=0;
+            }else{
+                  bill_discount_amount=parseFloat($('#bill_discount_amount').val());
+            }
+            if(bill_discount!=0){
+                bill_discount_amount=parseFloat(total)*parseFloat($('#bill_discount').val())/100;
+                total=parseFloat(total)-parseFloat(bill_discount_amount);
+            }else{
+                total=parseFloat(total)-parseFloat(bill_discount_amount);
+              
+            }
+            bill_discount_amount=parseFloat(bill_discount_amount);
+            bill_discount_amount= bill_discount_amount.toFixed(point);
+            console.log();
+            $('#demo_bill_discount').val(bill_discount_amount);
+            $('#bill_discount_amount').val(bill_discount_amount);
+            $("#parsley_reg #demo_grand_total").val(total);
+            $("#parsley_reg #grand_total").val(total);
             var num = parseFloat($('#demo_grand_total').val());
             $('#demo_grand_total').val(num.toFixed(point));
             var num = parseFloat($('#grand_total').val());
@@ -1026,29 +1066,37 @@
                           'name'=>'items_form',
                           'class'=>'form-horizontal');
        echo form_open_multipart('keyboard_sales/upadate_pos_keyboard_sales_details/',$form);?>
-<div class="row" style="margin-left:0px;">
+<div class="row" style="margin-left:15px;padding-right: 25px   !important;">
         
         <div class="col col-lg-8" style="padding: 0 0 0 10px;">
                 
               
                 <div class="row" style="padding-top: 1px; margin: auto;">
-                        <div class="col col-lg-2"></div>
+                        
                          
-                        <div class="col col-lg-8">
+                    <div class="col col-lg-12" style="  padding-left:0px;padding-right: 0px">
                             <div class="panel panel-default"  id="item_scan_panel" >
                             <div class="panel-heading" >
                                  <h4 class="panel-title"><?php echo $this->lang->line('scan')." ".$this->lang->line('items') ?></h4>
 
                           </div>
-                             <label for="items" class="text-center" ><?php echo $this->lang->line('barcode')."/".$this->lang->line('EANUPC') ?></label>	
-                            <input type="text" id="search_barcode" class="form-control search-input">
+                                <div class="row" style="margin-top: 14px;">
+                                    <div class="col col-lg-4">
+                                        <label for="items" class="text-center" style="padding-top: 10px;" ><?php echo $this->lang->line('barcode')."/".$this->lang->line('EANUPC') ?></label>	
+                                    </div>
+                                    <div class="col col-lg-8">
+                                        <input type="text" id="search_barcode" class="form-control search-input">
+                                    </div>
+                                </div>
+                            
+                            
                             </div>
                         
                         </div>
-                        <div class="col col-lg-2"></div>
+                        
                     </div>
             
-            <div class="panel panel-default" style="margin-top: 4px ;display: none" id="item_search_panel" >
+            <div class="panel panel-default" style="display: none" id="item_search_panel" >
                 <div class="panel-heading" >
                      <h4 class="panel-title"><?php echo $this->lang->line('search')." ".$this->lang->line('items') ?></h4>                                                                               
               </div>        
@@ -1190,7 +1238,7 @@
 <!--           fatay-->
         </div>
         <div class="col col-lg-2">
-             <div class="form_sep" style="padding: 0 0 0 10px;">
+             <div class="form_sep" style="padding: 0px;">
                     <label for="sales_bill_number" ><?php echo $this->lang->line('sales_bill_number') ?></label>													
                              <?php $order_number=array('name'=>'demo_sales_bill_number',
                                                 'class'=>'required  form-control',
@@ -1200,7 +1248,7 @@
                                  echo form_input($order_number)?>
                     <input type="hidden" name="keyboard_sales_bill_number" id="keyboard_sales_bill_number">
                </div>
-            <div class="form_sep " style="padding: 0 0 0 10px;">
+            <div class="form_sep " style="padding: 0px;">
                 <label for="sales_bill_date" ><?php echo $this->lang->line('sales_bill_date') ?></label>													
                          <div class="input-group date ebro_datepicker" data-date-format="dd.mm.yyyy" data-date-autoclose="true" data-date-start-view="2">
                                <?php $sales_bill_date=array('name'=>'sales_bill_date',
@@ -1214,7 +1262,7 @@
            </div>
         </div>
         <div class="col col-lg-2">
-              <div class="form_sep " style="padding: 0 10px 0 0;">
+              <div class="form_sep " style="padding: 0px;">
                 <label for="first_name" ><?php echo $this->lang->line('customer') ?></label>													
                       <?php $first_name=array('name'=>'first_name',
                                         'class'=>'required  form-control',
@@ -1224,7 +1272,7 @@
                          echo form_input($first_name)?>
 
             </div>
-              <div class="form_sep " style="padding: 0 10px 0 0;">
+              <div class="form_sep " style="padding: 0px;">
                 <label for="customer_discount" ><?php echo $this->lang->line('customer').' '.$this->lang->line('discount') ?> %</label>													
                          <?php $customer_discount=array('name'=>'customer_discount',
                                             'class'=>'required  form-control',
@@ -1237,12 +1285,12 @@
            </div>
         </div>
     </div>
-<div class="row" id="add_new_order"  style="margin-left: -4px;margin-right: -4px;margin-top: 20px">
+<div class="row" id="add_new_order"  style="margin-left: -4px;margin-right: -4px;margin-top: 2px">
     
                         <div class="col col-lg-12">
     
         
-    <div id="main_content" style="padding: 0 16px  !important;">
+    <div id="main_content" >
                      
         <input type="hidden" name="dummy_discount" id="dummy_discount" >
         <input type="hidden" name="dummy_discount_amount" id="dummy_discount_amount" >
@@ -1300,6 +1348,12 @@
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
+                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
+                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
+                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
+                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
+                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
+                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
                                     </tbody >
                                 </table>
                                 </div>
@@ -1315,16 +1369,13 @@
                                 <div id="newly_added">
                                     
                                 </div>
-                        <div class="row" style="margin-left: 5px">
-                                                     <div class="panel panel-default">
-                                                    <div class="panel-heading" >
-                                     <h4 class="panel-title"><?php echo $this->lang->line('amount') ?></h4>                                                                               
-                              </div>        
+                        <div class="row" style="margin-left: 10px">
+                                           
                                                         
-                                                  <div class="form_sep " style="padding: 0 25px">
+                                                  <div class="form_sep " style="padding: 0px">
                                                             <label for="customer_discount_amount" ><?php echo $this->lang->line('customer').' '.$this->lang->line('disc').' '.$this->lang->line('amt') ?></label>													
                                                                      <?php $customer_discount_amount=array('name'=>'customer_discount_amount',
-                                                                                        'class'=>'required  form-control',
+                                                                                        'class'=>'required  form-control amount-input',
                                                                                         'id'=>'demo_customer_discount_amount',
                                                                                         'disabled'=>'disabled',
                                                                                         'value'=>set_value('customer_discount'));
@@ -1333,30 +1384,30 @@
                                                        </div>
                                                 
                                                   
-                                                         <div class="form_sep " style="padding: 0 25px">
+                                                         <div class="form_sep " style="padding: 0px">
                                                         <label for="total_item_discount_amount" ><?php echo $this->lang->line('total_item_discount_amount') ?></label>													
                                                                   <?php $total_item_discount_amount=array('name'=>'total_item_discount_amount',
-                                                                                    'class'=>' form-control',
+                                                                                    'class'=>' form-control amount-input',
                                                                                     'id'=>'total_item_discount_amount',
                                                                                     'disabled'=>'disabled',
                                                                                     'value'=>set_value('total_item_discount_amount'));
                                                                      echo form_input($total_item_discount_amount)?>
                                                         
                                                   </div>
-                                                         <div class="form_sep " style="padding: 0 25px">
+                                                         <div class="form_sep " style="padding: 0px">
                                                         <label for="total_tax" ><?php echo $this->lang->line('total_tax') ?></label>													
                                                                   <?php $total_item_discount_amount=array('name'=>'total_tax',
-                                                                                    'class'=>' form-control',
+                                                                                    'class'=>' form-control amount-input',
                                                                                     'id'=>'total_tax',
                                                                                     'disabled'=>'disabled',
                                                                                     'value'=>set_value('total_tax'));
                                                                      echo form_input($total_item_discount_amount)?>
                                                         
                                                   </div>
-                                                         <div class="form_sep " style="padding: 0 25px">
+                                                         <div class="form_sep " style="padding: 0px">
                                                         <label for="total_amount" ><?php echo $this->lang->line('total_amount') ?></label>													
                                                                   <?php $total_amount=array('name'=>'demo_total_amount',
-                                                                                    'class'=>'required  form-control',
+                                                                                    'class'=>'required  form-control amount-input',
                                                                                     'id'=>'demo_total_amount',
                                                                                     'disabled'=>'disabled',
                                                                                     'value'=>set_value('total_amount'));
@@ -1364,17 +1415,27 @@
                                                         <input type="hidden" name="total_amount" id="total_amount">
                                                         
                                                   </div>
-                                                         <div class="form_sep " style="padding: 0 25px">
+                                                         <div class="form_sep " style="padding: 0px">
+                                                        <label for="total_amount" ><?php echo $this->lang->line('bill_discount') ?></label>													
+                                                                  <?php $bill_discount=array('name'=>'demo_bill_discount',
+                                                                                    'class'=>'required  form-control amount-input',
+                                                                                    'id'=>'demo_bill_discount',
+                                                                                    'disabled'=>'disabled',
+                                                                                    'value'=>set_value('bill_discount'));
+                                                                     echo form_input($bill_discount)?>
+                                                        
+                                                  </div>
+                                                     
+                                                         <div class="form_sep " style="padding: 0px">
                                                         <label for="grand_total" ><?php echo $this->lang->line('grand_total') ?></label>													
                                                                   <?php $grand_total=array('name'=>'demo_grand_total',
-                                                                                    'class'=>'required  form-control',
+                                                                                    'class'=>'required  form-control amount-input',
                                                                                     'id'=>'demo_grand_total',
                                                                                     'disabled'=>'disabled',
                                                                                     'value'=>set_value('grand_total'));
                                                                      echo form_input($grand_total)?>
                                                         <input type="hidden" name="grand_total" id="grand_total">
                                                         
-                                                  </div><br>
                                                   </div>
                                                </div>
                         
@@ -1394,10 +1455,54 @@
         <a href="" class="btn btn-info">Alt+1 <i class="icon icon-user"></i> <?php echo $this->lang->line('customer') ?></a>
         <a href="" class="btn btn-info">Alt+2 <i class="icon icon-list"></i> <?php echo $this->lang->line('item_list') ?></a>
         <a href="" class="btn btn-info">Alt+3 <i class="icon icon-search"></i> <?php echo $this->lang->line('search_added_item') ?></a>
+        <a href="" class="btn btn-info">Alt+4 <i class="icon icon-money"></i> <?php echo $this->lang->line('bill_discount') ?></a>
 <!--        <a href="" class="btn btn-info">Delete+No <i class="icon icon-trash"></i> <?php echo $this->lang->line('delete_item') ?></a>-->
     </div>
-          
-		
+     <div id="sales_bill_discount" class="modal fade in"  >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header madal-search">
+                    <button class="close" data-dismiss="modal" type="button">×</button>
+                    <h4 class="modal-title text-center"><?php echo $this->lang->line('bill_discount') ?></h4>
+                </div>
+                <div class="modal-body"> 
+                    <div class="row">
+                        <div class="col col-lg-2"></div>
+                        <div class="col col-lg-4">    
+                            <div class="form_sep " style="padding: 0px">
+                                    <label for="bill_discount" ><?php echo $this->lang->line('bill_discount') ?> %</label>													
+                                              <?php $bill_discount=array('name'=>'bill_discount',
+                                                                'class'=>'required  form-control amount-input',
+                                                                'id'=>'bill_discount',
+                                                               'onKeyPress'=>"return numbersonly(event)",
+                                                                'value'=>set_value('bill_discount'));
+                                                 echo form_input($bill_discount)?>
+
+                                      </div>
+                                                       </div>
+                        <div class="col col-lg-4">
+                              <div class="form_sep " style="padding: 0px">
+                                    <label for="bill_discount_amount" ><?php echo $this->lang->line('bill_discount') ?> </label>													
+                                              <?php $bill_discount_amount=array('name'=>'bill_discount_amount',
+                                                                'class'=>'required  form-control amount-input',
+                                                                'id'=>'bill_discount_amount',
+                                                                'onKeyPress'=>"return numbersonly(event)",
+                                                                'value'=>set_value('bill_discount_amount'));
+                                                 echo form_input($bill_discount_amount)?>
+
+                              </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-dismiss="modal" type="button">Ctrl+S / Insert <?php echo $this->lang->line('to')." ".$this->lang->line('save') ?></button>
+                    <button class="btn btn-danger" data-dismiss="modal" type="button">Esc <?php echo $this->lang->line('to')." ".$this->lang->line('close') ?></button>
+                
+                </div>
+            </div>
+        </div>
+    </div>	
  
 
 
