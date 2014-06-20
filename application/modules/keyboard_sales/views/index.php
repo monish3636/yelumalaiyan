@@ -137,6 +137,9 @@
     label {
         font-weight: bold;
     }
+    .selected{
+         background-color: #f2b835;
+    }
 </style>	
 <script type="text/javascript" charset="utf-8">   
     $(document).ready(function(){
@@ -1219,7 +1222,7 @@
                                     <div class="panel-heading">
                                             <h4 class="panel-title"><?php echo $this->lang->line('order_items') ?></h4>                                                                               
                                     </div>
-                                <table id='selected_item_table' class="table table-striped dataTable ">
+                                <table id='selected_item_table' class="table dataTable ">
                                     <thead>
                                         <tr>
                                             
@@ -1371,6 +1374,7 @@
         <a href="" class="btn btn-info">Alt+1 <i class="icon icon-user"></i> <?php echo $this->lang->line('customer') ?></a>
         <a href="" class="btn btn-info">Alt+2 <i class="icon icon-list"></i> <?php echo $this->lang->line('item_list') ?></a>
         <a href="" class="btn btn-info">Alt+3 <i class="icon icon-search"></i> <?php echo $this->lang->line('search_added_item') ?></a>
+<!--        <a href="" class="btn btn-info">Delete+No <i class="icon icon-trash"></i> <?php echo $this->lang->line('delete_item') ?></a>-->
     </div>
           
 		</div>

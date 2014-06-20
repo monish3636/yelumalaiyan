@@ -744,5 +744,6 @@ $lang['credit_days']='Credit Days';
     $lang['scan']='Scan';
     $lang['item_list']='Item List';
     $lang['search_added_item']='Search Added Item';
+    $lang['delete_item']='Delete Item';
    
 ?>
