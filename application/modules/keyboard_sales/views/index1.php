@@ -1,3 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>POSNIC</title>
+        <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/css/todc-bootstrap.min.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/css/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/img/flags/flags.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/css/retina.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/bootstrap-switch/stylesheets/bootstrap-switch.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/bootstrap-switch/stylesheets/ebro_bootstrapSwitch.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/jvectormap/jquery-jvectormap-1.2.2.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/css/hint-css/hint.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/css/style.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>template/app/css/theme/color_1.css" id="theme">
+               
+        <!--[if lt IE 9]>
+                <link rel="stylesheet" href="<?php echo base_url() ?>template/app/css/ie.css">
+                <script src="<?php echo base_url() ?>template/app/js/ie/html5shiv.js"></script>
+                <script src="<?php echo base_url() ?>template/app/js/ie/respond.min.js"></script>
+                <script src="<?php echo base_url() ?>template/app/js/ie/excanvas.min.js"></script>
+        <![endif]-->
+
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/multi-select/css/multi-select.css">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/multi-select/css/ebro_multi-select.css">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/app/select/select2.css">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/select2/ebro_select2.css">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/datepicker/css/datepicker.css">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/colorpicker/css/colorpicker.css">
+         <link href="<?php echo base_url() ?>template/app/js/lib/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/timepicker/css/bootstrap-timepicker.min.css">
+         <link href="<?php echo base_url() ?>template/app/validation/prettify.css" rel="stylesheet">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/app/validate/css/wizard.css">
+         <link rel="stylesheet" href="<?php echo base_url() ?>template/keyboard/style.css">
+         <link  rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/dataTables/media/DT_bootstrap.css">
+	 <link rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/dataTables/extras/TableTools/media/css/TableTools.css">     
+	    
+
+	
+	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.js"></script>
+	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.dataTables.js"></script>
+	
+	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script> 
+         
+
+	<script type="text/javascript" language="javascript" src="http://localhost/aaa/jquery.js"></script>
+		<script src="http://localhost/posnic/template/shortcut/jquery.hotkeys-0.7.9.min.js" type="text/javascript"></script>
+	<script type="text/javascript" language="javascript" src="http://localhost/aaa/jquery.dataTables.js"></script>
+         <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/select2.js"></script>
+	<script type="text/javascript" language="javascript" class="init">
+   var point=3;
+   var last_row=1;
+$(document).ready(function() {
+    
+	$('#example').dataTable( {
+		
+		     "bProcessing": true,
+                              "bDestroy": true ,
+                              "bPaginate": false,
+"scrollY":        "200px",
+		"scrollCollapse": true,
+		"paging":         false,
+                             "sPaginationType": "bootstrap_full",
+                             "fnRowCallback" : function(nRow, aData, iDisplayIndex){
+                         $("td:first", nRow).html(iDisplayIndex +1);
+                         $("#index", nRow).val(iDisplayIndex +1);
+                        return nRow;
+                     },
+	} );
+           var selected = [];
+                $('#selected_item_table').dataTable({
+                   		     "bProcessing": true,
+                              "bDestroy": true ,
+                              "bPaginate": false,
+"scrollY":        "100px",
+		"scrollCollapse": true,
+		"paging":         false,
+                             "sPaginationType": "bootstrap_full",
+                             "fnRowCallback" : function(nRow, aData, iDisplayIndex){
+                         $("td:first", nRow).html(iDisplayIndex +1);
+                         $("#index", nRow).val(iDisplayIndex +1);
+                        return nRow;
+                     },
+                }); 
+                
+                
+//                  $('#selected_item_table tbody').on('click', 'tr', function () {
+//                        var id = this.id;
+//                        var index = $.inArray(id, selected);
+//
+//                        if ( index === -1 ) {
+//                            selected.push( id );
+//                        } else {
+//                            selected.splice( index, 1 );
+//                        }
+//                        console.log($(this));
+//                        $(this).addClass('selected');
+//                    } );
+                jQuery(document).bind('keydown', 'f2',function() 
+                {
+                    $('#item_scan_panel').show();
+                    $('#item_search_panel').hide();
+                    $('#items').select2('close');
+                    $('#first_name').select2('close');
+                    window.setTimeout(function ()
+                    {
+                        $('#search_barcode').val("");
+                        $('#search_barcode').focus();
+                    }, 200);
+		});
+                jQuery(document).bind('keydown', 'f3',function() 
+                {
+                    $('#item_scan_panel').hide();
+                    $('#item_search_panel').show();
+                    $('#items').select2('open');
+                    $('#first_name').select2('close');
+		});
+                jQuery(document).bind('keydown', 'Alt+1',function() 
+                {
+                    $('#items').select2('close');
+                    $('#first_name').select2('open');
+		});
+                jQuery(document).bind('keydown', 'Alt+2',function() 
+                {
+                   remove_all();
+                   $('#selected_item_table').focus();
+		});
+                jQuery(document).bind('keydown', 'Alt+3',function() 
+                {
+                   remove_all();
+                   $('#selected_item_table_filter input').focus();
+                  
+		});
+                jQuery('#selected_item_table').bind('keydown', 'up',function() 
+                {
+                 last_row++;
+                 if(last_row==3){
+                    var bid =$(':focus').attr('id');
+                    var trid = $('#'+bid).closest('tr').attr('id');
+                    var index=$('#'+trid).children('td:first').text();
+                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                    index=parseInt(index)-1;
+                    var up;
+                    for(var i=0;i<rows.length;i++)
+                    {                       
+                        var row=$(rows[i]).attr('id');
+                        
+                        if($('#'+row).children('td:first').text()==index){
+                            up=row;
+                        }
+                      
+                    }
+                    
+                    $('#'+up).addClass('selected');
+                    $('#'+trid).removeClass('selected');
+                    $('#'+up +' input[type=text]').focus();                  
+                    last_row=1;
+                    }
+		});
+                $('#selected_item_table').bind('keydown', 'down',function() 
+                {
+                   last_row++;
+                 if(last_row==3){
+                    var bid =$(':focus').attr('id');
+                    var trid = $('#'+bid).closest('tr').attr('id');
+                    var index=$('#'+trid).children('td:first').text();
+                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                    index=parseInt(index)+1;
+                    var up;
+                    for(var i=0;i<rows.length;i++)
+                    {                       
+                        var row=$(rows[i]).attr('id');
+                        
+                        if($('#'+row).children('td:first').text()==index){
+                            up=row;
+                        }
+                      
+                    }
+                    
+                    $('#'+up).addClass('selected');
+                    $('#'+trid).removeClass('selected');
+                    $('#'+up +' input[type=text]').focus();                  
+                    last_row=1;
+                    }
+                  
+		});
+} );
+
+	</script>
+	
+</head>
+<body>
+		<section>
+			<h1>DataTables example <span>Scroll - vertical</span></h1>
+
+			
+			<table id="example" class="display" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</thead>
+
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
+
+				<tbody>
+					<tr>
+						<td>Tiger Nixon</td>
+						<td>System Architect</td>
+						<td>Edinburgh</td>
+						<td>61</td>
+						<td>2011/04/25</td>
+						<td>$320,800</td>
+					</tr>
+					<tr>
+						<td>Garrett Winters</td>
+						<td>Accountant</td>
+						<td>Tokyo</td>
+						<td>63</td>
+						<td>2011/07/25</td>
+						<td>$170,750</td>
+					</tr>
+					<tr>
+						<td>Ashton Cox</td>
+						<td>Junior Technical Author</td>
+						<td>San Francisco</td>
+						<td>66</td>
+						<td>2009/01/12</td>
+						<td>$86,000</td>
+					</tr>
+					<tr>
+						<td>Cedric Kelly</td>
+						<td>Senior Javascript Developer</td>
+						<td>Edinburgh</td>
+						<td>22</td>
+						<td>2012/03/29</td>
+						<td>$433,060</td>
+					</tr>
+					<tr>
+						<td>Airi Satou</td>
+						<td>Accountant</td>
+						<td>Tokyo</td>
+						<td>33</td>
+						<td>2008/11/28</td>
+						<td>$162,700</td>
+					</tr>
+					<tr>
+						<td>Brielle Williamson</td>
+						<td>Integration Specialist</td>
+						<td>New York</td>
+						<td>61</td>
+						<td>2012/12/02</td>
+						<td>$372,000</td>
+					</tr>
+					<tr>
+						<td>Herrod Chandler</td>
+						<td>Sales Assistant</td>
+						<td>San Francisco</td>
+						<td>59</td>
+						<td>2012/08/06</td>
+						<td>$137,500</td>
+					</tr>
+					<tr>
+						<td>Rhona Davidson</td>
+						<td>Integration Specialist</td>
+						<td>Tokyo</td>
+						<td>55</td>
+						<td>2010/10/14</td>
+						<td>$327,900</td>
+					</tr>
+					<tr>
+						<td>Colleen Hurst</td>
+						<td>Javascript Developer</td>
+						<td>San Francisco</td>
+						<td>39</td>
+						<td>2009/09/15</td>
+						<td>$205,500</td>
+					</tr>
+					<tr>
+						<td>Sonya Frost</td>
+						<td>Software Engineer</td>
+						<td>Edinburgh</td>
+						<td>23</td>
+						<td>2008/12/13</td>
+						<td>$103,600</td>
+					</tr>
+					<tr>
+						<td>Jena Gaines</td>
+						<td>Office Manager</td>
+						<td>London</td>
+						<td>30</td>
+						<td>2008/12/19</td>
+						<td>$90,560</td>
+					</tr>
+					<tr>
+						<td>Quinn Flynn</td>
+						<td>Support Lead</td>
+						<td>Edinburgh</td>
+						<td>22</td>
+						<td>2013/03/03</td>
+						<td>$342,000</td>
+					</tr>
+					<tr>
+						<td>Charde Marshall</td>
+						<td>Regional Director</td>
+						<td>San Francisco</td>
+						<td>36</td>
+						<td>2008/10/16</td>
+						<td>$470,600</td>
+					</tr>
+					<tr>
+						<td>Haley Kennedy</td>
+						<td>Senior Marketing Designer</td>
+						<td>London</td>
+						<td>43</td>
+						<td>2012/12/18</td>
+						<td>$313,500</td>
+					</tr>
+					<tr>
+						<td>Tatyana Fitzpatrick</td>
+						<td>Regional Director</td>
+						<td>London</td>
+						<td>19</td>
+						<td>2010/03/17</td>
+						<td>$385,750</td>
+					</tr>
+					<tr>
+						<td>Michael Silva</td>
+						<td>Marketing Designer</td>
+						<td>London</td>
+						<td>66</td>
+						<td>2012/11/27</td>
+						<td>$198,500</td>
+					</tr>
+					<tr>
+						<td>Paul Byrd</td>
+						<td>Chief Financial Officer (CFO)</td>
+						<td>New York</td>
+						<td>64</td>
+						<td>2010/06/09</td>
+						<td>$725,000</td>
+					</tr>
+					<tr>
+						<td>Gloria Little</td>
+						<td>Systems Administrator</td>
+						<td>New York</td>
+						<td>59</td>
+						<td>2009/04/10</td>
+						<td>$237,500</td>
+					</tr>
+					<tr>
+						<td>Bradley Greer</td>
+						<td>Software Engineer</td>
+						<td>London</td>
+						<td>41</td>
+						<td>2012/10/13</td>
+						<td>$132,000</td>
+					</tr>
+					<tr>
+						<td>Dai Rios</td>
+						<td>Personnel Lead</td>
+						<td>Edinburgh</td>
+						<td>35</td>
+						<td>2012/09/26</td>
+						<td>$217,500</td>
+					</tr>
+					<tr>
+						<td>Jenette Caldwell</td>
+						<td>Development Lead</td>
+						<td>New York</td>
+						<td>30</td>
+						<td>2011/09/03</td>
+						<td>$345,000</td>
+					</tr>
+					<tr>
+						<td>Yuri Berry</td>
+						<td>Chief Marketing Officer (CMO)</td>
+						<td>New York</td>
+						<td>40</td>
+						<td>2009/06/25</td>
+						<td>$675,000</td>
+					</tr>
+					<tr>
+						<td>Caesar Vance</td>
+						<td>Pre-Sales Support</td>
+						<td>New York</td>
+						<td>21</td>
+						<td>2011/12/12</td>
+						<td>$106,450</td>
+					</tr>
+					<tr>
+						<td>Doris Wilder</td>
+						<td>Sales Assistant</td>
+						<td>Sidney</td>
+						<td>23</td>
+						<td>2010/09/20</td>
+						<td>$85,600</td>
+					</tr>
+					<tr>
+						<td>Angelica Ramos</td>
+						<td>Chief Executive Officer (CEO)</td>
+						<td>London</td>
+						<td>47</td>
+						<td>2009/10/09</td>
+						<td>$1,200,000</td>
+					</tr>
+					<tr>
+						<td>Gavin Joyce</td>
+						<td>Developer</td>
+						<td>Edinburgh</td>
+						<td>42</td>
+						<td>2010/12/22</td>
+						<td>$92,575</td>
+					</tr>
+					<tr>
+						<td>Jennifer Chang</td>
+						<td>Regional Director</td>
+						<td>Singapore</td>
+						<td>28</td>
+						<td>2010/11/14</td>
+						<td>$357,650</td>
+					</tr>
+					<tr>
+						<td>Brenden Wagner</td>
+						<td>Software Engineer</td>
+						<td>San Francisco</td>
+						<td>28</td>
+						<td>2011/06/07</td>
+						<td>$206,850</td>
+					</tr>
+					<tr>
+						<td>Fiona Green</td>
+						<td>Chief Operating Officer (COO)</td>
+						<td>San Francisco</td>
+						<td>48</td>
+						<td>2010/03/11</td>
+						<td>$850,000</td>
+					</tr>
+					<tr>
+						<td>Shou Itou</td>
+						<td>Regional Marketing</td>
+						<td>Tokyo</td>
+						<td>20</td>
+						<td>2011/08/14</td>
+						<td>$163,000</td>
+					</tr>
+					<tr>
+						<td>Michelle House</td>
+						<td>Integration Specialist</td>
+						<td>Sidney</td>
+						<td>37</td>
+						<td>2011/06/02</td>
+						<td>$95,400</td>
+					</tr>
+					<tr>
+						<td>Suki Burks</td>
+						<td>Developer</td>
+						<td>London</td>
+						<td>53</td>
+						<td>2009/10/22</td>
+						<td>$114,500</td>
+					</tr>
+					<tr>
+						<td>Prescott Bartlett</td>
+						<td>Technical Author</td>
+						<td>London</td>
+						<td>27</td>
+						<td>2011/05/07</td>
+						<td>$145,000</td>
+					</tr>
+					<tr>
+						<td>Gavin Cortez</td>
+						<td>Team Leader</td>
+						<td>San Francisco</td>
+						<td>22</td>
+						<td>2008/10/26</td>
+						<td>$235,500</td>
+					</tr>
+					<tr>
+						<td>Martena Mccray</td>
+						<td>Post-Sales support</td>
+						<td>Edinburgh</td>
+						<td>46</td>
+						<td>2011/03/09</td>
+						<td>$324,050</td>
+					</tr>
+					<tr>
+						<td>Unity Butler</td>
+						<td>Marketing Designer</td>
+						<td>San Francisco</td>
+						<td>47</td>
+						<td>2009/12/09</td>
+						<td>$85,675</td>
+					</tr>
+					<tr>
+						<td>Howard Hatfield</td>
+						<td>Office Manager</td>
+						<td>San Francisco</td>
+						<td>51</td>
+						<td>2008/12/16</td>
+						<td>$164,500</td>
+					</tr>
+					<tr>
+						<td>Hope Fuentes</td>
+						<td>Secretary</td>
+						<td>San Francisco</td>
+						<td>41</td>
+						<td>2010/02/12</td>
+						<td>$109,850</td>
+					</tr>
+					<tr>
+						<td>Vivian Harrell</td>
+						<td>Financial Controller</td>
+						<td>San Francisco</td>
+						<td>62</td>
+						<td>2009/02/14</td>
+						<td>$452,500</td>
+					</tr>
+					<tr>
+						<td>Timothy Mooney</td>
+						<td>Office Manager</td>
+						<td>London</td>
+						<td>37</td>
+						<td>2008/12/11</td>
+						<td>$136,200</td>
+					</tr>
+					<tr>
+						<td>Jackson Bradshaw</td>
+						<td>Director</td>
+						<td>New York</td>
+						<td>65</td>
+						<td>2008/09/26</td>
+						<td>$645,750</td>
+					</tr>
+					<tr>
+						<td>Olivia Liang</td>
+						<td>Support Engineer</td>
+						<td>Singapore</td>
+						<td>64</td>
+						<td>2011/02/03</td>
+						<td>$234,500</td>
+					</tr>
+					<tr>
+						<td>Bruno Nash</td>
+						<td>Software Engineer</td>
+						<td>London</td>
+						<td>38</td>
+						<td>2011/05/03</td>
+						<td>$163,500</td>
+					</tr>
+					<tr>
+						<td>Sakura Yamamoto</td>
+						<td>Support Engineer</td>
+						<td>Tokyo</td>
+						<td>37</td>
+						<td>2009/08/19</td>
+						<td>$139,575</td>
+					</tr>
+					<tr>
+						<td>Thor Walton</td>
+						<td>Developer</td>
+						<td>New York</td>
+						<td>61</td>
+						<td>2013/08/11</td>
+						<td>$98,540</td>
+					</tr>
+					<tr>
+						<td>Finn Camacho</td>
+						<td>Support Engineer</td>
+						<td>San Francisco</td>
+						<td>47</td>
+						<td>2009/07/07</td>
+						<td>$87,500</td>
+					</tr>
+					<tr>
+						<td>Serge Baldwin</td>
+						<td>Data Coordinator</td>
+						<td>Singapore</td>
+						<td>64</td>
+						<td>2012/04/09</td>
+						<td>$138,575</td>
+					</tr>
+					<tr>
+						<td>Zenaida Frank</td>
+						<td>Software Engineer</td>
+						<td>New York</td>
+						<td>63</td>
+						<td>2010/01/04</td>
+						<td>$125,250</td>
+					</tr>
+					<tr>
+						<td>Zorita Serrano</td>
+						<td>Software Engineer</td>
+						<td>San Francisco</td>
+						<td>56</td>
+						<td>2012/06/01</td>
+						<td>$115,000</td>
+					</tr>
+					<tr>
+						<td>Jennifer Acosta</td>
+						<td>Junior Javascript Developer</td>
+						<td>Edinburgh</td>
+						<td>43</td>
+						<td>2013/02/01</td>
+						<td>$75,650</td>
+					</tr>
+					<tr>
+						<td>Cara Stevens</td>
+						<td>Sales Assistant</td>
+						<td>New York</td>
+						<td>46</td>
+						<td>2011/12/06</td>
+						<td>$145,600</td>
+					</tr>
+					<tr>
+						<td>Hermione Butler</td>
+						<td>Regional Director</td>
+						<td>London</td>
+						<td>47</td>
+						<td>2011/03/21</td>
+						<td>$356,250</td>
+					</tr>
+					<tr>
+						<td>Lael Greer</td>
+						<td>Systems Administrator</td>
+						<td>London</td>
+						<td>21</td>
+						<td>2009/02/27</td>
+						<td>$103,500</td>
+					</tr>
+					<tr>
+						<td>Jonas Alexander</td>
+						<td>Developer</td>
+						<td>San Francisco</td>
+						<td>30</td>
+						<td>2010/07/14</td>
+						<td>$86,500</td>
+					</tr>
+					<tr>
+						<td>Shad Decker</td>
+						<td>Regional Director</td>
+						<td>Edinburgh</td>
+						<td>51</td>
+						<td>2008/11/13</td>
+						<td>$183,000</td>
+					</tr>
+					<tr>
+						<td>Michael Bruce</td>
+						<td>Javascript Developer</td>
+						<td>Singapore</td>
+						<td>29</td>
+						<td>2011/06/27</td>
+						<td>$183,000</td>
+					</tr>
+					<tr>
+						<td>Donna Snider</td>
+						<td>Customer Support</td>
+						<td>New York</td>
+						<td>27</td>
+						<td>2011/01/25</td>
+						<td>$112,000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			
+			
+		</section>
 <style type="text/css">
     .my_select{
          -moz-border-bottom-colors: none;
@@ -70,18 +755,15 @@
         padding: 0 1px !important;
     }
     #main_content {
-           // margin: 0px;
-            height: 544px;
-            margin: 0;
-         //   width: 84%;
-            
+            margin: 0px;
+            overflow-y: scroll;
+            height: 457px;
     }
     .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
         border-top:none;
         line-height: 1.42857;
-         padding: 0 11px 1px 10px;
+        padding: 6px;
         vertical-align: top;
-        text-align: center;
     }
     .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
         background-color: #ffffff ;
@@ -101,32 +783,14 @@
    
     }
     
-    #selected_item_table tr th:nth-child(6),#selected_item_table tr td:nth-child(6){
-      width: 170px;
+    #selected_item_table tr td:nth-child(6){
+      width: 150px;
     }
-    
-    #selected_item_table tr th:nth-child(1),selected_item_table tr td:nth-child(1){
-      padding-left: 20px;
+    #selected_item_table tr td:nth-child(9){
+      width: 50px;
     }
-    #selected_item_table tr th:nth-child(2),selected_item_table tr td:nth-child(2){
-      padding-left: 100px;
-    }
-    #selected_item_table tr th:nth-child(3),selected_item_table tr td:nth-child(3){
-      padding-left: 100px;
-    }
-    #selected_item_table tr th:nth-child(4),selected_item_table tr td:nth-child(4){
-      width: 50px !important;
-    }
-    #selected_item_table tr th:nth-child(9),#selected_item_table tr td:nth-child(9){
-      width: 20px;
-    }
-    #selected_item_table tr th:nth-child(4),#selected_item_table tr td:nth-child(4){
-      width: 150px ;
-    }
-    .dataTables_info {
-        float: left;
-        font-size: 12px;
-        line-height: 32px;
+    div.dt-bottom-row {
+         display: none;
     }
     .btn-info{
          background: #007da9;
@@ -159,29 +823,8 @@
         font-weight: bold;
     }
     .selected{
-         background-color: #007da9;
-         color: #ffffff;
+         background-color: #f2b835;
     }
-    .quantity{
-        font-weight: bold;
-        border: solid 1px #007da9;
-        border-radius: 5px;
-    }
-    .quantity :hover{
-        font-weight: bold;
-        border: solid 2px #007da9;
-    }
-    .quantity :focus{
-        font-weight: bold;
-        border: solid 2px #007da9;
-    }
-    .select2-results .select2-highlighted {
-        background: none repeat scroll 0 0 #007da9;
-    }
-    .dataTables_scrollBody{
-        overflow-x: hidden !important;
-    }
-  
 </style>	
 <script type="text/javascript" charset="utf-8">   
     $(document).ready(function(){
@@ -241,17 +884,16 @@
                     discount=discount.toFixed(point);
                     tax=parseFloat(tax);
                     tax=tax.toFixed(point);
-                    $('#selected_item_table #new_item_row_id_'+data[0]['guid']+' td:nth-child(6)').html(tax +''+' : '+tax_type+'('+type+')');
+                    $('#selected_item_table #new_item_row_id_'+data[0]['guid']+' td:nth-child(6)').html(tax +''+' : '+tax_type+'-'+tax_value+'%('+type+')');
                     $('#selected_item_table #new_item_row_id_'+data[0]['guid']+' td:nth-child(7)').html(discount);
                     $('#selected_item_table #new_item_row_id_'+data[0]['guid']+' td:nth-child(8)').html(total);
-                    $('#new_item_row_id_'+data[0]['guid']+' #quty_'+data[0]['guid']).val(parseFloat(quty));
+                    $('#new_item_row_id_'+data[0]['guid']+' #quty_'+$('#parsley_reg #stock_id').val()).val(parseFloat(quty));
                     $('#new_item_row_id_'+data[0]['guid']+' #items_total').val(total);
                     var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
                     amount=amount.toFixed(point);
                     $('#parsley_reg #total_amount').val(amount);
                     $('#parsley_reg #demo_total_amount').val(amount);
                     new_grand_total(); 
-                    new_row('new_item_row_id_'+data[0]['guid']);
                 }else{
                     if(data[0]['deco_guid']){
                         var guid = data[0]['deco_guid'];
@@ -323,7 +965,7 @@
                                 null,
                                 name,
                                 sku,
-                                "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"'>",
+                                "<input type='text' name='items_quty[]' class='form-control text-center' value='"+quty+"' id='quty_"+stock+"'>",
                                 price,
                                 tax+' : '+tax_type+'('+type+')',
                                 discount,
@@ -376,7 +1018,6 @@
                             }
                             $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
                             new_grand_total(); 
-                            new_row('new_item_row_id_'+data[0]['guid']);
                             clear_inputs();
                             $('#parsley_reg #tax').val(0);
                             $('#parsley_reg #item_discount').val(0);
@@ -403,16 +1044,6 @@
            }
         }
         return false
-    }
-    function new_row(row){
-        var rows = $("#selected_item_table").dataTable().fnGetNodes();
-        for(var i=0;i<rows.length;i++)
-        {
-           var trid=$(rows[i]).attr('id');
-           $('#'+trid).removeClass('selected');
-        }
-        $('#'+row).addClass('selected');
-        
     }
     function get_table_data(){
         $('#selected_item_table').dataTable({
@@ -806,8 +1437,6 @@
                 $('#parsley_reg #total_amount').val(amount);
                 $('#parsley_reg #demo_total_amount').val(amount);
                 new_grand_total(); 
-               
-                new_row('new_item_row_id_'+$('#parsley_reg #stock_id').val());
                 clear_inputs();
             }else{
                 var  name=$('#parsley_reg #item_name').val();
@@ -845,7 +1474,7 @@
                     null,
                     name,
                     sku,
-                    "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"'>",
+                    "<input type='text' name='items_quty[]' class='form-control text-center' value='"+quty+"' id='quty_"+stock+"'>",
                     price,
                     tax+' : '+tax_type+'('+type+')',
                     discount,
@@ -897,7 +1526,6 @@
                 }
                 $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
                 new_grand_total(); 
-                new_row('new_item_row_id_'+$('#parsley_reg #stock_id').val());
                 clear_inputs();
                 $('#parsley_reg #tax').val(0);
                 $('#parsley_reg #item_discount').val(0);
@@ -1026,9 +1654,32 @@
                           'name'=>'items_form',
                           'class'=>'form-horizontal');
        echo form_open_multipart('keyboard_sales/upadate_pos_keyboard_sales_details/',$form);?>
-<div class="row" style="margin-left:0px;">
-        
-        <div class="col col-lg-8" style="padding: 0 0 0 10px;">
+    <div class="row">
+        <div class="col col-lg-2">
+             <div class="form_sep" style="padding: 0 0 0 10px;">
+                    <label for="sales_bill_number" ><?php echo $this->lang->line('sales_bill_number') ?></label>													
+                             <?php $order_number=array('name'=>'demo_sales_bill_number',
+                                                'class'=>'required  form-control',
+                                                'id'=>'demo_sales_bill_number',
+                                                'disabled'=>'disabled',
+                                                'value'=>set_value('sales_bill_number'));
+                                 echo form_input($order_number)?>
+                    <input type="hidden" name="keyboard_sales_bill_number" id="keyboard_sales_bill_number">
+               </div>
+            <div class="form_sep " style="padding: 0 0 0 10px;">
+                <label for="sales_bill_date" ><?php echo $this->lang->line('sales_bill_date') ?></label>													
+                         <div class="input-group date ebro_datepicker" data-date-format="dd.mm.yyyy" data-date-autoclose="true" data-date-start-view="2">
+                               <?php $sales_bill_date=array('name'=>'sales_bill_date',
+                                                'class'=>'required form-control',
+                                                'id'=>'sales_bill_date',
+                                              'onKeyPress'=>"new_sales_bill_date(event)", 
+                                                'value'=>set_value('order_date'));
+                                 echo form_input($sales_bill_date)?>
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    </div>
+           </div>
+        </div>
+        <div class="col col-lg-8">
                 
               
                 <div class="row" style="padding-top: 1px; margin: auto;">
@@ -1190,30 +1841,6 @@
 <!--           fatay-->
         </div>
         <div class="col col-lg-2">
-             <div class="form_sep" style="padding: 0 0 0 10px;">
-                    <label for="sales_bill_number" ><?php echo $this->lang->line('sales_bill_number') ?></label>													
-                             <?php $order_number=array('name'=>'demo_sales_bill_number',
-                                                'class'=>'required  form-control',
-                                                'id'=>'demo_sales_bill_number',
-                                                'disabled'=>'disabled',
-                                                'value'=>set_value('sales_bill_number'));
-                                 echo form_input($order_number)?>
-                    <input type="hidden" name="keyboard_sales_bill_number" id="keyboard_sales_bill_number">
-               </div>
-            <div class="form_sep " style="padding: 0 0 0 10px;">
-                <label for="sales_bill_date" ><?php echo $this->lang->line('sales_bill_date') ?></label>													
-                         <div class="input-group date ebro_datepicker" data-date-format="dd.mm.yyyy" data-date-autoclose="true" data-date-start-view="2">
-                               <?php $sales_bill_date=array('name'=>'sales_bill_date',
-                                                'class'=>'required form-control',
-                                                'id'=>'sales_bill_date',
-                                              'onKeyPress'=>"new_sales_bill_date(event)", 
-                                                'value'=>set_value('order_date'));
-                                 echo form_input($sales_bill_date)?>
-                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                    </div>
-           </div>
-        </div>
-        <div class="col col-lg-2">
               <div class="form_sep " style="padding: 0 10px 0 0;">
                 <label for="first_name" ><?php echo $this->lang->line('customer') ?></label>													
                       <?php $first_name=array('name'=>'first_name',
@@ -1256,7 +1883,7 @@
             
         </div>
                     <div class="row small_inputs" >
-                    <div class="col col-lg-10">
+                    <div class="col col-lg-12">
                       
                          
                              
@@ -1286,20 +1913,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="new_order_items" >
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
+                                       
                                     </tbody >
                                 </table>
                                 </div>
@@ -1308,7 +1922,7 @@
                         </div>
                         
                     
-                    </div><div class="col col-sm-2"  >
+                    </div><div class="col col-sm-2" style="display: none" >
                         <div id="deleted">
                                     
                                 </div>
@@ -1320,7 +1934,37 @@
                                                     <div class="panel-heading" >
                                      <h4 class="panel-title"><?php echo $this->lang->line('amount') ?></h4>                                                                               
                               </div>        
-                                                        
+                                                         <div class="form_sep" style="padding: 0 25px">
+                                                            <label for="sales_bill_number" ><?php echo $this->lang->line('sales_bill_number') ?></label>													
+                                                                     <?php $order_number=array('name'=>'demo_sales_bill_number',
+                                                                                        'class'=>'required  form-control',
+                                                                                        'id'=>'demo_sales_bill_number',
+                                                                                        'disabled'=>'disabled',
+                                                                                        'value'=>set_value('sales_bill_number'));
+                                                                         echo form_input($order_number)?>
+                                                            <input type="hidden" name="keyboard_sales_bill_number" id="keyboard_sales_bill_number">
+                                                       </div>
+                                                        <div class="form_sep " style="padding: 0 25px">
+                                                            <label for="first_name" ><?php echo $this->lang->line('name') ?></label>													
+                                                                  <?php $first_name=array('name'=>'first_name',
+                                                                                    'class'=>'required  form-control',
+                                                                                    'id'=>'first_name',
+                                                                                   
+                                                                                    'value'=>set_value('first_name'));
+                                                                     echo form_input($first_name)?>
+                                                       
+                                                        </div>
+                                                          <div class="form_sep " style="padding: 0 25px">
+                                                            <label for="customer_discount" ><?php echo $this->lang->line('customer').' '.$this->lang->line('discount') ?> %</label>													
+                                                                     <?php $customer_discount=array('name'=>'customer_discount',
+                                                                                        'class'=>'required  form-control',
+                                                                                        'id'=>'demo_customer_discount',
+                                                                                        'disabled'=>'disabled',
+                                                                                        'value'=>set_value('customer_discount'));
+                                                                         echo form_input($customer_discount)?>
+                                                            <input type="hidden" name="customer_discount" id="customer_discount">
+                                                            <input type="hidden" name="customers_guid" id="customers_guid">
+                                                       </div>
                                                   <div class="form_sep " style="padding: 0 25px">
                                                             <label for="customer_discount_amount" ><?php echo $this->lang->line('customer').' '.$this->lang->line('disc').' '.$this->lang->line('amt') ?></label>													
                                                                      <?php $customer_discount_amount=array('name'=>'customer_discount_amount',
@@ -1331,7 +1975,18 @@
                                                                          echo form_input($customer_discount_amount)?>
                                                             <input type="hidden" name="customer_discount_amount" id="customer_discount_amount">
                                                        </div>
-                                                
+                                                <div class="form_sep " style="padding: 0 25px">
+                                                            <label for="sales_bill_date" ><?php echo $this->lang->line('sales_bill_date') ?></label>													
+                                                                     <div class="input-group date ebro_datepicker" data-date-format="dd.mm.yyyy" data-date-autoclose="true" data-date-start-view="2">
+                                                                           <?php $sales_bill_date=array('name'=>'sales_bill_date',
+                                                                                            'class'=>'required form-control',
+                                                                                            'id'=>'sales_bill_date',
+                                                                                          'onKeyPress'=>"new_sales_bill_date(event)", 
+                                                                                            'value'=>set_value('order_date'));
+                                                                             echo form_input($sales_bill_date)?>
+                                                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                                                </div>
+                                                       </div>
                                                   
                                                          <div class="form_sep " style="padding: 0 25px">
                                                         <label for="total_item_discount_amount" ><?php echo $this->lang->line('total_item_discount_amount') ?></label>													
@@ -1390,18 +2045,94 @@
  <?php echo form_close();?>
 <div class="row" style="margin: 20px;">
         <a href="" class="btn btn-info">F2 <i class="icon icon-barcode"></i> <?php echo $this->lang->line('scan') ?></a>
-        <a href="" class="btn btn-info">F4 <i class="icon icon-search"></i> <?php echo $this->lang->line('search') ?></a>
+        <a href="" class="btn btn-info">F3 <i class="icon icon-search"></i> <?php echo $this->lang->line('search') ?></a>
         <a href="" class="btn btn-info">Alt+1 <i class="icon icon-user"></i> <?php echo $this->lang->line('customer') ?></a>
         <a href="" class="btn btn-info">Alt+2 <i class="icon icon-list"></i> <?php echo $this->lang->line('item_list') ?></a>
         <a href="" class="btn btn-info">Alt+3 <i class="icon icon-search"></i> <?php echo $this->lang->line('search_added_item') ?></a>
 <!--        <a href="" class="btn btn-info">Delete+No <i class="icon icon-trash"></i> <?php echo $this->lang->line('delete_item') ?></a>-->
     </div>
           
-		
- 
-
+		</div>
+  
+  
 
 
         
 
       
+
+ <script src="<?php echo base_url() ?>template/app/validate/js/jquery.validate.min.js"></script>
+<!--	<script src="<?php echo base_url() ?>template/app/js/lib/dataTables/media/js/jquery.dataTables.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/dataTables/media/DT_bootstrap.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/pages/ebro_datatables.js"></script>-->
+        <script src="<?php echo base_url() ?>template/app/bootstrap/js/bootstrap.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/jquery.ba-resize.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/jquery_cookie.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/retina.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/typeahead.js/typeahead.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/typeahead.js/hogan-2.0.0.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/tinynav.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/jQuery-slimScroll/jquery.slimscroll.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/navgoco/jquery.navgoco.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/ebro_common.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/peity/jquery.peity.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/jvectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/easy-pie-chart/jquery.easy-pie-chart.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/flot/jquery.flot.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/flot/jquery.flot.pie.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/flot/jquery.flot.time.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/flot/jquery.flot.tooltip.min.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/flot/jquery.flot.resize.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/pages/ebro_dashboard1.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/lib/bootbox/bootbox.min.js"></script>
+<!--[[ page specific plugins ]]-->
+
+                <!-- 2col multiselect -->
+                        <script src="<?php echo base_url() ?>template/app/js/lib/multi-select/js/jquery.multi-select.js"></script>
+                <!-- select2 -->
+                        
+                <!-- datepicker -->
+                        <script src="<?php echo base_url() ?>template/app/js/lib/datepicker/js/bootstrap-datepicker.js"></script>
+                        <script src="<?php echo base_url() ?>template/app/js/lib/colorpicker/js/bootstrap-colorpicker.js"></script>
+                <!-- iCheck -->
+                        <script src="<?php echo base_url() ?>template/app/js/lib/iCheck/jquery.icheck.min.js"></script>
+                <!-- parsley -->
+                        <script src="<?php echo base_url() ?>template/app/js/lib/parsley/parsley.min.js"></script>
+                        
+                        <script src="<?php echo base_url() ?>template/app/js/pages/ebro_form_validate.js"></script>
+<!-- jquery steps -->
+                        <script src="<?php echo base_url() ?>template/app/js/lib/jquery-steps/jquery.steps.min.js"></script>
+                <!-- parsley -->
+                        <script src="<?php echo base_url() ?>template/app/js/lib/parsley/parsley.min.js"></script>
+                        
+                        
+                        <script src="<?php echo base_url() ?>template/app/js/lib/jasny_plugins/bootstrap-fileupload.js"></script>
+                        
+                        <script src="<?php echo base_url() ?>template/app/js/pages/ebro_form_extended.js"></script>
+<!-- datepicker -->
+                        
+                         <script src="<?php echo base_url() ?>template/app/validate/js/jquery.validate.min.js"></script>
+                        
+                      
+                        <script src="<?php echo base_url() ?>template/app/validation/prettify.js"></script>
+                <!-- timepicker -->
+                        <script src="<?php echo base_url() ?>template/app/js/lib/timepicker/js/bootstrap-timepicker.min.js"></script>
+                        <script src="<?php echo base_url() ?>template/app/validate/js/bootstrap-alert.js"></script>
+                        <script src="<?php echo base_url() ?>template/app/validate/js/jquery.bootstrap-growl.js"></script>
+                       
+                      
+        <!--[if lte IE 9]>
+                <script src="<?php echo base_url() ?>template/app/js/ie/jquery.placeholder.js"></script>
+                <script>
+                        $(function() {
+                                $('input, textarea').placeholder();
+                        });
+                </script>
+        <![endif]-->
+        
+             </body>
+
+
+</html>
