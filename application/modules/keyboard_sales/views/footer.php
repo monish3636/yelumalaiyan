@@ -1,7 +1,7 @@
  <script src="<?php echo base_url() ?>template/app/validate/js/jquery.validate.min.js"></script>
-	<script src="<?php echo base_url() ?>template/app/js/lib/dataTables/media/js/jquery.dataTables.min.js"></script>
+<!--	<script src="<?php echo base_url() ?>template/app/js/lib/dataTables/media/js/jquery.dataTables.min.js"></script>
         <script src="<?php echo base_url() ?>template/app/js/lib/dataTables/media/DT_bootstrap.js"></script>
-        <script src="<?php echo base_url() ?>template/app/js/pages/ebro_datatables.js"></script>
+        <script src="<?php echo base_url() ?>template/app/js/pages/ebro_datatables.js"></script>-->
         <script src="<?php echo base_url() ?>template/app/bootstrap/js/bootstrap.min.js"></script>
         <script src="<?php echo base_url() ?>template/app/js/jquery.ba-resize.min.js"></script>
         <script src="<?php echo base_url() ?>template/app/js/jquery_cookie.min.js"></script>

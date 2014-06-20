@@ -40,20 +40,26 @@
 	    
 
 	
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.js"></script>
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.dataTables.js"></script>
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/select2.js"></script>
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script> 
-        <script type="text/javascript" charset="utf-8">
+	 
+	
+	<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.js"></script>
+	<script src="<?php echo base_url() ?>template/shortcut/jquery.hotkeys-0.7.9.min.js" type="text/javascript"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/keyboard/jquery.dataTables.js"></script>
+        <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script> 
+        <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/select2.js"></script>
+	<script type="text/javascript" language="javascript" class="init">
             var point=3;
-            var last_row;
-            $(document).ready( function () {
-                var selected = [];
+            var last_row=1;
+         $(document).ready(function() { 
+           var selected = [];
                 $('#selected_item_table').dataTable({
-                              "bProcessing": true,
-                              "bDestroy": true ,
-                              "bPaginate": false,
-
+                   	     "bProcessing": true,
+                             "bDestroy": true ,
+                             "bPaginate": false,
+                             "scrollY":        "425px",
+                             "scrollX":        "100%",
+                             "scrollCollapse": true,
+                             "paging":         false,
                              "sPaginationType": "bootstrap_full",
                              "fnRowCallback" : function(nRow, aData, iDisplayIndex){
                          $("td:first", nRow).html(iDisplayIndex +1);
@@ -62,17 +68,11 @@
                      },
                 }); 
                 
+                
                   $('#selected_item_table tbody').on('click', 'tr', function () {
                         var id = this.id;
-                        var index = $.inArray(id, selected);
-
-                        if ( index === -1 ) {
-                            selected.push( id );
-                        } else {
-                            selected.splice( index, 1 );
-                        }
-                        console.log($(this));
-                        $(this).addClass('selected');
+                        new_row(id);
+                        $('#'+id +' input[type=text]').focus(); 
                     } );
                 jQuery(document).bind('keydown', 'f2',function() 
                 {
@@ -86,7 +86,7 @@
                         $('#search_barcode').focus();
                     }, 200);
 		});
-                jQuery(document).bind('keydown', 'f3',function() 
+                jQuery(document).bind('keydown', 'f4',function() 
                 {
                     $('#item_scan_panel').hide();
                     $('#item_search_panel').show();
@@ -101,7 +101,8 @@
                 jQuery(document).bind('keydown', 'Alt+2',function() 
                 {
                    remove_all();
-                   $('#selected_item_table').focus();
+                   new_row($("#selected_item_table tbody tr:first").attr('id'));
+                   $('#selected_item_table tbody tr:first input[type=text]').focus();
 		});
                 jQuery(document).bind('keydown', 'Alt+3',function() 
                 {
@@ -111,43 +112,67 @@
 		});
                 jQuery('#selected_item_table').bind('keydown', 'up',function() 
                 {
-                 
+                 last_row++;
+                 if(last_row==3){
                     var bid =$(':focus').attr('id');
                     var trid = $('#'+bid).closest('tr').attr('id');
                     var index=$('#'+trid).children('td:first').text();
-                    console.log(trid);
+                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                    index=parseInt(index)-1;
+                    var up;
+                    for(var i=0;i<rows.length;i++)
+                    {                       
+                        var row=$(rows[i]).attr('id');
+                        
+                        if($('#'+row).children('td:first').text()==index){
+                            up=row;
+                        }
+                      
+                    }
+                    if(up){
+                        $('#'+up).addClass('selected');
+                        $('#'+trid).removeClass('selected');
+                        $('#'+up +' input[type=text]').focus();                  
+                      
+                    }
+                      last_row=1;
+                    }
 		});
                 $('#selected_item_table').bind('keydown', 'down',function() 
                 {
-                  alert('jibi');
+                   last_row++;
+                 if(last_row==3){
+                    var bid =$(':focus').attr('id');
+                    var trid = $('#'+bid).closest('tr').attr('id');
+                    var index=$('#'+trid).children('td:first').text();
+                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                    index=parseInt(index)+1;
+                    var down;
+                    for(var i=0;i<rows.length;i++)
+                    {                       
+                        var row=$(rows[i]).attr('id');
+                        
+                        if($('#'+row).children('td:first').text()==index){
+                            down=row;
+                        }
+                      
+                    }
+                    if(down){
+                        $('#'+down).addClass('selected');
+                        $('#'+trid).removeClass('selected');
+                        $('#'+down +' input[type=text]').focus(); 
+                    }
+                    last_row=1;
+                    }
                   
 		});
-//                var timer, last,first;
-//                $(document).bind('keydown', function(e) {
-//                    // Typing a then h will call the alert
-//                    if (first==97 && last == 98 && e.which === 46) {
-//                        alert('Hello World');
-//                    }
-//                    if(first==""){
-//                        first = e.which;    
-//                    }else{
-//                        last = e.which;
-//                    }
-//                         console.log(e.which)         ;
-//                                       
-//                    clearTimeout(timer);
-//                    timer = setTimeout(function(){
-//                        last = '';
-//                        first = '';
-//                    }, 1000);
-//                });
-                           
-                
-                
-            });
-            function remove_all(){
-                $('#items').select2('close');
-                $('#first_name').select2('close');
-            }
-        </script>
-	<script src="<?php echo base_url() ?>template/shortcut/jquery.hotkeys-0.7.9.min.js" type="text/javascript"></script>
+        } );
+        function remove_all(){
+            $('#first_name').select2('close');
+            $('#items').select2('close');
+        }
+
+	</script>
+	
+</head>
+<body>
