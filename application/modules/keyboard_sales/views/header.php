@@ -46,8 +46,9 @@
 	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script> 
         <script type="text/javascript" charset="utf-8">
             var point=3;
+            var last_row;
             $(document).ready( function () {
-                
+                var selected = [];
                 $('#selected_item_table').dataTable({
                               "bProcessing": true,
                               "bDestroy": true ,
@@ -59,7 +60,20 @@
                          $("#index", nRow).val(iDisplayIndex +1);
                         return nRow;
                      },
-                });    
+                }); 
+                
+                  $('#selected_item_table tbody').on('click', 'tr', function () {
+                        var id = this.id;
+                        var index = $.inArray(id, selected);
+
+                        if ( index === -1 ) {
+                            selected.push( id );
+                        } else {
+                            selected.splice( index, 1 );
+                        }
+                        console.log($(this));
+                        $(this).addClass('selected');
+                    } );
                 jQuery(document).bind('keydown', 'f2',function() 
                 {
                     $('#item_scan_panel').show();
@@ -95,7 +109,39 @@
                    $('#selected_item_table_filter input').focus();
                   
 		});
-                            
+                jQuery('#selected_item_table').bind('keydown', 'up',function() 
+                {
+                 
+                    var bid =$(':focus').attr('id');
+                    var trid = $('#'+bid).closest('tr').attr('id');
+                    var index=$('#'+trid).children('td:first').text();
+                    console.log(trid);
+		});
+                $('#selected_item_table').bind('keydown', 'down',function() 
+                {
+                  alert('jibi');
+                  
+		});
+//                var timer, last,first;
+//                $(document).bind('keydown', function(e) {
+//                    // Typing a then h will call the alert
+//                    if (first==97 && last == 98 && e.which === 46) {
+//                        alert('Hello World');
+//                    }
+//                    if(first==""){
+//                        first = e.which;    
+//                    }else{
+//                        last = e.which;
+//                    }
+//                         console.log(e.which)         ;
+//                                       
+//                    clearTimeout(timer);
+//                    timer = setTimeout(function(){
+//                        last = '';
+//                        first = '';
+//                    }, 1000);
+//                });
+                           
                 
                 
             });
