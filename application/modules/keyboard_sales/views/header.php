@@ -110,6 +110,60 @@
                    $('#selected_item_table_filter input').focus();
                   
 		});
+                jQuery(document).bind('keydown', 'Alt+4',function() 
+                {
+                   remove_all();
+                  $('#sales_bill_discount').modal('show');
+                 
+                   window.setTimeout(function ()
+                    {
+                        $('#bill_discount').focus();
+                    }, 200);
+                  
+		});
+                jQuery('#sales_bill_discount').bind('keydown', 'ctrl+s',function() 
+                {
+                   remove_all();
+                  $('#sales_bill_discount').modal('hide');
+                 new_grand_total();
+                    window.setTimeout(function ()
+                    {
+                        $('#search_barcode').val("");
+                        $('#search_barcode').focus();
+                    }, 200);
+                  
+		});
+                jQuery('#sales_bill_discount').bind('keydown', 'insert',function() 
+                {
+                    remove_all();
+                    $('#sales_bill_discount').modal('hide');
+                    new_grand_total();
+                    window.setTimeout(function ()
+                    {
+                        $('#search_barcode').val("");
+                        $('#search_barcode').focus();
+                    }, 200);
+                  
+		});
+//                var timer, last,first;
+//                jQuery('#sales_bill_discount').bind('keydown', function(e) {
+//                    // Typing a then h will call the alert
+//                    if (first==97 && last == 98 && e.which === 46) {
+//                        alert('Hello World');
+//                    }
+//                    if(first==""){
+//                        first = e.which;    
+//                    }else{
+//                        last = e.which;
+//                    }
+//                         console.log(e.which)         ;
+//                                       
+//                    clearTimeout(timer);
+//                    timer = setTimeout(function(){
+//                        last = '';
+//                        first = '';
+//                    }, 1000);
+//                });
                 jQuery('#selected_item_table').bind('keydown', 'up',function() 
                 {
                  last_row++;
