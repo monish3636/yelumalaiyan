@@ -746,5 +746,6 @@ $lang['credit_days']='Credit Days';
     $lang['search_added_item']='Search Added Item';
     $lang['delete_item']='Delete Item';
     $lang['bill_discount']='Bill Discount';
+    $lang['bill_discount_amount']='Bill Discount Amount';
    
 ?>

@@ -142,6 +142,23 @@
     }
     .btn-info{
          background: #007da9;
+         border: none;
+         font-weight: normal;
+         font-size: 12px;
+    }
+    .btn-info:hover{
+         background: #007da9;
+         border: none;
+         
+    }
+    .btn-danger{
+         border: none;
+         font-weight: normal;
+         font-size: 12px;
+    }
+    .btn-danger:hover{
+         border: none;
+         
     }
     .row + .row {
         margin-top: 0;
@@ -195,7 +212,13 @@
     }
     .amount-input{
         text-align: right;
+        font-size: 22px !important;
+        height: 30px;
        
+    }
+    .grand-total{
+        font-size: 25px !important;
+        height: 50px;
     }
 </style>	
 <script type="text/javascript" charset="utf-8">   
@@ -261,6 +284,7 @@
                     $('#selected_item_table #new_item_row_id_'+data[0]['guid']+' td:nth-child(8)').html(total);
                     $('#new_item_row_id_'+data[0]['guid']+' #quty_'+data[0]['guid']).val(parseFloat(quty));
                     $('#new_item_row_id_'+data[0]['guid']+' #items_total').val(total);
+                    $('#new_item_row_id_'+data[0]['guid']+' #items_tax_amount').val(tax);
                     var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
                     amount=amount.toFixed(point);
                     $('#parsley_reg #total_amount').val(amount);
@@ -338,7 +362,7 @@
                                 null,
                                 name,
                                 sku,
-                                "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"'>",
+                            "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"' onkeyup='table_row_total(this);' onkeypress='return numbersonly(event)'>",
                                 price,
                                 tax+' : '+tax_type+'('+type+')',
                                 discount,
@@ -355,10 +379,11 @@
                                 <input type="hidden" name="items_tax_type[]" value="'+tax_type+'" id="items_tax_type">\n\
                                 <input type="hidden" name="items_tax_value[]" value="'+tax_value+'" id="items_tax_value">\n\
                                 <input type="hidden" name="items_tax_inclusive[]" value="'+tax_Inclusive+'" id="items_tax_inclusive">\n\
+                                <input type="hidden" name="items_tax_amount[]" value="'+tax+'" id="items_tax_amount">\n\
                                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                 '+"&nbsp;<a href=javascript:delete_order_item('"+stock+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
+                                 '+"<label class='label label-danger'>Ctrl+Del</label>" ] );
 
                             var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                             theNode.setAttribute('id','new_item_row_id_'+stock)
@@ -408,6 +433,55 @@
         if (unicode<48||unicode>57)
         return false
           }
+    }
+    function table_row_total(id){
+        var row = $('#'+id.id).closest('tr').attr('id');
+        var quty=$('#'+id.id).val();        
+        var old_total=$('#'+row+' #items_total').val();
+      
+        var price=$('#'+row+' #items_price').val();
+        var tax_Inclusive=$('#'+row+' #items_tax_inclusive').val();
+        var tax_value=$('#'+row+' #items_tax_value').val();
+        var tax_type=$('#'+row+' #items_tax_type').val();
+        var per=$('#'+row+' #items_discount_per').val();
+        var discount=0;
+        quty=parseFloat(quty);
+        if(per!="" && per!=0){
+            discount=((parseFloat(quty)*parseFloat(price))*per/100);
+        }
+        var tax=((parseFloat(quty)*parseFloat(price))*tax_value)/100;
+        var total;
+        var type;
+        if(tax_Inclusive==1){
+            total= (parseFloat(quty)*parseFloat(price))+tax-discount;
+            var old_tax=$('#'+row+' #items_tax_amount').val()
+            var total_tax=$('#total_tax').val();
+            total_tax=total_tax-old_tax+tax;
+            total_tax=total_tax.toFixed(point);
+            $('#total_tax').val(total_tax);
+            type='Exc';
+        }else{
+            type='Inc';
+            total= (parseFloat(quty)*parseFloat(price))-discount;
+        }
+        total=parseFloat(total);
+        total=total.toFixed(point);
+        discount=parseFloat(discount);
+        discount=discount.toFixed(point);
+        tax=parseFloat(tax);
+        tax=tax.toFixed(point);
+        $('#selected_item_table #'+row+' td:nth-child(6)').html(tax +''+' : '+tax_type+'('+type+')');
+        $('#selected_item_table #'+row+' td:nth-child(7)').html(discount);
+        $('#selected_item_table #'+row+' td:nth-child(8)').html(total);
+        $('#'+row+' #items_tax_amount').val(tax);        
+        $('#'+row+' #items_total').val(total);
+          console.log(old_total);
+            console.log(total);
+        var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
+        amount=amount.toFixed(point);
+        $('#parsley_reg #total_amount').val(amount);
+        $('#parsley_reg #demo_total_amount').val(amount);
+        new_grand_total(); 
     }
     function data_table_duplicate(row){
         var rows = $("#selected_item_table").dataTable().fnGetNodes();
@@ -633,6 +707,7 @@
             $('#first_name').val($('#parsley_reg #first_name').select2('data').text);
             $('#demo_customer_discount').val($('#parsley_reg #first_name').select2('data').discount);
             $('#customer_discount').val($('#parsley_reg #first_name').select2('data').discount);
+             new_grand_total();
             $('#customers_guid').val(guid);
         });
         $('#first_name').select2({
@@ -816,6 +891,7 @@
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(8)').html(total);
                 $('#new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #quty_'+$('#parsley_reg #stock_id').val()).val(parseFloat(quty));
                 $('#new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #items_total').val(total);
+                $('#new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #items_tax_amount').val(tax);
                 var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
                 amount=amount.toFixed(point);
                 $('#parsley_reg #total_amount').val(amount);
@@ -860,7 +936,7 @@
                     null,
                     name,
                     sku,
-                    "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"'>",
+                    "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"' onkeyup='table_row_total(this);' onkeypress='return numbersonly(event)'>",
                     price,
                     tax+' : '+tax_type+'('+type+')',
                     discount,
@@ -876,10 +952,11 @@
                     <input type="hidden" name="items_tax_type[]" value="'+tax_type+'" id="items_tax_type">\n\
                     <input type="hidden" name="items_tax_value[]" value="'+tax_value+'" id="items_tax_value">\n\
                     <input type="hidden" name="items_tax_inclusive[]" value="'+tax_Inclusive+'" id="items_tax_inclusive">\n\
+                    <input type="hidden" name="items_tax_amount[]" value="'+tax+'" id="items_tax_amount">\n\
                     <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                     <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                     <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                    '+"<a href=javascript:delete_order_item('"+stock+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
+                     '+"<label class='label label-danger'>Ctrl+Del</label>" ] );
 
                     var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                 theNode.setAttribute('id','new_item_row_id_'+stock)
@@ -940,15 +1017,12 @@
  
 
     function delete_order_item(guid){
-        var net=$('#selected_item_table #new_item_row_id_'+guid+' #items_total').val();
-        var dis=$('#selected_item_table #new_item_row_id_'+guid+' #items_discount').val();
-        var items_tax_inclusive=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_inclusive').val();
+        var net=$('#selected_item_table #'+guid+' #items_total').val();
+        var dis=$('#selected_item_table #'+guid+' #items_discount').val();
+        var items_tax_inclusive=$('#selected_item_table #'+guid+' #items_tax_inclusive').val();
         if(items_tax_inclusive==1){
-            var quty=$('#selected_item_table #new_item_row_id_'+guid+' #items_quty').val();
-            var price=$('#selected_item_table #new_item_row_id_'+guid+' #items_price').val();
-            var value=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_value').val();
-            var tax=parseFloat(quty)*parseFloat(price)*parseFloat(value)/100;
-             $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())-tax);
+           var tax=$('#selected_item_table #'+guid+' #items_tax_amount').val();
+           $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())-tax);
         }
 
         $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())-parseFloat(dis));
@@ -959,16 +1033,15 @@
         $('#demo_total_amount').val(num.toFixed(point));
         var num = parseFloat($('#total_amount').val());
         $('#total_amount').val(num.toFixed(point));
-        new_grand_total(); 
-        $("#parsley_reg #total_amount").val()
-         var order=$('#selected_item_table #new_item_row_id_'+guid+' #items_order_guid').val();
+        var num = parseFloat($('#total_tax').val());
+        $('#total_tax').val(num.toFixed(point));
+       new_grand_total(); 
+         var order=$('#selected_item_table #'+guid+' #items_order_guid').val();
           $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+order+'">');
-        var index=$('#selected_item_table #new_item_row_id_'+guid+' #index').val();
+        var index=$('#selected_item_table #'+guid+' #index').val();
          var anSelected =  $("#selected_item_table").dataTable();
            anSelected.fnDeleteRow(index-1);
-        if(document.getElementById('newly_added_items_list_'+guid)){
-            $('#newly_added_items_list_'+guid).remove();
-        }
+       
         if($("#parsley_reg #total_amount").val()==0 || $("#parsley_reg #total_amount").val()==""){
             $("#parsley_reg #demo_grand_total").val(0)
             $("#parsley_reg #grand_total").val(0)
@@ -1034,7 +1107,8 @@
             bill_discount_amount=parseFloat(bill_discount_amount);
             bill_discount_amount= bill_discount_amount.toFixed(point);
             console.log();
-            $('#demo_bill_discount').val(bill_discount_amount);
+            $('#demo_bill_discount').val(bill_discount);
+            $('#demo_bill_discount_amount').val(bill_discount_amount);
             $('#bill_discount_amount').val(bill_discount_amount);
             $("#parsley_reg #demo_grand_total").val(total);
             $("#parsley_reg #grand_total").val(total);
@@ -1058,8 +1132,22 @@
     }
 
 </script>
-    <div class="row">
-        <a class="btn btn-info" style="width: 100%">POSNIC</a>
+<div class="row" style="background: #007da9;color: #ffffff">
+    <div class="col col-lg-1">
+      
+    </div>  
+    <div class="col col-lg-4">
+        
+    </div>  
+    <div class="col col-lg-2">
+         <h4 class="text-center">POSNIC</h4>
+    </div>  
+    <div class="col col-lg-3">
+        
+    </div>  
+      
+   
+  
     </div>
  <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
@@ -1334,6 +1422,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="new_order_items" >
+<!--                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
@@ -1352,8 +1441,7 @@
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
                                         <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
+                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>-->
                                     </tbody >
                                 </table>
                                 </div>
@@ -1416,7 +1504,7 @@
                                                         
                                                   </div>
                                                          <div class="form_sep " style="padding: 0px">
-                                                        <label for="total_amount" ><?php echo $this->lang->line('bill_discount') ?></label>													
+                                                        <label for="total_amount" ><?php echo $this->lang->line('bill_discount') ?> %</label>													
                                                                   <?php $bill_discount=array('name'=>'demo_bill_discount',
                                                                                     'class'=>'required  form-control amount-input',
                                                                                     'id'=>'demo_bill_discount',
@@ -1425,14 +1513,23 @@
                                                                      echo form_input($bill_discount)?>
                                                         
                                                   </div>
+                                                         <div class="form_sep " style="padding: 0px">
+                                                        <label for="demo_bill_discount_amount" ><?php echo $this->lang->line('bill_discount_amount') ?></label>													
+                                                                  <?php $demo_bill_discount_amount=array('name'=>'demo_bill_discount_amount',
+                                                                                    'class'=>'required  form-control amount-input',
+                                                                                    'id'=>'demo_bill_discount_amount',
+                                                                                    'disabled'=>'disabled',
+                                                                                    'value'=>set_value('demo_bill_discount_amount'));
+                                                                     echo form_input($demo_bill_discount_amount)?>
+                                                        
+                                                  </div>
                                                      
                                                          <div class="form_sep " style="padding: 0px">
                                                         <label for="grand_total" ><?php echo $this->lang->line('grand_total') ?></label>													
                                                                   <?php $grand_total=array('name'=>'demo_grand_total',
-                                                                                    'class'=>'required  form-control amount-input',
+                                                                                    'class'=>'required  form-control amount-input grand-total ',
                                                                                     'id'=>'demo_grand_total',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('grand_total'));
+                                                                                    'disabled'=>'disabled');
                                                                      echo form_input($grand_total)?>
                                                         <input type="hidden" name="grand_total" id="grand_total">
                                                         
@@ -1446,19 +1543,9 @@
    
   </div>  
     
-
+  
 </div>
- <?php echo form_close();?>
-<div class="row" style="margin: 20px;">
-        <a href="" class="btn btn-info">F2 <i class="icon icon-barcode"></i> <?php echo $this->lang->line('scan') ?></a>
-        <a href="" class="btn btn-info">F4 <i class="icon icon-search"></i> <?php echo $this->lang->line('search') ?></a>
-        <a href="" class="btn btn-info">Alt+1 <i class="icon icon-user"></i> <?php echo $this->lang->line('customer') ?></a>
-        <a href="" class="btn btn-info">Alt+2 <i class="icon icon-list"></i> <?php echo $this->lang->line('item_list') ?></a>
-        <a href="" class="btn btn-info">Alt+3 <i class="icon icon-search"></i> <?php echo $this->lang->line('search_added_item') ?></a>
-        <a href="" class="btn btn-info">Alt+4 <i class="icon icon-money"></i> <?php echo $this->lang->line('bill_discount') ?></a>
-<!--        <a href="" class="btn btn-info">Delete+No <i class="icon icon-trash"></i> <?php echo $this->lang->line('delete_item') ?></a>-->
-    </div>
-     <div id="sales_bill_discount" class="modal fade in"  >
+<div id="sales_bill_discount" class="modal fade in"  >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header madal-search">
@@ -1502,7 +1589,25 @@
                 </div>
             </div>
         </div>
-    </div>	
+    </div>
+ <?php echo form_close();?>
+<div style="margin: 0px;background: #131f2b;position: fixed;    bottom: 0;  width: 100%;">
+    <div class="row" style=" padding: 2px 25px;color: #ffffff" >
+         <h5 style=" margin: 0px"><?php echo $this->session->userdata('first_name') ?></h5>
+          <img style="height: 44px;border: 2px solid;" src="<?php echo base_url() ?>uploads/profile_images/<?php   if($this->session->userdata('image')!=""){ echo $this->session->userdata('image'); }else{ echo 'profile.gif'; } ?>" >
+        <a href="" class="btn btn-danger"> <i class="icon icon-lock"></i> <?php echo $this->lang->line('logout') ?></a>
+        <a href="" class="btn btn-info">F2 <i class="icon icon-barcode"></i> <?php echo $this->lang->line('scan') ?></a>
+        <a href="" class="btn btn-info">F4 <i class="icon icon-search"></i> <?php echo $this->lang->line('search') ?></a>
+        <a href="" class="btn btn-info">Alt+1 <i class="icon icon-user"></i> <?php echo $this->lang->line('customer') ?></a>
+        <a href="" class="btn btn-info">Alt+2 <i class="icon icon-list"></i> <?php echo $this->lang->line('item_list') ?></a>
+        <a href="" class="btn btn-info">Alt+3 <i class="icon icon-search"></i> <?php echo $this->lang->line('search_added_item') ?></a>
+        <a href="" class="btn btn-info">Alt+4 <i class="icon icon-money"></i> <?php echo $this->lang->line('bill_discount') ?></a>
+        <a href="" class="btn btn-info">Alt+C <i class="icon icon-refresh"></i> <?php echo $this->lang->line('clear') ?></a>
+        <a href="" class="btn btn-info" style="float: right">F8 <i class="icon icon-shopping-cart"></i> <?php echo $this->lang->line('payment') ?></a>
+<!--        <a href="" class="btn btn-info">Delete+No <i class="icon icon-trash"></i> <?php echo $this->lang->line('delete_item') ?></a>-->
+    </div>
+</div>
+     	
  
 
 

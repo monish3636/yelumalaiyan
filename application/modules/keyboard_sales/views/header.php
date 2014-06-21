@@ -44,22 +44,24 @@
 	
 	<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.js"></script>
 	<script src="<?php echo base_url() ?>template/shortcut/jquery.hotkeys-0.7.9.min.js" type="text/javascript"></script>
-	<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/keyboard/jquery.dataTables.js"></script>
+	
         <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script> 
         <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/select2.js"></script>
+        <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/keyboard/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" class="init">
             var point=3;
             var last_row=1;
+            var delete_row=0;
          $(document).ready(function() { 
+    
            var selected = [];
                 $('#selected_item_table').dataTable({
                    	     "bProcessing": true,
                              "bDestroy": true ,
                              "bPaginate": false,
-                             "scrollY":        "425px",
+                             "scrollY":        "360px",
                              "scrollX":        "100%",
                              "scrollCollapse": true,
-                             "paging":         false,
                              "sPaginationType": "bootstrap_full",
                              "fnRowCallback" : function(nRow, aData, iDisplayIndex){
                          $("td:first", nRow).html(iDisplayIndex +1);
@@ -67,7 +69,7 @@
                         return nRow;
                      },
                 }); 
-                
+                clear_form();
                 
                   $('#selected_item_table tbody').on('click', 'tr', function () {
                         var id = this.id;
@@ -119,6 +121,11 @@
                     {
                         $('#bill_discount').focus();
                     }, 200);
+                  
+		});
+                jQuery(document).bind('keydown', 'Alt+c',function() 
+                {
+                  clear_form();
                   
 		});
                 jQuery('#sales_bill_discount').bind('keydown', 'ctrl+s',function() 
@@ -192,8 +199,10 @@
                       last_row=1;
                     }
 		});
+              
                 $('#selected_item_table').bind('keydown', 'down',function() 
                 {
+                   
                    last_row++;
                  if(last_row==3){
                     var bid =$(':focus').attr('id');
@@ -220,10 +229,56 @@
                     }
                   
 		});
+                $('#selected_item_table').bind('keydown', 'ctrl+del',function() 
+                {
+                delete_row++;
+               
+                if(delete_row==3){
+                    var bid =$(':focus').attr('id');
+                    var trid = $('#'+bid).closest('tr').attr('id');
+                    var index=$('#'+trid).children('td:first').text();
+                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                    delete_order_item(trid);
+                    index=parseInt(index)-1;
+                    console.log(index);
+                    if(index==0){
+                       index=1;
+                    }                    
+                    var up;
+                    for(var i=0;i<rows.length;i++)
+                    {                       
+                        var row=$(rows[i]).attr('id');
+                        
+                        if($('#'+row).children('td:first').text()==index){
+                            up=row;
+                        }
+                      
+                    }
+                    if(up){
+                        $('#'+up).addClass('selected');
+                        $('#'+trid).removeClass('selected');
+                        $('#'+up +' input[type=text]').focus();                  
+                      
+                    }
+                    
+                   
+                   delete_row=0;
+                }
+		});
         } );
         function remove_all(){
             $('#first_name').select2('close');
             $('#items').select2('close');
+        }
+        function clear_form(){
+            $("#parsley_reg").trigger('reset');
+            $('#selected_item_table').dataTable().fnClearTable();
+          
+            $('#total_amount').val('');
+            $('#demo_total_amount').val('');
+            $('#grand_total').val('');
+            $('#demo_grand_total').val('');
+            
         }
 
 	</script>
