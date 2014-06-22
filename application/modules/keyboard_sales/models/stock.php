@@ -68,13 +68,20 @@ class Stock extends CI_Model{
         $this->db->join('tax_types', "tax_types.guid=taxes.type AND items.tax_id=taxes.guid AND items.guid=stock.item OR tax_types.guid=taxes.type AND items.tax_id=taxes.guid AND items.guid=decomposition_items.item_id",'left');
         $this->db->join('brands', 'items.brand_id=brands.guid','left');
         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-        $like=array('decomposition_items.code'=>$search,'decomposition_items.barcode'=>$search,'item_kit.code'=>$search,'item_kit.barcode'=>$search,'items.ean_upc_code'=>$search,'items.code'=>$search);
-        $this->db->or_like($like);
-        $this->db->limit(1);
+        //$like=array('decomposition_items.code'=>$search,'decomposition_items.barcode'=>$search,'item_kit.code'=>$search,'item_kit.barcode'=>$search,'items.ean_upc_code'=>$search,'items.code'=>$search);
+        $like=array('items.code'=>$search);
+        $this->db->where($like);
+        $this->db->or_where('items.barcode',$search);
+        $this->db->or_where('items.ean_upc_code',$search);
+        $this->db->or_where('decomposition_items.code',$search);
+        $this->db->or_where('decomposition_items.barcode',$search);
+        $this->db->or_where('item_kit.code',$search);
+        $this->db->or_where('item_kit.barcode',$search);
+        
         $this->db->group_by('stock.guid');
-         $sql=  $this->db->get();
-         $data=array();
-         foreach ($sql->result_array() as $row){
+        $sql=  $this->db->get();
+        $data=array();
+        foreach ($sql->result_array() as $row){
                     if($row['sales']==1 OR $row['kit_code']!="" OR $row['deco_code']!=""){
                   if($row['end_date'] <  strtotime(date("Y/m/d"))){
                               $row['start_date']=0;
@@ -87,7 +94,7 @@ class Stock extends CI_Model{
                      $data[]=$row;
                     } //$data[]=$row;
          }
-          return $data; 
+       return $data; 
     }
     
     

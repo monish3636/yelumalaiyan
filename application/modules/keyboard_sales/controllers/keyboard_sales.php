@@ -5,6 +5,7 @@ class Keyboard_sales extends MX_Controller{
                 $this->load->library('posnic');               
     }
     function index(){  
+        $this->session->set_userdata(array('currency_symbol'=>'$'));
         $this->load->view('header'); 
         $this->load->view('index');
         $this->load->view('footer');

@@ -220,6 +220,28 @@
         font-size: 25px !important;
         height: 50px;
     }
+    select[multiple], select[size] {
+        font-size: 15px;
+       // font-weight: bold;
+        height: 200px;
+    }
+    .form-control:focus {
+        border: solid 1px #007da9 !important;
+    }
+    .form-control:active {
+        border: solid 1px #007da9 !important;
+    }
+    .modal {
+        bottom: 0;
+        display: none;
+        left: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 1040;
+    }
 </style>	
 <script type="text/javascript" charset="utf-8">   
     $(document).ready(function(){
@@ -244,7 +266,64 @@
             data: "", 
             dataType: 'json',               
             success: function(data)        
-                {       
+                {  
+                    if(data.length>0){
+                        item_data=data;
+                        $('#multiple_item_select').remove();
+                        $('#parent_select').append('<select name="multiple_item_select" id="multiple_item_select" class="form-control" multiple></select>');
+                        $('#multiple_items').modal('show');
+                        for(var i=0;i<data.length;i++){
+                            if(data[i]['deco_guid']){
+                                    var guid = data[i]['deco_guid'];
+                                    var item_id=data[i]['deco_guid'];                                
+                                    var sku=data[i]['deco_code']+"-"+data[i]['deco_value'];                                
+                                    var stock=data[i]['guid']                                
+                                    var name =data[i]['name']                                
+                                    var price=data[i]['price'];                               
+                                    var quty=1;                               
+                                    var tax_value=data[i]['tax_value'];
+                                    var tax_type=data[i]['tax_type_name']+"-"+tax_value+"%";                               
+                                    var tax_Inclusive=data[i]['deco_tax'];                                
+
+                                }else if(data[i]['kit_guid']){
+                                    var guid = data[i]['kit_guid'];
+                                    var item_id=data[i]['kit_guid'];                                
+                                    var sku=data[i]['kit_code'];                                
+                                    var stock=data[i]['guid']                                
+                                    var name= data[i]['kit_name']                                
+                                    var price=data[i]['price'];                               
+                                    var quty=1;                               
+                                    var tax_value=data[i]['kit_tax_value'];
+                                    var tax_type=data[i]['kit_tax_type']+"-"+tax_value+"%";                                
+                                    var tax_Inclusive=data[i]['kit_tax'];   
+                                }else{
+                                    var  items_id=data[i]['i_guid'];
+                                    var  name=data[i]['name'];
+                                    var  stock=data[i]['guid'];
+                                    var  quty=1;
+                                    if(data[i]['uom']==1){
+                                        var  price=parseFloat(data[i]['price'])/parseFloat(data[i]['no_of_unit']);
+                                    }else{
+                                        var price=data[i]['price'];
+                                    }
+                                    var  items_id=data[i]['item'];
+                                    var  sku=data[i]['code'];
+                                    var  tax_value=data[i]['tax_value'];
+                                    var  tax_type=data[i]['tax_type_name']+"-"+tax_value+"%"; 
+                                    var  tax_Inclusive=data[i]['tax_Inclusive'];
+                                }
+                            $('#multiple_item_select').append('<option value="'+i+'" id="op_'+i+'"> \n\
+                                  '+name+' - '+sku+' -: <?php echo $this->session->userdata('currency_symbol') ?> '+price  +'           \n\
+                                  </option>');
+                    window.setTimeout(function ()
+                    {
+                       $('#multiple_item_select').focus();
+                    }, 200);
+    
+                    $('#op_0').attr('selected','selected');
+                        }
+                    }else{
+                    
                 if(data_table_duplicate('new_item_row_id_'+data[0]['guid'])){
                     var old_total=$('#new_item_row_id_'+data[0]['guid']+' #items_total').val();
                     var quty=$('#new_item_row_id_'+data[0]['guid']+' #quty_'+data[0]['guid']).val();
@@ -383,7 +462,7 @@
                                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                 '+"<label class='label label-danger'>Ctrl+Del</label>" ] );
+                                '+"<label class='label label-danger'>Ctrl+Del</label>" ] );
 
                             var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                             theNode.setAttribute('id','new_item_row_id_'+stock)
@@ -420,6 +499,7 @@
                             clear_inputs();
                             $('#parsley_reg #tax').val(0);
                             $('#parsley_reg #item_discount').val(0);
+                    }
                     }
                 }
         });
@@ -475,8 +555,6 @@
         $('#selected_item_table #'+row+' td:nth-child(8)').html(total);
         $('#'+row+' #items_tax_amount').val(tax);        
         $('#'+row+' #items_total').val(total);
-          console.log(old_total);
-            console.log(total);
         var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
         amount=amount.toFixed(point);
         $('#parsley_reg #total_amount').val(amount);
@@ -1549,7 +1627,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header madal-search">
-                    <button class="close" data-dismiss="modal" type="button">×</button>
+                    <button class="close" data-dismiss="modal" type="button">Ã—</button>
                     <h4 class="modal-title text-center"><?php echo $this->lang->line('bill_discount') ?></h4>
                 </div>
                 <div class="modal-body"> 
@@ -1584,6 +1662,34 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success" data-dismiss="modal" type="button">Ctrl+S / Insert <?php echo $this->lang->line('to')." ".$this->lang->line('save') ?></button>
+                    <button class="btn btn-danger" data-dismiss="modal" type="button">Esc <?php echo $this->lang->line('to')." ".$this->lang->line('close') ?></button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="multiple_items" class="modal fade in"  >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header madal-search">
+                    <button class="close" data-dismiss="modal" type="button"></button>
+                    <h4 class="modal-title text-center"><?php echo $this->lang->line('items') ?></h4>
+                </div>
+                <div class="modal-body"> 
+                    <div class="row">
+                        <div class="col col-lg-1"></div>
+                        <div class="col col-lg-10" id="parent_select">
+                            <select name="multiple_item_select" id="multiple_item_select" class="form-control" multiple>
+                             
+                            </select>
+  
+                        </div>
+                      
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-dismiss="modal" type="button">Enter<?php echo $this->lang->line('to')." ".$this->lang->line('add') ?></button>
                     <button class="btn btn-danger" data-dismiss="modal" type="button">Esc <?php echo $this->lang->line('to')." ".$this->lang->line('close') ?></button>
                 
                 </div>
