@@ -243,7 +243,25 @@
         z-index: 1040;
     }
 </style>	
-<script type="text/javascript" charset="utf-8">   
+<script type="text/javascript" charset="utf-8"> 
+    function save_sale(){
+        <?php if($this->session->userdata['keyboard_sales_per']['sale']==1) { ?>
+                var inputs=$('#parsley_reg').serialize();
+                if($('#parsley_reg').valid()){
+                    $.ajax ({
+                              url: "<?php echo base_url('index.php/keyboard_sales/save')?>",
+                              data: inputs,
+                              type:'POST',
+                              complete: function(response) {
+                              }
+                    });
+                }
+                
+        <?php }else{
+            ?>
+                <?php
+        } ?>
+    }
     $(document).ready(function(){
         $('#search_barcode').focusout(function(){
             window.setTimeout(function ()
@@ -1696,7 +1714,61 @@
             </div>
         </div>
     </div>
+<div id="payment_modal" class="modal fade in"  >
+    <div class="modal-dialog" style=" width: 760px;">
+            <div class="modal-content">
+                <div class="modal-header madal-search">
+                    <button class="close" data-dismiss="modal" type="button"></button>
+                    <h4 class="modal-title text-center"><?php echo $this->lang->line('payment') ?></h4>
+                </div>
+                <div class="modal-body"> 
+                    <div class="row">
+                        <div class="col col-lg-2"></div>
+                        <div class="col col-lg-4" >
+                            <label><?php echo $this->lang->line('amount') ?></label>
+                            <input type="text" class="form-control" disabled="disabled" id="payment_amount"> 
+                        </div>
+                          <div class="col col-lg-4" >
+                            <label><?php echo $this->lang->line('payment_type') ?></label>
+                            <select class="form-control" id="payment_type">
+                                <option value="cash"><?php echo $this->lang->line('cash') ?></option>
+                                <option value="card" ><?php echo $this->lang->line('card') ?></option>
+                                <option value="cheque"><?php echo $this->lang->line('cheque') ?></option>
+                                <option value="credit"><?php echo $this->lang->line('credit') ?></option>
+                            </select>
+                        </div>
+                      
+                    </div>
+                    <div class="row" id="cash">
+                        <div class="col col-lg-2"></div>
+                        <div class="col col-lg-4"><label><?php echo $this->lang->line('paid_amount') ?></label>
+                            <input type="text" class="form-control required" onkeyup="balance_amount()" id="paid_amount"></div>
+                        <div class="col col-lg-4"> <label><?php echo $this->lang->line('balance') ?></label>
+                            <input type="text" class="form-control" disabled="disabled" id="balance"></div>
+                        <div class="col col-lg-2"></div>
+                      
+                      
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                   
+                    <button class="btn btn-success" data-dismiss="modal" type="button">Enter / F9<?php echo $this->lang->line('save')." & ".$this->lang->line('print') ?></button>
+                    <button class="btn btn-danger" data-dismiss="modal" type="button">Esc <?php echo $this->lang->line('close') ?></button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
  <?php echo form_close();?>
+<script type="text/javascript">
+    function balance_amount(){
+        var paid=$('#paid_amount').val();
+        var total=$('#grand_total').val();
+        var bal=parseFloat(total)-parseFloat(paid);
+        $('#balance').val(bal.toFixed(point)); 
+    }
+</script>
 <div style="margin: 0px;background: #131f2b;position: fixed;    bottom: 0;  width: 100%;">
     <div class="row" style=" padding: 2px 25px;color: #ffffff" >
          <h5 style=" margin: 0px"><?php echo $this->session->userdata('first_name') ?></h5>
