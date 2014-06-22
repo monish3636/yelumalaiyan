@@ -54,7 +54,6 @@
             var delete_row=0;
             var item_data=[];
          $(document).ready(function() { 
-    
            var selected = [];
                 $('#selected_item_table').dataTable({
                    	     "bProcessing": true,
@@ -129,11 +128,26 @@
                   clear_form();
                   
 		});
+                jQuery(document).bind('keydown', 'f8',function() 
+                {
+                    $('#payment_modal').modal('show');
+                    $('#payment_amount').val($('#grand_total').val());                 
+                    window.setTimeout(function ()
+                    {
+                        $('#payment_type').focus();
+                    }, 200);
+                  
+		});
+                jQuery(document).bind('keydown', 'f9',function() 
+                {
+                    save_sale();
+                  
+		});
                 jQuery('#sales_bill_discount').bind('keydown', 'ctrl+s',function() 
                 {
-                   remove_all();
-                  $('#sales_bill_discount').modal('hide');
-                 new_grand_total();
+                    remove_all();
+                    $('#sales_bill_discount').modal('hide');
+                    new_grand_total();
                     window.setTimeout(function ()
                     {
                         $('#search_barcode').val("");
@@ -158,8 +172,7 @@
                         $("#multiple_items").each(function(){
                             var selectedOption = $('option:selected', this);
                             var value=selectedOption.val();
-                            add_new_item(value);
-                            console.log(value)
+                            add_new_item(value);                           
                         });
                         remove_all();
                         $('#multiple_items').modal('hide');
@@ -204,98 +217,100 @@
 //                });
                 jQuery('#selected_item_table').bind('keydown', 'up',function() 
                 {
-                 last_row++;
-                 if(last_row==3){
-                    var bid =$(':focus').attr('id');
-                    var trid = $('#'+bid).closest('tr').attr('id');
-                    var index=$('#'+trid).children('td:first').text();
-                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
-                    index=parseInt(index)-1;
-                    var up;
-                    for(var i=0;i<rows.length;i++)
-                    {                       
-                        var row=$(rows[i]).attr('id');
-                        
-                        if($('#'+row).children('td:first').text()==index){
-                            up=row;
-                        }
-                      
-                    }
-                    if(up){
-                        $('#'+up).addClass('selected');
-                        $('#'+trid).removeClass('selected');
-                        $('#'+up +' input[type=text]').focus();                  
-                      
-                    }
-                      last_row=1;
+                    last_row++;
+                    if(last_row==3){
+                       var bid =$(':focus').attr('id');
+                       var trid = $('#'+bid).closest('tr').attr('id');
+                       var index=$('#'+trid).children('td:first').text();
+                       var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                       index=parseInt(index)-1;
+                       var up;
+                       for(var i=0;i<rows.length;i++)
+                       {                       
+                           var row=$(rows[i]).attr('id');                        
+                           if($('#'+row).children('td:first').text()==index){
+                               up=row;
+                           }                      
+                       }
+                       if(up){
+                           $('#'+up).addClass('selected');
+                           $('#'+trid).removeClass('selected');
+                           $('#'+up +' input[type=text]').focus(); 
+                       }
+                           last_row=1;
                     }
 		});
               
                 $('#selected_item_table').bind('keydown', 'down',function() 
-                {
-                   
-                   last_row++;
-                 if(last_row==3){
-                    var bid =$(':focus').attr('id');
-                    var trid = $('#'+bid).closest('tr').attr('id');
-                    var index=$('#'+trid).children('td:first').text();
-                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
-                    index=parseInt(index)+1;
-                    var down;
-                    for(var i=0;i<rows.length;i++)
-                    {                       
-                        var row=$(rows[i]).attr('id');
-                        
-                        if($('#'+row).children('td:first').text()==index){
-                            down=row;
+                {                   
+                    last_row++;
+                    if(last_row==3){
+                        var bid =$(':focus').attr('id');
+                        var trid = $('#'+bid).closest('tr').attr('id');
+                        var index=$('#'+trid).children('td:first').text();
+                        var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                        index=parseInt(index)+1;
+                        var down;
+                        for(var i=0;i<rows.length;i++)
+                        {                       
+                            var row=$(rows[i]).attr('id');
+
+                            if($('#'+row).children('td:first').text()==index){
+                                down=row;
+                            }
+
                         }
-                      
-                    }
-                    if(down){
-                        $('#'+down).addClass('selected');
-                        $('#'+trid).removeClass('selected');
-                        $('#'+down +' input[type=text]').focus(); 
-                    }
-                    last_row=1;
-                    }
-                  
+                        if(down){
+                            $('#'+down).addClass('selected');
+                            $('#'+trid).removeClass('selected');
+                            $('#'+down +' input[type=text]').focus(); 
+                        }
+                        last_row=1;
+                    }                  
 		});
                 $('#selected_item_table').bind('keydown', 'ctrl+del',function() 
                 {
-                delete_row++;
-               
-                if(delete_row==3){
-                    var bid =$(':focus').attr('id');
-                    var trid = $('#'+bid).closest('tr').attr('id');
-                    var index=$('#'+trid).children('td:first').text();
-                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
-                    delete_order_item(trid);
-                    index=parseInt(index)-1;
-                    console.log(index);
-                    if(index==0){
-                       index=1;
-                    }                    
-                    var up;
-                    for(var i=0;i<rows.length;i++)
-                    {                       
-                        var row=$(rows[i]).attr('id');
-                        
-                        if($('#'+row).children('td:first').text()==index){
-                            up=row;
+                    delete_row++;               
+                    if(delete_row==3){
+                        var bid =$(':focus').attr('id');
+                        var trid = $('#'+bid).closest('tr').attr('id');
+                        var index=$('#'+trid).children('td:first').text();
+                        var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                        delete_order_item(trid);
+                        index=parseInt(index)-1;
+                        console.log(index);
+                        if(index==0){
+                           index=1;
+                        }                    
+                        var up;
+                        for(var i=0;i<rows.length;i++)
+                        {                       
+                            var row=$(rows[i]).attr('id');                        
+                            if($('#'+row).children('td:first').text()==index){
+                                up=row;
+                            }
                         }
-                      
+                        if(up){
+                            $('#'+up).addClass('selected');
+                            $('#'+trid).removeClass('selected');
+                            $('#'+up +' input[type=text]').focus();  
+                        }
+                       delete_row=0;
                     }
-                    if(up){
-                        $('#'+up).addClass('selected');
-                        $('#'+trid).removeClass('selected');
-                        $('#'+up +' input[type=text]').focus();                  
-                      
-                    }
-                    
-                   
-                   delete_row=0;
-                }
 		});
+                jQuery('#payment_type').bind('keyup', function(e) {
+                         $("#payment_type").each(function(){
+                            var selectedOption = $('option:selected', this);
+                            var value=selectedOption.val();
+                            if(value=='cash'){
+                                $('#cash').show();
+                                $('#paid_amount').val('');
+                                $('#balance').val('');
+                            }else{
+                                $('#cash').hide();
+                            }
+                        });
+                });
         } );
         function remove_all(){
             $('#first_name').select2('close');

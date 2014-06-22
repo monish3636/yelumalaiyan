@@ -747,5 +747,10 @@ $lang['credit_days']='Credit Days';
     $lang['delete_item']='Delete Item';
     $lang['bill_discount']='Bill Discount';
     $lang['bill_discount_amount']='Bill Discount Amount';
+    $lang['cash']='Cash';
+    $lang['card']='Card';
+    $lang['cheque']='Cheque';
+    $lang['payment_type']='Payment Type';
+    $lang['paid_amount']='Paid Amount';
    
 ?>
