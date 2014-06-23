@@ -752,5 +752,7 @@ $lang['credit_days']='Credit Days';
     $lang['cheque']='Cheque';
     $lang['payment_type']='Payment Type';
     $lang['paid_amount']='Paid Amount';
+    $lang['keyboard_sales']='Keyboard Sales';
+    $lang['touch_sales']='Touch Sales';
    
 ?>
