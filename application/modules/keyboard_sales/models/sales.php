@@ -4,24 +4,8 @@ class Sales extends CI_Model{
     function __construct() {
         parent::__construct();
     }
-    function get($end,$start,$like,$branch){
-                $this->db->select('direct_sales.* ,customers.guid as s_guid,customers.first_name as s_name,customers.company_name as c_name');
-             
-                $this->db->from('direct_sales')->where('direct_sales.branch_id',$branch)->where('direct_sales.delete_status',0);
-                $this->db->join('customers', 'customers.guid=direct_sales.customer_id','left');
-                $this->db->limit($end,$start); 
-                $this->db->or_like($like);     
-                $query=$this->db->get();
-                return $query->result_array(); 
-        
-    }
-   
-    function count($branch){
-        $this->db->select()->from('direct_sales')->where('branch_id',$branch)->where('active_status',1)->where('delete_status',0);
-        $sql=  $this->db->get();
-        return $sql->num_rows();
-    }
-       function search_customers($search){
+    
+    function search_customers($search){
           $like=array('first_name'=>$search,'email'=>$search,'company_name'=>$search,'phone'=>$search,'email'=>$search);       
           $this->db->select('customer_category.discount,customers.*')->from('customers')->where('customers.branch_id',  $this->session->userdata('branch_id'))->where('customers.active_status',1)->where('customers.delete_status',0);
           $this->db->join('customer_category','customer_category.guid=customers.category_id  AND customers.active_status=1 AND customers.delete_status=0','left');
@@ -36,7 +20,7 @@ class Sales extends CI_Model{
           return $data;
           
           
-     }
+    }
     
     
     function search_items($search){
@@ -75,61 +59,8 @@ class Sales extends CI_Model{
           return $data;
      
      }
-     function get_direct_sales($guid){
-        $this->db->select('stock.quty as stock_quty,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,direct_sales.*,direct_sales_x_items.quty ,direct_sales_x_items.item as ds_item ,direct_sales_x_items.stock_id ,direct_sales_x_items.discount as item_discount,direct_sales_x_items.price,direct_sales_x_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_sales')->where('direct_sales.guid',$guid);
-        $this->db->join('direct_sales_x_items', "direct_sales_x_items.direct_sales_id = direct_sales.guid  ",'left');
-        $this->db->join('stock', "stock.item = direct_sales_x_items.item AND stock.price=direct_sales_x_items.price  ",'left');
-        $this->db->join('item_kit','item_kit.guid=direct_sales_x_items.item','left');
-        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
-        $this->db->join('decomposition_items','decomposition_items.guid=direct_sales_x_items.item','left');
-        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
-        $this->db->join('items', "items.guid=direct_sales_x_items.item OR items.guid=decomposition_items.item_id",'left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid ",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid ",'left');
-        $this->db->join('customers', "customers.guid=direct_sales.customer_id  ",'left');
-        $sql=  $this->db->get();
-        $data=array();
-        foreach($sql->result_array() as $row){         
-         
-          $row['date']=date('d-m-Y',$row['date']);
-         
-          $data[]=$row;
-         }
-         return $data;
-     }
-     function get_direct_sales_for_bill($guid){
-       $this->db->select('stock.quty as stock_quty,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,direct_sales.*,direct_sales_x_items.quty ,direct_sales_x_items.item as ds_item ,direct_sales_x_items.stock_id ,direct_sales_x_items.discount as item_discount,direct_sales_x_items.price,direct_sales_x_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_sales')->where('direct_sales.guid',$guid);
-        $this->db->join('direct_sales_x_items', "direct_sales_x_items.direct_sales_id = direct_sales.guid  ",'left');
-        $this->db->join('stock', "stock.item = direct_sales_x_items.item AND stock.price=direct_sales_x_items.price  ",'left');
-        $this->db->join('item_kit','item_kit.guid=direct_sales_x_items.item','left');
-        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
-        $this->db->join('decomposition_items','decomposition_items.guid=direct_sales_x_items.item','left');
-        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
-        $this->db->join('items', "items.guid=direct_sales_x_items.item OR items.guid=decomposition_items.item_id",'left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid ",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid ",'left');
-        $this->db->join('customers', "customers.guid=direct_sales.customer_id  ",'left');
-        $sql=  $this->db->get();
-        $data=array();
-        foreach($sql->result_array() as $row){         
-         
-          $row['date']=date('d-m-Y',$row['date']);
-         
-          $data[]=$row;
-         }
-         $this->db->select()->from('master_data')->where('key','sales_bill')->where('branch_id',  $this->session->userdata('branch_id'));
-         $mas=  $this->db->get();
-         foreach ($mas->result() as $row){
-             $prefix=$row->prefix;
-             $max=$row->max;
-         }
-         $data[]=$prefix.$max;
-         return $data;
-     }
-     function delete_order_item($guid){      
-          $this->db->where('guid',$guid);
-          $this->db->delete('direct_sales_x_items');
-     }
+   
+ 
      function approve_order($guid){
          $this->db->where('guid',$guid);
          $this->db->update('direct_sales',array('order_status'=>1));
@@ -150,48 +81,58 @@ class Sales extends CI_Model{
                  
         
      }
-     function  check_approve($guid){
-          $this->db->select()->from('direct_sales')->where('guid',$guid)->where('order_status',1);
-            $sql=  $this->db->get();
-            if($sql->num_rows()>0){
-               return FALSE;
-            }else{
-                return TRUE;
-            }
-            
-     }
-     function bill_status($guid){
-         $this->db->where('guid',$guid);
-         $this->db->update('direct_sales',array('receipt_status'=>1));
-     }
-     function add_direct_sales($guid,$item,$quty,$stock,$discount,$i){
+   
+    
+     function add_keyboard_sales($guid,$item,$quty,$stock,$discount,$i,$price){
          
-         $this->db->select()->from('stock')->where('guid',$stock);
-         $sql=  $this->db->get();
-         $price;
-         foreach ($sql->result() as $row)
-         {
-             $price=$row->price;
-         }
          $this->db->insert('direct_sales_x_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_id'=>$guid));
          
                
      }
-     function update_direct_sales($guid,$quty){
-         $this->db->where('guid',$guid);
-         $this->db->update('direct_sales_x_items',array('quty'=>$quty));
-     }
-      function payable_amount($customer_id,$sdn_guid,$guid){
-        $this->db->select('total_amt')->from('direct_sales')->where('guid',$sdn_guid);
-        $sql=  $this->db->get();
-        $amount;
-        foreach ($sql->result() as $row){
-            $amount=$row->total_amt;
-        }
+   
+    function payable_amount($customer_id,$guid,$amount){        
         $this->db->insert('customer_payable',array('customer_id'=>$customer_id,'invoice_id'=>$guid,'amount'=>$amount,'branch_id'=>  $this->session->userdata['branch_id']));
         $id=  $this->db->insert_id();
         $this->db->where('id',$id);
         $this->db->update('customer_payable',array('guid'=>  md5($customer_id.$guid.$id."customer_payable")));
+    }
+    function card_payment($customer_id,$guid,$amount,$date){        
+        $this->db->insert('customer_payable',array('customer_id'=>$customer_id,'invoice_id'=>$guid,'amount'=>$amount,'payment_status'=>1,'paid_amount'=>$amount,'branch_id'=>  $this->session->userdata['branch_id']));
+        $id=  $this->db->insert_id();
+        $this->db->where('id',$id);
+        $payable_id=  md5($customer_id.$guid.$id."customer_payable".uniqid());
+        $this->db->update('customer_payable',array('guid'=>$payable_id));
+        $this->db->select()->from('master_data')->where('key','customer_payment')->where('branch_id', $this->session->userdata('branch_id'));
+        $sql=  $this->db->get();
+        $code;
+        foreach ($sql->result() as $row){
+            $code=$row->prefix.$row->max;
+        }
+        
+        $data=array('invoice_id'=>$guid,'code'=>$code,'type'=>'credit','payable_id'=>$payable_id,'customer_id'=>$customer_id,'amount'=>$amount,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
+        $this->db->insert('payment',$data);
+        $id=  $this->db->insert_id();
+        $this->db->where('id',$id);
+        $this->db->update('payment',array('guid'=>md5($id.$customer_id.$payable_id)));
+    }
+    function cash_payment($customer_id,$guid,$amount,$date,$paid){        
+        $this->db->insert('customer_payable',array('customer_id'=>$customer_id,'invoice_id'=>$guid,'amount'=>$amount,'payment_status'=>0,'paid_amount'=>$paid,'branch_id'=>  $this->session->userdata['branch_id']));
+        $id=  $this->db->insert_id();
+        $this->db->where('id',$id);
+        $payable_id=  md5($customer_id.$guid.$id."customer_payable".uniqid());
+        $this->db->update('customer_payable',array('guid'=>$payable_id));
+        $this->db->select()->from('master_data')->where('key','customer_payment')->where('branch_id', $this->session->userdata('branch_id'));
+        $sql=  $this->db->get();
+        $code;
+        foreach ($sql->result() as $row){
+            $code=$row->prefix.$row->max;
+        }
+        
+        $data=array('invoice_id'=>$guid,'code'=>$code,'type'=>'credit','payable_id'=>$payable_id,'customer_id'=>$customer_id,'amount'=>$paid,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
+        $this->db->insert('payment',$data);
+        $id=  $this->db->insert_id();
+        $this->db->where('id',$id);
+        $this->db->update('payment',array('guid'=>md5($id.$customer_id.$payable_id)));
     }
     
 }
