@@ -247,6 +247,16 @@
     function save_sale(){
         <?php if($this->session->userdata['keyboard_sales_per']['sale']==1) { ?>
             var inputs=$('#parsley_reg').serialize();
+            var value;
+            $("#payment_type").each(function(){
+                var selectedOption = $('option:selected', this);
+                 value=selectedOption.val();
+            });
+            if(value=='cash'){
+                $("#parsley_reg #first_name").addClass('required');
+            }else{
+                $("#parsley_reg #first_name").removeClass('required');
+            }
                 if($('#parsley_reg').valid()){
                     $.ajax ({
                         url: "<?php echo base_url('index.php/keyboard_sales/save')?>",
@@ -257,10 +267,15 @@
                                    $.bootstrapGrowl('<?php echo $this->lang->line('sales').' '.$this->lang->line('added');?>', { type: "success" });                     
                                    clear_form();
                                    $('#payment_modal').modal('hide');
+                                   max++;
+                                   $('#parsley_reg #demo_sales_bill_number').val(pre+max);
+                                   $('#parsley_reg #keyboard_sales_bill_number').val(pre+max);
+                                   $('#search_barcode').val("");
+                                   $('#search_barcode').focus();
                             }else if(response['responseText']=='FALSE'){
                                 $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                                
-                            }else{
-                                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales');?>', { type: "error" });
+                            }else if(response['responseText']=='Noop'){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales');?>', { type: "error" });                        
                             }
                         }
                     });
@@ -297,7 +312,7 @@
             dataType: 'json',               
             success: function(data)        
                 {  
-                    if(data.length>0){
+                    if(data.length>1){
                         item_data=data;
                         $('#multiple_item_select').remove();
                         $('#parent_select').append('<select name="multiple_item_select" id="multiple_item_select" class="form-control" multiple></select>');
@@ -1238,6 +1253,7 @@
         if (isNaN($("#parsley_reg #demo_grand_total").val())) 
             $("#parsley_reg #grand_total").val(0)
     }
+    va
     function posnic_add_new(){
         $.ajax({                                      
             url: "<?php echo base_url() ?>index.php/keyboard_sales/order_number/",                      
@@ -1245,10 +1261,10 @@
             dataType: 'json',               
             success: function(data)        
             {    
-
-
                 $('#parsley_reg #demo_sales_bill_number').val(data[0][0]['prefix']+data[0][0]['max']);
                 $('#parsley_reg #keyboard_sales_bill_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                pre=data[0][0]['prefix'];
+                max=data[0][0]['max'];
             }
         });
     }
@@ -1465,7 +1481,7 @@
                                                 'class'=>'required form-control',
                                                 'id'=>'sales_bill_date',
                                               'onKeyPress'=>"new_sales_bill_date(event)", 
-                                                'value'=>set_value('order_date'));
+                                                'value'=>date("d/m/Y"));
                                  echo form_input($sales_bill_date)?>
                     <span class="input-group-addon"><i class="icon-calendar"></i></span>
                     </div>
@@ -1544,26 +1560,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="new_order_items" >
-<!--                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>
-                                        <tr><td>1</td><td>Item 1</td><td>145</td><td><input class="form-control quantity"></td><td>45</td><td>45</td><td>1</td><td>465 1</td><td>Del</td></tr>-->
+                
                                     </tbody >
                                 </table>
                                 </div>
@@ -1671,7 +1668,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header madal-search">
-                    <button class="close" data-dismiss="modal" type="button">Ã—</button>
+                    <button class="close" data-dismiss="modal" type="button"></button>
                     <h4 class="modal-title text-center"><?php echo $this->lang->line('bill_discount') ?></h4>
                 </div>
                 <div class="modal-body"> 
@@ -1779,8 +1776,8 @@
                 </div>
                 <div class="modal-footer">
                    
-                    <button class="btn btn-success" data-dismiss="modal" type="button">Enter / F9<?php echo $this->lang->line('save')." & ".$this->lang->line('print') ?></button>
-                    <button class="btn btn-danger" data-dismiss="modal" type="button">Esc <?php echo $this->lang->line('close') ?></button>
+                    <button class="btn btn-success" data-dismiss="modal" type="button"><?php echo $this->lang->line('save')." & ".$this->lang->line('print') ?>( Enter / Ctrl+S) </button>
+                    <button class="btn btn-danger" data-dismiss="modal" type="button"><?php echo $this->lang->line('close') ?> ( Esc ) </button>
                 
                 </div>
             </div>

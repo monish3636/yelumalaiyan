@@ -41,32 +41,35 @@ function save(){
                 $customer_discount=  $this->input->post('customer_discount');
                 $customer_discount_amount=  $this->input->post('customer_discount_amount');
                 $this->load->model('sales');
-                $value=array('receipt_status'=>1,'order_status'=>1,'customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'code'=>$order_number,'date'=>$order_date,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
-                $guid=   $this->posnic->posnic_add_record($value,'direct_sales');
-                $bill=array('customer_id'=>$customer,'invoice'=>$order_number,'date'=>$order_date,'direct_sales_id'=>$guid);
-                $invoice= $this->posnic->posnic_add_record($bill,'sales_bill');
-                if($payment_type=='cash'){
-                    if($grand_total==$this->input->post('paid_amount')){
-                        $this->sales->card_payment($customer,$invoice,$grand_total,$order_date) ;
-                    }else{
-                        $this->sales->cash_payment($customer,$invoice,$grand_total,$order_date,$this->input->post('paid_amount')) ;
+                if($this->sales->check_duplicate($order_number)){
+                    $value=array('receipt_status'=>1,'order_status'=>1,'customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'code'=>$order_number,'date'=>$order_date,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
+                    $guid=   $this->posnic->posnic_add_record($value,'direct_sales');
+                    $bill=array('customer_id'=>$customer,'invoice'=>$order_number,'date'=>$order_date,'direct_sales_id'=>$guid);
+                    $invoice= $this->posnic->posnic_add_record($bill,'sales_bill');
+                    if($payment_type=='cash'){
+                        if($grand_total==$this->input->post('paid_amount')){
+                            $this->sales->card_payment($customer,$invoice,$grand_total,$order_date) ;
+                        }else{
+                            $this->sales->cash_payment($customer,$invoice,$grand_total,$order_date,$this->input->post('paid_amount')) ;
+                        }
+                    }else if($payment_type=='card'){
+                        $this->sales->card_payment($customer,$invoice,$grand_total,$order_date) ;                        
+                    }else {
+                        $this->sales->payable_amount($customer,$invoice,$grand_total)   ;
                     }
-                }else if($payment_type=='card'){
-                    $this->sales->card_payment($customer,$invoice,$grand_total,$order_date) ;                        
-                }else {
-                    $this->sales->payable_amount($customer,$invoice,$grand_total)   ;
+                    $item=  $this->input->post('items_id');
+                    $quty=  $this->input->post('items_quty');
+                    $price=  $this->input->post('items_price');
+                    $stock=  $this->input->post('items_stock_id');
+                    $item_discount=  $this->input->post('items_discount_per');           
+                    for($i=0;$i<count($item);$i++){
+                        $this->sales->add_keyboard_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i,$price[$i]);
+                    }
+                    $this->posnic->posnic_master_increment_max('keyboard_sales')  ;
+                    echo 'TRUE';
+                }else{
+                echo 'l';
                 }
-                $item=  $this->input->post('items_id');
-                $quty=  $this->input->post('items_quty');
-                $price=  $this->input->post('items_price');
-                $stock=  $this->input->post('items_stock_id');
-                $item_discount=  $this->input->post('items_discount_per');           
-                for($i=0;$i<count($item);$i++){
-                    $this->sales->add_keyboard_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i,$price[$i]);
-                }
-                $this->posnic->posnic_master_increment_max('keyboard_sales')  ;
-                echo 'TRUE';
-    
                 }else{
                    echo 'FALSE';
                 }
