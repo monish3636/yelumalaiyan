@@ -9,8 +9,6 @@ class Keyboard_sales extends MX_Controller{
         $this->load->view('header'); 
         $this->load->view('index');
         $this->load->view('footer');
-        
-        /// echo strtotime(date("Y/m/d"));
     }
   
 function save(){      
@@ -27,13 +25,12 @@ function save(){
         $this->form_validation->set_rules('items_stock_id[]', $this->lang->line('items_stock_id'), 'required');                      
         $this->form_validation->set_rules('items_price[]', $this->lang->line('items_price'), 'required|numeric');                      
         $this->form_validation->set_rules('items_quty[]', $this->lang->line('items_price'), 'required|numeric');                      
-        $this->form_validation->set_rules('items_discount_per[]', $this->lang->line('items_discount_per'), 'required|numeric');                      
-           
+        $this->form_validation->set_rules('items_discount_per[]', $this->lang->line('items_discount_per'), 'required|numeric'); 
             if ( $this->form_validation->run() !== false ) {    
                 $customer=  $this->input->post('customers_guid');
                 $order_number=  $this->input->post('keyboard_sales_bill_number');              
                 $order_date= strtotime($this->input->post('sales_bill_date'));
-                 $discount=  $this->input->post('bill_discount');
+                $discount=  $this->input->post('bill_discount');
                 $discount_amount=  $this->input->post('bill_discount_amount');
                 $payment_type=  $this->input->post('payment_type');
                 $freight= 0;
@@ -74,48 +71,36 @@ function save(){
                    echo 'FALSE';
                 }
         }else{
-                   echo 'Noop';
-                }
+            echo 'Noop';
+        }
     }
   
         
-/*
- * get customer details for direct sales
- *  */       
-// function starts
-function search_customer(){
-    $search= $this->input->post('term'); 
-    $this->load->model('sales');
-    $data=$this->sales->search_customers($search);
-    echo json_encode($data);
-}
-// function end
+    /*
+     * get customer details for direct sales
+     *  */       
+    // function starts
+    function search_customer(){
+        $search= $this->input->post('term'); 
+        $this->load->model('sales');
+        $data=$this->sales->search_customers($search);
+        echo json_encode($data);
+    }
+    // function end
 
-
-
-
-
-   
     function order_number(){
            $data[]= $this->posnic->posnic_master_max('keyboard_sales')    ;
            echo json_encode($data);
     }
-/*
- * search items to purchase order with or like 
- *  */
-    function sales_bill_number(){
-           $data[]= $this->posnic->posnic_master_max('sales_bill')    ;
-           echo json_encode($data);
-    }
+
     function search_items(){
         $search= $this->input->post('term');
         $guid= $this->input->post('suppler');
         $this->load->model('sales');
         $data= $this->sales->search_items($search);      
         echo json_encode($data);
-
-
     }
+    
     function get_items($code){
         $this->load->model('stock');
         $data=  $this->stock->get_items($code);
