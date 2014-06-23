@@ -54,6 +54,7 @@
             var delete_row=0;
             var item_data=[];
          $(document).ready(function() { 
+             posnic_add_new();
            var selected = [];
                 $('#selected_item_table').dataTable({
                    	     "bProcessing": true,
@@ -138,10 +139,9 @@
                     }, 200);
                   
 		});
-                jQuery(document).bind('keydown', 'f9',function() 
+                jQuery('#payment_modal').bind('keydown', 'f9',function() 
                 {
                     save_sale();
-                  
 		});
                 jQuery('#sales_bill_discount').bind('keydown', 'ctrl+s',function() 
                 {
@@ -324,7 +324,8 @@
             $('#demo_total_amount').val('');
             $('#grand_total').val('');
             $('#demo_grand_total').val('');
-            
+            $("#parsley_reg #first_name").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('customer') ?>'});
+            posnic_add_new();  
         }
         function add_new_item(value){
                     if(data_table_duplicate('new_item_row_id_'+item_data[value]['guid'])){

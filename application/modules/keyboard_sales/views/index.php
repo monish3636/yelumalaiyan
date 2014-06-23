@@ -246,21 +246,33 @@
 <script type="text/javascript" charset="utf-8"> 
     function save_sale(){
         <?php if($this->session->userdata['keyboard_sales_per']['sale']==1) { ?>
-                var inputs=$('#parsley_reg').serialize();
+            var inputs=$('#parsley_reg').serialize();
                 if($('#parsley_reg').valid()){
                     $.ajax ({
-                              url: "<?php echo base_url('index.php/keyboard_sales/save')?>",
-                              data: inputs,
-                              type:'POST',
-                              complete: function(response) {
-                              }
+                        url: "<?php echo base_url('index.php/keyboard_sales/save')?>",
+                        data: inputs,
+                        type:'POST',
+                        complete: function(response) {
+                            if(response['responseText']=='TRUE'){
+                                   $.bootstrapGrowl('<?php echo $this->lang->line('sales').' '.$this->lang->line('added');?>', { type: "success" });                     
+                                   clear_form();
+                                   $('#payment_modal').modal('hide');
+                            }else if(response['responseText']=='FALSE'){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                                
+                            }else{
+                                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales');?>', { type: "error" });
+                            }
+                        }
                     });
+                }else{
+                    $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });    
                 }
                 
         <?php }else{
             ?>
-                <?php
-        } ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales');?>', { type: "error" });       
+            <?php
+        } ?>    
     }
     $(document).ready(function(){
         $('#search_barcode').focusout(function(){
@@ -1226,6 +1238,20 @@
         if (isNaN($("#parsley_reg #demo_grand_total").val())) 
             $("#parsley_reg #grand_total").val(0)
     }
+    function posnic_add_new(){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/keyboard_sales/order_number/",                      
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            {    
+
+
+                $('#parsley_reg #demo_sales_bill_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                $('#parsley_reg #keyboard_sales_bill_number').val(data[0][0]['prefix']+data[0][0]['max']);
+            }
+        });
+    }
 
 </script>
 <div class="row" style="background: #007da9;color: #ffffff">
@@ -1730,7 +1756,7 @@
                         </div>
                           <div class="col col-lg-4" >
                             <label><?php echo $this->lang->line('payment_type') ?></label>
-                            <select class="form-control" id="payment_type">
+                            <select class="form-control" id="payment_type" name="payment_type">
                                 <option value="cash"><?php echo $this->lang->line('cash') ?></option>
                                 <option value="card" ><?php echo $this->lang->line('card') ?></option>
                                 <option value="cheque"><?php echo $this->lang->line('cheque') ?></option>
@@ -1742,7 +1768,7 @@
                     <div class="row" id="cash">
                         <div class="col col-lg-2"></div>
                         <div class="col col-lg-4"><label><?php echo $this->lang->line('paid_amount') ?></label>
-                            <input type="text" class="form-control required" onkeyup="balance_amount()" id="paid_amount"></div>
+                            <input type="text" class="form-control required" onkeyup="balance_amount()" id="paid_amount" name="paid_amount"></div>
                         <div class="col col-lg-4"> <label><?php echo $this->lang->line('balance') ?></label>
                             <input type="text" class="form-control" disabled="disabled" id="balance"></div>
                         <div class="col col-lg-2"></div>
