@@ -53,6 +53,8 @@
             var last_row=1;
             var delete_row=0;
             var item_data=[];
+            var pre;
+            var max;
          $(document).ready(function() { 
              posnic_add_new();
            var selected = [];
@@ -139,9 +141,16 @@
                     }, 200);
                   
 		});
-                jQuery('#payment_modal').bind('keydown', 'f9',function() 
+              
+                jQuery('#payment_modal').bind('keydown', 'ctrl+s',function() 
                 {
                     save_sale();
+		});
+                jQuery('#payment_modal').bind('keydown', function(e) {                 
+                    if(e.which==13){
+                         save_sale();
+                    } 
+                   
 		});
                 jQuery('#sales_bill_discount').bind('keydown', 'ctrl+s',function() 
                 {
@@ -299,6 +308,19 @@
                     }
 		});
                 jQuery('#payment_type').bind('keyup', function(e) {
+                         $("#payment_type").each(function(){
+                            var selectedOption = $('option:selected', this);
+                            var value=selectedOption.val();
+                            if(value=='cash'){
+                                $('#cash').show();
+                                $('#paid_amount').val('');
+                                $('#balance').val('');
+                            }else{
+                                $('#cash').hide();
+                            }
+                        });
+                });
+                jQuery('#payment_type').change(function(e) {
                          $("#payment_type").each(function(){
                             var selectedOption = $('option:selected', this);
                             var value=selectedOption.val();
