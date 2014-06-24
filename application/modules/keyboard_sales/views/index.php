@@ -108,16 +108,8 @@
       width: 170px;
     }
     
-    #selected_item_table tr th:nth-child(1),selected_item_table tr td:nth-child(1){
-      padding-left: 20px;
-    }
-    #selected_item_table tr th:nth-child(2),selected_item_table tr td:nth-child(2){
-      padding-left: 100px;
-    }
-    #selected_item_table tr th:nth-child(3),selected_item_table tr td:nth-child(3){
-      padding-left: 100px;
-    }
-    #selected_item_table tr th:nth-child(4),selected_item_table tr td:nth-child(4){
+   
+    #selected_item_table tr th:nth-child(4),#selected_item_table tr td:nth-child(4){
       width: 50px !important;
     }
     #selected_item_table tr th:nth-child(9),#selected_item_table tr td:nth-child(9){

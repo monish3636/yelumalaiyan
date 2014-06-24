@@ -196,8 +196,45 @@
     #multiple_item_select .item{
         margin: 2px !important;
     }
+    .quantity{
+        width: 76px;
+        border: solid 1px #007da9;
+        border-radius: 5px;
+    }
+    .quantity :hover{
+        border: solid 2px #007da9;
+    }
+    .quantity :focus{
+        
+        border: solid 2px #007da9; //413
+    }
+    #selected_item_table tr th:nth-child(5),#selected_item_table tr td:nth-child(5){
+      width: 40px !important;
+    }
+    #selected_item_table tr th:nth-child(4),#selected_item_table tr td:nth-child(4){
+      width: 77px !important;
+    }
+    #selected_item_table tr th:nth-child(3),#selected_item_table tr td:nth-child(3){
+      width: 70px !important;
+    }
+    #selected_item_table tr th:nth-child(2),#selected_item_table tr td:nth-child(2){
+      width: 190px !important;
+    }
+    #selected_item_table tr th:nth-child(1),#selected_item_table tr td:nth-child(1){
+      width: 35px !important;
+    }
 </style>
 <script>
+    function data_table_duplicate(row){
+        var rows = $("#selected_item_table").dataTable().fnGetNodes();
+        for(var i=0;i<rows.length;i++)
+        {
+           if($(rows[i]).attr('id')==row){
+               return true
+           }
+        }
+        return false
+    }
  $(document).ready(function(){
         $('#scan_items').focusout(function(){
             window.setTimeout(function ()
@@ -266,7 +303,7 @@
                                     var  tax_type=data[i]['tax_type_name']+"-"+tax_value+"%"; 
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
                                 }
-                            $('#multiple_item_select').append('<div class=" btn btn-warning item">     <a class="">'+name+' <br> '+sku+'<br><strong> <?php echo $this->session->userdata('currency_symbol') ?> '+price+'</strong></a></div>');
+                            $('#multiple_item_select').append('     <a href="javascript:add_new_item('+i+')" ><div class=" btn btn-warning item">'+name+' <br> '+sku+'<br><strong> <?php echo $this->session->userdata('currency_symbol') ?> '+price+'</strong></div></a>');
                  
                         }
                     }else{
@@ -386,13 +423,13 @@
                         discount=discount.toFixed(point);
                         var addId = $('#selected_item_table').dataTable().fnAddData( [
                                 null,
-                                name,
-                                sku,
-                            "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"' onkeyup='table_row_total(this);' onkeypress='return numbersonly(event)'>",
+                                name+'-'+sku,
                                 price,
-                                tax+' : '+tax_type+'('+type+')',
-                                discount,
-                                total,
+                            "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"' onkeyup='table_row_total(this);' onkeypress='return numbersonly(event)'>",
+                              //  price,
+                               // tax+' : '+tax_type+'('+type+')',
+                               // discount,
+                               // total,
                                 '<input type="hidden" name="index" id="index">\n\
                                 <input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
                                 <input type="hidden" name="items_id[]" id="items_id" value="'+items_id+'">\n\
@@ -409,7 +446,7 @@
                                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                '+"<label class='label label-danger'>Ctrl+Del</label>" ] );
+                                '+"<a href='javascript:remove_row("+stock+")' class='btn btn-danger'><i class='icon icon-trash'></i></a>" ] );
 
                             var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                             theNode.setAttribute('id','new_item_row_id_'+stock)
@@ -482,91 +519,29 @@
                     </div>
                 </div>
                 <div class="row item-list" style="margin-right: 10px;margin-left:-10px;padding: 10px">
-                    <div class="row">
-                        <div class="col col-xs-1"><h5><?php echo $this->lang->line('no') ?></h5></div>
-                        <div class="col col-xs-4"><h5><?php echo $this->lang->line('item') ?></h5></div>
-                        <div class="col col-xs-3"><h5><?php echo $this->lang->line('price') ?></h5></div>
-                        <div class="col col-xs-3"><h5><?php echo $this->lang->line('qty') ?></h5></div>
-                        <div class="col col-xs-1"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">1</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">2</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">3</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">4</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">5</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">6</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">7</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">8</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">9</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">10</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-xs-1">11</div>
-                        <div class="col col-xs-4">item 1</div>
-                        <div class="col col-xs-2">59.56</div>
-                        <div class="col col-xs-3"><input type="text" class="form-control"></div>
-                        <div class="col col-xs-2"><a href="" class="btn btn-danger"><i class="icon icon-trash"></i></a></div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                                <h4 class="panel-title"><?php echo $this->lang->line('order_items') ?></h4>                                                                               
+                        </div>
+                        <table id='selected_item_table' class="dataTable">
+                            <thead>
+                                <tr> 
+                                    <td><?php echo $this->lang->line('no') ?></td>
+                                    <td><?php echo $this->lang->line('item') ?></td>
+                                    <td><?php echo $this->lang->line('price') ?></td>
+                                    <td><?php echo $this->lang->line('qty') ?></td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            
+                        </tbody>
+                        </table>
                     </div>
                     
+                   
+                   
+                   
                   
                    
                 </div>

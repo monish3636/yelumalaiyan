@@ -98,9 +98,8 @@ function save(){
 
     function search_items(){
         $search= $this->input->post('term');
-        $guid= $this->input->post('suppler');
-        $this->load->model('sales');
-        $data= $this->sales->search_items($search);      
+        $this->load->model('stock');
+        $data= $this->stock->search_items($search);      
         echo json_encode($data);
     }
     
