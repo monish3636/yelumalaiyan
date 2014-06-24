@@ -40,13 +40,22 @@
 	    
 
 	
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.js"></script>
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.dataTables.js"></script>
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/select2.js"></script>
-	 <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script> 
-    <script type="text/javascript">
+	 
+	
+	<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/data_table/js/jquery.js"></script>
+	<script src="<?php echo base_url() ?>template/shortcut/jquery.hotkeys-0.7.9.min.js" type="text/javascript"></script>
+	
+        <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/jquery-ui.js"></script> 
+        <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/app/select/select2.js"></script>
+        <script type="text/javascript" language="javascript" src="<?php echo base_url() ?>template/keyboard/jquery.dataTables.js"></script>
+        <link href="<?php echo base_url() ?>template/keyboard/css/keyboard.css" rel="stylesheet">
+	<script src="<?php echo base_url() ?>template/keyboard/js/jquery.keyboard.js"></script>
+	<script src="<?php echo base_url() ?>template/keyboard/js/jquery.mousewheel.js"></script>
+	<script src="<?php echo base_url() ?>template/keyboard/js/jquery.keyboard.extension-typing.js"></script>
+	<script type="text/javascript" language="javascript" class="init">
             $(document).ready( function () { 
-                   $('#keyboard').modal('show');
+                $('.qwerty:first').keyboard({ layout: 'qwerty' });
+              scan_items();
                 function format_customers(sup) {
                     if (!sup.id) return sup.text;
                         return  "<p >"+sup.text+"    <br>"+sup.company+"   "+sup.address1+"</p> ";
@@ -214,8 +223,18 @@
                     }
                 }
             });
-            
+            $('.select2-container .select2-choice div b').click(function(){
+            alert('jibi');
+            })
                
             });
+            function scan_items(){
+                $('#search_div').hide();
+                $('#scan_div').show();
+            }
+            function search_items(){
+                $('#search_div').show();
+                $('#scan_div').hide();
+            }
         </script>
              
