@@ -35,6 +35,10 @@ class Touch_sales extends MX_Controller{
         echo json_encode($data);
     }
    // function end
-
+     function get_items($code){
+        $this->load->model('stock');
+        $data=  $this->stock->scan_items($code);
+        echo json_encode($data);
+    }
 }
 
