@@ -62,7 +62,7 @@
                     "bProcessing": true,
                     "bDestroy": true ,
                     "bPaginate": false,
-                    "scrollY":        "360px",
+                    "scrollY":        "453px",
                     "scrollX":        "100%",
                     "scrollCollapse": true,
                     "sPaginationType": "bootstrap_full",
@@ -180,7 +180,7 @@
                     amount=amount.toFixed(point);
                     $('#parsley_reg #total_amount').val(amount);
                     $('#parsley_reg #demo_total_amount').val(amount);
-                   // new_grand_total(); 
+                    new_grand_total(); 
                  //   new_row('new_item_row_id_'+$('#search_items').select2('data').sid);
                 }else{
                     if($('#search_items').select2('data').deco_guid){
@@ -306,7 +306,7 @@
                                 $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())+parseFloat(discount));
                             }
                             $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
-                           // new_grand_total(); 
+                            new_grand_total(); 
                             //new_row('new_item_row_id_'+item_data[value]['guid']);
                             //clear_inputs();
                             $('#parsley_reg #tax').val(0);
@@ -535,7 +535,7 @@
                     amount=amount.toFixed(point);
                     $('#parsley_reg #total_amount').val(amount);
                     $('#parsley_reg #demo_total_amount').val(amount);
-                   // new_grand_total(); 
+                   new_grand_total(); 
                  //   new_row('new_item_row_id_'+item_data[value]['guid']);
                 }else{
                     if(item_data[value]['deco_guid']){
@@ -661,7 +661,7 @@
                                 $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())+parseFloat(discount));
                             }
                             $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
-                           // new_grand_total(); 
+                            new_grand_total(); 
                             //new_row('new_item_row_id_'+item_data[value]['guid']);
                             //clear_inputs();
                             $('#parsley_reg #tax').val(0);

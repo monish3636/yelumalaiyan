@@ -67,7 +67,7 @@
     .item-list{
         background: #e3eaf3;
         overflow: auto;
-        height: 548px;
+        height: 486px;
         overflow-x: hidden;
         
     }
@@ -222,6 +222,25 @@
     }
     #selected_item_table tr th:nth-child(1),#selected_item_table tr td:nth-child(1){
       width: 35px !important;
+    }
+    #demo_total_amount{
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .amount-input{
+        font-weight: bold;
+        font-size: 15px;
+        text-align: right;
+    }
+    .grand-total{
+        font-weight: bold;
+        font-size: 20px;
+        
+    }
+    .dataTables_info {
+        float: left;
+        font-size: 12px;
+        line-height: 32px;
     }
 </style>
 <script>
@@ -471,6 +490,9 @@
                                     $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())+parseFloat(tax));
                                 }
                             }
+                            total_tax=$('#total_tax').val();
+                            total_tax=total_tax.toFixed(point);
+                            $('#total_tax').val(total_tax);
                             if($('#parsley_reg #total_item_discount_amount').val()==0){
                                 $('#parsley_reg #total_item_discount_amount').val(discount);
 
@@ -488,8 +510,100 @@
                 }
         });
     }
+    function delete_order_item(guid){
+        var net=$('#selected_item_table #'+guid+' #items_total').val();
+        var dis=$('#selected_item_table #'+guid+' #items_discount').val();
+        var items_tax_inclusive=$('#selected_item_table #'+guid+' #items_tax_inclusive').val();
+        if(items_tax_inclusive==1){
+           var tax=$('#selected_item_table #'+guid+' #items_tax_amount').val();
+           $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())-tax);
+        }
+
+        $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())-parseFloat(dis));
+        var total=$("#parsley_reg #total_amount").val();
+        $("#parsley_reg #total_amount").val(parseFloat(total)-parseFloat(net));
+        $("#parsley_reg #demo_total_amount").val(parseFloat(total)-parseFloat(net));
+        var num = parseFloat($('#demo_total_amount').val());
+        $('#demo_total_amount').val(num.toFixed(point));
+        var num = parseFloat($('#total_amount').val());
+        $('#total_amount').val(num.toFixed(point));
+        var num = parseFloat($('#total_tax').val());
+        $('#total_tax').val(num.toFixed(point));
+       new_grand_total(); 
+         var order=$('#selected_item_table #'+guid+' #items_order_guid').val();
+          $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+order+'">');
+        var index=$('#selected_item_table #'+guid+' #index').val();
+         var anSelected =  $("#selected_item_table").dataTable();
+           anSelected.fnDeleteRow(index-1);
+       
+        if($("#parsley_reg #total_amount").val()==0 || $("#parsley_reg #total_amount").val()==""){
+            $("#parsley_reg #demo_grand_total").val(0)
+            $("#parsley_reg #grand_total").val(0)
+        }
+    }
+        function new_grand_total(){
+        if(parseFloat($("#parsley_reg #total_amount").val())>0){
+            if($('#parsley_reg #customer_discount').val()==0 || isNaN($('#parsley_reg #customer_discount').val())){
+                var  customer_dis=0;
+            }else{
+                customer_dis=parseFloat($('#parsley_reg #total_amount').val())*parseFloat($('#parsley_reg #customer_discount').val())/100;
+                var customer_dis = parseFloat(customer_dis);
+                $('#demo_customer_discount_amount').val(customer_dis.toFixed(point));
+                $('#customer_discount_amount').val(customer_dis.toFixed(point));
+            }
+            var total=parseFloat($("#parsley_reg #total_amount").val())-customer_dis;
+             var  bill_discount=0;
+            if($('#bill_discount').val()=="" || isNaN(parseFloat($('#bill_discount').val()))){
+                 bill_discount=0;
+            }else{
+                bill_discount=parseFloat($('#bill_discount').val());
+            }
+             var  bill_discount_amount=0;
+            if($('#bill_discount_amount').val()=="" || isNaN(parseFloat($('#bill_discount_amount').val()))){
+                 bill_discount_amount=0;
+            }else{
+                  bill_discount_amount=parseFloat($('#bill_discount_amount').val());
+            }
+            if(bill_discount!=0){
+                bill_discount_amount=parseFloat(total)*parseFloat($('#bill_discount').val())/100;
+                total=parseFloat(total)-parseFloat(bill_discount_amount);
+            }else{
+                total=parseFloat(total)-parseFloat(bill_discount_amount);
+              
+            }
+            bill_discount_amount=parseFloat(bill_discount_amount);
+            bill_discount_amount= bill_discount_amount.toFixed(point);
+            console.log();
+            $('#demo_bill_discount').val(bill_discount);
+            $('#demo_bill_discount_amount').val(bill_discount_amount);
+            $('#bill_discount_amount').val(bill_discount_amount);
+            $("#parsley_reg #demo_grand_total").val(total);
+            $("#parsley_reg #grand_total").val(total);
+            var num = parseFloat($('#demo_grand_total').val());
+            $('#demo_grand_total').val(num.toFixed(point));
+            var num = parseFloat($('#grand_total').val());
+            $('#grand_total').val(num.toFixed(point));
+            var num = parseFloat($('#demo_total_amount').val());
+            $('#demo_total_amount').val(num.toFixed(point));
+            var num = parseFloat($('#total_amount').val());
+            $('#total_amount').val(num.toFixed(point));    
+        }
+        if (isNaN($("#parsley_reg #total_amount").val())) 
+            $("#parsley_reg #total_amount").val(0)      
+        if (isNaN($("#parsley_reg #demo_total_amount").val())) 
+            $("#parsley_reg #demo_total_amount").val(0)
+        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
+            $("#parsley_reg #demo_grand_total").val(0)
+        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
+            $("#parsley_reg #grand_total").val(0)
+    }
 </script>
 <body class="header">
+     <?php   $form =array('id'=>'parsley_reg',
+                          'runat'=>'server',
+                          'name'=>'items_form',
+                          'class'=>'form-horizontal');
+       echo form_open_multipart('keyboard_sales/upadate_pos_keyboard_sales_details/',$form);?>
     <div id="container " >
 
 <!--        <br><input id="text" class="qwerty" type="text" placeholder="Enter something...">-->
@@ -545,6 +659,58 @@
                   
                    
                 </div>
+                <div class="row item-list" style="margin-right: 10px;margin-left:-10px;padding: 10px;height:117px">
+                    <div class="row">
+                            <div class="col col-xs-6">  
+                                <label for="total_amount" style=" font-weight: bold; font-size: 18px;"><?php echo $this->lang->line('total_amount') ?></label>	
+                                  </div> <div class="col col-xs-6">
+                                         <div class="form_sep " style="padding: 0px">
+                                     												
+                                                  <?php $total_amount=array('name'=>'demo_total_amount',
+                                                                    'class'=>'required  form-control amount-input',
+                                                                    'id'=>'demo_total_amount',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('total_amount'));
+                                                     echo form_input($total_amount)?>
+                                        <input type="hidden" name="total_amount" id="total_amount">
+
+                                  </div>
+                                  </div>
+                                  </div>
+                    <div class="row">
+                            <div class="col col-xs-6">
+                                  <label for="total_item_discount_amount" style=" font-weight: bold; font-size: 14px;"><?php echo $this->lang->line('total_item_discount_amount') ?></label>	
+                                  </div> <div class="col col-xs-6">
+
+                                         <div class="form_sep " style="padding: 0px">
+                                      												
+                                                  <?php $total_item_discount_amount=array('name'=>'total_item_discount_amount',
+                                                                    'class'=>' form-control amount-input pull-right',
+                                                                    'id'=>'total_item_discount_amount',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('total_item_discount_amount'));
+                                                     echo form_input($total_item_discount_amount)?>
+
+                                  </div>
+                                  </div>
+                                  </div>
+                                 <div class="row">
+                            <div class="col col-xs-6" >    <label for="total_tax" style=" font-weight: bold; font-size: 14px;"><?php echo $this->lang->line('total_tax') ?></label>	
+                                  </div> <div class="col col-xs-6">
+                                         <div class="form_sep " style="padding: 0px">
+                                    												
+                                                  <?php $total_item_discount_amount=array('name'=>'total_tax',
+                                                                    'class'=>' form-control amount-input',
+                                                                    'id'=>'total_tax',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('total_tax'));
+                                                     echo form_input($total_item_discount_amount)?>
+
+                                  </div>
+                                  </div>
+                                  </div>
+                                 
+                </div>
                 
             </div>
             <div class="col col-xs-6  ">
@@ -597,26 +763,77 @@
                 </div>
                
                 <div class="row">
-                    <div class="col col-xs-6" >
-                        <div class="row item-amount" style="margin-right: 10px;margin-left:-15px;padding: 10px">
-                            <div class="col col-xs-1">
-
-                            </div>
+                    <div class="col col-xs-7" >
+                        <div class="row item-amount" style="margin-right: 10px;margin-left:-15px;padding: 10px"> 
+                            <div class="row">
                             <div class="col col-xs-6">
-                                <h5><?php echo $this->lang->line('discount')?></h5>
-                                <h5><?php echo $this->lang->line('tax_amount')?></h5>
-                                <h4><?php echo $this->lang->line('total')?></h4>
+                                  <label for="customer_discount_amount" style=" font-weight: bold; font-size: 14px;"><?php echo $this->lang->line('customer').' '.$this->lang->line('disc').' '.$this->lang->line('amt') ?></label>	
+                            </div> <div class="col col-xs-6">
+                                        <div class="form_sep " style="padding: 0px">                                          												
+                                                 <?php $customer_discount_amount=array('name'=>'customer_discount_amount',
+                                                                    'class'=>'required  form-control amount-input',
+                                                                    'id'=>'demo_customer_discount_amount',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('customer_discount'));
+                                                     echo form_input($customer_discount_amount)?>
+                                        <input type="hidden" name="customer_discount_amount" id="customer_discount_amount">
+                                       </div>
                             </div>
-                            <div class="col col-xs-4">
-                               <h5> 56.98</h5>
-                               <h5> 56.98</h5>
-                               <h4> 56.98</h4>
+                            </div> 
+                                 <div class="row">
+                            <div class="col col-xs-6">
+                                  <label for="total_amount" style=" font-weight: bold; font-size: 14px;"><?php echo $this->lang->line('bill_discount') ?> %</label>
+                                  </div> <div class="col col-xs-6">
+                                         <div class="form_sep " style="padding: 0px">
+                                      													
+                                                  <?php $bill_discount=array('name'=>'demo_bill_discount',
+                                                                    'class'=>'required  form-control amount-input',
+                                                                    'id'=>'demo_bill_discount',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('bill_discount'));
+                                                     echo form_input($bill_discount)?>
+
+                                  </div>
+                                  </div>
+                                 </div>
+                                 <div class="row">
+                            <div class="col col-xs-6">
+                                  <label for="demo_bill_discount_amount" style=" font-weight: bold; font-size: 14px;"><?php echo $this->lang->line('bill_discount_amount') ?></label>	
+                                  </div> <div class="col col-xs-6">
+                                         <div class="form_sep " style="padding: 0px">
+                                      												
+                                                  <?php $demo_bill_discount_amount=array('name'=>'demo_bill_discount_amount',
+                                                                    'class'=>'required  form-control amount-input',
+                                                                    'id'=>'demo_bill_discount_amount',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('demo_bill_discount_amount'));
+                                                     echo form_input($demo_bill_discount_amount)?>
+
+                                  </div>
+                                  </div>
+                                  </div>
+                                 <div class="row">
+                            <div class="col col-xs-6">
+                                   <label for="grand_total" style=" font-weight: bold; font-size: 19px;"><?php echo $this->lang->line('grand_total') ?></label>	
+                                </div> <div class="col col-xs-6">
+                                         <div class="form_sep " style="padding: 0px">
+                                     												
+                                                  <?php $grand_total=array('name'=>'demo_grand_total',
+                                                                    'class'=>'required  form-control amount-input grand-total ',
+                                                                    'id'=>'demo_grand_total',
+                                                                    'disabled'=>'disabled');
+                                                     echo form_input($grand_total)?>
+                                        <input type="hidden" name="grand_total" id="grand_total">
+
+                                  </div>
+                                  </div>
+                                
                             </div>
                         </div>
                         <div class="row" style="margin-right:-5px">
                             <div class="col col-xs-6 ">
                                 <div class="row " style="width: 100%">
-                                    <a href="" class=" btn btn-info" style="width: 100%;padding-bottom: 14px; padding-top: 14px;"><i class="icon icon-gift"></i> <?php echo $this->lang->line('bill_discount') ?></a>
+                                    <a href="javascript:bill_discount_modal()" class=" btn btn-info" style="width: 100%;padding-bottom: 14px; padding-top: 14px;"><i class="icon icon-gift"></i> <?php echo $this->lang->line('bill_discount') ?></a>
                                 </div>
                                 <div class="row " style="width: 100%">
                                     <a href="" class=" btn btn-danger" style="width: 100%;padding-bottom: 14px; padding-top: 14px;"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('clear') ?></a>
@@ -629,7 +846,7 @@
                         </div>
                       
                     </div>
-                    <div class="col col-xs-6">
+                    <div class="col col-xs-5">
                         <div class="row" style="margin-right: -15px">
                             <div class="col col-xs-5 btn btn-default"><a class=""><i class="icon icon-backward"></i> <?php echo $this->lang->line('previous') ?></a></div>
                             <div class="col col-xs-2"></div>
@@ -747,7 +964,60 @@
             </div>
         </div>
     </div>
+    <div id="sales_bill_discount" class="modal fade in"  >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header madal-search">
+                    <button class="close" data-dismiss="modal" type="button"></button>
+                    <h4 class="modal-title text-center"><?php echo $this->lang->line('bill_discount') ?></h4>
+                </div>
+                <div class="modal-body"> 
+                    <div class="row">
+                        <div class="col col-lg-2"></div>
+                        <div class="col col-lg-4">    
+                            <div class="form_sep " style="padding: 0px">
+                                    <label for="bill_discount" ><?php echo $this->lang->line('bill_discount') ?> %</label>													
+                                              <?php $bill_discount=array('name'=>'bill_discount',
+                                                                'class'=>'required  form-control amount-input',
+                                                                'id'=>'bill_discount',
+                                                               'onKeyPress'=>"return numbersonly(event)",
+                                                                'value'=>set_value('bill_discount'));
+                                                 echo form_input($bill_discount)?>
+
+                                      </div>
+                                                       </div>
+                        <div class="col col-lg-4">
+                              <div class="form_sep " style="padding: 0px">
+                                    <label for="bill_discount_amount" ><?php echo $this->lang->line('bill_discount') ?> </label>													
+                                              <?php $bill_discount_amount=array('name'=>'bill_discount_amount',
+                                                                'class'=>'required  form-control amount-input',
+                                                                'id'=>'bill_discount_amount',
+                                                                'onKeyPress'=>"return numbersonly(event)",
+                                                                'value'=>set_value('bill_discount_amount'));
+                                                 echo form_input($bill_discount_amount)?>
+
+                              </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" href="javascript:add_bill_discount()"><?php echo $this->lang->line('save') ?></a>
+                    <button class="btn btn-danger" data-dismiss="modal" type="button"><?php echo $this->lang->line('close') ?></button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php echo form_close() ?> 
     <script>
+        function bill_discount_modal(){
+            $('#sales_bill_discount').modal('show');
+        }
+        function add_bill_discount(){
+             new_grand_total();
+              $('#sales_bill_discount').modal('hide');
+        }
         function show_key_board(){
             $('#keyboard').modal('show');
         }

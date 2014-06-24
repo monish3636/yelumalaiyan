@@ -1245,7 +1245,7 @@
         if (isNaN($("#parsley_reg #demo_grand_total").val())) 
             $("#parsley_reg #grand_total").val(0)
     }
-    va
+    
     function posnic_add_new(){
         $.ajax({                                      
             url: "<?php echo base_url() ?>index.php/keyboard_sales/order_number/",                      
