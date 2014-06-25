@@ -994,11 +994,7 @@
                       
                     </div>
                     <div class="col col-xs-5">
-                        <div class="row" style="margin-right: -15px">
-                            <div class="col col-xs-5 btn btn-default"><a class=""><i class="icon icon-backward"></i> <?php echo $this->lang->line('previous') ?></a></div>
-                            <div class="col col-xs-2"></div>
-                            <div class="col col-xs-5 btn btn-default"><a ><?php echo $this->lang->line('next') ?> <i class="icon icon-forward"></i></a></div>
-                        </div>
+                       
                         <div class="row" style="margin-right: -25px">
                             <a href="javascript:number_value(1)" class="col col-xs-4 btn btn-default numbers" >1</a>
                             <a href="javascript:number_value(2)" class="col col-xs-4 btn btn-default numbers">2</a>
