@@ -22,6 +22,44 @@
         color: #ffffff;
         border: solid 2px #99417b;
         border-radius: 10px;
+          padding: 22px 12px !important;
+           margin-left: 2px;
+    }
+    .category{
+        height: 80px;
+        margin-bottom: 2px;
+        white-space: normal;
+        width: 24.7%;
+        background:#007da9;
+        color: #ffffff;
+        border: solid 2px #007da9;
+        border-radius: 10px;
+        padding: 22px 12px !important;
+        margin-left: 2px;
+    }
+    .brand{
+        height: 80px;
+        margin-bottom: 2px;
+        white-space: normal;
+        width: 24.7%;
+        background:#007da9;
+        color: #ffffff;
+        border: solid 2px #007da9;
+        border-radius: 10px;
+        padding: 22px 12px !important;
+        margin-left: 2px;
+    }
+    .department{
+        height: 80px;
+        margin-bottom: 2px;
+        white-space: normal;
+        width: 24.7%;
+        background:#007da9 ;
+        color: #ffffff;
+        border: solid 2px #007da9 ;
+        border-radius: 10px;
+        padding: 22px 12px !important;
+        margin-left: 2px;
     }
     .item a{
         color: #ffffff;
@@ -68,6 +106,7 @@
         background: #e3eaf3;
         overflow: auto;
         height: 486px;
+      
         overflow-x: hidden;
         
     }
@@ -250,6 +289,9 @@
     .selected{
          background-color: #405b75;
          color: #ffffff;
+    }
+    .item-category{
+        
     }
 </style>
 <script>
@@ -725,9 +767,125 @@
            var trid=$(rows[i]).attr('id');
            $('#'+trid).removeClass('selected');
         }
-        $('#'+row).addClass('selected');
-        
+        $('#'+row).addClass('selected');        
     }
+    function category(){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/category/",    
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            { 
+                var total=data.length;
+                var col=total/5;
+                col=parseInt(col);
+                $('#item-lists').remove();
+                $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
+                var app="<div class='row'>";
+                for(var i=0;i<data.length;i++){
+                    if(i%col==0){
+                         app=app+"</div><div class='row'>";
+                    }
+                           app=app+'<a href=javascript:get_category_items("'+data[i]['guid']+'") class=" btn btn-warning category"> '+data[i]['category_name']+'  </a>';
+                          
+                }
+                 app=app+'</div>';
+                $('#item-lists').append(app);     
+                                              
+                          
+            }
+        });
+    }
+    function departments(){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/department/",    
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            { 
+                var total=data.length;
+                var col=total/5;
+                col=parseInt(col);
+                $('#item-lists').remove();
+                $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
+                var app="<div class='row'>";
+                for(var i=0;i<data.length;i++){
+                    if(i%col==0){
+                         app=app+"</div><div class='row'>";
+                    }
+                           app=app+'<a class=" btn btn-warning department"> '+data[i]['department_name']+'  </a>';
+                          
+                }
+                 app=app+'</div>';
+                $('#item-lists').append(app);     
+                                              
+                          
+            }
+        });
+    }
+    function brands(){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/brand/",    
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            { 
+                var total=data.length;
+                var col=total/5;
+                col=parseInt(col);
+                $('#item-lists').remove();
+                $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
+                var app="<div class='row'>";
+                for(var i=0;i<data.length;i++){
+                    if(i%col==0){
+                         app=app+"</div><div class='row'>";
+                    }
+                           app=app+'<a class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                          
+                }
+                 app=app+'</div>';
+                $('#item-lists').append(app);     
+                                              
+                          
+            }
+        });
+    }
+    function get_category_items(guid){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/get_brand_items/",    
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            { 
+                var total=data.length;
+                var col=total/5;
+                col=parseInt(col);
+                $('#item-lists').remove();
+                $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
+                var app="<div class='row'>";
+                for(var i=0;i<data.length;i++){
+                    if(i%col==0){
+                         app=app+"</div><div class='row'>";
+                    }
+                           app=app+'<a class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                          
+                }
+                 app=app+'</div>';
+                $('#item-lists').append(app);     
+                                              
+                          
+            }
+        });
+    }
+//    <div class=" btn btn-warning item">
+//<a class="">
+//item 4
+//<br>
+//158
+//<br>
+//<strong>$ 8080</strong>
+//</a>
+//</div>
 </script>
 <body class="header">
      <?php   $form =array('id'=>'parsley_reg',
@@ -846,46 +1004,24 @@
             </div>
             <div class="col col-xs-6  ">
                 <div class="row">
-                    <div class="col col-xs-4 btn btn-default">
-                        <a ><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('brand') ?></a>
+                   
+                    <div class="col col-xs-3 btn btn-default">
+                           <a  href="javascript:category()"><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('category') ?></a>
                     </div>
-                    <div class="col col-xs-4 btn btn-default">
-                           <a class=""><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('category') ?></a>
+                    <div class="col col-xs-3 btn btn-default">
+                           <a  href="javascript:departments()"><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('item_department') ?></a>
                     </div>
-                    <div class="col col-xs-4 btn btn-default">
-                           <a class=""><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('item_department') ?></a>
+                     <div class="col col-xs-3 btn btn-default">
+                        <a href="javascript:brands()"><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('brand') ?></a>
+                    </div>
+                     <div class="col col-xs-3 btn btn-default">
+                        <a href="javascript:brands()"><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('item_kit') ?></a>
                     </div>
                 </div>
                 <div class="row item_right " style="padding: 2px" id="stuff">
-                    <div class="col col-xs-12">
-                          <div class="row" >
-                            <?php $i=0; foreach ($row as $item){ 
-                                if($i%6==0){
-                                    echo '  </div><div class="row" >';
-                                }
-                                $i++;
-                                ?>
-                            <div class=" btn btn-warning item">
-                            <a class=""><?php echo $item['name']." <br>".$item['code']."<br><strong>".$this->session->userdata('currency_symbol')." ". $item['price']."</strong>" ?></a>
-                            </div>
-                           <?php } ?>
-                          </div>
-                          <div class="row" >
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-                          </div>
-                          <div class="row" >
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-<div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div> <div class=" btn btn-warning item">     <a class="">item 4<br> 158<br><strong>$ 8080</strong></a></div>
-                          </div>
+                    <div class="col col-xs-12" id="item-lists" >
+                         
+                         
                       
                            
                             
