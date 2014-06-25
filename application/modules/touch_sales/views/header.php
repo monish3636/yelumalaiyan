@@ -691,7 +691,7 @@
             $('#demo_total_amount').val('');
             $('#grand_total').val('');
             $('#demo_grand_total').val('');
-            $("#parsley_reg #first_name").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('customer') ?>'});
+            $("#parsley_reg #customer").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('customer') ?>'});
             $("#parsley_reg #search_items").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('items') ?>'});
             posnic_add_new();
         }

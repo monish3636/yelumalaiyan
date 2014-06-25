@@ -10,20 +10,19 @@
         height: 435px; 
       //  border: solid 3px #003333;
         white-space: nowrap;
-         overflow-x: hidden;
+         overflow-x: scroll;
         overflow-y: hidden;
     }
     .item{
         height: 80px;
         margin-bottom: 2px;
         white-space: normal;
-        width: 19.5322%;
-        background: #99417b;
+        width: 24.7%;
+        background: #6c8eaf;
         color: #ffffff;
-        border: solid 2px #99417b;
-        border-radius: 10px;
-          padding: 22px 12px !important;
-           margin-left: 2px;
+        border: solid 2px #6c8eaf;
+        padding: 22px 12px !important;
+        margin-left: 2px;
     }
     .category{
         height: 80px;
@@ -33,7 +32,6 @@
         background:#007da9;
         color: #ffffff;
         border: solid 2px #007da9;
-        border-radius: 10px;
         padding: 22px 12px !important;
         margin-left: 2px;
     }
@@ -45,7 +43,6 @@
         background:#007da9;
         color: #ffffff;
         border: solid 2px #007da9;
-        border-radius: 10px;
         padding: 22px 12px !important;
         margin-left: 2px;
     }
@@ -57,7 +54,6 @@
         background:#007da9 ;
         color: #ffffff;
         border: solid 2px #007da9 ;
-        border-radius: 10px;
         padding: 22px 12px !important;
         margin-left: 2px;
     }
@@ -108,6 +104,10 @@
         height: 486px;
       
         overflow-x: hidden;
+        
+    }
+    #item-lists{
+       padding-left: 13px;
         
     }
     .item-list h5{
@@ -290,9 +290,10 @@
          background-color: #405b75;
          color: #ffffff;
     }
-    .item-category{
-        
+    #stuff .row + .row {
+        margin-top: 0;
     }
+   
 </style>
 <script>
     function numbersonly(e){
@@ -863,8 +864,8 @@
                 for(var i=0;i<data.length;i++){
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
-                    }
-                           app=app+'<a href=javascript:add_new_item('+i+')  class="btn btn-warning brand"> '+data[i]['kit_name']+'  </a>';
+                    }                        
+                        app=app+'<a href=javascript:add_new_item('+i+') class=" btn btn-warning item"> '+data[i]['kit_name']+' <br> <strong><?php echo $this->session->userdata('currency_symbol') ?>'+data[i]['kit_price']+' </strong></a>';
                           
                 }
                  app=app+'</div>';
@@ -892,7 +893,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a href=javascript:add_new_item('+i+') class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                           app=app+'<a href=javascript:add_new_item('+i+') class=" btn btn-warning item"> '+data[i]['name']+' <br> <strong><?php echo $this->session->userdata('currency_symbol') ?>'+data[i]['price']+' </strong></a>';
                           
                 }
                  app=app+'</div>';
@@ -920,7 +921,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a href=javascript:add_new_item('+i+')  class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                           app=app+'<a href=javascript:add_new_item('+i+') class=" btn btn-warning item"> '+data[i]['name']+' <br> <strong><?php echo $this->session->userdata('currency_symbol') ?>'+data[i]['price']+' </strong></a>';
                           
                 }
                  app=app+'</div>';
@@ -948,7 +949,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a href=javascript:add_new_item('+i+') class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                          app=app+'<a href=javascript:add_new_item('+i+') class=" btn btn-warning item"> '+data[i]['name']+' <br> <strong><?php echo $this->session->userdata('currency_symbol') ?>'+data[i]['price']+' </strong></a>';
                           
                 }
                  app=app+'</div>';
@@ -958,15 +959,7 @@
             }
         });
     }
-//    <div class=" btn btn-warning item">
-//<a class="">
-//item 4
-//<br>
-//158
-//<br>
-//<strong>$ 8080</strong>
-//</a>
-//</div>
+
 </script>
 <body class="header">
      <?php   $form =array('id'=>'parsley_reg',
