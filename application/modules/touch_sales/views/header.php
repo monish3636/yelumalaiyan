@@ -59,7 +59,7 @@
             var max;
             var prevFocus;
             $(document).ready( function () { 
-                
+                 $('#scan_items').focus();
                 $('#selected_item_table tbody').on('click', 'tr', function () {
                     var rows = $("#selected_item_table").dataTable().fnGetNodes();
                     for(var i=0;i<rows.length;i++)

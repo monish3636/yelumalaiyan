@@ -260,6 +260,51 @@
         return false
           }
     }
+     function save_sale(){
+        <?php if($this->session->userdata['touch_sales_per']['sale']==1) { ?>
+            
+            var value=$('#payment_type_input').val();
+           
+            if(value=='credit' || value=='cheque'){
+                $("#parsley_reg #first_name").addClass('required');
+            }else{
+                $("#parsley_reg #first_name").removeClass('required');
+            }
+                 $('.quantity').removeAttr('disabled'); 
+                if($('#parsley_reg').valid()){
+                    var inputs=$('#parsley_reg').serialize();
+                    $.ajax ({
+                        url: "<?php echo base_url('index.php/touch_sales/save')?>",
+                        data: inputs,
+                        type:'POST',
+                        complete: function(response) {
+                            if(response['responseText']=='TRUE'){
+                                   $.bootstrapGrowl('<?php echo $this->lang->line('sales').' '.$this->lang->line('added');?>', { type: "success" });                     
+                                   clear_form();
+                                   $('#payment_modal').modal('hide');
+                                   max++;
+                                   $('#parsley_reg #touch_sales_bill_number').val(pre+max);
+                                   $('#search_barcode').val("");
+                                   $('#scan_items').focus();
+                            }else if(response['responseText']=='FALSE'){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                                
+                            }else if(response['responseText']=='Noop'){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales');?>', { type: "error" });                        
+                            }
+                            $('.quantity').attr('disabled','disabled'); 
+                        }
+                    });
+                }else{
+                     $('.quantity').attr('disabled','disabled'); 
+                    $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });    
+                }
+                
+        <?php }else{
+            ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales');?>', { type: "error" });       
+            <?php
+        } ?>    
+    }
     function table_row_total(id){
         var row = $('#'+id).closest('tr').attr('id');
         var quty=$('#'+id).val();  
@@ -305,12 +350,12 @@
     }
     function posnic_add_new(){
         $.ajax({                                      
-            url: "<?php echo base_url() ?>index.php/keyboard_sales/order_number/",                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/order_number/",                      
             data: "", 
             dataType: 'json',               
             success: function(data)        
             {                 
-                $('#parsley_reg #keyboard_sales_bill_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                $('#parsley_reg #touch_sales_bill_number').val(data[0][0]['prefix']+data[0][0]['max']);
                 pre=data[0][0]['prefix'];
                 max=data[0][0]['max'];
             }
@@ -341,7 +386,7 @@
     });
     function sendBarcode(b){
         $.ajax({                                      
-            url: "<?php echo base_url() ?>index.php/keyboard_sales/get_items/"+b,                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/get_items/"+b,                      
             data: "", 
             dataType: 'json',               
             success: function(data)        
@@ -611,7 +656,7 @@
             $("#parsley_reg #grand_total").val(0)
         }
     }
-        function new_grand_total(){
+    function new_grand_total(){
               $('.quantity').attr('disabled','disabled'); 
         if(parseFloat($("#parsley_reg #total_amount").val())>0){
             if($('#parsley_reg #customer_discount').val()==0 || isNaN($('#parsley_reg #customer_discount').val())){
@@ -689,10 +734,10 @@
                           'runat'=>'server',
                           'name'=>'items_form',
                           'class'=>'form-horizontal');
-       echo form_open_multipart('keyboard_sales/upadate_pos_keyboard_sales_details/',$form);?>
+       echo form_open_multipart('touch_sales/upadate_pos_touch_sales_details/',$form);?>
     <div id="container " >
 
-  <input type="hidden" name="keyboard_sales_bill_number" id="keyboard_sales_bill_number">
+  <input type="hidden" name="touch_sales_bill_number" id="touch_sales_bill_number">
         <div class="row header-bar">
             <div class="col col-xs-1 ">
             </div>
@@ -1143,6 +1188,7 @@
                             <input type="text" class="form-control required" onkeyup="balance_amount()" id="paid_amount" name="paid_amount">
                             <label><?php echo $this->lang->line('balance') ?></label>
                             <input type="text" class="form-control" disabled="disabled" id="balance">
+                            <input type="hidden" id="payment_type_input" name="payment_type" value="cash">
                       
                       
                     </div>
@@ -1155,7 +1201,7 @@
                 </div>
                 <div class="modal-footer">
                    
-                    <button class="btn btn-success" data-dismiss="modal" type="button"><?php echo $this->lang->line('save')." & ".$this->lang->line('print') ?> </button>
+                    <a href='javascript:save_sale()' class="btn btn-success"  type="button"><?php echo $this->lang->line('save')." & ".$this->lang->line('print') ?> </a>
                     <button class="btn btn-danger" data-dismiss="modal" type="button"><?php echo $this->lang->line('close') ?> </button>
                 
                 </div>
@@ -1197,6 +1243,7 @@
             }else{
                 $('#cash').hide();
             }
+            $('#payment_type_input').val(value);
         }
         function balance_amount(){
             var paid=$('#paid_amount').val();
