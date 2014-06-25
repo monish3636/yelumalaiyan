@@ -94,7 +94,7 @@
     }
     .select2-container .select2-choice div {
         width: 36px;
-        display: none;
+        //display: none;
     }
     .select2-container .select2-choice div b {
         background: url("template/app/select/Search.png") no-repeat scroll 0 1px rgba(0, 0, 0, 0);
@@ -242,8 +242,76 @@
         font-size: 12px;
         line-height: 32px;
     }
+    .payment_body .btn{
+        padding: 15px 12px;
+        width:100px;
+        height: 50px
+    }
 </style>
 <script>
+    function numbersonly(e){
+        var unicode=e.charCode? e.charCode : e.keyCode
+        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40 && unicode!=16 && unicode!=9){ //if the key isn't the backspace key (which we should allow)
+        if (unicode<48||unicode>57)
+        return false
+          }
+    }
+    function table_row_total(id){
+        var row = $('#'+id).closest('tr').attr('id');
+        var quty=$('#'+id).val();  
+        var old_total=$('#'+row+' #items_total').val();      
+        var price=$('#'+row+' #items_price').val();
+        var tax_Inclusive=$('#'+row+' #items_tax_inclusive').val();
+        var tax_value=$('#'+row+' #items_tax_value').val();
+        var tax_type=$('#'+row+' #items_tax_type').val();
+        var per=$('#'+row+' #items_discount_per').val();
+        var discount=0;
+        quty=parseFloat(quty);
+        if(per!="" && per!=0){
+            discount=((parseFloat(quty)*parseFloat(price))*per/100);
+        }
+        var tax=((parseFloat(quty)*parseFloat(price))*tax_value)/100;
+        var total;
+        var type;
+        if(tax_Inclusive==1){
+            total= (parseFloat(quty)*parseFloat(price))+tax-discount;
+            var old_tax=$('#'+row+' #items_tax_amount').val()
+            var total_tax=$('#total_tax').val();
+            total_tax=total_tax-old_tax+tax;
+            total_tax=total_tax.toFixed(point);
+            $('#total_tax').val(total_tax);
+            type='Exc';
+        }else{
+            type='Inc';
+            total= (parseFloat(quty)*parseFloat(price))-discount;
+        }
+        total=parseFloat(total);
+        total=total.toFixed(point);
+        discount=parseFloat(discount);
+        discount=discount.toFixed(point);
+        tax=parseFloat(tax);
+        tax=tax.toFixed(point);
+        $('#'+row+' #items_tax_amount').val(tax);        
+        $('#'+row+' #items_total').val(total);
+        var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
+        amount=amount.toFixed(point);
+        $('#parsley_reg #total_amount').val(amount);
+        $('#parsley_reg #demo_total_amount').val(amount);
+        new_grand_total(); 
+    }
+    function posnic_add_new(){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/keyboard_sales/order_number/",                      
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            {                 
+                $('#parsley_reg #keyboard_sales_bill_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                pre=data[0][0]['prefix'];
+                max=data[0][0]['max'];
+            }
+        });
+    }
     function data_table_duplicate(row){
         var rows = $("#selected_item_table").dataTable().fnGetNodes();
         for(var i=0;i<rows.length;i++)
@@ -254,12 +322,9 @@
         }
         return false
     }
- $(document).ready(function(){
-        $('#scan_items').focusout(function(){
-            window.setTimeout(function ()
-            {
-             //   $('#search_barcode').focus();
-            }, 0);
+    $(document).ready(function(){           
+        $(".quantity").live('focusin', function(){
+            prevFocus = $(this);
         });
         $('#scan_items').keyup(function(e){
             barcode = $(this);
@@ -348,6 +413,7 @@
                         var old_tax=((parseFloat(quty-1)*parseFloat(price))*tax_value)/100;
                         var total_tax=$('#total_tax').val();
                         total_tax=total_tax-old_tax+tax;
+                        total_tax=parseFloat(total_tax);
                         total_tax=total_tax.toFixed(point);
                         $('#total_tax').val(total_tax);
                         type='Exc';
@@ -372,7 +438,7 @@
                     $('#parsley_reg #total_amount').val(amount);
                     $('#parsley_reg #demo_total_amount').val(amount);
                     new_grand_total(); 
-                    new_row('new_item_row_id_'+data[0]['guid']);
+                   
                 }else{
                     if(data[0]['deco_guid']){
                         var guid = data[0]['deco_guid'];
@@ -490,7 +556,7 @@
                                     $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())+parseFloat(tax));
                                 }
                             }
-                            total_tax=$('#total_tax').val();
+                            total_tax=parseFloat($('#total_tax').val());
                             total_tax=total_tax.toFixed(point);
                             $('#total_tax').val(total_tax);
                             if($('#parsley_reg #total_item_discount_amount').val()==0){
@@ -501,8 +567,8 @@
                             }
                             $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
                             new_grand_total(); 
-                            new_row('new_item_row_id_'+data[0]['guid']);
-                            clear_inputs();
+                         
+                            
                             $('#parsley_reg #tax').val(0);
                             $('#parsley_reg #item_discount').val(0);
                     }
@@ -587,6 +653,11 @@
             $('#demo_total_amount').val(num.toFixed(point));
             var num = parseFloat($('#total_amount').val());
             $('#total_amount').val(num.toFixed(point));    
+        }else{
+            $("#parsley_reg #demo_grand_total").val(0);
+            $("#parsley_reg #grand_total").val(0);
+            $("#parsley_reg #total_amount").val(0)  ;
+            $("#parsley_reg #demo_total_amount").val(0);
         }
         if (isNaN($("#parsley_reg #total_amount").val())) 
             $("#parsley_reg #total_amount").val(0)      
@@ -606,7 +677,7 @@
        echo form_open_multipart('keyboard_sales/upadate_pos_keyboard_sales_details/',$form);?>
     <div id="container " >
 
-<!--        <br><input id="text" class="qwerty" type="text" placeholder="Enter something...">-->
+  <input type="hidden" name="keyboard_sales_bill_number" id="keyboard_sales_bill_number">
         <div class="row header-bar">
             <div class="col col-xs-1 ">
             </div>
@@ -767,6 +838,21 @@
                         <div class="row item-amount" style="margin-right: 10px;margin-left:-15px;padding: 10px"> 
                             <div class="row">
                             <div class="col col-xs-6">
+                                  <label for="customer_discount_amount" style=" font-weight: bold; font-size: 14px;"><?php echo $this->lang->line('customer').' '.$this->lang->line('discount') ?> %</label>	
+                            </div> <div class="col col-xs-6">
+                                        <div class="form_sep " style="padding: 0px">                                          												
+                                                 <?php $demo_customer_discount=array('name'=>'demo_customer_discount',
+                                                                    'class'=>'required  form-control amount-input',
+                                                                    'id'=>'demo_customer_discount',
+                                                                    'disabled'=>'disabled',
+                                                                    'value'=>set_value('demo_customer_discount'));
+                                                     echo form_input($demo_customer_discount)?>
+                                           <input type="hidden" name="customer_discount" id="customer_discount">
+                                       </div>
+                            </div>
+                            </div> 
+                            <div class="row">
+                            <div class="col col-xs-6">
                                   <label for="customer_discount_amount" style=" font-weight: bold; font-size: 14px;"><?php echo $this->lang->line('customer').' '.$this->lang->line('disc').' '.$this->lang->line('amt') ?></label>	
                             </div> <div class="col col-xs-6">
                                         <div class="form_sep " style="padding: 0px">                                          												
@@ -777,6 +863,7 @@
                                                                     'value'=>set_value('customer_discount'));
                                                      echo form_input($customer_discount_amount)?>
                                         <input type="hidden" name="customer_discount_amount" id="customer_discount_amount">
+                                        <input type="hidden" name="customers_guid" id="customers_guid">
                                        </div>
                             </div>
                             </div> 
@@ -836,12 +923,12 @@
                                     <a href="javascript:bill_discount_modal()" class=" btn btn-info" style="width: 100%;padding-bottom: 14px; padding-top: 14px;"><i class="icon icon-gift"></i> <?php echo $this->lang->line('bill_discount') ?></a>
                                 </div>
                                 <div class="row " style="width: 100%">
-                                    <a href="" class=" btn btn-danger" style="width: 100%;padding-bottom: 14px; padding-top: 14px;"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('clear') ?></a>
+                                    <a href="javascript:clear_form()" class=" btn btn-danger" style="width: 100%;padding-bottom: 14px; padding-top: 14px;"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('clear') ?></a>
                                 </div>
                                
                             </div>
                             <div class="col col-xs-6">
-                                <a href="" class=" btn btn-success" style="width: 100%;padding-bottom: 40px; padding-top: 40px;"><i class="icon icon-save"></i> <?php echo $this->lang->line('bill') ?></a>
+                                <a href="javascript:payment_modal_show()" class=" btn btn-success" style="width: 100%;padding-bottom: 40px; padding-top: 40px;"><i class="icon icon-save"></i> <?php echo $this->lang->line('bill') ?></a>
                             </div>
                         </div>
                       
@@ -853,18 +940,18 @@
                             <div class="col col-xs-5 btn btn-default"><a ><?php echo $this->lang->line('next') ?> <i class="icon icon-forward"></i></a></div>
                         </div>
                         <div class="row" style="margin-right: -25px">
-                            <div class="col col-xs-4 btn btn-default numbers" >1</div>
-                            <div class="col col-xs-4 btn btn-default numbers">2</div>
-                            <div class="col col-xs-4 btn btn-default numbers">3</div>
-                            <div class="col col-xs-4 btn btn-default numbers">4</div>
-                            <div class="col col-xs-4 btn btn-default numbers">5</div>
-                            <div class="col col-xs-4 btn btn-default numbers">6</div>
-                            <div class="col col-xs-4 btn btn-default numbers">7</div>
-                            <div class="col col-xs-4 btn btn-default numbers">8</div>
-                            <div class="col col-xs-4 btn btn-default numbers">9</div>
-                            <div class="col col-xs-4 btn btn-default numbers">.</div>
-                            <div class="col col-xs-4 btn btn-default numbers">0</div>
-                            <div class="col col-xs-4 btn btn-default numbers"><?php echo $this->lang->line('clear'); ?></div>
+                            <a href="javascript:number_value(1)" class="col col-xs-4 btn btn-default numbers" >1</a>
+                            <a href="javascript:number_value(2)" class="col col-xs-4 btn btn-default numbers">2</a>
+                            <a href="javascript:number_value(3)" class="col col-xs-4 btn btn-default numbers">3</a>
+                            <a href="javascript:number_value(4)" class="col col-xs-4 btn btn-default numbers">4</a>
+                            <a href="javascript:number_value(5)" class="col col-xs-4 btn btn-default numbers">5</a>
+                            <a href="javascript:number_value(6)" class="col col-xs-4 btn btn-default numbers">6</a>
+                            <a href="javascript:number_value(7)" class="col col-xs-4 btn btn-default numbers">7</a>
+                            <a href="javascript:number_value(8)" class="col col-xs-4 btn btn-default numbers">8</a>
+                            <a href="javascript:number_value(9)" class="col col-xs-4 btn btn-default numbers">9</a>
+                            <a href="javascript:number_value(.)" class="col col-xs-4 btn btn-default numbers">.</a>
+                            <a href="javascript:number_value(0)" class="col col-xs-4 btn btn-default numbers">0</a>
+                            <a href="javascript:number_value(101)" class="col col-xs-4 btn btn-default numbers"><?php echo $this->lang->line('clear'); ?></a>
                         </div>
                     </div>
                 </div>
@@ -1009,10 +1096,98 @@
             </div>
         </div>
     </div>
+    <div id="payment_modal" class="modal fade in"  >
+    <div class="modal-dialog" style=" width: 760px;">
+            <div class="modal-content">
+                <div class="modal-header madal-search">
+                    <button class="close" data-dismiss="modal" type="button"></button>
+                    <h4 class="modal-title text-center"><?php echo $this->lang->line('payment') ?></h4>
+                </div>
+                <div class="modal-body payment_body"> 
+                    <div class="row">
+                        <div class="col col-lg-2"></div>
+                        <div class="col col-lg-4">
+                            <div class="row" style="margin-top: 10px">
+                                <a href="javascript:payment_type('cash')" class="btn btn-info" ><?php echo $this->lang->line('cash') ?></a>
+                            </div> 
+                            <div class="row" style="margin-top: 10px">
+                                <a href="javascript:payment_type('card')" class="btn btn-success"><?php echo $this->lang->line('card') ?></a>
+                            </div> 
+                            <div class="row" style="margin-top: 10px">
+                                <a href="javascript:payment_type('cheque')" class="btn btn-warning"><?php echo $this->lang->line('cheque') ?></a>
+                            </div> 
+                            <div class="row" style="margin-top: 10px">
+                                <a href="javascript:payment_type('credit')" class="btn btn-danger" ><?php echo $this->lang->line('credit') ?></a>
+                            </div>
+                        </div>
+                        <div class="col col-lg-4" >
+                            <div class="row">
+                            <label><?php echo $this->lang->line('amount') ?></label>
+                            <input type="text" class="form-control" disabled="disabled" id="payment_amount"> </div>
+                             <div class="row" id="cash"><label><?php echo $this->lang->line('paid_amount') ?></label>
+                            <input type="text" class="form-control required" onkeyup="balance_amount()" id="paid_amount" name="paid_amount">
+                            <label><?php echo $this->lang->line('balance') ?></label>
+                            <input type="text" class="form-control" disabled="disabled" id="balance">
+                      
+                      
+                    </div>
+                        </div>
+                         
+                      
+                    </div>
+                   
+                    
+                </div>
+                <div class="modal-footer">
+                   
+                    <button class="btn btn-success" data-dismiss="modal" type="button"><?php echo $this->lang->line('save')." & ".$this->lang->line('print') ?> </button>
+                    <button class="btn btn-danger" data-dismiss="modal" type="button"><?php echo $this->lang->line('close') ?> </button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
     <?php echo form_close() ?> 
     <script>
+        function number_value(key){
+            if(key==101){
+                var id=prevFocus.attr('id');
+                prevFocus.val(parseInt(quty));
+                prevFocus.val(0);
+                prevFocus.focus();
+                table_row_total(id);
+            }else{
+                var id=prevFocus.attr('id');
+                var quty=prevFocus.val();
+                if(quty==0){
+                    quty=key;
+                }else{
+                    quty=quty+key;
+                }
+                prevFocus.val(parseInt(quty));
+                prevFocus.focus();
+                table_row_total(id);
+            }
+        }
         function bill_discount_modal(){
             $('#sales_bill_discount').modal('show');
+        }
+        function payment_modal_show(){
+            $('#payment_modal').modal('show');
+            $('#payment_amount').val($('#grand_total').val());   
+        }
+        function payment_type(value){
+            if(value=='cash'){
+                $('#cash').show();
+            }else{
+                $('#cash').hide();
+            }
+        }
+        function balance_amount(){
+            var paid=$('#paid_amount').val();
+            var total=$('#grand_total').val();
+            var bal=parseFloat(total)-parseFloat(paid);
+            $('#balance').val(bal.toFixed(point)); 
         }
         function add_bill_discount(){
              new_grand_total();

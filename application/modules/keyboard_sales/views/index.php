@@ -244,7 +244,7 @@
                 var selectedOption = $('option:selected', this);
                  value=selectedOption.val();
             });
-            if(value=='cash'){
+            if(value=='credit' || value=='cheque'){
                 $("#parsley_reg #first_name").addClass('required');
             }else{
                 $("#parsley_reg #first_name").removeClass('required');

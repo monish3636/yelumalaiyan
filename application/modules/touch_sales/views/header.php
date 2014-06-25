@@ -55,7 +55,11 @@
 	<script type="text/javascript" language="javascript" class="init">
             var point=3;
             var item_data=[];
+            var pre;
+            var max;
+            var prevFocus;
             $(document).ready( function () { 
+                posnic_add_new();
                 $('.qwerty:first').keyboard({ layout: 'qwerty' });
                 scan_items();
                 $('#selected_item_table').dataTable({
@@ -83,17 +87,15 @@
                                         <div class="col col-lg-4"><?php echo $this->lang->line('address') ?></div> \n\
                                         <div class="col col-lg-4"><?php echo $this->lang->line('phone') ?></div> \n\
                                    </div> \n\
-                                    <div class="row"> \n\
-                                        <div class="col col-lg-4">458878</div> \n\
-                                        <div class="col col-lg-4">150.000</div> \n\
-                                        <div class="col col-lg-4">10</div> \n\
-                                   </div> \n\
                                 </div>     \n\
                             </div>\n\ ';
                 }
                 $('#customer').change(function() {
-                    
-             
+                    var guid = $('#parsley_reg #customer').select2('data').id;
+                    $('#demo_customer_discount').val($('#parsley_reg #customer').select2('data').discount);
+                    $('#customer_discount').val($('#parsley_reg #customer').select2('data').discount);
+                    new_grand_total();
+                    $('#customers_guid').val(guid);             
                 });
           $('#customer').select2({
               dropdownCssClass : 'customers_select',
@@ -181,7 +183,7 @@
                     $('#parsley_reg #total_amount').val(amount);
                     $('#parsley_reg #demo_total_amount').val(amount);
                     new_grand_total(); 
-                 //   new_row('new_item_row_id_'+$('#search_items').select2('data').sid);
+               
                 }else{
                     if($('#search_items').select2('data').deco_guid){
                         var guid = $('#search_items').select2('data').deco_guid;
@@ -255,9 +257,6 @@
                                  price,
                             "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"' onkeyup='table_row_total(this);' onkeypress='return numbersonly(event)'>",
                                
-                               // tax+' : '+tax_type+'('+type+')',
-                               // discount,
-                               // total,
                                 '<input type="hidden" name="index" id="index">\n\
                                 <input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
                                 <input type="hidden" name="items_id[]" id="items_id" value="'+items_id+'">\n\
@@ -307,12 +306,11 @@
                             }
                             $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
                             new_grand_total(); 
-                            //new_row('new_item_row_id_'+item_data[value]['guid']);
-                            //clear_inputs();
-                            $('#parsley_reg #tax').val(0);
-                            $('#parsley_reg #item_discount').val(0);
+                          
+                     
                     }
                     $('#multiple_items').modal('hide');
+                    $("#parsley_reg #search_items").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('items') ?>'});
             });
             function format_item(sup) {
                 if (!sup.id) return sup.text;
@@ -426,7 +424,7 @@
                     data: function (term) {
                         return {
                             term: term,
-                                     suppler:$('#parsley_reg #customers_guid').val()
+                          
                         };
                     },
                     results: function (data) {
@@ -536,7 +534,7 @@
                     $('#parsley_reg #total_amount').val(amount);
                     $('#parsley_reg #demo_total_amount').val(amount);
                    new_grand_total(); 
-                 //   new_row('new_item_row_id_'+item_data[value]['guid']);
+               
                 }else{
                     if(item_data[value]['deco_guid']){
                         var guid = item_data[value]['deco_guid'];
@@ -662,12 +660,22 @@
                             }
                             $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
                             new_grand_total(); 
-                            //new_row('new_item_row_id_'+item_data[value]['guid']);
-                            //clear_inputs();
+                         
                             $('#parsley_reg #tax').val(0);
                             $('#parsley_reg #item_discount').val(0);
                     }
                     $('#multiple_items').modal('hide');
+        }
+        function clear_form(){
+            $("#parsley_reg").trigger('reset');
+            $('#selected_item_table').dataTable().fnClearTable();          
+            $('#total_amount').val('');
+            $('#demo_total_amount').val('');
+            $('#grand_total').val('');
+            $('#demo_grand_total').val('');
+            $("#parsley_reg #first_name").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('customer') ?>'});
+            $("#parsley_reg #search_items").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('items') ?>'});
+            posnic_add_new();
         }
         </script>
              
