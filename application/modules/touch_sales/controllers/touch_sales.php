@@ -9,8 +9,6 @@ class Touch_sales extends MX_Controller{
         $data=array();
         $this->load->model('stock');
         $data['row']=  $this->stock->get_items();
-       
-    //    $this->load->view('template/app/header'); 
         $this->load->view('header');  
         $this->load->view('index',$data);  
   
@@ -94,8 +92,6 @@ class Touch_sales extends MX_Controller{
                     }
                     $this->posnic->posnic_master_increment_max('touch_sales')  ;
                     echo 'TRUE';
-                }else{
-                echo 'l';
                 }
                 }else{
                    echo 'FALSE';
