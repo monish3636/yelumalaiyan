@@ -59,6 +59,20 @@
             var max;
             var prevFocus;
             $(document).ready( function () { 
+                
+                $('#selected_item_table tbody').on('click', 'tr', function () {
+                    var rows = $("#selected_item_table").dataTable().fnGetNodes();
+                    for(var i=0;i<rows.length;i++)
+                    {
+                       var row=$(rows[i]).attr('id');
+                       $('#'+row).removeClass('selected');
+                           
+                    }
+                    var id = this.id;
+                    $(this).addClass('selected');
+                    $('#'+id +' .quantity').focus(); 
+                    //$('#'+id +' .quantity').attr('disabled','disabled'); 
+                } );
                 posnic_add_new();
                 $('.qwerty:first').keyboard({ layout: 'qwerty' });
                 scan_items();
@@ -607,10 +621,7 @@
                                 name+"-"+sku,
                                  price,
                             "<input type='text' name='items_quty[]' class='form-control text-center quantity' value='"+quty+"' id='quty_"+stock+"' onkeyup='table_row_total(this);' onkeypress='return numbersonly(event)'>",
-                               
-                               // tax+' : '+tax_type+'('+type+')',
-                               // discount,
-                               // total,
+                             
                                 '<input type="hidden" name="index" id="index">\n\
                                 <input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
                                 <input type="hidden" name="items_id[]" id="items_id" value="'+items_id+'">\n\
@@ -627,7 +638,7 @@
                                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                '+"<a href='javascript:remove_row("+stock+")' class='btn btn-danger'><i class='icon icon-trash'></i></a>" ] );
+                                '+"<a href=javascript:remove_row('"+stock+"') class='btn btn-danger'><i class='icon icon-trash'></i></a>" ] );
 
                             var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                             theNode.setAttribute('id','new_item_row_id_'+stock)
