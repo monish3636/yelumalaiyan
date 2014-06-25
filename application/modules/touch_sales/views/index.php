@@ -850,6 +850,33 @@
             }
         });
     }
+    function item_kit(){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/item_kit/",    
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            { 
+                var total=data.length;
+                var col=total/5;
+                col=parseInt(col);
+                $('#item-lists').remove();
+                $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
+                var app="<div class='row'>";
+                for(var i=0;i<data.length;i++){
+                    if(i%col==0){
+                         app=app+"</div><div class='row'>";
+                    }
+                           app=app+'<a href=javascript:get_brand_items("'+data[i]['guid']+'") class="btn btn-warning brand"> '+data[i]['kit_name']+'  </a>';
+                          
+                }
+                 app=app+'</div>';
+                $('#item-lists').append(app);     
+                                              
+                          
+            }
+        });
+    }
     function get_category_items(guid){
         $.ajax({                                      
             url: "<?php echo base_url() ?>index.php/touch_sales/get_category_items/"+guid,    
@@ -1069,7 +1096,7 @@
                         <a href="javascript:brands()"><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('brand') ?></a>
                     </div>
                      <div class="col col-xs-3 btn btn-default">
-                        <a href="javascript:brands()"><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('item_kit') ?></a>
+                        <a href="javascript:item_kit()"><i class="icon icon-briefcase"></i> <?php echo $this->lang->line('item_kit') ?></a>
                     </div>
                 </div>
                 <div class="row item_right " style="padding: 2px" id="stuff">
