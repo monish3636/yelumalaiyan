@@ -195,6 +195,22 @@ class Stock extends CI_Model{
         $sql=  $this->db->get();
         return $sql->result();
     }
+    function item_kit(){
+        $this->db->select('item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax,item_kit.tax_amount as kit_tax_amount,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->join('item_kit','item_kit.guid=stock.item','left');
+        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
+        $this->db->limit($this->session->userdata['data_limit']);
+        $this->db->order_by('item_kit.name','asc');
+        $this->db->group_by('stock.guid');
+         $sql=  $this->db->get();
+         foreach ($sql->result_array() as $row){
+                    if($row['kit_code']!=""){
+                
+                     $data[]=$row;
+                    } //$data[]=$row;
+         }
+         return $data;  
+    }
     function get_category_items($brand){
         $this->db->select('decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata('branch_id'));    
         $this->db->join('decomposition_items','decomposition_items.guid=stock.item','left');
