@@ -180,5 +180,25 @@ class Stock extends CI_Model{
         }
         return TRUE;
     }
+    function category(){
+        $this->db->select()->from('items_category')->where('branch_id',  $this->session->userdata('branch_id'))->where('active_status',1)->where('delete_status',0);
+        $sql=  $this->db->get();
+        return $sql->result();
+    }
+    function department(){
+        $this->db->select()->from('items_department')->where('branch_id',  $this->session->userdata('branch_id'))->where('active_status',1)->where('delete_status',0);
+        $sql=  $this->db->get();
+        return $sql->result();
+    }
+    function brand(){
+        $this->db->select()->from('brands')->where('branch_id',  $this->session->userdata('branch_id'))->where('active_status',1)->where('delete_status',0);
+        $sql=  $this->db->get();
+        return $sql->result();
+    }
+    function get_brand_items(){
+        $this->db->select()->from('brands')->where('branch_id',  $this->session->userdata('branch_id'))->where('active_status',1)->where('delete_status',0);
+        $sql=  $this->db->get();
+        return $sql->result();
+    }
 }
 

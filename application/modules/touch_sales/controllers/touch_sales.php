@@ -9,8 +9,6 @@ class Touch_sales extends MX_Controller{
         $data=array();
         $this->load->model('stock');
         $data['row']=  $this->stock->get_items();
-       
-    //    $this->load->view('template/app/header'); 
         $this->load->view('header');  
         $this->load->view('index',$data);  
   
@@ -94,8 +92,6 @@ class Touch_sales extends MX_Controller{
                     }
                     $this->posnic->posnic_master_increment_max('touch_sales')  ;
                     echo 'TRUE';
-                }else{
-                echo 'l';
                 }
                 }else{
                    echo 'FALSE';
@@ -104,9 +100,29 @@ class Touch_sales extends MX_Controller{
             echo 'Noop';
         }
     }
-        function order_number(){
-           $data[]= $this->posnic->posnic_master_max('touch_sales')    ;
-           echo json_encode($data);
+    function order_number(){
+       $data[]= $this->posnic->posnic_master_max('touch_sales')    ;
+       echo json_encode($data);
+    }
+    function category(){
+        $this->load->model('stock');
+        $data=  $this->stock->category();
+        echo json_encode($data);
+    }
+    function department(){
+        $this->load->model('stock');
+        $data=  $this->stock->department();
+        echo json_encode($data);
+    }
+    function brand(){
+        $this->load->model('stock');
+        $data=  $this->stock->brand();
+        echo json_encode($data);
+    }
+    function get_brand_items(){
+        $this->load->model('stock');
+        $data=  $this->stock->get_brand_items();
+        echo json_encode($data);
     }
 }
 
