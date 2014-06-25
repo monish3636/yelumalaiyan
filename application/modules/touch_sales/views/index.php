@@ -517,10 +517,7 @@
                     discount=parseFloat(discount);
                     discount=discount.toFixed(point);
                     tax=parseFloat(tax);
-                    tax=tax.toFixed(point);
-                    $('#selected_item_table #new_item_row_id_'+data[0]['guid']+' td:nth-child(6)').html(tax +''+' : '+tax_type+'('+type+')');
-                    $('#selected_item_table #new_item_row_id_'+data[0]['guid']+' td:nth-child(7)').html(discount);
-                    $('#selected_item_table #new_item_row_id_'+data[0]['guid']+' td:nth-child(8)').html(total);
+                    tax=tax.toFixed(point);                    
                     $('#new_item_row_id_'+data[0]['guid']+' #quty_'+data[0]['guid']).val(parseFloat(quty));
                     $('#new_item_row_id_'+data[0]['guid']+' #items_total').val(total);
                     $('#new_item_row_id_'+data[0]['guid']+' #items_tax_amount').val(tax);
@@ -731,7 +728,6 @@
             }
             bill_discount_amount=parseFloat(bill_discount_amount);
             bill_discount_amount= bill_discount_amount.toFixed(point);
-            console.log();
             $('#demo_bill_discount').val(bill_discount);
             $('#demo_bill_discount_amount').val(bill_discount_amount);
             $('#bill_discount_amount').val(bill_discount_amount);
@@ -744,7 +740,7 @@
             var num = parseFloat($('#demo_total_amount').val());
             $('#demo_total_amount').val(num.toFixed(point));
             var num = parseFloat($('#total_amount').val());
-            $('#total_amount').val(num.toFixed(point));    
+            $('#total_amount').val(num.toFixed(point));  
         }else{
             $("#parsley_reg #demo_grand_total").val(0);
             $("#parsley_reg #grand_total").val(0);
@@ -778,7 +774,7 @@
             { 
                 var total=data.length;
                 var col=total/5;
-                col=parseInt(col);
+                col=parseInt(col)+1;
                 $('#item-lists').remove();
                 $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
                 var app="<div class='row'>";
@@ -805,7 +801,7 @@
             { 
                 var total=data.length;
                 var col=total/5;
-                col=parseInt(col);
+                col=parseInt(col)+1;
                 $('#item-lists').remove();
                 $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
                 var app="<div class='row'>";
@@ -832,7 +828,7 @@
             { 
                 var total=data.length;
                 var col=total/5;
-                col=parseInt(col);
+                col=parseInt(col)+1;
                 $('#item-lists').remove();
                 $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
                 var app="<div class='row'>";
@@ -857,9 +853,10 @@
             dataType: 'json',               
             success: function(data)        
             { 
+                item_data=data;
                 var total=data.length;
                 var col=total/5;
-                col=parseInt(col);
+                col=parseInt(col)+1;
                 $('#item-lists').remove();
                 $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
                 var app="<div class='row'>";
@@ -867,7 +864,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a href=javascript:get_brand_items("'+data[i]['guid']+'") class="btn btn-warning brand"> '+data[i]['kit_name']+'  </a>';
+                           app=app+'<a href=javascript:add_new_item('+i+')  class="btn btn-warning brand"> '+data[i]['kit_name']+'  </a>';
                           
                 }
                  app=app+'</div>';
@@ -884,9 +881,10 @@
             dataType: 'json',               
             success: function(data)        
             { 
+                item_data=data;
                 var total=data.length;
-                var col=total/5;
-                col=parseInt(col);
+                var col=total/5+1;
+                col=parseInt(col)+1;
                 $('#item-lists').remove();
                 $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
                 var app="<div class='row'>";
@@ -894,7 +892,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                           app=app+'<a href=javascript:add_new_item('+i+') class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
                           
                 }
                  app=app+'</div>';
@@ -911,9 +909,10 @@
             dataType: 'json',               
             success: function(data)        
             { 
+                item_data=data;
                 var total=data.length;
                 var col=total/5;
-                col=parseInt(col);
+                col=parseInt(col)+1;
                 $('#item-lists').remove();
                 $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
                 var app="<div class='row'>";
@@ -921,7 +920,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                           app=app+'<a href=javascript:add_new_item('+i+')  class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
                           
                 }
                  app=app+'</div>';
@@ -938,9 +937,10 @@
             dataType: 'json',               
             success: function(data)        
             { 
+                item_data=data;
                 var total=data.length;
                 var col=total/5;
-                col=parseInt(col);
+                col=parseInt(col)+1;
                 $('#item-lists').remove();
                 $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
                 var app="<div class='row'>";
@@ -948,7 +948,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                           app=app+'<a href=javascript:add_new_item('+i+') class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
                           
                 }
                  app=app+'</div>';
@@ -1485,9 +1485,6 @@
             if(down){
                 var newX=e.pageX;
                 var newY=e.pageY;
-
-                //console.log(y+", "+newY+", "+top+", "+(top+(newY-y)));
-
                 $("#stuff").scrollTop(top-newY+y);    
                 $("#stuff").scrollLeft(left-newX+x);    
             }
