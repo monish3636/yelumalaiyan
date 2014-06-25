@@ -813,7 +813,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a class=" btn btn-warning department"> '+data[i]['department_name']+'  </a>';
+                           app=app+'<a href=javascript:get_department_items("'+data[i]['guid']+'") class=" btn btn-warning department"> '+data[i]['department_name']+'  </a>';
                           
                 }
                  app=app+'</div>';
@@ -840,7 +840,7 @@
                     if(i%col==0){
                          app=app+"</div><div class='row'>";
                     }
-                           app=app+'<a class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                           app=app+'<a href=javascript:get_brand_items("'+data[i]['guid']+'") class="btn btn-warning brand"> '+data[i]['name']+'  </a>';
                           
                 }
                  app=app+'</div>';
@@ -852,7 +852,61 @@
     }
     function get_category_items(guid){
         $.ajax({                                      
-            url: "<?php echo base_url() ?>index.php/touch_sales/get_brand_items/",    
+            url: "<?php echo base_url() ?>index.php/touch_sales/get_category_items/"+guid,    
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            { 
+                var total=data.length;
+                var col=total/5;
+                col=parseInt(col);
+                $('#item-lists').remove();
+                $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
+                var app="<div class='row'>";
+                for(var i=0;i<data.length;i++){
+                    if(i%col==0){
+                         app=app+"</div><div class='row'>";
+                    }
+                           app=app+'<a class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                          
+                }
+                 app=app+'</div>';
+                $('#item-lists').append(app);     
+                                              
+                          
+            }
+        });
+    }
+    function get_department_items(guid){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/get_department_items/"+guid,    
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            { 
+                var total=data.length;
+                var col=total/5;
+                col=parseInt(col);
+                $('#item-lists').remove();
+                $('#stuff').append(' <div class="col col-xs-12" id="item-lists" />');
+                var app="<div class='row'>";
+                for(var i=0;i<data.length;i++){
+                    if(i%col==0){
+                         app=app+"</div><div class='row'>";
+                    }
+                           app=app+'<a class=" btn btn-warning brand"> '+data[i]['name']+'  </a>';
+                          
+                }
+                 app=app+'</div>';
+                $('#item-lists').append(app);     
+                                              
+                          
+            }
+        });
+    }
+    function get_brand_items(guid){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/touch_sales/get_brand_items/"+guid,    
             data: "", 
             dataType: 'json',               
             success: function(data)        

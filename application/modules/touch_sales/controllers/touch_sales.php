@@ -119,9 +119,19 @@ class Touch_sales extends MX_Controller{
         $data=  $this->stock->brand();
         echo json_encode($data);
     }
-    function get_brand_items(){
+    function get_category_items($brand){
         $this->load->model('stock');
-        $data=  $this->stock->get_brand_items();
+        $data=  $this->stock->get_category_items($brand);
+        echo json_encode($data);
+    }
+    function get_department_items($brand){
+        $this->load->model('stock');
+        $data=  $this->stock->get_department_items($brand);
+        echo json_encode($data);
+    }
+    function get_brand_items($brand){
+        $this->load->model('stock');
+        $data=  $this->stock->get_brand_items($brand);
         echo json_encode($data);
     }
 }
