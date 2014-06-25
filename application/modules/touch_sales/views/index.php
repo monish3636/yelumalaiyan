@@ -247,6 +247,10 @@
         width:100px;
         height: 50px
     }
+    .selected{
+         background-color: #405b75;
+         color: #ffffff;
+    }
 </style>
 <script>
     function numbersonly(e){
@@ -531,7 +535,7 @@
                                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                '+"<a href='javascript:remove_row("+stock+")' class='btn btn-danger'><i class='icon icon-trash'></i></a>" ] );
+                                '+"<a href=javascript:remove_row('"+stock+"') class='btn btn-danger'><i class='icon icon-trash'></i></a>" ] );
 
                             var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                             theNode.setAttribute('id','new_item_row_id_'+stock)
@@ -576,12 +580,12 @@
                 }
         });
     }
-    function delete_order_item(guid){
-        var net=$('#selected_item_table #'+guid+' #items_total').val();
-        var dis=$('#selected_item_table #'+guid+' #items_discount').val();
-        var items_tax_inclusive=$('#selected_item_table #'+guid+' #items_tax_inclusive').val();
+    function remove_row(guid){
+        var net=$('#selected_item_table #new_item_row_id_'+guid+' #items_total').val();
+        var dis=$('#selected_item_table #new_item_row_id_'+guid+' #items_discount').val();
+        var items_tax_inclusive=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_inclusive').val();
         if(items_tax_inclusive==1){
-           var tax=$('#selected_item_table #'+guid+' #items_tax_amount').val();
+           var tax=$('#selected_item_table #new_item_row_id_'+guid+' #items_tax_amount').val();
            $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())-tax);
         }
 
@@ -596,9 +600,9 @@
         var num = parseFloat($('#total_tax').val());
         $('#total_tax').val(num.toFixed(point));
        new_grand_total(); 
-         var order=$('#selected_item_table #'+guid+' #items_order_guid').val();
+         var order=$('#selected_item_table #new_item_row_id_'+guid+' #items_order_guid').val();
           $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+order+'">');
-        var index=$('#selected_item_table #'+guid+' #index').val();
+        var index=$('#selected_item_table #new_item_row_id_'+guid+' #index').val();
          var anSelected =  $("#selected_item_table").dataTable();
            anSelected.fnDeleteRow(index-1);
        
@@ -608,6 +612,7 @@
         }
     }
         function new_grand_total(){
+              $('.quantity').attr('disabled','disabled'); 
         if(parseFloat($("#parsley_reg #total_amount").val())>0){
             if($('#parsley_reg #customer_discount').val()==0 || isNaN($('#parsley_reg #customer_discount').val())){
                 var  customer_dis=0;
@@ -667,6 +672,16 @@
             $("#parsley_reg #demo_grand_total").val(0)
         if (isNaN($("#parsley_reg #demo_grand_total").val())) 
             $("#parsley_reg #grand_total").val(0)
+    }
+    function new_row(row){
+        var rows = $("#selected_item_table").dataTable().fnGetNodes();
+        for(var i=0;i<rows.length;i++)
+        {
+           var trid=$(rows[i]).attr('id');
+           $('#'+trid).removeClass('selected');
+        }
+        $('#'+row).addClass('selected');
+        
     }
 </script>
 <body class="header">
