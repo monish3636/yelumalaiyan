@@ -12,12 +12,10 @@ class Stock extends CI_Model{
                 $this->db->join('items','items.guid=stock.item  OR items.guid=decomposition_items.item_id ','left');
                 $this->db->join('items_category', 'items.category_id=items_category.guid','left');
                 $this->db->join('brands', 'items.brand_id=brands.guid','left');
-                $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-      
+                $this->db->join('items_department', 'items.depart_id=items_department.guid','left');      
                 $query=$this->db->get();
                 $data=array();
-                foreach ($query->result_array() as $row){
-                   // $row['date']=date('d-m-Y',$row['date']);
+                foreach ($query->result_array() as $row){                  
                     if($row['kit_code']!=""){
                         $row['name']=$row['kit_name'];
                         $row['c_name']=$row['kit_cat_name'];
@@ -46,8 +44,6 @@ class Stock extends CI_Model{
             }
         }
         return $data;
-
-          
     }
     function search_items($search){
         $this->db->select('item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax,item_kit.tax_amount as kit_tax_amount,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata('branch_id'));
@@ -80,7 +76,7 @@ class Stock extends CI_Model{
                             $row['end_date']=date('d-m-Y',$row['end_date']);
                     }
                      $data[]=$row;
-                    } //$data[]=$row;
+                    } 
          }
          return $data;     
     }
@@ -120,7 +116,7 @@ class Stock extends CI_Model{
                             $row['end_date']=date('d-m-Y',$row['end_date']);
                     }
                      $data[]=$row;
-                    } //$data[]=$row;
+                    } 
          }
        return $data; 
     }
@@ -207,7 +203,7 @@ class Stock extends CI_Model{
                     if($row['kit_code']!=""){
                 
                      $data[]=$row;
-                    } //$data[]=$row;
+                    } 
          }
          return $data;  
     }
@@ -303,6 +299,36 @@ class Stock extends CI_Model{
                     } 
          }
        return $data; 
+    }
+    function reduce_stock($item,$quty,$price){
+        $this->db->select('quty,guid,item_type')->from('stock')->where('branch_id',  $this->session->userdata("branch_id"))->where('item',$item)->where('price',$price);
+        $sql=  $this->db->get();
+        $guid;
+        $stock;
+        $item_type;
+        foreach ($sql->result() as $row){
+            $guid=$row->guid;
+            $stock=$row->quty;
+            $item_type=$row->item_type;
+        }
+        if($item_type=='kit'){
+            
+            $this->db->select('stock.quty as stock_quty,stock.guid as stock_id,item_kit_x_items.quty as kit_quty')->from('item_kit_x_items')->where('item_kit_x_items.item_kit_id',$item)->where('stock.branch_id',  $this->session->userdata('branch_id'));
+            $this->db->join('stock',"stock.item=item_kit_x_items.item_id AND item_kit_x_items.item_kit_id='".$item."'",'left' );
+            $kit=  $this->db->get();
+            foreach ($kit->result() as $row){
+                $stock_quty=$row->stock_quty;
+                $stock_id=$row->stock_id;
+                $kit_quty=$row->kit_quty;
+                $kit_quty=$kit_quty*$quty;
+                $this->db->where('guid',$stock_id);
+                $this->db->update('stock',array('quty'=>$stock_quty-$kit_quty));
+            }
+            
+        }else{
+            $this->db->where('guid',$guid);
+            $this->db->update('stock',array('quty'=>$stock-$quty));
+        }
     }
 }
 

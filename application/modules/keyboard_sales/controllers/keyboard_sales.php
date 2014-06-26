@@ -41,6 +41,7 @@ function save(){
                 $customer_discount=  $this->input->post('customer_discount');
                 $customer_discount_amount=  $this->input->post('customer_discount_amount');
                 $this->load->model('sales');
+                $this->load->model('stock');
                 if($this->sales->check_duplicate($order_number)){
                     $value=array('receipt_status'=>1,'order_status'=>1,'customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'code'=>$order_number,'date'=>$order_date,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
                     $guid=   $this->posnic->posnic_add_record($value,'direct_sales');
@@ -64,6 +65,7 @@ function save(){
                     $item_discount=  $this->input->post('items_discount_per');           
                     for($i=0;$i<count($item);$i++){
                         $this->sales->add_keyboard_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i,$price[$i]);
+                         $this->stock->reduce_stock($item[$i],$quty[$i],$price[$i]);
                     }
                     $this->posnic->posnic_master_increment_max('keyboard_sales')  ;
                     echo 'TRUE';

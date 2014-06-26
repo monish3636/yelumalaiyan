@@ -96,7 +96,36 @@ class Stock extends CI_Model{
          }
        return $data; 
     }
-    
+    function reduce_stock($item,$quty,$price){
+        $this->db->select('quty,guid,item_type')->from('stock')->where('branch_id',  $this->session->userdata("branch_id"))->where('item',$item)->where('price',$price);
+        $sql=  $this->db->get();
+        $guid;
+        $stock;
+        $item_type;
+        foreach ($sql->result() as $row){
+            $guid=$row->guid;
+            $stock=$row->quty;
+            $item_type=$row->item_type;
+        }
+        if($item_type=='kit'){
+            
+            $this->db->select('stock.quty as stock_quty,stock.guid as stock_id,item_kit_x_items.quty as kit_quty')->from('item_kit_x_items')->where('item_kit_x_items.item_kit_id',$item)->where('stock.branch_id',  $this->session->userdata('branch_id'));
+            $this->db->join('stock',"stock.item=item_kit_x_items.item_id AND item_kit_x_items.item_kit_id='".$item."'",'left' );
+            $kit=  $this->db->get();
+            foreach ($kit->result() as $row){
+                $stock_quty=$row->stock_quty;
+                $stock_id=$row->stock_id;
+                $kit_quty=$row->kit_quty;
+                $kit_quty=$kit_quty*$quty;
+                $this->db->where('guid',$stock_id);
+                $this->db->update('stock',array('quty'=>$stock_quty-$kit_quty));
+            }
+            
+        }else{
+            $this->db->where('guid',$guid);
+            $this->db->update('stock',array('quty'=>$stock-$quty));
+        }
+    }
     
 }
 
