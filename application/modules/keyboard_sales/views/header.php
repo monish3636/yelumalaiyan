@@ -399,7 +399,7 @@
                 }else{
                     if(item_data[value]['deco_guid']){
                         var guid = item_data[value]['deco_guid'];
-                        var item_id=item_data[value]['deco_guid'];                                
+                        var items_id=item_data[value]['deco_guid'];                                
                         var sku=item_data[value]['deco_code']+"-"+item_data[value]['deco_value'];                                
                         var stock=item_data[value]['guid']                                
                         var name =item_data[value]['name']                                
@@ -411,7 +411,7 @@
 
                     }else if(item_data[value]['kit_guid']){
                         var guid = item_data[value]['kit_guid'];
-                        var item_id=item_data[value]['kit_guid'];                                
+                        var items_id=item_data[value]['kit_guid'];                                
                         var sku=item_data[value]['kit_code'];                                
                         var stock=item_data[value]['guid']                                
                         var name= item_data[value]['kit_name']                                

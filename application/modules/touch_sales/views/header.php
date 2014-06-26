@@ -199,7 +199,7 @@
                 }else{
                     if($('#search_items').select2('data').deco_guid){
                         var guid = $('#search_items').select2('data').deco_guid;
-                        var item_id=$('#search_items').select2('data').deco_guid;                                
+                        var items_id=$('#search_items').select2('data').deco_guid;                                
                         var sku=$('#search_items').select2('data').deco_code+"-"+$('#search_items').select2('data').deco_value;                                
                         var stock=$('#search_items').select2('data').sid ;                               
                         var name =$('#search_items').select2('data').text ;                               
@@ -211,7 +211,7 @@
 
                     }else if($('#search_items').select2('data').kit_guid){
                         var guid = $('#search_items').select2('data').kit_guid;
-                        var item_id=$('#search_items').select2('data').kit_guid;                                
+                        var items_id=$('#search_items').select2('data').kit_guid;                                
                         var sku=$('#search_items').select2('data').kit_code;                                
                         var stock=$('#search_items').select2('data').sid                                
                         var name=$('#search_items').select2('data').kit_name;                                
@@ -548,7 +548,7 @@
                 }else{
                     if(item_data[value]['deco_guid']){
                         var guid = item_data[value]['deco_guid'];
-                        var item_id=item_data[value]['deco_guid'];                                
+                        var items_id=item_data[value]['deco_guid'];                                
                         var sku=item_data[value]['deco_code']+"-"+item_data[value]['deco_value'];                                
                         var stock=item_data[value]['guid']                                
                         var name =item_data[value]['name']                                
@@ -567,7 +567,7 @@
 
                     }else if(item_data[value]['kit_guid']){
                         var guid = item_data[value]['kit_guid'];
-                        var item_id=item_data[value]['kit_guid'];                                
+                        var items_id=item_data[value]['kit_guid'];                                
                         var sku=item_data[value]['kit_code'];                                
                         var stock=item_data[value]['guid']                                
                         var name= item_data[value]['kit_name']                                

@@ -89,9 +89,12 @@ class Touch_sales extends MX_Controller{
                     $item_discount=  $this->input->post('items_discount_per');           
                     for($i=0;$i<count($item);$i++){
                         $this->stock->add_touch_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i,$price[$i]);
+                        $this->stock->reduce_stock($item[$i],$quty[$i],$price[$i]);
                     }
                     $this->posnic->posnic_master_increment_max('touch_sales')  ;
                     echo 'TRUE';
+                }else{
+                    echo 'ko';
                 }
                 }else{
                    echo 'FALSE';

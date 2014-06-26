@@ -73,7 +73,7 @@ class Sales extends CI_Model{
         $this->db->select()->from('direct_sales')->where('code',$code)->where('branch_id',  $this->session->userdata('branch_id'));
         $sql=  $this->db->get();
         if($sql->num_rows()>0){
-            return FALSE;
+          //  return FALSE;
         }
         return TRUE;
     }
