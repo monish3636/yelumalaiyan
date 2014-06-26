@@ -226,28 +226,8 @@ function  get_direct_delivery_note(){
     echo json_encode($data);
     
 }
-function  get_sales_bill($guid){
-    if($this->session->userdata['sales_bill_per']['edit']==1){
-    $this->load->model('sales');
-    $data=  $this->sales->get_sales_bill($guid);
-    echo json_encode($data);
-    }
-}
-function sdn_approve(){
-    if($this->session->userdata['sales_bill_per']['approve']==1){
-        $id=  $this->input->post('guid');
-        $so=  $this->input->post('so');
-        $this->load->model('sales');
-        $report=$this->sales->sdn_approve($id,$so);     
-        if (!$report['error']) {
-            echo 'TRUE';
-        } else {
-            echo 'FALSE';
-        }
-    }else{
-        echo 'Noop';
-    }
-}
+
+
 
 function order_number(){
        $data[]= $this->posnic->posnic_master_max('sales_bill')    ;

@@ -71,6 +71,9 @@
     font-size: 11px;
     padding: 0 1px !important;
 }
+.row + .row {
+    margin-top: 0px;
+}
 </style>	
 <script type="text/javascript">
     var grn_number;
@@ -253,7 +256,16 @@
                                 for(i=0;i<data.length;i++){
                                       receive=1;
                                     var  name=data[i]['items_name'];
+                                     if(data[i]['kit_name']){
+                                        name=data[i]['kit_name'];
+                                    }
                                     var  sku=data[i]['i_code'];
+                                    if(data[i]['kit_code']){
+                                        sku=data[i]['kit_code'];
+                                    }
+                                    if(data[i]['deco_code']){
+                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                                    }
                                     var  quty=data[i]['quty'];
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
@@ -354,7 +366,7 @@
                            
                           
                    var guid = $('#parsley_reg #demo_order_number').select2('data').id;
-console.log(guid);
+
                
                             $.ajax({                                      
                              url: "<?php echo base_url() ?>index.php/sales_bill/get_direct_delivery_note/",                      
@@ -397,8 +409,17 @@ console.log(guid);
                                 var total_amount=0;
                                 for(i=0;i<data.length;i++){
                                       receive=1;
-                                    var  name=data[i]['items_name'];
+                                     var  name=data[i]['items_name'];
+                                     if(data[i]['kit_name']){
+                                        name=data[i]['kit_name'];
+                                    }
                                     var  sku=data[i]['i_code'];
+                                    if(data[i]['kit_code']){
+                                        sku=data[i]['kit_code'];
+                                    }
+                                    if(data[i]['deco_code']){
+                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                                    }
                                     var  quty=data[i]['quty'];
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
@@ -667,7 +688,7 @@ function reload_update_user(){
                                          <th>Id</th>
                                           <th ><?php echo $this->lang->line('select') ?></th>
                                           <th ><?php echo $this->lang->line('invoice') ?></th>
-                                           <th style="width: 170px !important"><?php echo $this->lang->line('grn_number') ?></th>
+                                           <th style="width: 170px !important"><?php echo $this->lang->line('sales_id') ?></th>
                                           
                                           <th><?php echo $this->lang->line('company') ?></th>
                                            <th><?php echo $this->lang->line('name') ?></th>

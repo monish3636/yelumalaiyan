@@ -754,5 +754,6 @@ $lang['credit_days']='Credit Days';
     $lang['paid_amount']='Paid Amount';
     $lang['keyboard_sales']='Keyboard Sales';
     $lang['touch_sales']='Touch Sales';
+    $lang['sales_id']='Sales Id';
    
 ?>

@@ -93,10 +93,14 @@ class Sales extends CI_Model{
    
    
     function get_sales_order($guid,$sdn){
-        $this->db->select('items.uom,items.no_of_unit,sales_delivery_note.customer_discount,sales_delivery_note.customer_discount_amount,sales_delivery_note.date as sd_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as s_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,sales_order.*  ,sales_order_x_items.discount as dis_per ,sales_order_x_items.item ,sales_order_x_items.delivered_quty as quty ,sales_order_x_items.price,sales_order_x_items.guid as o_i_guid ,sales_order_x_items.guid as o_i_guid  ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_delivery_note')->where('sales_delivery_note.guid',$sdn)->where('sales_order.guid',$guid)->where('sales_order.order_status',1);
+        $this->db->select('decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,sales_delivery_note.customer_discount,sales_delivery_note.customer_discount_amount,sales_delivery_note.date as sd_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as s_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,sales_order.*  ,sales_order_x_items.discount as dis_per ,sales_order_x_items.item ,sales_order_x_items.delivered_quty as quty ,sales_order_x_items.price,sales_order_x_items.guid as o_i_guid ,sales_order_x_items.guid as o_i_guid  ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_delivery_note')->where('sales_delivery_note.guid',$sdn)->where('sales_order.guid',$guid)->where('sales_order.order_status',1);
         $this->db->join('sales_order', 'sales_order.guid = sales_delivery_note.so ','left');
         $this->db->join('sales_order_x_items', 'sales_order_x_items.sales_order_id = sales_order.guid ','left');
-        $this->db->join('items', "items.guid=sales_order_x_items.item AND sales_order_x_items.sales_order_id='".$guid."' ",'left');
+        $this->db->join('item_kit','item_kit.guid=sales_order_x_items.item','left');
+        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
+        $this->db->join('decomposition_items','decomposition_items.guid=sales_order_x_items.item','left');
+        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
+        $this->db->join('items', "items.guid=sales_order_x_items.item OR items.guid=decomposition_items.item_id",'left'); 
         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=sales_order_x_items.item  ",'left');
         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=sales_order_x_items.item ",'left');
         $this->db->join('customers', "customers.guid=sales_order.customer_id AND sales_order_x_items.sales_order_id='".$guid."' ",'left');
@@ -111,13 +115,17 @@ class Sales extends CI_Model{
         return $data;
      }
     function get_direct_delivery_note($guid){
-         $this->db->select('items.uom,items.no_of_unit,direct_sales_delivery.customer_discount,direct_sales_delivery.customer_discount_amount,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,direct_sales_delivery.*,direct_sales_delivery_x_items.quty ,direct_sales_delivery_x_items.stock_id ,direct_sales_delivery_x_items.discount as item_discount,direct_sales_delivery_x_items.price,direct_sales_delivery_x_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_sales_delivery')->where('direct_sales_delivery.guid',$guid);
-         $this->db->join('direct_sales_delivery_x_items', "direct_sales_delivery_x_items.direct_sales_delivery_id = direct_sales_delivery.guid  ",'left');
-         $this->db->join('items', "items.guid=direct_sales_delivery_x_items.item AND direct_sales_delivery_x_items.direct_sales_delivery_id='".$guid."' ",'left');
-         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=direct_sales_delivery_x_items.item  ",'left');
-         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=direct_sales_delivery_x_items.item  ",'left');
-         $this->db->join('customers', "customers.guid=direct_sales_delivery.customer_id AND direct_sales_delivery_x_items.direct_sales_delivery_id='".$guid."'  ",'left');
-         $sql=  $this->db->get();
+        $this->db->select('decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,direct_sales_delivery.customer_discount,direct_sales_delivery.customer_discount_amount,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,direct_sales_delivery.*,direct_sales_delivery_x_items.quty ,direct_sales_delivery_x_items.stock_id ,direct_sales_delivery_x_items.discount as item_discount,direct_sales_delivery_x_items.price,direct_sales_delivery_x_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_sales_delivery')->where('direct_sales_delivery.guid',$guid);
+        $this->db->join('direct_sales_delivery_x_items', "direct_sales_delivery_x_items.direct_sales_delivery_id = direct_sales_delivery.guid  ",'left');
+        $this->db->join('item_kit','item_kit.guid=direct_sales_delivery_x_items.item','left');
+        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
+        $this->db->join('decomposition_items','decomposition_items.guid=direct_sales_delivery_x_items.item','left');
+        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
+        $this->db->join('items', "items.guid=direct_sales_delivery_x_items.item OR items.guid=decomposition_items.item_id",'left'); 
+        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=direct_sales_delivery_x_items.item  ",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=direct_sales_delivery_x_items.item  ",'left');
+        $this->db->join('customers', "customers.guid=direct_sales_delivery.customer_id AND direct_sales_delivery_x_items.direct_sales_delivery_id='".$guid."'  ",'left');
+        $sql=  $this->db->get();
          $data=array();
          foreach($sql->result_array() as $row){
              
@@ -129,13 +137,18 @@ class Sales extends CI_Model{
           $data[]=$row;
          }
          return $data;
+         //echo '<pre>';
+         //print_r($data);
      }
     function get_sales_bill($guid){
-        $this->db->select('sales_delivery_note.date as sales_delivery_note_date,sales_delivery_note.note as sales_delivery_note_note,sales_delivery_note.remark as sales_delivery_note_remark,sales_delivery_note.sales_delivery_note_no,items.tax_Inclusive ,sales_delivery_note.so,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as s_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,sales_order.*,sales_order_x_items.discount as dis_per ,sales_order_x_items.item ,sales_order_x_items.quty ,sales_order_x_items.guid as o_i_guid ,sales_order_x_items.delivered_quty ,sales_order_x_items.price ,sales_order_x_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_delivery_note')->where('sales_delivery_note.guid',$guid)->where('sales_delivery_note.delete_status',0);
-        $this->db->join('sales_order', 'sales_delivery_note.so=sales_order.guid','left');
-      
+        $this->db->select('decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,sales_delivery_note.date as sales_delivery_note_date,sales_delivery_note.note as sales_delivery_note_note,sales_delivery_note.remark as sales_delivery_note_remark,sales_delivery_note.sales_delivery_note_no,items.tax_Inclusive ,sales_delivery_note.so,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as s_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,sales_order.*,sales_order_x_items.discount as dis_per ,sales_order_x_items.item ,sales_order_x_items.quty ,sales_order_x_items.guid as o_i_guid ,sales_order_x_items.delivered_quty ,sales_order_x_items.price ,sales_order_x_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_delivery_note')->where('sales_delivery_note.guid',$guid)->where('sales_delivery_note.delete_status',0);
+        $this->db->join('sales_order', 'sales_delivery_note.so=sales_order.guid','left');      
         $this->db->join('sales_order_x_items', 'sales_order_x_items.sales_order_id = sales_order.guid  ','left');
-        $this->db->join('items', "items.guid=sales_order_x_items.item AND sales_order_x_items.sales_order_id=sales_order.guid ",'left');
+        $this->db->join('item_kit','item_kit.guid=sales_order_x_items.item','left');
+        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
+        $this->db->join('decomposition_items','decomposition_items.guid=sales_order_x_items.item','left');
+        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
+        $this->db->join('items', "items.guid=sales_order_x_items.item OR items.guid=decomposition_items.item_id",'left');
         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=sales_order_x_items.item  ",'left');
         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=sales_order_x_items.item  ",'left');
         $this->db->join('customers', "customers.guid=sales_order.customer_id AND sales_order_x_items.sales_order_id=sales_order.guid  ",'left');
@@ -150,104 +163,18 @@ class Sales extends CI_Model{
         }
         return $data;
      }
-     function delete_order_item($guid){      
-          $this->db->where('guid',$guid);
-          $this->db->update('sales_order_x_items',array('delete_status'=>1));
-     }
-     function deactive_order($guid){
-         $this->db->select()->from('sales_order')->where('guid',$guid)->where('order_status',0);
-         $sql=  $this->db->get();
-         if($sql->num_rows()>0){
-             $this->db->where('guid',$guid);
-             $this->db->update('sales_order',array('active'=>0));
-             echo 'TRUE';
-         }else {
-             echo "approve";
-         }
-     }
-    function update_item_receving($items,$quty,$so){
-        $where=array('sales_order_id'=>$so,'item'=>$items);
-        $this->db->where($where);
-        $this->db->update('sales_order_x_items',array('delivered_quty'=>$quty));
-        
-         
-     }
-    # Add Stock From Purchase Receve Note
-    function add_stock($guid,$po_item,$Bid){
-     
-    }
-    
-    function sdn_approve($guid,$so){
-        $this->db->where('guid',$guid);
-        $this->db->update('sales_delivery_note',array('sales_delivery_note_status'=>1));
-        $this->db->select()->from('sales_order_x_items')->where('sales_order_id',$so);
-        $sql=  $this->db->get();
-        foreach ($sql->result() as $row){
-            $quty;
-            $stock_id;
-            $this->db->select('quty,id')->from('stock')->where('item',$row->item)->where('price',$row->price)->where('branch_id',$this->session->userdata['branch_id']);
-            $stock=  $this->db->get();
-            foreach ($stock->result() as $s_row){
-                $quty=$s_row->quty;
-                $stock_id=$s_row->id;
-            }
-            $this->db->where('id',$stock_id);
-            $this->db->update('stock',array('quty'=>$quty-$row->delivered_quty));
-            
-            
-        }
-    }
-    function delete_sales_delivery_note_items($guid){
-        $this->db->select()->from('sales_delivery_note')->where('guid',$guid);
-        $sales_delivery_note=  $this->db->get();
-        $order_id;
-        foreach ($sales_delivery_note->result() as $row){
-            $order_id= $row->po;
-        }
-        $this->db->select()->from('sales_order_x_items')->where('order_id',$order_id);
-        $po=$this->db->get();
-        foreach ($po->result() as $item){
-            $quty;
-            $free;
-            $this->db->select()->from('sales_delivery_note_x_items')->where('sales_delivery_note',$guid)->where('item',$item->item) ;
-            $sales_delivery_note_item=  $this->db->get();
-            $sales_delivery_note_item_guid;
-            foreach ($sales_delivery_note_item->result() as $sales_delivery_note_row)
-            {
-                $quty=$sales_delivery_note_row->quty;   
-                $free=$sales_delivery_note_row->free; 
-                $sales_delivery_note_item_guid=$sales_delivery_note_row->guid; 
-            }
-            
-           
-            $this->db->where('guid',$item->guid);
-            $this->db->update('sales_order_x_items',array('received_quty'=>$item->received_quty-$quty,'received_free'=>$item->received_free-$free));
-            $this->db->where('guid',$sales_delivery_note_item_guid);
-            $this->db->update('sales_delivery_note_x_items',array('active'=>0,'active_status'=>0));
-                    
-        }
-        
-    }
-    function check_approve($guid){
-            $this->db->select()->from('sales_delivery_note')->where('guid',$guid)->where('sales_delivery_note_status',1);
-            $sql=  $this->db->get();
-            if($sql->num_rows()>0){
-                return FALSE;
-            }else{
-                return TRUE;
-            }
+    function update_direct_sales_delivery_note($so){
+        $this->db->where('guid',$so);
+        $this->db->update('direct_sales_delivery',array('bill_status'=>1));
             
     }
     function update_sales_delivery_note($so){
         $this->db->where('guid',$so);
-        $this->db->update('sales_delivery_note',array('bill_status'=>1));      
+        $this->db->update('sales_delivery_note',array('bill_status'=>1));
             
     }
-    function update_direct_sales_delivery_note($so){
-        $this->db->where('guid',$so);
-        $this->db->update('direct_sales_delivery',array('bill_status'=>1));      
-            
-    }
+  
+  
     function direct_delivery_payable_amount($grn,$invoice){
         $this->db->select('total_amt,customer_id')->from('direct_sales_delivery')->where('guid',$grn);
         $sql=  $this->db->get();
