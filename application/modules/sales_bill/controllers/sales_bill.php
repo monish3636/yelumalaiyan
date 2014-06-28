@@ -11,9 +11,7 @@ class Sales_bill extends MX_Controller{
         $data['active']='sales_bill';
         $this->load->view('index',$data);
         $this->load->view('template/app/navigation',$this->posnic->modules());
-        $this->load->view('template/app/footer');
-        
-        
+        $this->load->view('template/app/footer');        
     }
     // goods Receiving Note data table
     function data_table(){
@@ -89,11 +87,8 @@ class Sales_bill extends MX_Controller{
 				
 		$output1['aaData'][] = $row;
 		}
-                
-		
-		   echo json_encode($output1);
-    }
- 
+                		   echo json_encode($output1);
+    } 
 function save(){      
      if($this->session->userdata['sales_bill_per']['add']==1){
         $this->form_validation->set_rules('sdn_guid',$this->lang->line('sdn_guid'), 'required');
