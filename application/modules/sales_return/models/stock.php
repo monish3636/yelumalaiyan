@@ -100,9 +100,11 @@ class Stock extends CI_Model{
         $this->db->join('sales_order_x_items', 'sales_order_x_items.sales_order_id=sales_order.guid','left');
          
          
+        
+        
         $this->db->join('customers','customers.guid=sales_bill.customer_id','left');
         $this->db->join('sales_return_x_items', "sales_return_x_items.sales_return_id = sales_return.guid ",'left');
-  $this->db->join('item_kit','item_kit.guid=sales_order_x_items.item OR item_kit.guid=direct_sales_delivery_x_items.item OR item_kit.guid=direct_sales_x_items.item','left');
+        $this->db->join('item_kit','item_kit.guid=sales_order_x_items.item OR item_kit.guid=direct_sales_delivery_x_items.item OR item_kit.guid=direct_sales_x_items.item','left');
         $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
         $this->db->join('decomposition_items','decomposition_items.guid=sales_order_x_items.item OR decomposition_items.guid=direct_sales_delivery_x_items.item OR decomposition_items.guid=direct_sales_x_items.item','left');
         $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
