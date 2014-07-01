@@ -238,7 +238,7 @@ function sales_return_approve(guid){
                                     if(data[i]['deco_code']){
                                         sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
                                     }
-                                    console.log(name);
+                                    
                                     var  quty=data[i]['quty'];
                                     var  limit=data[i]['item_limit'];
                                     var  tax_type=data[i]['tax_type_name'];
@@ -247,7 +247,24 @@ function sales_return_approve(guid){
                                    
                                
                                     var  price=data[i]['sell'];
-                                    
+                                    if(data[i]['kit_code']){
+                                        tax_type=data[i]['kit_tax_type'];
+                                        tax_value=data[i]['kit_tax_value'];
+                                        tax_Inclusive=data[i]['kit_tax_Inclusive'];
+                                        price=data[i]['kit_price'];
+                                        var  items_id=data[i]['kit_guid'];
+                                    }else  if(data[i]['deco_code']){
+                                        var  price=data[i]['sell'];
+                                        var items_id=data[i]['deco_guid'];
+                                    }
+                                    else{
+                                    var  items_id=data[i]['i_guid'];
+                                    var uom=data[i]['uom']                                    
+                                        if(uom==1){
+                                            var no_of_unit=data[i]['no_of_unit'];
+                                            price=price/no_of_unit;
+                                        }
+                                    }
                                     
                                     
                                     var  o_i_guid=data[i]['o_i_guid'];
