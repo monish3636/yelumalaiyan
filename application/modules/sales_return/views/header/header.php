@@ -227,6 +227,18 @@ function sales_return_approve(guid){
                                   
                                     var  name=data[i]['items_name'];
                                     var  sku=data[i]['i_code'];
+                                    
+                                    if(data[i]['kit_name']){
+                                        name=data[i]['kit_name'];
+                                    }
+                                    var  sku=data[i]['i_code'];
+                                    if(data[i]['kit_code']){
+                                        sku=data[i]['kit_code'];
+                                    }
+                                    if(data[i]['deco_code']){
+                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                                    }
+                                    console.log(name);
                                     var  quty=data[i]['quty'];
                                     var  limit=data[i]['item_limit'];
                                     var  tax_type=data[i]['tax_type_name'];
