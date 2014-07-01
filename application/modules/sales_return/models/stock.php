@@ -57,6 +57,7 @@ class Stock extends CI_Model{
         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
         $this->db->join('taxes', "items.tax_id=taxes.guid  ",'left');
         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid ",'left');
+           $like=array('items.active_status'=>$search,'decomposition_items.code'=>$search,'item_kit.name'=>$search,'item_kit.code'=>$search,'item_kit.barcode'=>$search,'items.ean_upc_code'=>$search,'items.name'=>$search,'items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
            $sql=$this->db->get();
            
             foreach ($sql->result_array() as $row){
@@ -88,7 +89,7 @@ class Stock extends CI_Model{
      
      }
     function get_sales_return($guid){
-        $this->db->select('sales_bill.invoice,direct_sales_x_items.quty as ds_quty ,direct_sales_delivery_x_items.quty as dsd_quty ,sales_order_x_items.delivered_quty as so_quty ,customers.first_name,sales_bill.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,sales_return_x_items.quty as item_limit,sales_return.*,sales_return_x_items.tax as order_tax,sales_return_x_items.item ,sales_return_x_items.quty ,sales_return_x_items.sell ,sales_return_x_items.guid as o_i_guid ,sales_return_x_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_return')->where('sales_return.guid',$guid);
+        $this->db->select('decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,sales_bill.invoice,direct_sales_x_items.quty as ds_quty ,direct_sales_delivery_x_items.quty as dsd_quty ,sales_order_x_items.delivered_quty as so_quty ,customers.first_name,sales_bill.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,sales_return_x_items.quty as item_limit,sales_return.*,sales_return_x_items.tax as order_tax,sales_return_x_items.item ,sales_return_x_items.quty ,sales_return_x_items.sell ,sales_return_x_items.guid as o_i_guid ,sales_return_x_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_return')->where('sales_return.guid',$guid);
         $this->db->join('sales_bill','sales_bill.guid=sales_return.sales_bill_id','left');
         $this->db->join('direct_sales', 'direct_sales.guid=sales_bill.direct_sales_id','left');
         $this->db->join('direct_sales_x_items', 'direct_sales_x_items.direct_sales_id=direct_sales.guid','left');
@@ -98,18 +99,13 @@ class Stock extends CI_Model{
          
         $this->db->join('sales_order', 'sales_order.guid=sales_bill.so','left');
         $this->db->join('sales_order_x_items', 'sales_order_x_items.sales_order_id=sales_order.guid','left');
-         
-         
-        
-        
         $this->db->join('customers','customers.guid=sales_bill.customer_id','left');
         $this->db->join('sales_return_x_items', "sales_return_x_items.sales_return_id = sales_return.guid ",'left');
-        $this->db->join('item_kit','item_kit.guid=sales_order_x_items.item OR item_kit.guid=direct_sales_delivery_x_items.item OR item_kit.guid=direct_sales_x_items.item','left');
+        $this->db->join('item_kit','item_kit.guid=sales_return_x_items.item ','left');
         $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
-        $this->db->join('decomposition_items','decomposition_items.guid=sales_order_x_items.item OR decomposition_items.guid=direct_sales_delivery_x_items.item OR decomposition_items.guid=direct_sales_x_items.item','left');
+        $this->db->join('decomposition_items','decomposition_items.guid=sales_return_x_items.item ','left');
         $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
-        $this->db->join('items', "items.guid=sales_order_x_items.item OR items.guid=decomposition_items.item_id OR items.guid=direct_sales_x_items.item OR items.guid=direct_sales_delivery_x_items.item",'left');
-        
+        $this->db->join('items', "items.guid=sales_return_x_items.item OR items.guid=decomposition_items.item_id",'left');
         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=sales_return_x_items.item  ",'left');
         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=sales_return_x_items.item  ",'left');
         $sql=  $this->db->get();
