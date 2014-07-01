@@ -158,17 +158,13 @@ function save(){
         $this->form_validation->set_rules('kit_price', $this->lang->line('kit_price'), 'numeric|required');                  
         $this->form_validation->set_rules('selling_kit_price', $this->lang->line('selling_kit_price'), 'numeric|required'); 
         $this->form_validation->set_rules('kit_tax_type', $this->lang->line('kit_tax_type'), 'required');  
-        $this->form_validation->set_rules('kit_tax_value', $this->lang->line('kit_tax_value'), 'required'); 
-        
+        $this->form_validation->set_rules('kit_tax_value', $this->lang->line('kit_tax_value'), 'required');         
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'numeric');                       
-        $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id'));  
-        
+        $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id'));          
         $this->form_validation->set_rules('item_id[]', $this->lang->line('item_id'));                      
         $this->form_validation->set_rules('item_quty[]', $this->lang->line('item_quty'), 'numeric');                       
-        $this->form_validation->set_rules('item_stocks_id[]', $this->lang->line('item_stocks_id'));  
-        
-        
+        $this->form_validation->set_rules('item_stocks_id[]', $this->lang->line('item_stocks_id')); 
             if ( $this->form_validation->run() !== false ) {  
                 $guid=  $this->input->post('guid');
                 $item_kit_number=  $this->input->post('item_kit_number');
@@ -190,23 +186,19 @@ function save(){
                     $value=array('code'=>$item_kit_number,'name'=>$item_kit_name,'selling_price'=>$selling_price,'tax_type'=>$kit_tax_type,'tax_value'=>$kit_tax_value,'tax_id'=>$taxes,'category_id'=>$category_id,'no_of_items'=>$total_types,'item_total'=>$total_amount,'tax_inclusive'=>$tax_inclusive,'tax_amount'=>$seling_tax_amount,'kit_price'=>$kit_price,'remark'=>$remark,'note'=>$note);
                     $guid=  $this->input->post('guid');
                     $update_where=array('guid'=>$guid);
-                    $this->posnic->posnic_update_record($value,$update_where,'item_kit');  
-                    
+                    $this->posnic->posnic_update_record($value,$update_where,'item_kit');                      
                     $item_id=  $this->input->post('item_id');
                     $item_quty=  $this->input->post('item_quty');
                     $item_stocks_id=  $this->input->post('item_stocks_id');
                     $this->load->model('items');
                     $this->item->update_kit_in_stock($guid,$selling_price);
                     for($i=0;$i<count($item_id);$i++){
-
-                        $this->items->update_item_kit($guid,$item_id[$i],$item_quty[$i]);                
-
+                        $this->items->update_item_kit($guid,$item_id[$i],$item_quty[$i]);   
                     }
                     $delete=  $this->input->post('r_items');
                         for($j=0;$j<count($delete);$j++){                      
                              $this->items->delete_item_kit_item($delete[$j]);
                         }
-
                     $item=  $this->input->post('new_item_id');
                     $quty=  $this->input->post('new_item_quty');
                     $stock=  $this->input->post('new_item_stock_id'); 
@@ -218,9 +210,6 @@ function save(){
                         }
                     }
                     echo 'TRUE';
-                    
-                
-                
                 }
                 }else{
                    echo 'FALSE';
@@ -229,8 +218,6 @@ function save(){
                    echo 'Noop';
                 }
         }
-        
-        
     }
         
 
@@ -251,29 +238,29 @@ Delete  item_kit if the user have permission  */
     }
 // function end
 
-function  get_item_kit($guid){
-    if($this->session->userdata['item_kit_per']['edit']==1){
-    $this->load->model('items');
-    $data=  $this->items->get_item_kit($guid);
-    echo json_encode($data);
+    function  get_item_kit($guid){
+        if($this->session->userdata['item_kit_per']['edit']==1){
+        $this->load->model('items');
+        $data=  $this->items->get_item_kit($guid);
+        echo json_encode($data);
+        }
     }
-}
 
-function item_kit_approve(){
-     if($this->session->userdata['item_kit_per']['approve']==1){
+    function item_kit_approve(){
+        if($this->session->userdata['item_kit_per']['approve']==1){
             $id=  $this->input->post('guid');
             $item_id=  $this->input->post('item');
             $this->load->model('items');
             $this->items->approve_item_kit($id,$item_id);
             echo 'TRUE';
-     }else{
-         echo 'FALSE';
-     }
+        }else{
+            echo 'FALSE';
+        }
     }
-function item_kit_number(){
+    function item_kit_number(){
        $data[]= $this->posnic->posnic_master_max('item_kit')    ;
        echo json_encode($data);
-}
+    }
 /*
  * search items to purchase item_kit with or like 
  *  */
