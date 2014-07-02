@@ -13,7 +13,7 @@
             multiple:true,
             placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('branch') ?>",
             ajax: {
-                url: '<?php echo base_url() ?>index.php/Summary_reports/get_branch',
+                url: '<?php echo base_url() ?>index.php/summary_reports/get_branch',
                 data: function(term, page) {
                     return {types: ["exercise"],
                         limit: -1,
@@ -43,7 +43,20 @@
                 }
             }
         });
-
+        var test = $('#select_branch');
+$('#select_branch').change(function() {
+var ids =[];
+     ids = $(test).val(); // works
+    //var selections = $(test).filter('option:selected').text(); // doesn't work
+    //var ids = $(test).select2('data').id; // doesn't work (returns 'undefined')
+    //var selections = $(test).select2('data').text; // doesn't work (returns 'undefined')
+    //var selections = $(test).select2('data');
+    var selections = ( JSON.stringify($(test).select2('data')) );
+    console.log('Selected IDs: ' + ids[0]);
+    console.log('Selected options: ' + selections['id']);
+    //$('#selectedIDs').text(ids);
+    //$('#selectedText').text(selections);
+});
 
     });
     
