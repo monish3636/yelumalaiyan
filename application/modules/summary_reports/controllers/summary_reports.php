@@ -21,10 +21,16 @@ class Summary_reports extends MX_Controller
         $like= $this->input->post('term');  
         $this->load->model('report');
         $data= $this->report->search_branch($like);
-        echo json_encode($data);
-                
+        echo json_encode($data);                
     }
-   
+    function get_report(){
+        $report=  $this->input->post('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        if($report!=""){
+          
+        }
+    }
    
 }
 ?>

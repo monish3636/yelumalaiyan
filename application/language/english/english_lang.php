@@ -763,5 +763,6 @@ $lang['credit_days']='Credit Days';
     $lang['supplier_payable']='Supplier Payable';
     $lang['customer_payable']='Customer Payable';
     $lang['date_range']='Date Range';
+    $lang['get']='Get';
    
 ?>

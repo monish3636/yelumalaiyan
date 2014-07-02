@@ -29,12 +29,33 @@
     function report(report){
             var title=$('#'+report).text();
             $('#title').text(title+' <?php echo $this->lang->line('report') ?>');
-            $('#'+report).offsetParent().addClass('active');
+            $('#report_val').val(report);
+    }
+    function get_report(){
+        var report= $('#report_val').val();
+        var range=$('#date_range').val();
+        var start_date=range.split(' - ')[0];
+        var end_date=range.split(' - ')[1];
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/summary_reports/get_report/",                      
+            data: {
+                report:report,
+                start:start_date,
+                end:end_date
+                        
+            }, 
+            type:'POST',
+            dataType: 'json',               
+            success: function(data)        
+            { 
+            }
+        });
+        
     }
 </script>
 
 <nav id="top_navigation">
-
+    <input type="hidden" id='report_val'>
     <div class="container">
 					<ul id="text_nav_h" class="clearfix j_menu top_text_nav">
 					<li>
@@ -162,15 +183,18 @@
                 <lable><?php  echo $this->lang->line('branches') ?></lable>
                 <input id="select_branch" class="form-control" >                   
             </div>
-           <div class="col col-sm-4" >
+           <div class="col col-sm-3" >
            <div class="form_sep">
-                    <label for="order_date" ><?php echo $this->lang->line('date_range') ?></label>													
-                             <div id="reportrange"  >
-                                <i class="icon icon-calendar "></i>
-                                <span><?php echo date("F j, Y", strtotime('-30 day')); ?> - <?php echo date("F j, Y"); ?></span> <b class="caret"></b>
-                            </div>
+                    <label for="order_date" ><?php echo $this->lang->line('date_range') ?></label>
+                     <div class="input-group  ">
+                    <input id="date_range" class="form-control"  >
+                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                
+                            
                         </div>
-               </div>
+                        </div>
+               </div>  <label >.</label>
+            <a href="javascript:get_report()" class="btn btn-default"><i class="glyphicon glyphicon-book"></i> <?php echo $this->lang->line('get') ?></a>
            </div>
             
         </div>
@@ -180,8 +204,8 @@
 
 
 <script type="text/javascript">
-    $('#reportrange').daterangepicker(
-       {
+    $('#date_range').daterangepicker({
+//       {timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'
            ranges: {
                'Today': [moment(), moment()],
                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
@@ -194,7 +218,7 @@
            endDate: moment()
        },
        function(start, end) {
-           $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+           $('#date_range span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
        }
     );
 </script>
