@@ -19,7 +19,7 @@ class Summary_reports extends MX_Controller
     }
     function get_branch(){
         $like= $this->input->post('term');  
-        $this->load->mode('report');
+        $this->load->model('report');
         $data= $this->report->search_branch($like);
         echo json_encode($data);
                 

@@ -1,13 +1,17 @@
-
+<link rel="stylesheet" href="<?php echo base_url() ?>template/date/css/daterangepicker-bs3.css"></script>
+<script src="<?php echo base_url() ?>template/date/js/moment.js"></script>
+<script src="<?php echo base_url() ?>template/date/js/daterangepicker.js"></script>
 <script type="text/javascript" charset="utf-8">
     $(document).ready( function () {
-        function format(state) {
-            if (!state.id) return state.text;
-                return '<i class="flag-' + state.id + '"></i>' + state.text;
+        function format_branch(branch) {
+            if (!branch.id) return branch.text;
+                return  branch.code+" "+branch.text;
         }
         $('#select_branch').select2({
-                multiple:true,
-                 placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('branch') ?>",
+            formatResult: format_branch,
+            formatSelection: format_branch,
+            multiple:true,
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('branch') ?>",
             ajax: {
                 url: '<?php echo base_url() ?>index.php/Summary_reports/get_branch',
                 data: function(term, page) {
@@ -29,18 +33,19 @@
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
-                            text: item.category_name
+                            text: item.store_name,
+                            code: item.code
                         });
                     });
                     return {
                        results: results
                     };
                 }
-           }
-        }).val("AU").trigger("change");
+            }
+        });
 
 
     });
     
-				
+   			
   </script>

@@ -759,5 +759,9 @@ $lang['credit_days']='Credit Days';
     $lang['report']='Report';
     $lang['summary_reports']='Summary Report';
     $lang['detailed_reports']='Detailed Report';
+    $lang['direct_sales_delivery_note']=' Direct Sales Delivery Note';
+    $lang['supplier_payable']='Supplier Payable';
+    $lang['customer_payable']='Customer Payable';
+    $lang['date_range']='Date Range';
    
 ?>
