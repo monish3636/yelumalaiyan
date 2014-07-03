@@ -3,6 +3,7 @@
 <script src="<?php echo base_url() ?>template/date/js/daterangepicker.js"></script>
 <script type="text/javascript" charset="utf-8">
     $(document).ready( function () {
+        $('.dataTable').hide();
         function format_branch(branch) {
             if (!branch.id) return branch.text;
                 return  branch.code+" "+branch.text;

@@ -126,13 +126,15 @@ function save(){
                 $total_items=$this->input->post('no_of_item');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
+                $total_discount=$this->input->post('total_item_discount_amount');
+                $total_tax=$this->input->post('total_tax');
                 $total_amount=  $this->input->post('total_amount');
                 $grand_total=  $this->input->post('grand_total');
                 $customer_discount=  $this->input->post('customer_discount');
                 $customer_discount_amount=  $this->input->post('customer_discount_amount');
   
      
-              $value=array('customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'exp_date'=>$expdate,'code'=>$order_number,'date'=>$quotation_date,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'remark'=>$remark,'note'=>$note,'total_item_amt'=>$total_amount);
+              $value=array('customer_discount_amount'=>$customer_discount_amount,'total_tax'=>$total_tax,'total_discount'=>$total_discount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'exp_date'=>$expdate,'code'=>$order_number,'date'=>$quotation_date,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'remark'=>$remark,'note'=>$note,'total_item_amt'=>$total_amount);
               $guid=   $this->posnic->posnic_add_record($value,'sales_quotation');
           
                 $item=  $this->input->post('new_item_id');
@@ -169,7 +171,8 @@ function save(){
         $this->form_validation->set_rules('round_off_amount', $this->lang->line('round_off_amount'), 'numeric');                      
         $this->form_validation->set_rules('discount_percentage', $this->lang->line('discount'), 'numeric');                      
         $this->form_validation->set_rules('freight', $this->lang->line('freight'), 'numeric');    
-        
+        $total_discount=$this->input->post('total_item_discount_amount');
+        $total_tax=$this->input->post('total_tax');
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'numeric');                      
         $this->form_validation->set_rules('new_item_discount[]', $this->lang->line('new_item_discount'), 'numeric');                      
@@ -194,13 +197,13 @@ function save(){
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');
                 $grand_total=  $this->input->post('grand_total');
-                  $customer_discount=  $this->input->post('customer_discount');
+                $customer_discount=  $this->input->post('customer_discount');
                 $customer_discount_amount=  $this->input->post('customer_discount_amount');
      
-              $value=array('customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'exp_date'=>$expdate,'date'=>$podate,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'remark'=>$remark,'note'=>$note,'total_item_amt'=>$total_amount);
-              $guid=  $this->input->post('sales_quotation_guid');
-              $update_where=array('guid'=>$guid);
-             $this->posnic->posnic_update_record($value,$update_where,'sales_quotation');
+                $value=array('customer_discount_amount'=>$customer_discount_amount,'total_tax'=>$total_tax,'total_discount'=>$total_discount,'customer_discount'=>$customer_discount,'customer_id'=>$customer,'exp_date'=>$expdate,'date'=>$podate,'discount'=>$discount,'discount_amt'=>$discount_amount,'freight'=>$freight,'round_amt'=>$round_amt,'total_items'=>$total_items,'total_amt'=>$grand_total,'remark'=>$remark,'note'=>$note,'total_item_amt'=>$total_amount);
+                $guid=  $this->input->post('sales_quotation_guid');
+                $update_where=array('guid'=>$guid);
+                $this->posnic->posnic_update_record($value,$update_where,'sales_quotation');
           
                 $sq=  $this->input->post('sq_items');
                 $quty=  $this->input->post('items_quty');
