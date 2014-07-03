@@ -280,7 +280,36 @@
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
-                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["po_no"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["po_date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["exp_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='goods_receiving_note'){
+                    $('.dataTable').hide();
+                    $('#goods_receiving_note_table').show();
+                    $('#goods_receiving_note_table tbody').remove();
+                    $('#goods_receiving_note_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('waiting') ?>';
+                        if(data[0]['grn_status']==1){
+                            var status='<?php echo $this->lang->line('approved') ?>';
+                        }
+                        $('#goods_receiving_note_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["po_no"]+'</td>\n\
                             <td class="text-center">'+data[i]["s_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["po_date"]+'</td>\n\
@@ -333,7 +362,7 @@
 						<ul>
 							
 							<li><a href="javascript:report('purchase_order')" id='purchase_order'><?php echo $this->lang->line('purchase_order') ?></a></li>
-							<li><a href="javascript:report('purchase_order_cancel')" id='purchase_order_cancel'><?php echo $this->lang->line('purchase_order_cancel') ?></a></li>
+							
 							<li><a href="javascript:report('goods_receiving_note')" id='goods_receiving_note'><?php echo $this->lang->line('goods_receiving_note') ?></a></li>
 							<li><a href="javascript:report('direct_grn')" id='direct_grn'><?php echo $this->lang->line('direct_grn') ?></a></li>
 							<li><a href="javascript:report('direct_invoice')" id='direct_invoice'><?php echo $this->lang->line('direct_invoice') ?></a></li>
@@ -622,6 +651,29 @@
         <tbody></tbody>
     </table>
     <table id="purchase_order_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                   <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('purchase_order') ?></th>
+                <th><?php echo $this->lang->line('supplier') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('order_date') ?></th>
+                <th><?php echo $this->lang->line('expiry_date') ?></th>
+                <th><?php echo $this->lang->line('purchase_order')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('freight') ?></th>
+                <th><?php echo $this->lang->line('round_off_amount') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                <th><?php echo $this->lang->line('approve') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <table id="goods_receiving_note_table" class="dataTable table-condensed table-bordered">
         <thead>
             <tr>
                    <th><?php echo $this->lang->line('sl_no') ?></th>
