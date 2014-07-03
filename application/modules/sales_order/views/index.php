@@ -2122,7 +2122,7 @@ function new_discount_amount(){
                                                                                     'disabled'=>'disabled',
                                                                                     'value'=>set_value('total_item_discount_amount'));
                                                                      echo form_input($total_item_discount_amount)?>
-                                                        
+                                                         <input type="hidden" id="total_item_discount_amount" name="total_item_discount_amount">
                                                   </div>
                                                          <div class="form_sep " style="padding: 0 25px">
                                                         <label for="total_tax" ><?php echo $this->lang->line('total_tax') ?></label>													
@@ -2132,6 +2132,7 @@ function new_discount_amount(){
                                                                                     'disabled'=>'disabled',
                                                                                     'value'=>set_value('total_tax'));
                                                                      echo form_input($total_item_discount_amount)?>
+                                                        <input type="hidden" id="total_tax" name="total_tax">
                                                         
                                                   </div>
                                                          <div class="form_sep " style="padding: 0 25px">
