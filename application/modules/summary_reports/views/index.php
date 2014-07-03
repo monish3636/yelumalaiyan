@@ -168,7 +168,6 @@
                             <td class="text-center">'+data[i]["s_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["date"]+'</td>\n\
-                            <td class="text-center">'+data[i]["date"]+'</td>\n\
                             <td class="text-right">'+data[i]["customer_discount_amount"]+'</td>\n\
                             <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
                             <td class="text-right">'+data[i]["freight"]+'</td>\n\
@@ -200,6 +199,37 @@
                             <td class="text-center">'+data[i]["s_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["customer_discount_amount"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_discount"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_tax"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-right">'+status+'</td>\n\\n\
+                        </tr>')
+                    }
+                }
+               
+                else if(report=='sales_bill'){
+                    $('.dataTable').hide();
+                    $('#sales_bill_table').show();
+                    $('#sales_bill_table tbody').remove();
+                    $('#sales_bill_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('waiting') ?>';
+                        if(data[0]['order_status']==1){
+                            var status='<?php echo $this->lang->line('approved') ?>';
+                        }
+                        $('#sales_bill_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["date"]+'</td>\n\
                             <td class="text-right">'+data[i]["customer_discount_amount"]+'</td>\n\
                             <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
@@ -210,7 +240,6 @@
                             <td class="text-right">'+data[i]["total_tax"]+'</td>\n\
                             <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
                             <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
-                            <td class="text-right">'+status+'</td>\n\
                         </tr>')
                     }
                 }
@@ -234,8 +263,8 @@
 							<li><a href="javascript:report('sales_delivery_note')" id='sales_delivery_note'><?php echo $this->lang->line('sales_delivery_note') ?></a></li>
 							<li><a href="javascript:report('direct_sales_delivery_note')" id='direct_sales_delivery_note'><?php echo $this->lang->line('direct_sales_delivery_note') ?></a></li>
 							<li><a href="javascript:report('direct_sales')" id='direct_sales'><?php echo $this->lang->line('direct_sales') ?></a></li>
-							<li><a href="javascript:report('touch_sales')" id='touch_sales'><?php echo $this->lang->line('touch_sales') ?></a></li>
-							<li><a href="javascript:report('keyboard_sales')" id='keyboard_sales'><?php echo $this->lang->line('keyboard_sales') ?></a></li>
+<!--							<li><a href="javascript:report('touch_sales')" id='touch_sales'><?php echo $this->lang->line('touch_sales') ?></a></li>
+							<li><a href="javascript:report('keyboard_sales')" id='keyboard_sales'><?php echo $this->lang->line('keyboard_sales') ?></a></li>-->
 							<li><a href="javascript:report('sales_bill')" id='sales_bill'><?php echo $this->lang->line('sales_bill') ?></a></li>
 							<li><a href="javascript:report('sales_return')" id='sales_return'><?php echo $this->lang->line('sales_return') ?></a></li>
 <!--							<li>
@@ -458,7 +487,6 @@
                 <th><?php echo $this->lang->line('customer') ?></th>
                 <th><?php echo $this->lang->line('company') ?></th>
                 <th><?php echo $this->lang->line('order_date') ?></th>
-                <th><?php echo $this->lang->line('expiry_date') ?></th>
                 <th><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('sales_delivery_note')." ".$this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('freight') ?></th>
@@ -484,7 +512,6 @@
                 <th><?php echo $this->lang->line('customer') ?></th>
                 <th><?php echo $this->lang->line('company') ?></th>
                 <th><?php echo $this->lang->line('order_date') ?></th>
-                <th><?php echo $this->lang->line('expiry_date') ?></th>
                 <th><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('sales_quotation')." ".$this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('freight') ?></th>
@@ -495,6 +522,30 @@
                 <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
                 <th><?php echo $this->lang->line('approve') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <table id="sales_bill_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('direct_sales') ?></th>
+                <th><?php echo $this->lang->line('customer') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('order_date') ?></th>
+                <th><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('sales_quotation')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('freight') ?></th>
+                <th><?php echo $this->lang->line('round_off_amount') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('items')." ". $this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('tax') ?></th>
+                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
                 
             </tr>
         </thead>
