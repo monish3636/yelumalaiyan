@@ -63,10 +63,39 @@
             success: function(data)        
             { 
                 if(report=='sales_order'){
+                    $('.dataTable').hide();
+                    $('#sales_order_table').show();
                     $('#sales_order_table tbody').remove();
                     $('#sales_order_table').append('<tbody></tbody');
                     for(var i=0;i<data.length;i++){
                         $('#sales_order_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["exp_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["customer_discount_amount"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_discount"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_tax"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='sales_quotation'){
+                    $('.dataTable').hide();
+                    $('#sales_quotation_table').show();
+                    $('#sales_quotation_table tbody').remove();
+                    $('#sales_quotation_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        $('#sales_quotation_table tbody').append('<tr> \n\
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
@@ -235,7 +264,10 @@
                         </div>
                         </div>
                </div>  <label >.</label>
-            <a href="javascript:get_report()" class="btn btn-default"><i class="glyphicon glyphicon-book"></i> <?php echo $this->lang->line('get') ?></a>
+            <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-eye-open"></i> <?php echo $this->lang->line('view') ?></a>
+            <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('xlsx') ?></a>
+            <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('csv') ?></a>
+            <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('pdf') ?></a>
            </div>
             
      
@@ -254,6 +286,31 @@
                 <th><?php echo $this->lang->line('expiry_date') ?></th>
                 <th><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('sales_order')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('freight') ?></th>
+                <th><?php echo $this->lang->line('round_off_amount') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('items')." ". $this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('tax') ?></th>
+                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <table id="sales_quotation_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('sales_quotation') ?></th>
+                <th><?php echo $this->lang->line('customer') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('order_date') ?></th>
+                <th><?php echo $this->lang->line('expiry_date') ?></th>
+                <th><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('sales_quotation')." ".$this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('freight') ?></th>
                 <th><?php echo $this->lang->line('round_off_amount') ?></th>
                 <th><?php echo $this->lang->line('no_of_items') ?></th>

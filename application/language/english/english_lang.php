@@ -764,5 +764,8 @@ $lang['credit_days']='Credit Days';
     $lang['customer_payable']='Customer Payable';
     $lang['date_range']='Date Range';
     $lang['get']='Get';
+    $lang['pdf']='PDF';
+    $lang['csv']='CSV';
+    $lang['xlsx']='XLSX';
    
 ?>
