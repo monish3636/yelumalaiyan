@@ -51,6 +51,25 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='sales_delivery_note'){
+            $this->db->select('sales_order.code,sales_order.freight,sales_order.round_amt,sales_order.total_items,sales_order.exp_date,sales_order.discount,sales_order.discount_amt,sales_delivery_note.*,branches.store_name,branches.code as bcode,customers.first_name as s_name,customers.company_name as c_name')->from('sales_delivery_note')->where('sales_delivery_note.branch_id',$branch)->where('sales_delivery_note.delete_status',0);
+            $this->db->join('sales_order', 'sales_order.guid=sales_delivery_note.so','left');
+            $this->db->join('branches', 'branches.guid=sales_delivery_note.branch_id','left');
+            $this->db->join('customers', 'customers.guid=sales_order.customer_id','left');
+            $this->db->where('sales_delivery_note.date >=', strtotime($start));
+            $this->db->where('sales_delivery_note.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['exp_date']=date('d-m-Y',$row['exp_date']);
+                $row['date']=date('d-m-Y',$row['date']);
+                if($row['discount']!=0 && $row['discount']!="" && $row['discount']!=NULL){
+                    $row['discount_amt']=$row['total_amount']*$row['discount']/100;
+                }
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>

@@ -106,13 +106,15 @@ function save(){
                 $so=  $this->input->post('sales_delivery_note_guid');
                 $delivery_date=strtotime($this->input->post('delivery_date'));
                 $dn_no= $this->input->post('dn_no');
-                $total_amount=$this->input->post('grand_total');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
-                 $customer_discount=  $this->input->post('customer_discount');
+                $customer_discount=  $this->input->post('customer_discount');
                 $customer_discount_amount=  $this->input->post('customer_discount_amount');
-               
-              $value=array('customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'sales_delivery_note_no'=>$dn_no,'date'=>$delivery_date,'so'=>$so,'remark'=>$remark,'note'=>$note,'total_amount'=>$total_amount);
+                $total_discount=$this->input->post('total_item_discount_amount');
+                $total_tax=$this->input->post('total_tax');   
+                $total_amount=  $this->input->post('total_amount');
+                $grand_total=  $this->input->post('grand_total');
+                $value=array('customer_discount_amount'=>$customer_discount_amount,'total_tax'=>$total_tax,'total_discount'=>$total_discount,'customer_discount'=>$customer_discount,'sales_delivery_note_no'=>$dn_no,'date'=>$delivery_date,'so'=>$so,'remark'=>$remark,'note'=>$note,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
                 $guid=   $this->posnic->posnic_add_record($value,'sales_delivery_note');
                 $this->load->model('sales');
                 $this->sales->update_sales_order_status($so);
@@ -142,21 +144,23 @@ function save(){
        $this->form_validation->set_rules('sales_delivery_note_guid',$this->lang->line('sales_delivery_note_guid'), 'required');
        $this->form_validation->set_rules('guid',$this->lang->line('guid'), 'required');
         $this->form_validation->set_rules('delivery_date',$this->lang->line('delivery_date'), 'required');
-      //  $this->form_validation->set_rules('dn_no', $this->lang->line('dn_no'), 'required'); 
         $this->form_validation->set_rules('delivered_quty[]', $this->lang->line('delivered_quty'), 'required|numeric'); 
         $this->form_validation->set_rules('items[]', $this->lang->line('items'), 'required'); 
             if ( $this->form_validation->run() !== false ) {    
-                 $so=  $this->input->post('sales_delivery_note_guid');
-                 $guid=  $this->input->post('guid');
+                $so=  $this->input->post('sales_delivery_note_guid');
+                $guid=  $this->input->post('guid');
                 $delivery_date=strtotime($this->input->post('delivery_date'));
-                $total_amount=$this->input->post('grand_total');
+                $total_amount=  $this->input->post('total_amount');
+                $grand_total=  $this->input->post('grand_total');
                
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
-                 $customer_discount=  $this->input->post('customer_discount');
+                $customer_discount=  $this->input->post('customer_discount');
                 $customer_discount_amount=  $this->input->post('customer_discount_amount');
+                $total_discount=$this->input->post('total_item_discount_amount');
+                $total_tax=$this->input->post('total_tax');
                
-                $value=array('customer_discount_amount'=>$customer_discount_amount,'customer_discount'=>$customer_discount,'date'=>$delivery_date,'so'=>$so,'remark'=>$remark,'note'=>$note,'total_amount'=>$total_amount);
+                $value=array('customer_discount_amount'=>$customer_discount_amount,'total_tax'=>$total_tax,'total_discount'=>$total_discount,'customer_discount'=>$customer_discount,'date'=>$delivery_date,'so'=>$so,'remark'=>$remark,'note'=>$note,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
                 $guid=  $this->input->post('guid');
                 $update_where=array('guid'=>$guid);
                 $this->posnic->posnic_update_record($value,$update_where,'sales_delivery_note');          

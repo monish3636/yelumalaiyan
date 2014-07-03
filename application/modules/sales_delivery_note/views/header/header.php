@@ -227,13 +227,10 @@
                                 $("#parsley_reg #customer_discount").val(data[0]['sdn_customer_discount']);
                                 $("#parsley_reg #demo_customer_discount_amount").val(data[0]['sdn_customer_discount_amount']);
                                 $("#parsley_reg #customer_discount_amount").val(data[0]['sdn_customer_discount_amount']);
-                               // $("#parsley_reg #demo_order_number").select2('data', {id:'',text: data[0]['po_no']});
                                 $(".supplier_select_2").hide();
                                 $(".porchase_order_for_grn").show();
-                                $("#edit_grn_node").val(data[0]['po_no']);
-                                
-                                $("#parsley_reg #id_discount").val(data[0]['discount']);
-                              
+                                $("#edit_grn_node").val(data[0]['po_no']);                                
+                                $("#parsley_reg #id_discount").val(data[0]['discount']);                              
                                 $("#parsley_reg #discount_amount").val(data[0]['discount_amt']);
                                 $("#parsley_reg #freight").val(data[0]['freight']);
                                 $("#parsley_reg #round_off_amount").val(data[0]['round_amt']);
