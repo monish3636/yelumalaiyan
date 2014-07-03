@@ -1876,6 +1876,7 @@ function new_discount_amount(){
                                                                                     'disabled'=>'disabled',
                                                                                     'value'=>set_value('total_item_discount_amount'));
                                                                      echo form_input($total_item_discount_amount)?>
+                                                        <input type="hidden" name="total_item_discount_amount" id='total_item_discount_amount'>
                                                         
                                                   </div>
                                                          <div class="form_sep " style="padding: 0 25px">
@@ -1886,6 +1887,7 @@ function new_discount_amount(){
                                                                                     'disabled'=>'disabled',
                                                                                     'value'=>set_value('total_tax'));
                                                                      echo form_input($total_item_discount_amount)?>
+                                                        <input type="hidden" name="total_tax" id='total_tax'>
                                                         
                                                   </div>
                                                          <div class="form_sep " style="padding: 0 25px">
