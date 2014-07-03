@@ -24,6 +24,11 @@
     .table-condensed thead > tr > th, .table-condensed tbody > tr > th, .table-condensed tfoot > tr > th, .table-condensed thead > tr > td, .table-condensed tbody > tr > td, .table-condensed tfoot > tr > td {
         padding: 3px 9px 2px;
     }
+    .dataTable {
+        max-width: 200% !important;
+        width: 200% !important;
+        margin-bottom: 50px;
+    }
 </style>	
 <script type="text/javascript">
     function report(report){
@@ -36,21 +41,53 @@
         var range=$('#date_range').val();
         var start_date=range.split(' - ')[0];
         var end_date=range.split(' - ')[1];
+        var branch =$('#select_branch').select2('data');
+        var branch_id=[];
+        for(var i=0;i<branch.length;i++){
+            branch_id[i]=branch[i]['id'];
+        }
         $.ajax({                                      
             url: "<?php echo base_url() ?>index.php/summary_reports/get_report/",                      
             data: {
                 report:report,
                 start:start_date,
-                end:end_date
+                end:end_date,
+                branch:branch_id
                         
             }, 
             type:'POST',
             dataType: 'json',               
             success: function(data)        
             { 
+                if(report=='sales_order'){
+                    $('#sales_order_table tbody').remove();
+                    $('#sales_order_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        $('#sales_order_table tbody').append('<tr> \n\
+                            <td>'+parseInt(i+1)+'</td>\n\
+                            <td>'+data[i]['store_name']+'</td>\n\
+                            <td>'+data[i]["bcode"]+'</td>\n\
+                            <td>'+data[i]["code"]+'</td>\n\
+                            <td>'+data[i]["s_name"]+'</td>\n\
+                            <td>'+data[i]["c_name"]+'</td>\n\
+                            <td>'+data[i]["date"]+'</td>\n\
+                            <td>'+data[i]["exp_date"]+'</td>\n\
+                            <td>'+data[i]["customer_discount_amount"]+'</td>\n\
+                            <td>'+data[i]["discount_amt"]+'</td>\n\
+                            <td>'+data[i]["freight"]+'</td>\n\
+                            <td>'+data[i]["round_amt"]+'</td>\n\
+                            <td>'+data[i]["total_items"]+'</td> \n\
+                            <td>'+data[i][""]+'</td>\n\
+                            <td>'+data[i]["total_item_amt"]+'</td>\n\
+                            <td>'+data[i]["total_amt"]+'</td>\n\
+                        </tr>')
+                    }
+                }
+                
+                
+                
             }
-        });
-        
+        });        
     }
 </script>
 
@@ -197,8 +234,35 @@
             <a href="javascript:get_report()" class="btn btn-default"><i class="glyphicon glyphicon-book"></i> <?php echo $this->lang->line('get') ?></a>
            </div>
             
-        </div>
-    </section> 
+     
+    </section>
+<section style="overflow-x: scroll">
+    <table id="sales_order_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('sales_order') ?></th>
+                <th><?php echo $this->lang->line('customer') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('order_date') ?></th>
+                <th><?php echo $this->lang->line('expiry_date') ?></th>
+                <th><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('sales_order')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('freight') ?></th>
+                <th><?php echo $this->lang->line('round_off_amount') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('items')." ". $this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+</div>
    
          
 
@@ -222,7 +286,6 @@
        }
     );
 </script>
-      </div>
-</div>
+   
 <script src="<?php echo base_url() ?>template/app/js/lib/jMenu/js/jMenu.jquery.js"></script>
       
