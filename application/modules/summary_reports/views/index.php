@@ -243,6 +243,29 @@
                         </tr>')
                     }
                 }
+                else if(report=='sales_return'){
+                    $('.dataTable').hide();
+                    $('#sales_return_table').show();
+                    $('#sales_return_table tbody').remove();
+                    $('#sales_return_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('waiting') ?>';
+                        if(data[0]['order_status']==1){
+                            var status='<?php echo $this->lang->line('approved') ?>';
+                        }
+                        $('#sales_return_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["no_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_amount"]+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
                 
@@ -533,7 +556,7 @@
                 <th><?php echo $this->lang->line('sl_no') ?></th>
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>
-                <th><?php echo $this->lang->line('direct_sales') ?></th>
+                <th><?php echo $this->lang->line('sales_bill') ?></th>
                 <th><?php echo $this->lang->line('customer') ?></th>
                 <th><?php echo $this->lang->line('company') ?></th>
                 <th><?php echo $this->lang->line('order_date') ?></th>
@@ -545,6 +568,23 @@
                 <th><?php echo $this->lang->line('items')." ". $this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('tax') ?></th>
                 <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <table id="sales_return_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('sales_return') ?></th>
+                <th><?php echo $this->lang->line('customer') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
                 
             </tr>

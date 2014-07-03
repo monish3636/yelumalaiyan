@@ -155,10 +155,23 @@ class Report extends CI_Model{
                     $row['total_tax']=$row['ds_total_tax'];
                     $row['total_discount']=$row['ds_total_discount'];
                     $row['total_item_amt']=$row['ds_total_item_amt'];
-                    $row['total_amt']=$row['ds_total_amt'];
-                    
-                    
+                    $row['total_amt']=$row['ds_total_amt']; 
                 }
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='sales_return'){
+            $this->db->select('sales_return.*,branches.store_name,branches.code as bcode,customers.first_name as s_name,customers.company_name as c_name')->from('sales_return')->where('sales_return.branch_id',$branch)->where('sales_return.delete_status',0);
+            $this->db->join('sales_bill', 'sales_bill.guid=sales_return.sales_bill_id','left');
+            $this->db->join('branches', 'branches.guid=sales_return.branch_id','left');
+            $this->db->join('customers', 'customers.guid=sales_bill.customer_id','left');
+            $this->db->where('sales_return.date >=', strtotime($start));
+            $this->db->where('sales_return.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
                 $data[]=$row;
             }
             return $data;
