@@ -29,6 +29,9 @@
         width: 200% !important;
         margin-bottom: 50px;
     }
+    .dataTable th{
+        text-align: center;
+    }
 </style>	
 <script type="text/javascript">
     function report(report){
@@ -64,22 +67,23 @@
                     $('#sales_order_table').append('<tbody></tbody');
                     for(var i=0;i<data.length;i++){
                         $('#sales_order_table tbody').append('<tr> \n\
-                            <td>'+parseInt(i+1)+'</td>\n\
-                            <td>'+data[i]['store_name']+'</td>\n\
-                            <td>'+data[i]["bcode"]+'</td>\n\
-                            <td>'+data[i]["code"]+'</td>\n\
-                            <td>'+data[i]["s_name"]+'</td>\n\
-                            <td>'+data[i]["c_name"]+'</td>\n\
-                            <td>'+data[i]["date"]+'</td>\n\
-                            <td>'+data[i]["exp_date"]+'</td>\n\
-                            <td>'+data[i]["customer_discount_amount"]+'</td>\n\
-                            <td>'+data[i]["discount_amt"]+'</td>\n\
-                            <td>'+data[i]["freight"]+'</td>\n\
-                            <td>'+data[i]["round_amt"]+'</td>\n\
-                            <td>'+data[i]["total_items"]+'</td> \n\
-                            <td>'+data[i][""]+'</td>\n\
-                            <td>'+data[i]["total_item_amt"]+'</td>\n\
-                            <td>'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["exp_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["customer_discount_amount"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_discount"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_tax"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
                         </tr>')
                     }
                 }
@@ -254,6 +258,7 @@
                 <th><?php echo $this->lang->line('round_off_amount') ?></th>
                 <th><?php echo $this->lang->line('no_of_items') ?></th>
                 <th><?php echo $this->lang->line('items')." ". $this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('tax') ?></th>
                 <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
                 
