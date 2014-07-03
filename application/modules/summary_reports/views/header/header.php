@@ -52,8 +52,11 @@ var ids =[];
     //var selections = $(test).select2('data').text; // doesn't work (returns 'undefined')
     //var selections = $(test).select2('data');
     var selections = ( JSON.stringify($(test).select2('data')) );
-    console.log('Selected IDs: ' + ids[0]);
-    console.log('Selected options: ' + selections['id']);
+    var data =$(test).select2('data') ;
+  //  console.log('Selected IDs: ' + ids[1]);
+  console.log(data.length);
+  console.log(data[0]['id']);
+    console.log('Selected options: ' + selections);
     //$('#selectedIDs').text(ids);
     //$('#selectedText').text(selections);
 });

@@ -24,12 +24,18 @@ class Summary_reports extends MX_Controller
         echo json_encode($data);                
     }
     function get_report(){
+        $this->load->model('report');
         $report=  $this->input->post('report');
         $start=  $this->input->post('start');
         $end=  $this->input->post('end');
+        $branch=  $this->input->post('branch');
+        $data=array();
         if($report!=""){
-          
+            for($i=0;$i<count($branch);$i++){
+               $data= array_merge($data,  $this->report->get_report($branch[$i],$report,$start,$end));
+            }
         }
+        echo json_encode($data);
     }
    
 }
