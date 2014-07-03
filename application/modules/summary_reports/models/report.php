@@ -70,6 +70,20 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='direct_sales_delivery_note'){
+            $this->db->select('direct_sales_delivery.*,branches.store_name,branches.code as bcode,customers.first_name as s_name,customers.company_name as c_name')->from('direct_sales_delivery')->where('direct_sales_delivery.branch_id',$branch)->where('direct_sales_delivery.delete_status',0);
+            $this->db->join('branches', 'branches.guid=direct_sales_delivery.branch_id','left');
+            $this->db->join('customers', 'customers.guid=direct_sales_delivery.customer_id','left');
+            $this->db->where('direct_sales_delivery.date >=', strtotime($start));
+            $this->db->where('direct_sales_delivery.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
