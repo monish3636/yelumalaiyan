@@ -176,6 +176,20 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='purchase_order'){
+            $this->db->select('purchase_order.*,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('purchase_order')->where('purchase_order.branch_id',$branch)->where('purchase_order.delete_status',0);
+            $this->db->join('branches', 'branches.guid=purchase_order.branch_id','left');
+            $this->db->join('suppliers', 'suppliers.guid=purchase_order.supplier_id','left');
+            $this->db->where('purchase_order.po_date >=', strtotime($start));
+            $this->db->where('purchase_order.po_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['po_date']=date('d-m-Y',$row['po_date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
