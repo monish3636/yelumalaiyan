@@ -191,7 +191,7 @@ class Report extends CI_Model{
             return $data;
         }
         else if($report=='goods_receiving_note'){
-            $this->db->select('purchase_order.*, grn.date as date,grn.grn_status,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('grn')->where('grn.branch_id',$branch)->where('grn.delete_status',0);
+            $this->db->select('purchase_order.*, grn.discount_amt as grn_discount_amt, grn.total_item_amt as grn_total_item_amt,grn.total_amt as grn_total_amt,grn.date as date,grn.grn_status,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('grn')->where('grn.branch_id',$branch)->where('grn.delete_status',0);
             $this->db->join('branches', 'branches.guid=grn.branch_id','left');
             $this->db->join('purchase_order', 'purchase_order.guid=grn.po','left');
             $this->db->join('suppliers', 'suppliers.guid=purchase_order.supplier_id','left');

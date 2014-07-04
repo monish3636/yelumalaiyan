@@ -103,10 +103,13 @@ function save(){
             if ( $this->form_validation->run() !== false ) {    
                 $po=  $this->input->post('goods_receiving_note_guid');
                 $grn_date=strtotime($this->input->post('grn_date'));
+                $discount_amount=  $this->input->post('discount_amount');                
+                $total_amount=  $this->input->post('total_amount');
+                $grand_total=  $this->input->post('grand_total');                
                 $grn_no= $this->input->post('grn_no');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
-                $value=array('grn_no'=>$grn_no,'date'=>$grn_date,'po'=>$po,'remark'=>$remark,'note'=>$note);
+                $value=array('grn_no'=>$grn_no,'date'=>$grn_date,'po'=>$po,'remark'=>$remark,'note'=>$note,'discount_amt'=>$discount_amount,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
                 $guid=   $this->posnic->posnic_add_record($value,'grn');
                 $this->load->model('grn');
                 $this->grn->update_grn_status($po);
@@ -145,10 +148,12 @@ function save(){
             if ( $this->form_validation->run() !== false ) {    
                 $po=  $this->input->post('goods_receiving_note_guid');
                 $grn_date=strtotime($this->input->post('grn_date'));
-               // $grn_no= $this->input->post('grn_no');
+                $discount_amount=  $this->input->post('discount_amount');
+                $total_amount=  $this->input->post('total_amount');
+                $grand_total=  $this->input->post('grand_total');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
-                $value=array('date'=>$grn_date,'remark'=>$remark,'note'=>$note);
+                $value=array('date'=>$grn_date,'remark'=>$remark,'note'=>$note,'discount_amt'=>$discount_amount,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
                 $guid=  $this->input->post('grn_guid');
                 $update_where=array('guid'=>$guid);
                 $this->posnic->posnic_update_record($value,$update_where,'grn');          

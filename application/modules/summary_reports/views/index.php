@@ -314,12 +314,12 @@
                             <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["po_date"]+'</td>\n\
                             <td class="text-center">'+data[i]["exp_date"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["grn_discount_amt"]+'</td>\n\
                             <td class="text-right">'+data[i]["freight"]+'</td>\n\
                             <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
                             <td class="text-center">'+data[i]["total_items"]+'</td> \n\
-                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
-                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["grn_total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["grn_total_amt"]+'</td>\n\
                             <td class="text-center">'+status+'</td>\n\
                         </tr>')
                     }
