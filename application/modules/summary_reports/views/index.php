@@ -535,6 +535,27 @@
                         </tr>')
                     }
                 }
+                else if(report=='stock_level'){
+                    $('.dataTable').hide();
+                    $('#stock_level_table').show();
+                    $('#stock_level_table tbody').remove();
+                    $('#stock_level_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                       
+                        $('#stock_level_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["sku"]+'</td>\n\
+                            <td class="text-center">'+data[i]["item_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["cost"]+'</td>\n\
+                            <td class="text-center">'+data[i]["quty"]+'</td>\n\
+                            <td class="text-center">'+data[i]["price"]+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
                 
@@ -589,7 +610,7 @@
 							<li><a href="javascript:report('stock_transfer')" id="stock_transfer"><?php echo $this->lang->line('stock_transfer') ?></a></li>
 							<li><a href="javascript:report('damage_stock')" id="damage_stock"><?php echo $this->lang->line('damage_stock') ?></a></li>
 							<li><a href="javascript:report('receiving_stock')" id="receiving_stock"><?php echo $this->lang->line('receiving_stock') ?></a></li>
-							<li><a href="javascript:report('stock_level')" id="stock_level"><?php echo $this->lang->line('stock_level') ?></a></li>
+							<li><a href="javascript:report('stock_level')" id="stock_level"><?php echo $this->lang->line('stock_history') ?></a></li>
 							
                                                 </ul>
                                         </li>
@@ -1050,6 +1071,24 @@
                 <th><?php echo $this->lang->line('no_of_items') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
                 <th><?php echo $this->lang->line('approve') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="stock_level_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('invoice') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('sku') ?></th>
+                <th><?php echo $this->lang->line('item')." ".$this->lang->line('name') ?></th>
+                <th><?php echo $this->lang->line('cost') ?></th>
+                <th><?php echo $this->lang->line('quty') ?></th>
+                <th><?php echo $this->lang->line('price') ?></th>
                 
             </tr>
         </thead>
