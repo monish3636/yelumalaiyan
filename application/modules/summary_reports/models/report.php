@@ -234,22 +234,22 @@ class Report extends CI_Model{
             return $data;
         }
         else if($report=='purchase_invoice'){
-            $this->db->select('direct_grn.grn_no as dgrn_code,direct_grn.discount_amt as dg_discount_amt,direct_grn.freight as dg_freight,direct_grn.round_amt as dg_round_amt,direct_grn.total_items as dg_total_items,direct_grn.total_item_amt as dg_total_item_amt, direct_grn.total_amt as dg_total_amt,direct_invoice.invoice_no as grn_code,direct_invoice.discount_amt as di_discount_amt,direct_invoice.freight as di_freight,direct_invoice.round_amt as di_round_amt,direct_invoice.total_items as di_total_items,direct_invoice.total_item_amt as di_total_item_amt, direct_invoice.total_amt as di_total_amt, branches.store_name,branches.code as bcode,purchase_invoice.*,direct_grn.grn_no,purchase_invoice.invoice,purchase_invoice.guid as invoice_guid, purchase_invoice.date as date,suppliers.first_name as s_name,suppliers.company_name as c_name');
+            $this->db->select('grn.grn_no as grn_code,grn.discount_amt as grn_discount_amt,purchase_order.freight as grn_freight,purchase_order.round_amt as grn_round_amt,purchase_order.total_items as grn_total_items,grn.total_item_amt as grn_total_item_amt,grn.total_amt as grn_total_amt,direct_grn.grn_no as dgrn_code,direct_grn.discount_amt as dg_discount_amt,direct_grn.freight as dg_freight,direct_grn.round_amt as dg_round_amt,direct_grn.total_items as dg_total_items,direct_grn.total_item_amt as dg_total_item_amt, direct_grn.total_amt as dg_total_amt,direct_invoice.invoice_no as di_code,direct_invoice.discount_amt as di_discount_amt,direct_invoice.freight as di_freight,direct_invoice.round_amt as di_round_amt,direct_invoice.total_items as di_total_items,direct_invoice.total_item_amt as di_total_item_amt, direct_invoice.total_amt as di_total_amt, branches.store_name,branches.code as bcode,direct_grn.grn_no,purchase_invoice.invoice,purchase_invoice.guid as invoice_guid, purchase_invoice.date,suppliers.first_name as s_name,suppliers.company_name as c_name');
             $this->db->from('purchase_invoice')->where('purchase_invoice.branch_id',$branch);
             $this->db->join('branches', 'branches.guid=purchase_invoice.branch_id','left');
             $this->db->join('direct_grn', 'direct_grn.guid=purchase_invoice.grn','left');
             $this->db->join('direct_invoice', 'direct_invoice.guid=purchase_invoice.direct_invoice_id','left');
+            $this->db->join('grn', 'grn.guid=purchase_invoice.grn AND grn.po=purchase_invoice.po','left');
             $this->db->join('purchase_order', 'purchase_order.guid=purchase_invoice.po','left');
             $this->db->join('suppliers', 'suppliers.guid=purchase_order.supplier_id OR suppliers.guid=direct_grn.supplier_id OR suppliers.guid=direct_invoice.supplier_id','left');
-            $this->db->where('date >=', strtotime($start));
-            $this->db->where('date <=', strtotime($end));
+            $this->db->where('purchase_invoice.date >=', strtotime($start));
+            $this->db->where('purchase_invoice.date <=', strtotime($end));
             $sql=  $this->db->get();
             $data=array();
             foreach($sql->result_array() as $row){  
                 $row['date']=date('d-m-Y',$row['date']);
-                if($row['grn_code']!="" && $row['grn_code']!=NULL){
+                if($row['di_code']!="" && $row['di_code']!=NULL){
                     $row['total_items']=$row['di_total_items'];
-                    $row['total_amount']=$row['di_amount'];
                     $row['discount_amt']=$row['di_discount_amt'];
                     $row['freight']=$row['di_freight'];
                     $row['round_amt']=$row['di_round_amt'];
@@ -257,9 +257,16 @@ class Report extends CI_Model{
                     $row['total_amt']=$row['di_total_amt'];
                 }
                 
-                if($row['dgrn_code']!="" && $row['dgrn_code']!=NULL){
+                if($row['grn_code']!="" && $row['grn_code']!=NULL){
+                    $row['total_items']=$row['grn_total_items'];
+                    $row['discount_amt']=$row['grn_discount_amt'];
+                    $row['freight']=$row['grn_freight'];
+                    $row['round_amt']=$row['grn_round_amt'];
+                    $row['total_item_amt']=$row['grn_total_item_amt'];
+                    $row['total_amt']=$row['grn_total_amt'];
+                }
+                  if($row['dgrn_code']!="" && $row['dgrn_code']!=NULL){
                     $row['total_items']=$row['dg_total_items'];
-                    $row['total_amount']=$row['dg_amount'];
                     $row['discount_amt']=$row['dg_discount_amt'];
                     $row['freight']=$row['dg_freight'];
                     $row['round_amt']=$row['dg_round_amt'];
@@ -269,6 +276,7 @@ class Report extends CI_Model{
                 $data[]=$row;
             }
             return $data;
+         
         }
     }
 }
