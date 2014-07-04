@@ -358,6 +358,8 @@
     function save_new_grn(){
          <?php if($this->session->userdata['goods_receiving_note_per']['add']==1){ ?>
                    if($('#parsley_reg').valid()){
+                       $('#total_amount').val($('#demo_total_amount').val());
+                       $('#grand_total').val($('#demo_grand_total').val());
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
                            get_table_data();
@@ -400,6 +402,8 @@
     function update_order(){
          <?php if($this->session->userdata['goods_receiving_note_per']['edit']==1){ ?>
                    if($('#parsley_reg').valid()){
+                       $('#total_amount').val($('#demo_total_amount').val());
+                       $('#grand_total').val($('#demo_grand_total').val());
                        var oTable = $('#selected_item_table').dataTable();
                        if(oTable.fnGetData().length>0){
                            get_table_data();
@@ -1021,6 +1025,7 @@ function reload_update_user(){
                                                                                         'disabled'=>'disabled',
                                                                                         'value'=>set_value('discount_amount'));
                                                                          echo form_input($discount_amount)?>
+                                                            <input type="hidden" name="discount_amount" id="discount_amount">
                                                        </div>
                                                     </div>
                                                 <div class="col col-sm-2" >
