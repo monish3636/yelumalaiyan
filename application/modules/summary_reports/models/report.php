@@ -275,8 +275,22 @@ class Report extends CI_Model{
                 }
                 $data[]=$row;
             }
+            return $data;         
+        }
+        else if($report=='purchase_return'){
+            $this->db->select('purchase_return.*,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('purchase_return')->where('purchase_return.branch_id',$branch)->where('purchase_return.delete_status',0);
+            $this->db->join('purchase_invoice', 'purchase_invoice.guid=purchase_return.purchase_invoice_id','left');
+            $this->db->join('branches', 'branches.guid=purchase_return.branch_id','left');
+            $this->db->join('suppliers', 'suppliers.guid=purchase_invoice.supplier_id','left');
+            $this->db->where('purchase_return.date >=', strtotime($start));
+            $this->db->where('purchase_return.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                $data[]=$row;
+            }
             return $data;
-         
         }
     }
 }
