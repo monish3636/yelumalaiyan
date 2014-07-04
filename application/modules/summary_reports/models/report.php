@@ -292,6 +292,19 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='opening_stock'){
+            $this->db->select('opening_stock.*,branches.store_name,branches.code as bcode')->from('opening_stock')->where('opening_stock.branch_id',$branch)->where('opening_stock.delete_status',0);
+            $this->db->join('branches', 'branches.guid=opening_stock.branch_id','left');
+            $this->db->where('opening_stock.date >=', strtotime($start));
+            $this->db->where('opening_stock.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
