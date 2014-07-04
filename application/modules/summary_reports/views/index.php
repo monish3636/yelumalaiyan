@@ -324,6 +324,92 @@
                         </tr>')
                     }
                 }
+                else if(report=='direct_grn'){
+                    $('.dataTable').hide();
+                    $('#direct_grn_table').show();
+                    $('#direct_grn_table tbody').remove();
+                    $('#direct_grn_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('waiting') ?>';
+                        if(data[0]['order_status']==1){
+                            var status='<?php echo $this->lang->line('approved') ?>';
+                        }
+                        $('#direct_grn_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["grn_no"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["po_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='direct_invoice'){
+                    $('.dataTable').hide();
+                    $('#direct_invoice_table').show();
+                    $('#direct_invoice_table tbody').remove();
+                    $('#direct_invoice_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('waiting') ?>';
+                        if(data[0]['order_status']==1){
+                            var status='<?php echo $this->lang->line('approved') ?>';
+                        }
+                        $('#direct_invoice_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice_no"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["po_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+               
+                else if(report=='purchase_invoice'){
+                    $('.dataTable').hide();
+                    $('#purchase_invoice_table').show();
+                    $('#purchase_invoice_table tbody').remove();
+                    $('#purchase_invoice_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('waiting') ?>';
+                        if(data[0]['order_status']==1){
+                            var status='<?php echo $this->lang->line('approved') ?>';
+                        }
+                        $('#purchase_invoice_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                    
+                }
                 
                 
                 
@@ -685,6 +771,72 @@
                 <th><?php echo $this->lang->line('order_date') ?></th>
                 <th><?php echo $this->lang->line('expiry_date') ?></th>
                 <th><?php echo $this->lang->line('purchase_order')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('freight') ?></th>
+                <th><?php echo $this->lang->line('round_off_amount') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                <th><?php echo $this->lang->line('approve') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <table id="direct_grn_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                   <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('direct_grn') ?></th>
+                <th><?php echo $this->lang->line('supplier') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('order_date') ?></th>
+                <th><?php echo $this->lang->line('purchase')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('freight') ?></th>
+                <th><?php echo $this->lang->line('round_off_amount') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                <th><?php echo $this->lang->line('approve') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <table id="direct_invoice_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                   <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('direct_invoice') ?></th>
+                <th><?php echo $this->lang->line('supplier') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('order_date') ?></th>
+                <th><?php echo $this->lang->line('purchase')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('freight') ?></th>
+                <th><?php echo $this->lang->line('round_off_amount') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                <th><?php echo $this->lang->line('approve') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <table id="purchase_invoice_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('purchase_invoice') ?></th>
+                <th><?php echo $this->lang->line('supplier') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('order_date') ?></th>
+                <th><?php echo $this->lang->line('purchase')." ".$this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('freight') ?></th>
                 <th><?php echo $this->lang->line('round_off_amount') ?></th>
                 <th><?php echo $this->lang->line('no_of_items') ?></th>
