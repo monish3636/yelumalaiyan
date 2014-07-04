@@ -344,6 +344,26 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='stock_level'){
+            $this->db->select('stocks_history.*,purchase_invoice.invoice,direct_invoice.invoice_no as invoice_no,items.code as sku,items.name as item_name,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('stocks_history')->where('stocks_history.branch_id',$branch);
+            $this->db->join('branches', 'branches.guid=stocks_history.branch_id','left');
+            $this->db->join('purchase_invoice', 'purchase_invoice.guid=stocks_history.invoice_id','left');
+            $this->db->join('direct_invoice', 'direct_invoice.guid=stocks_history.invoice_id','left');
+            $this->db->join('items', 'items.guid=stocks_history.item_id','left');
+            $this->db->join('suppliers', 'suppliers.guid=stocks_history.supplier_id','left');
+            $this->db->where('stocks_history.date >=', strtotime($start));
+            $this->db->where('stocks_history.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                if($row['invoice_no']!="" && $row['invoice_no']!=NULL){
+                    $row['invoice']=$row['invoice_no'];
+                }
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
