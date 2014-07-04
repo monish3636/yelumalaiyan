@@ -387,10 +387,7 @@
                     $('#purchase_invoice_table tbody').remove();
                     $('#purchase_invoice_table').append('<tbody></tbody');
                     for(var i=0;i<data.length;i++){
-                        var status='<?php echo $this->lang->line('waiting') ?>';
-                        if(data[0]['order_status']==1){
-                            var status='<?php echo $this->lang->line('approved') ?>';
-                        }
+                       
                         $('#purchase_invoice_table tbody').append('<tr> \n\
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
@@ -405,7 +402,6 @@
                             <td class="text-center">'+data[i]["total_items"]+'</td> \n\
                             <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
                             <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
-                            <td class="text-center">'+status+'</td>\n\
                         </tr>')
                     }
                     
@@ -842,7 +838,6 @@
                 <th><?php echo $this->lang->line('no_of_items') ?></th>
                 <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
-                <th><?php echo $this->lang->line('approve') ?></th>
                 
             </tr>
         </thead>
