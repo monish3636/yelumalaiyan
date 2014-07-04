@@ -318,6 +318,19 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='damage_stock'){
+            $this->db->select('damage_stock.*,branches.store_name,branches.code as bcode')->from('damage_stock')->where('damage_stock.branch_id',$branch)->where('damage_stock.delete_status',0);
+            $this->db->join('branches', 'branches.guid=damage_stock.branch_id','left');
+            $this->db->where('damage_stock.date >=', strtotime($start));
+            $this->db->where('damage_stock.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
