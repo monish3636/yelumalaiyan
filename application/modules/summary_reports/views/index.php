@@ -484,6 +484,7 @@
                         </tr>')
                     }
                 }
+            
                 else if(report=='damage_stock'){
                     $('.dataTable').hide();
                     $('#damage_stock_table').show();
@@ -506,7 +507,34 @@
                         </tr>')
                     }
                 }
-                
+                else if(report=='receiving_stock'){
+                    $('.dataTable').hide();
+                    $('#receiving_stock_table').show();
+                    $('#receiving_stock_table tbody').remove();
+                    $('#receiving_stock_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var branch =$('#select_branch').select2('data');   
+                        var barnch_name;
+                        var barnch_code;
+                        for(var j=0;j<branch.length;j++){
+                            if(data[i]['destination']=branch[j]['id']){
+                                barnch_name=branch[j]['text'];
+                                barnch_code=branch[j]['code'];
+                            }
+                        }
+                       
+                        $('#receiving_stock_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+barnch_name+'</td>\n\
+                            <td class="text-center">'+barnch_code+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["store_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["no_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_amount"]+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
                 
@@ -995,7 +1023,23 @@
         </thead>
         <tbody></tbody>
     </table>
-        <table id="damage_stock_table" class="dataTable table-condensed table-bordered">
+    <table id="receiving_stock_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('receiving_stock') ?></th>
+                <th><?php echo $this->lang->line('origin') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="damage_stock_table" class="dataTable table-condensed table-bordered">
         <thead>
             <tr>
                 <th><?php echo $this->lang->line('sl_no') ?></th>

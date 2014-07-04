@@ -331,6 +331,19 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='receiving_stock'){
+            $this->db->select('stock_transfer.*,branches.store_name,branches.code as bcode')->from('stock_transfer')->where('stock_transfer.destination',$branch)->where('stock_transfer.delete_status',0)->where('stock_transfer.stock_status',1);
+            $this->db->join('branches', 'branches.guid=stock_transfer.branch_id','left');
+            $this->db->where('stock_transfer.date >=', strtotime($start));
+            $this->db->where('stock_transfer.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>

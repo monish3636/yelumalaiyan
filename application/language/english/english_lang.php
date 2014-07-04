@@ -768,5 +768,6 @@ $lang['credit_days']='Credit Days';
     $lang['csv']='CSV';
     $lang['xlsx']='XLSX';
     $lang['destination']='Destination';
+    $lang['origin']='Origin';
    
 ?>
