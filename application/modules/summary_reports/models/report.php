@@ -607,6 +607,36 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='item_brand'){
+            $this->db->select('brands.*,branches.store_name,branches.code as bcode')->from('brands')->where('brands.branch_id',$branch)->where('brands.delete_status',0);
+            $this->db->join('branches', 'branches.guid=brands.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='item_department'){
+            $this->db->select('items_department.*,branches.store_name,branches.code as bcode')->from('items_department')->where('items_department.branch_id',$branch)->where('items_department.delete_status',0);
+            $this->db->join('branches', 'branches.guid=items_department.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='item_category'){
+            $this->db->select('items_category.*,branches.store_name,branches.code as bcode')->from('items_category')->where('items_category.branch_id',$branch)->where('items_category.delete_status',0);
+            $this->db->join('branches', 'branches.guid=items_category.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
