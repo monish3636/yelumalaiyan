@@ -502,6 +502,32 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='customers'){
+            $this->db->select('customers.*,branches.store_name,branches.code as bcode,customer_category.category_name')->from('customers')->where('customers.branch_id',$branch)->where('customers.delete_status',0);
+            $this->db->join('customer_category', 'customer_category.guid=customers.category_id','left');
+            $this->db->join('branches', 'branches.guid=customers.branch_id','left');
+            $this->db->where('customers.added_date >=', strtotime($start));
+            $this->db->where('customers.added_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['added_date']=date('d-m-Y',$row['added_date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='customer_category'){
+            $this->db->select('customer_category.*,branches.store_name,branches.code as bcode')->from('customer_category')->where('customer_category.branch_id',$branch)->where('customer_category.delete_status',0);
+            $this->db->join('branches', 'branches.guid=customer_category.branch_id','left');
+            //$this->db->where('customers.added_date >=', strtotime($start));
+            //$this->db->where('customers.added_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
