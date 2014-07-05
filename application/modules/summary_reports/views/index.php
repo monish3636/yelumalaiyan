@@ -1029,7 +1029,8 @@
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
-                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["tax_type"]+'</td>\n\
+                            <td class="text-center">'+data[i]["value"]+'%</td>\n\
                             <td class="text-center">'+status+'</td>\n\
                         </tr>')
                     }
@@ -1048,7 +1049,7 @@
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
-                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["type"]+'</td>\n\
                             <td class="text-center">'+status+'</td>\n\
                         </tr>')
                     }
@@ -2015,7 +2016,34 @@
                 <th><?php echo $this->lang->line('sl_no') ?></th>
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>                
-                <th><?php echo $this->lang->line('brand') ?></th>
+                <th><?php echo $this->lang->line('tax_type') ?></th>
+                <th><?php echo $this->lang->line('tax') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="item_tax_type_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('tax_type') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="item_tax_area_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('tax_area') ?></th>
                 <th><?php echo $this->lang->line('status') ?></th>
                 
             </tr>
