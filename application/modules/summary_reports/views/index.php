@@ -1015,6 +1015,63 @@
                         </tr>')
                     }
                 }
+                else if(report=='item_tax'){
+                    $('.dataTable').hide();
+                    $('#item_tax_table').show();
+                    $('#item_tax_table tbody').remove();
+                    $('#item_tax_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#item_tax_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='item_tax_type'){
+                    $('.dataTable').hide();
+                    $('#item_tax_type_table').show();
+                    $('#item_tax_type_table tbody').remove();
+                    $('#item_tax_type_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#item_tax_type_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='item_tax_area'){
+                    $('.dataTable').hide();
+                    $('#item_tax_area_table').show();
+                    $('#item_tax_area_table tbody').remove();
+                    $('#item_tax_area_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#item_tax_area_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
             }
@@ -1142,6 +1199,19 @@
 							<li><a href="javascript:report('item_department')" id="item_department"><?php echo $this->lang->line('item_department') ?></a></li>							
 							<li><a href="javascript:report('item_brand')" id="item_brand"><?php echo $this->lang->line('brand') ?></a></li>							
 							<li><a href="javascript:report('items')" id="item_kit"><?php echo $this->lang->line('items') ?></a></li>
+													
+							
+							
+                                                </ul>
+                                        </li>
+                                        <li>
+						<a href="javascript:void(0)"><?php echo $this->lang->line('tax') ?></a>
+						<ul>
+							
+							<li><a href="javascript:report('item_tax')" id="item_tax"><?php echo $this->lang->line('taxes') ?></a></li>							
+							<li><a href="javascript:report('item_tax_type')" id="item_tax_type"><?php echo $this->lang->line('tax_type') ?></a></li>							
+							<li><a href="javascript:report('item_tax_area')" id="item_tax_area"><?php echo $this->lang->line('tax_area') ?></a></li>							
+							
 													
 							
 							
@@ -1933,6 +2003,19 @@
                 <th><?php echo $this->lang->line('price') ?></th>
                 <th><?php echo $this->lang->line('tax_type') ?></th>
                 <th><?php echo $this->lang->line('tax') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="item_tax_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('brand') ?></th>
                 <th><?php echo $this->lang->line('status') ?></th>
                 
             </tr>
