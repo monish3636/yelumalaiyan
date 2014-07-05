@@ -364,6 +364,70 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='supplier_payment_debit'){
+            $this->db->select('payment.*,purchase_invoice.invoice,direct_invoice.invoice_no as invoice_no,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('payment')->where('payment.branch_id',$branch)->where('payment.type','debit')->where('payment.return_id','');
+            $this->db->join('purchase_invoice', 'purchase_invoice.guid=payment.invoice_id','left');
+            $this->db->join('direct_invoice', 'direct_invoice.guid=payment.invoice_id','left');
+            $this->db->join('branches', 'branches.guid=payment.branch_id','left');
+            $this->db->join('suppliers', 'suppliers.guid=payment.supplier_id','left');
+            $this->db->where('payment.added_date >=', strtotime($start));
+            $this->db->where('payment.added_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['added_date']=date('d-m-Y',$row['added_date']);
+                 if($row['invoice_no']!="" && $row['invoice_no']!=NULL){
+                    $row['invoice']=$row['invoice_no'];
+                }
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='supplier_payment_credit'){
+            $this->db->select('payment.*,purchase_return.code as invoice,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('payment')->where('payment.branch_id',$branch)->where('payment.type','debit')->where('payment.return_id !=','');;
+            $this->db->join('purchase_return', 'purchase_return.guid=payment.return_id','left');
+            $this->db->join('branches', 'branches.guid=payment.branch_id','left');
+            $this->db->join('suppliers', 'suppliers.guid=payment.supplier_id','left');
+            $this->db->where('payment.added_date >=', strtotime($start));
+            $this->db->where('payment.added_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['added_date']=date('d-m-Y',$row['added_date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='customer_payment_credit'){
+            $this->db->select('payment.*,sales_bill.invoice,branches.store_name,branches.code as bcode,customers.first_name as s_name,customers.company_name as c_name')->from('payment')->where('payment.branch_id',$branch)->where('payment.type','credit')->where('payment.return_id','');
+            $this->db->join('sales_bill', 'sales_bill.guid=payment.invoice_id','left');
+            $this->db->join('branches', 'branches.guid=payment.branch_id','left');
+            $this->db->join('customers', 'customers.guid=payment.customer_id','left');
+            $this->db->where('payment.added_date >=', strtotime($start));
+            $this->db->where('payment.added_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['added_date']=date('d-m-Y',$row['added_date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='customer_payment_debit'){
+            $this->db->select('payment.*,sales_return.code as invoice,branches.store_name,branches.code as bcode,customers.first_name as s_name,customers.company_name as c_name')->from('payment')->where('payment.branch_id',$branch)->where('payment.type','credit')->where('payment.return_id !=','');
+            $this->db->join('sales_return', 'sales_return.guid=payment.return_id','left');
+            $this->db->join('branches', 'branches.guid=payment.branch_id','left');
+            $this->db->join('customers', 'customers.guid=payment.customer_id','left');
+            $this->db->where('payment.added_date >=', strtotime($start));
+            $this->db->where('payment.added_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['added_date']=date('d-m-Y',$row['added_date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>

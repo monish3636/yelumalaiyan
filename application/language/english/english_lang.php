@@ -769,5 +769,7 @@ $lang['credit_days']='Credit Days';
     $lang['xlsx']='XLSX';
     $lang['destination']='Destination';
     $lang['origin']='Origin';
+    $lang['debit_payable']='Debit payable';
+    $lang['credit_payable']='Credit payable';
    
 ?>
