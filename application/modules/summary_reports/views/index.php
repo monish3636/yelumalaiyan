@@ -680,6 +680,49 @@
                         </tr>')
                     }
                 }
+                else if(report=='customer_payable_debit'){
+                    $('.dataTable').hide();
+                    $('#customer_payable_debit_table').show();
+                    $('#customer_payable_debit_table tbody').remove();
+                    $('#customer_payable_debit_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var balance=parseFloat(data[i]["total_amount"])-parseFloat(data[i]["paid_amount"]);
+                        $('#customer_payable_debit_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amount"]+'</td>\n\
+                            <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
+                            <td class="text-right">'+balance+'</td>\n\
+                        </tr>')
+                    }
+                }
+                
+                else if(report=='customer_payable_credit'){
+                    $('.dataTable').hide();
+                    $('#customer_payable_credit_table').show();
+                    $('#customer_payable_credit_table tbody').remove();
+                    $('#customer_payable_credit_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var balance=parseFloat(data[i]["amount"])-parseFloat(data[i]["paid_amount"]);
+                        $('#customer_payable_credit_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["amount"]+'</td>\n\
+                            <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
+                            <td class="text-right">'+balance+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
                 
@@ -1341,6 +1384,42 @@
                 <th><?php echo $this->lang->line('branch_name') ?></th>
                 <th><?php echo $this->lang->line('purchase_return') ?></th>
                 <th><?php echo $this->lang->line('supplier') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                <th><?php echo $this->lang->line('paid_amount') ?></th>
+                <th><?php echo $this->lang->line('payable_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="customer_payable_debit_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('sales_return') ?></th>
+                <th><?php echo $this->lang->line('customer') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                <th><?php echo $this->lang->line('paid_amount') ?></th>
+                <th><?php echo $this->lang->line('payable_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="customer_payable_credit_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('sales') ?></th>
+                <th><?php echo $this->lang->line('customer') ?></th>
                 <th><?php echo $this->lang->line('company') ?></th>
                 <th><?php echo $this->lang->line('date') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
