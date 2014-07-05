@@ -926,6 +926,63 @@
                         </tr>')
                     }
                 }
+                else if(report=='item_category'){
+                    $('.dataTable').hide();
+                    $('#item_category_table').show();
+                    $('#item_category_table tbody').remove();
+                    $('#item_category_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#item_category_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["category_name"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='item_department'){
+                    $('.dataTable').hide();
+                    $('#item_department_table').show();
+                    $('#item_department_table tbody').remove();
+                    $('#item_department_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#item_department_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["department_name"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='item_brand'){
+                    $('.dataTable').hide();
+                    $('#item_brand_table').show();
+                    $('#item_brand_table tbody').remove();
+                    $('#item_brand_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#item_brand_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
             }
@@ -1041,6 +1098,19 @@
 							<li><a href="javascript:report('suppliers')" id="suppliers"><?php echo $this->lang->line('suppliers') ?></a></li>
 													
 							<li><a href="javascript:report('suppliers_category')" id="suppliers_category"><?php echo $this->lang->line('suppliers_category') ?></a></li>							
+							
+							
+                                                </ul>
+                                        </li>
+                                        <li>
+						<a href="javascript:void(0)"><?php echo $this->lang->line('items') ?></a>
+						<ul>
+							
+							<li><a href="javascript:report('item_category')" id="item_category"><?php echo $this->lang->line('category') ?></a></li>							
+							<li><a href="javascript:report('item_department')" id="item_department"><?php echo $this->lang->line('item_department') ?></a></li>							
+							<li><a href="javascript:report('item_brand')" id="item_brand"><?php echo $this->lang->line('brand') ?></a></li>							
+							<li><a href="javascript:report('items')" id="item_kit"><?php echo $this->lang->line('items') ?></a></li>
+													
 							
 							
                                                 </ul>
@@ -1770,6 +1840,45 @@
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>                
                 <th><?php echo $this->lang->line('category') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="item_category_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('category') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="item_department_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('item_department') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="item_brand_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('brand') ?></th>
                 <th><?php echo $this->lang->line('status') ?></th>
                 
             </tr>
