@@ -428,6 +428,48 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        
+        
+        else if($report=='supplier_payable_debit'){
+            $this->db->select('supplier_payable.*,purchase_invoice.invoice,purchase_invoice.date as pi_date,direct_invoice.invoice_date as di_date,direct_invoice.invoice_no as invoice_no,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('supplier_payable')->where('supplier_payable.branch_id',$branch)->where('supplier_payable.payment_status',0);
+            $this->db->join('purchase_invoice', 'purchase_invoice.guid=supplier_payable.invoice_id','left');
+            $this->db->join('direct_invoice', 'direct_invoice.guid=supplier_payable.invoice_id','left');
+            $this->db->join('branches', 'branches.guid=supplier_payable.branch_id','left');
+            $this->db->join('suppliers', 'suppliers.guid=supplier_payable.supplier_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                if($row['pi_date']!="" && $row['pi_date']!=NULL){
+                    $row['date']=$row['pi_date'];
+                }else{
+                    $row['date']=$row['di_date'];
+                }
+                if($row['invoice_no']!="" && $row['invoice_no']!=NULL){
+                    $row['invoice']=$row['invoice_no'];
+                }
+                if($row['date'] >= strtotime($start) && $row['date'] <= strtotime($end)){
+                    $row['date']=date('d-m-Y',$row['date']);
+                    $data[]=$row;
+                }
+            }
+             return $data;
+        }
+        else if($report=='supplier_payable_credit'){
+            $this->db->select('purchase_return.*,purchase_return.code as invoice,branches.store_name,branches.code as bcode,suppliers.first_name as s_name,suppliers.company_name as c_name')->from('purchase_return')->where('purchase_return.branch_id',$branch)->where('purchase_return.payment_status',0);
+            $this->db->join('branches', 'branches.guid=purchase_return.branch_id','left');
+            $this->db->join('purchase_invoice', 'purchase_invoice.guid=purchase_return.purchase_invoice_id','left');
+            $this->db->join('direct_invoice', 'direct_invoice.guid=purchase_return.purchase_invoice_id','left');
+            $this->db->join('suppliers', 'suppliers.guid=direct_invoice.supplier_id OR suppliers.guid=purchase_invoice.supplier_id','left');
+            $this->db->where('purchase_return.date >=', strtotime($start));
+            $this->db->where('purchase_return.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
