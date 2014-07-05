@@ -52,7 +52,7 @@
             branch_id[i]=branch[i]['id'];
         }
         $.ajax({                                      
-            url: "<?php echo base_url() ?>index.php/summary_reports/get_report/",                      
+            url: "<?php echo base_url() ?>index.php/detailed_reports/get_report/",                      
             data: {
                 report:report,
                 start:start_date,
