@@ -878,7 +878,54 @@
                         </tr>')
                     }
                 }
-                
+                else if(report=='item_kit'){
+                    $('.dataTable').hide();
+                    $('#item_kit_table').show();
+                    $('#item_kit_table tbody').remove();
+                    $('#item_kit_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var tax='<?php echo $this->lang->line('inclusive') ?>';
+                        if(data[i]['tax_inclusive']==1){
+                            var tax='<?php echo $this->lang->line('exclusive') ?>';
+                        }
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+            
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#item_kit_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["no_of_items"]+'</td>\n\
+                            <td class="text-center">'+data[i]["kit_price"]+'</td>\n\
+                            <td class="text-center">'+data[i]["tax_amount"]+'('+data[i]["tax_type"]+'-'+data[i]["tax_value"]+'%)</td>\n\
+                            <td class="text-center">'+tax+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='kit_category'){
+                    $('.dataTable').hide();
+                    $('#kit_category_table').show();
+                    $('#kit_category_table tbody').remove();
+                    $('#kit_category_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#kit_category_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["category_name"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
             }
@@ -1013,8 +1060,8 @@
 						<a href="javascript:void(0)"><?php echo $this->lang->line('item_kit') ?></a>
 						<ul>
 							
-							<li><a href="javascript:report('')"><?php echo $this->lang->line('item_kit') ?></a></li>
-							<li><a href="javascript:report('')"><?php echo $this->lang->line('kit_category') ?></a></li>							
+							<li><a href="javascript:report('item_kit')" id="item_kit"><?php echo $this->lang->line('item_kit') ?></a></li>
+							<li><a href="javascript:report('kit_category')" id="kit_category"><?php echo $this->lang->line('kit_category') ?></a></li>							
 													
 							
 							
@@ -1693,6 +1740,37 @@
                 <th><?php echo $this->lang->line('weight') ?></th>
                 <th><?php echo $this->lang->line('price') ?></th>
                 <th><?php echo $this->lang->line('tax') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="item_kit_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('sku') ?></th>
+                <th><?php echo $this->lang->line('name') ?></th>
+                <th><?php echo $this->lang->line('no_of_item') ?></th>
+                <th><?php echo $this->lang->line('price') ?></th>
+                <th><?php echo $this->lang->line('tax_amount') ?></th>
+                <th><?php echo $this->lang->line('tax') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="kit_category_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('category') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
                 
             </tr>
         </thead>
