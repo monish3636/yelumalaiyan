@@ -983,6 +983,38 @@
                         </tr>')
                     }
                 }
+                else if(report=='items'){
+                    $('.dataTable').hide();
+                    $('#items_table').show();
+                    $('#items_table tbody').remove();
+                    $('#items_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        var tax='<?php echo $this->lang->line('inclusive') ?>';
+                        if(data[i]['tax_Inclusive']==1){
+                            var tax='<?php echo $this->lang->line('exclusive') ?>';
+                        }
+                        $('#items_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["b_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["d_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["mrp"]+'</td>\n\
+                            <td class="text-center">'+data[i]["cost_price"]+'</td>\n\
+                            <td class="text-center">'+data[i]["selling_price"]+'</td>\n\\n\
+                            <td class="text-center">'+data[i]["type"]+'-'+data[i]["value"]+'</td>\n\
+                            <td class="text-center">'+tax+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
             }
@@ -1879,6 +1911,28 @@
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>                
                 <th><?php echo $this->lang->line('brand') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="items_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('name') ?></th>
+                <th><?php echo $this->lang->line('sku') ?></th>
+                <th><?php echo $this->lang->line('brand') ?></th>
+                <th><?php echo $this->lang->line('item_department') ?></th>
+                <th><?php echo $this->lang->line('category') ?></th>
+                <th><?php echo $this->lang->line('mrp') ?></th>
+                <th><?php echo $this->lang->line('cost') ?></th>
+                <th><?php echo $this->lang->line('price') ?></th>
+                <th><?php echo $this->lang->line('tax_type') ?></th>
+                <th><?php echo $this->lang->line('tax') ?></th>
                 <th><?php echo $this->lang->line('status') ?></th>
                 
             </tr>

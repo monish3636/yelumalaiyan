@@ -637,6 +637,21 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='items'){
+            $this->db->select('items.* ,branches.store_name,branches.code as bcode,tax_types.type as type,taxes.value as value,items_category.guid as c_guid,items_category.category_name as c_name,brands.guid as b_guid,brands.name as b_name,items_department.department_name as d_name')->from('items')->where('items.branch_id',$branch)->where('items.delete_status',0);
+            $this->db->join('items_category', 'items.category_id=items_category.guid','left');
+            $this->db->join('brands', 'items.brand_id=brands.guid','left');
+            $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
+            $this->db->join('taxes', 'items.tax_id=taxes.guid','left');
+            $this->db->join('tax_types', 'taxes.type=tax_types.guid','left');
+            $this->db->join('branches', 'branches.guid=items.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
