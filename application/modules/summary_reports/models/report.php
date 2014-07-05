@@ -574,6 +574,18 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='decomposition_items'){
+            $this->db->select('decomposition_items.*,branches.store_name,branches.code as bcode,items.name,items.code as sku,decomposition_type.value as type')->from('decomposition_items')->where('decomposition_items.branch_id',$branch)->where('decomposition_items.delete_status',0);
+            $this->db->join('branches', 'branches.guid=decomposition_items.branch_id','left');            
+            $this->db->join('items', 'items.guid=decomposition_items.item_id','left');
+            $this->db->join('decomposition_type', 'decomposition_type.guid=decomposition_items.type_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>

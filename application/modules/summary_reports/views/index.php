@@ -856,6 +856,28 @@
                         </tr>')
                     }
                 }
+                else if(report=='decomposition_items'){
+                    $('.dataTable').hide();
+                    $('#decomposition_items_table').show();
+                    $('#decomposition_items_table tbody').remove();
+                    $('#decomposition_items_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var tax='<?php echo $this->lang->line('inclusive') ?>';
+                        if(data[i]['tax_inclusive']==1){
+                            var tax='<?php echo $this->lang->line('exclusive') ?>';
+                        }
+                        $('#decomposition_items_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["type"]+'</td>\n\
+                            <td class="text-center">'+data[i]["price"]+'</td>\n\
+                            <td class="text-center">'+tax+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
                 
@@ -1655,6 +1677,22 @@
                 <th><?php echo $this->lang->line('value') ?></th>
                 <th><?php echo $this->lang->line('formula') ?></th>
                 <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="decomposition_items_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('sku') ?></th>
+                <th><?php echo $this->lang->line('name') ?></th>
+                <th><?php echo $this->lang->line('weight') ?></th>
+                <th><?php echo $this->lang->line('price') ?></th>
+                <th><?php echo $this->lang->line('tax') ?></th>
                 
             </tr>
         </thead>
