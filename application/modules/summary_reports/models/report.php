@@ -586,6 +586,27 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='item_kit'){
+            $this->db->select('item_kit.*,branches.store_name,branches.code as bcode,kit_category.category_name')->from('item_kit')->where('item_kit.branch_id',$branch)->where('item_kit.delete_status',0);
+            $this->db->join('branches', 'branches.guid=item_kit.branch_id','left'); 
+            $this->db->join('kit_category', 'kit_category.guid=item_kit.category_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='kit_category'){
+            $this->db->select('kit_category.*,branches.store_name,branches.code as bcode')->from('kit_category')->where('kit_category.branch_id',$branch)->where('kit_category.delete_status',0);
+            $this->db->join('branches', 'branches.guid=kit_category.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
