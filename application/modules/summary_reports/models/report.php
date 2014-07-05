@@ -652,6 +652,37 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='item_tax_type'){
+            $this->db->select('tax_types.*,branches.store_name,branches.code as bcode')->from('tax_types')->where('tax_types.branch_id',$branch)->where('tax_types.delete_status',0);
+            $this->db->join('branches', 'branches.guid=tax_types.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='item_tax'){
+            $this->db->select('taxes.*,branches.store_name,branches.code as bcode,tax_types.type as tax_type')->from('taxes')->where('taxes.branch_id',$branch)->where('taxes.delete_status',0);
+            $this->db->join('branches', 'branches.guid=taxes.branch_id','left');
+            $this->db->join('tax_types', 'tax_types.guid=taxes.type','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='item_tax_area'){
+            $this->db->select('taxes_area.*,branches.store_name,branches.code as bcode')->from('taxes_area')->where('taxes_area.branch_id',$branch)->where('taxes_area.delete_status',0);
+            $this->db->join('branches', 'branches.guid=taxes_area.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
