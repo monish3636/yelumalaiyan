@@ -519,8 +519,30 @@ class Report extends CI_Model{
         else if($report=='customer_category'){
             $this->db->select('customer_category.*,branches.store_name,branches.code as bcode')->from('customer_category')->where('customer_category.branch_id',$branch)->where('customer_category.delete_status',0);
             $this->db->join('branches', 'branches.guid=customer_category.branch_id','left');
-            //$this->db->where('customers.added_date >=', strtotime($start));
-            //$this->db->where('customers.added_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='suppliers'){
+            $this->db->select('suppliers.*,branches.store_name,branches.code as bcode,suppliers_category.category_name')->from('suppliers')->where('suppliers.branch_id',$branch)->where('suppliers.delete_status',0);
+            $this->db->join('suppliers_category', 'suppliers_category.guid=suppliers.category','left');
+            $this->db->join('branches', 'branches.guid=suppliers.branch_id','left');
+            $this->db->where('suppliers.added_date >=', strtotime($start));
+            $this->db->where('suppliers.added_date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['added_date']=date('d-m-Y',$row['added_date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='suppliers_category'){
+            $this->db->select('suppliers_category.*,branches.store_name,branches.code as bcode')->from('suppliers_category')->where('suppliers_category.branch_id',$branch)->where('suppliers_category.delete_status',0);
+            $this->db->join('branches', 'branches.guid=suppliers_category.branch_id','left');
             $sql=  $this->db->get();
             $data=array();
             foreach($sql->result_array() as $row){  
