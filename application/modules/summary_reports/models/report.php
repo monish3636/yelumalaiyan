@@ -550,6 +550,30 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='decomposition'){
+            $this->db->select('decomposition.*,branches.store_name,branches.code as bcode,items.name,items.code as sku')->from('decomposition')->where('decomposition.branch_id',$branch)->where('decomposition.delete_status',0);
+            $this->db->join('items', 'items.guid=decomposition.item_id','left');
+            $this->db->join('branches', 'branches.guid=decomposition.branch_id','left');
+            $this->db->where('decomposition.date >=', strtotime($start));
+            $this->db->where('decomposition.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);  
+                $data[]=$row;
+            }
+            return $data;
+        }
+        else if($report=='decomposition_type'){
+            $this->db->select('decomposition_type.*,branches.store_name,branches.code as bcode')->from('decomposition_type')->where('decomposition_type.branch_id',$branch)->where('decomposition_type.delete_status',0);
+            $this->db->join('branches', 'branches.guid=decomposition_type.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
