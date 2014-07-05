@@ -812,6 +812,50 @@
                         </tr>')
                     }
                 }
+                else if(report=='decomposition'){
+                    $('.dataTable').hide();
+                    $('#decomposition_table').show();
+                    $('#decomposition_table tbody').remove();
+                    $('#decomposition_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#decomposition_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_types"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_weight"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_amount"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='decomposition_type'){
+                    $('.dataTable').hide();
+                    $('#decomposition_type_table').show();
+                    $('#decomposition_type_table tbody').remove();
+                    $('#decomposition_type_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#decomposition_type_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["type_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["value"]+'</td>\n\
+                            <td class="text-center">'+data[i]["formula"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
                 
@@ -926,7 +970,7 @@
 						<ul>
 							
 							<li><a href="javascript:report('suppliers')" id="suppliers"><?php echo $this->lang->line('suppliers') ?></a></li>
-							<li><a href="javascript:report('suppliers_x_items')" id="suppliers_x_items"><?php echo $this->lang->line('suppliers_x_items') ?></a></li>							
+													
 							<li><a href="javascript:report('suppliers_category')" id="suppliers_category"><?php echo $this->lang->line('suppliers_category') ?></a></li>							
 							
 							
@@ -936,9 +980,9 @@
 						<a href="javascript:void(0)"><?php echo $this->lang->line('decomposition') ?></a>
 						<ul>
 							
-							<li><a href="javascript:report('')"><?php echo $this->lang->line('decomposition') ?></a></li>
-							<li><a href="javascript:report('')"><?php echo $this->lang->line('decomposition_types') ?></a></li>							
-							<li><a href="javascript:report('')"><?php echo $this->lang->line('decomposition_items') ?></a></li>							
+							<li><a href="javascript:report('decomposition')" id="decomposition"><?php echo $this->lang->line('decomposition') ?></a></li>
+							<li><a href="javascript:report('decomposition_type')" id="decomposition_type"><?php echo $this->lang->line('decomposition_type') ?></a></li>							
+							<li><a href="javascript:report('decomposition_items')"  id="decomposition_items"><?php echo $this->lang->line('decomposition_items') ?></a></li>							
 							
 							
                                                 </ul>
@@ -1578,6 +1622,38 @@
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>                
                 <th><?php echo $this->lang->line('category') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="decomposition_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('decomposition') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('no_of_type') ?></th>
+                <th><?php echo $this->lang->line('total_weight') ?></th>
+                <th><?php echo $this->lang->line('amount') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="decomposition_type_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('decomposition_type') ?></th>
+                <th><?php echo $this->lang->line('value') ?></th>
+                <th><?php echo $this->lang->line('formula') ?></th>
                 <th><?php echo $this->lang->line('status') ?></th>
                 
             </tr>
