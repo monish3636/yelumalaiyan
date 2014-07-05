@@ -1073,6 +1073,29 @@
                         </tr>')
                     }
                 }
+                else if(report=='users'){
+                    $('.dataTable').hide();
+                    $('#users_table').show();
+                    $('#users_table tbody').remove();
+                    $('#users_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['user_active']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#users_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["username"]+'</td>\n\
+                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["address"]+'</td>\n\
+                            <td class="text-center">'+data[i]["email"]+'</td>\n\
+                            <td class="text-center">'+data[i]["phone"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
             }
@@ -1244,7 +1267,7 @@
 						<a href="javascript:void(0)"><?php echo $this->lang->line('users') ?></a>
 						<ul>
 							
-							<li><a href="javascript:report('')"><?php echo $this->lang->line('users') ?></a></li>
+							<li><a href="javascript:report('users')" id="users"><?php echo $this->lang->line('users') ?></a></li>
 							<li><a href="javascript:report('')"><?php echo $this->lang->line('login_details') ?></a></li>							
 													
 							
@@ -2044,6 +2067,23 @@
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>                
                 <th><?php echo $this->lang->line('tax_area') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="users_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('user_name') ?></th>
+                <th><?php echo $this->lang->line('first_name') ?></th>
+                <th><?php echo $this->lang->line('address') ?></th>
+                <th><?php echo $this->lang->line('email') ?></th>
+                <th><?php echo $this->lang->line('phone') ?></th>
                 <th><?php echo $this->lang->line('status') ?></th>
                 
             </tr>

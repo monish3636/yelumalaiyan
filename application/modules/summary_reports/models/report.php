@@ -683,6 +683,17 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        else if($report=='users'){
+            $this->db->select('users.*,branches.store_name,branches.code as bcode,users_x_branches.user_active')->from('users_x_branches')->where('users_x_branches.branch_id',$branch)->where('users_x_branches.user_delete',0);
+            $this->db->join('users', 'users.guid=users_x_branches.user_id','left');
+            $this->db->join('branches', 'branches.guid=users_x_branches.branch_id','left');
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
