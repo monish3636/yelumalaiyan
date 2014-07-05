@@ -470,6 +470,38 @@ class Report extends CI_Model{
             }
             return $data;
         }
+        
+        else if($report=='customer_payable_credit'){
+            $this->db->select('customer_payable.*,sales_bill.invoice,sales_bill.date ,branches.store_name,branches.code as bcode,customers.first_name as s_name,customers.company_name as c_name')->from('customer_payable')->where('customer_payable.branch_id',$branch)->where('customer_payable.payment_status',0);
+            $this->db->join('sales_bill', 'sales_bill.guid=customer_payable.invoice_id','left');
+            $this->db->join('branches', 'branches.guid=customer_payable.branch_id','left');
+            $this->db->join('customers', 'customers.guid=customer_payable.customer_id','left');
+            $this->db->where('sales_bill.date >=', strtotime($start));
+            $this->db->where('sales_bill.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                $data[]=$row;
+                
+            }
+             return $data;
+        }
+        else if($report=='customer_payable_debit'){
+            $this->db->select('sales_return.*,sales_return.code as invoice,branches.store_name,branches.code as bcode,customers.first_name as s_name,customers.company_name as c_name')->from('sales_return')->where('sales_return.branch_id',$branch)->where('sales_return.payment_status',0);
+            $this->db->join('branches', 'branches.guid=sales_return.branch_id','left');
+            $this->db->join('sales_bill', 'sales_bill.guid=sales_return.sales_bill_id','left');
+            $this->db->join('customers', 'customers.guid=sales_bill.customer_id','left');
+            $this->db->where('sales_return.date >=', strtotime($start));
+            $this->db->where('sales_return.date <=', strtotime($end));
+            $sql=  $this->db->get();
+            $data=array();
+            foreach($sql->result_array() as $row){  
+                $row['date']=date('d-m-Y',$row['date']);
+                $data[]=$row;
+            }
+            return $data;
+        }
     }
 }
 ?>
