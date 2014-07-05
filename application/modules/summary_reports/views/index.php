@@ -723,6 +723,51 @@
                         </tr>')
                     }
                 }
+                else if(report=='customers'){
+                    $('.dataTable').hide();
+                    $('#customers_table').show();
+                    $('#customers_table tbody').remove();
+                    $('#customers_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#customers_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["address"]+'</td>\n\
+                            <td class="text-center">'+data[i]["email"]+'</td>\n\
+                            <td class="text-center">'+data[i]["phone"]+'</td>\n\
+                            <td class="text-center">'+data[i]["category_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["added_date"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
+                else if(report=='customer_category'){
+                    $('.dataTable').hide();
+                    $('#customer_category_table').show();
+                    $('#customer_category_table tbody').remove();
+                    $('#customer_category_table').append('<tbody></tbody');
+                    for(var i=0;i<data.length;i++){
+                        var status='<?php echo $this->lang->line('deactive') ?>';
+                        if(data[i]['active_status']==1){
+                            var status='<?php echo $this->lang->line('active') ?>';
+                        }
+                        $('#customer_category_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["category_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["discount"]+'</td>\n\
+                            <td class="text-center">'+status+'</td>\n\
+                        </tr>')
+                    }
+                }
                 
                 
                 
@@ -826,8 +871,8 @@
 						<a href="javascript:void(0)"><?php echo $this->lang->line('customers') ?></a>
 						<ul>
 							
-							<li><a href="javascript:report('')"><?php echo $this->lang->line('customers') ?></a></li>
-							<li><a href="javascript:report('')"><?php echo $this->lang->line('customer_category') ?></a></li>							
+							<li><a href="javascript:report('customers')" id="customers"><?php echo $this->lang->line('customers') ?></a></li>
+							<li><a href="javascript:report('customer_category')" id="customer_category"><?php echo $this->lang->line('customer_category') ?></a></li>							
 							
 							
                                                 </ul>
@@ -1425,6 +1470,38 @@
                 <th><?php echo $this->lang->line('total_amount') ?></th>
                 <th><?php echo $this->lang->line('paid_amount') ?></th>
                 <th><?php echo $this->lang->line('payable_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="customers_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('name') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('address') ?></th>
+                <th><?php echo $this->lang->line('email') ?></th>
+                <th><?php echo $this->lang->line('phone') ?></th>                
+                <th><?php echo $this->lang->line('category') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+   <table id="customer_category_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>                
+                <th><?php echo $this->lang->line('category') ?></th>
+                <th><?php echo $this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('status') ?></th>
                 
             </tr>
         </thead>
