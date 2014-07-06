@@ -2,6 +2,7 @@
 <script src="<?php echo base_url() ?>template/date/js/moment.js"></script>
 <script src="<?php echo base_url() ?>template/date/js/daterangepicker.js"></script>
 <script type="text/javascript" charset="utf-8">
+    var point=3;
     $(document).ready( function () {
         $('.dataTable').hide();
         function format_branch(branch) {
