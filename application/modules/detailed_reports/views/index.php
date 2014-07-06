@@ -323,6 +323,7 @@
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
                         <td class="text-right table_footer">'+total_customer_discount_amount+'</td>\n\
                         <td class="text-right table_footer">'+total_sales_discount+'</td>\n\
                         <td class="text-right table_footer">'+total_freight+'</td>\n\
