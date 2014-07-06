@@ -314,7 +314,7 @@
                     total_item_amount=num.toFixed(point);
                     var num = parseFloat(total_amount);
                     total_amount=num.toFixed(point);
-                    $('#sales_quotation_table tfoot').append(' <tr >\n\
+                    $('#sales_delivery_note_table tfoot').append(' <tr >\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
@@ -333,7 +333,6 @@
                         <td class="text-right table_footer">'+total_item_amount+'</td>\n\
                         <td class="text-right table_footer">'+total_amount+'</td>\n\
                     </tr>');
-                    }
                 }
                 else if(report=='direct_sales_delivery_note'){
                     $('.dataTable').hide();
@@ -1571,6 +1570,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+         <tfoot></tfoot>
     </table>
     <table id="direct_sales_delivery_note_table" class="dataTable table-condensed table-bordered">
         <thead>
