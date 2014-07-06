@@ -17,12 +17,21 @@ class Detailed_reports extends MX_Controller
 
 
     }
-    function get_branch(){
+    function search_sales(){
         $like= $this->input->post('term');  
         $this->load->model('report');
-        $data= $this->report->search_branch($like);
+        $data= $this->report->search_sales($like);
         echo json_encode($data);                
     }
+    /* get sale deatils
+     * function start     */
+    function get_sales($guid){
+        $this->load->model('report');
+        $data= $this->report->get_sales($like);
+        echo json_encode($data); 
+    }
+    /* function end*/
+    
     function get_report(){
         $this->load->model('report');
         $report=  $this->input->post('report');
