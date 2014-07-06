@@ -4,17 +4,32 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready( function () {
         $('.dataTable').hide();
-        function format_branch(branch) {
-            if (!branch.id) return branch.text;
-                return  branch.code+" "+branch.text;
+      
+           
+
+    });
+    function sales(){
+        $('.select_sales').change(function() {
+            var guid=$('.select_sales').select2('data').id;
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/detailed_reports/search_sales/"+guid,                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                }
+            });
+        });
+        function format_sales(sale) {
+            if (!sale.id) return sale.text;
+                return  ''+sale.text+" "+sale.date+" "+sale.first_name+" "+sale.company_name+'';
         }
-        $('#select_branch').select2({
-            formatResult: format_branch,
-            formatSelection: format_branch,
-            multiple:true,
-            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('branch') ?>",
+        $('.select_sales').select2({
+            formatResult: format_sales,
+            formatSelection: format_sales,
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('sales') ?>",
             ajax: {
-                url: '<?php echo base_url() ?>index.php/detailed_reports/get_branch',
+                url: '<?php echo base_url() ?>index.php/detailed_reports/search_sales',
                 data: function(term, page) {
                     return {types: ["exercise"],
                         limit: -1,
@@ -34,8 +49,10 @@
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
-                            text: item.store_name,
-                            code: item.code
+                            text: item.invoice,
+                            first_name: item.first_name,
+                            company_name: item.company_name,
+                            date: item.date
                         });
                     });
                     return {
@@ -44,25 +61,6 @@
                 }
             }
         });
-        var test = $('#select_branch');
-$('#select_branch').change(function() {
-var ids =[];
-     ids = $(test).val(); // works
-    //var selections = $(test).filter('option:selected').text(); // doesn't work
-    //var ids = $(test).select2('data').id; // doesn't work (returns 'undefined')
-    //var selections = $(test).select2('data').text; // doesn't work (returns 'undefined')
-    //var selections = $(test).select2('data');
-    var selections = ( JSON.stringify($(test).select2('data')) );
-    var data =$(test).select2('data') ;
-  //  console.log('Selected IDs: ' + ids[1]);
-  console.log(data.length);
-  console.log(data[0]['id']);
-    console.log('Selected options: ' + selections);
-    //$('#selectedIDs').text(ids);
-    //$('#selectedText').text(selections);
-});
-
-    });
-    
+    }
    			
   </script>

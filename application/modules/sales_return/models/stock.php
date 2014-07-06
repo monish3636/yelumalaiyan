@@ -179,7 +179,7 @@ class Stock extends CI_Model{
      }
       function search_sales_bill($search){
           
-          $this->db->select('sales_bill.*,customers.first_name,customers.company_name')->from('sales_bill');
+          $this->db->select('sales_bill.*,customers.first_name,customers.company_name')->from('sales_bill')->where('sales_bill.branch_id',  $this->session->userdata('branch_id'));
           $this->db->join('customers', 'customers.guid=sales_bill.customer_id','left');
           $like=array('invoice'=>$search,'first_name'=>$search,'company_name'=>$search);       
           $this->db->or_like($like);
