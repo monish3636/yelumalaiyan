@@ -82,6 +82,8 @@
                     $('#sales_order_table').show();
                     $('#sales_order_table tbody').remove();
                     $('#sales_order_table').append('<tbody></tbody');
+                    $('#sales_order_table tfoot').remove();
+                    $('#sales_order_table').append('<tfoot></tfoot');                    
                     var total_freight=0;
                     var total_round_amt=0;
                     var total_customer_discount_amount=0;
@@ -167,6 +169,8 @@
                     $('#sales_quotation_table').show();
                     $('#sales_quotation_table tbody').remove();
                     $('#sales_quotation_table').append('<tbody></tbody');
+                    $('#sales_quotation_table tfoot').remove();
+                    $('#sales_quotation_table').append('<tfoot></tfoot');
                     var total_freight=0;
                     var total_round_amt=0;
                     var total_customer_discount_amount=0;
@@ -250,6 +254,8 @@
                     $('#sales_delivery_note_table').show();
                     $('#sales_delivery_note_table tbody').remove();
                     $('#sales_delivery_note_table').append('<tbody></tbody');
+                    $('#sales_delivery_note_table tfoot').remove();
+                    $('#sales_delivery_note_table').append('<tfoot></tfoot');
                     var total_freight=0;
                     var total_round_amt=0;
                     var total_customer_discount_amount=0;
@@ -340,7 +346,19 @@
                     $('#direct_sales_delivery_note_table').show();
                     $('#direct_sales_delivery_note_table tbody').remove();
                     $('#direct_sales_delivery_note_table').append('<tbody></tbody');
-                    for(var i=0;i<data.length;i++){
+                    $('#direct_sales_delivery_note_table tfoot').remove();
+                    $('#direct_sales_delivery_note_table').append('<tfoot></tfoot');    
+                    var total_freight=0;
+                    var total_round_amt=0;
+                    var total_customer_discount_amount=0;
+                    var total_sales_discount=0;
+                    var total_items=0;
+                    var total_tax=0;
+                    var total_item_discount=0;
+                    var total_item_amount=0;
+                    var total_amount=0;
+                    var i=0;
+                    for(i=0;i<data.length;i++){
                         var status='<?php echo $this->lang->line('waiting') ?>';
                         if(data[0]['order_status']==1){
                             var status='<?php echo $this->lang->line('approved') ?>';
@@ -362,9 +380,53 @@
                             <td class="text-right">'+data[i]["total_tax"]+'</td>\n\
                             <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
                             <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
-                            <td class="text-right">'+status+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_freight=parseFloat(total_freight)+parseFloat(data[i]["freight"]==""?0:data[i]["freight"]);
+                        total_round_amt=parseFloat(total_round_amt)+parseFloat(data[i]["round_amt"]==""?0:data[i]["round_amt"]);
+                        total_customer_discount_amount=parseFloat(total_customer_discount_amount)+parseFloat(data[i]["customer_discount_amount"]==""?0:data[i]["customer_discount_amount"]);
+                        total_sales_discount=parseFloat(total_sales_discount)+parseFloat(data[i]["discount_amt"]==""?0:data[i]["discount_amt"]);
+                        total_items=parseFloat(total_items)+parseFloat(data[i]["total_items"]==""?0:data[i]["total_items"]);
+                        total_tax=parseFloat(total_tax)+parseFloat(data[i]["total_tax"]==""?0:data[i]["total_tax"]);
+                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["total_discount"]==""?0:data[i]["total_discount"]);
+                        total_item_amount=parseFloat(total_item_amount)+parseFloat(data[i]["total_item_amt"]==""?0:data[i]["total_item_amt"]);
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amt"]==""?0:data[i]["total_amt"]);
                     }
+                    var num = parseFloat(total_freight);
+                    total_freight=num.toFixed(point);
+                    var num = parseFloat(total_round_amt);
+                    total_round_amt=num.toFixed(point);
+                    var num = parseFloat(total_customer_discount_amount);
+                    total_customer_discount_amount=num.toFixed(point);
+                    var num = parseFloat(total_sales_discount);
+                    total_sales_discount=num.toFixed(point);
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_tax);
+                    total_tax=num.toFixed(point);
+                    var num = parseFloat(total_item_discount);
+                    total_item_discount=num.toFixed(point);
+                    var num = parseFloat(total_item_amount);
+                    total_item_amount=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#direct_sales_delivery_note_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_customer_discount_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_sales_discount+'</td>\n\
+                        <td class="text-right table_footer">'+total_freight+'</td>\n\
+                        <td class="text-right table_footer">'+total_round_amt+'</td>\n\
+                        <td class="text-center table_footer">'+total_items+'</td>\n\
+                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
+                        <td class="text-right table_footer">'+total_tax+'</td>\n\
+                        <td class="text-right table_footer">'+total_item_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
                 }
                 else if(report=='direct_sales'){
                     $('.dataTable').hide();
@@ -1592,11 +1654,11 @@
                 <th><?php echo $this->lang->line('tax') ?></th>
                 <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
-                <th><?php echo $this->lang->line('approve') ?></th>
                 
             </tr>
         </thead>
         <tbody></tbody>
+        <tfoot></tfoot>
     </table>
     <table id="direct_sales_table" class="dataTable table-condensed table-bordered">
         <thead>
