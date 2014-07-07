@@ -1261,6 +1261,9 @@
                     $('#supplier_payment_debit_table').show();
                     $('#supplier_payment_debit_table tbody').remove();
                     $('#supplier_payment_debit_table').append('<tbody></tbody');
+                    $('#supplier_payment_debit_table tfoot').remove();
+                    $('#supplier_payment_debit_table').append('<tfoot></tfoot');
+                    var total_amount=0;
                     for(var i=0;i<data.length;i++){
                        
                         $('#supplier_payment_debit_table tbody').append('<tr> \n\
@@ -1273,14 +1276,34 @@
                             <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["added_date"]+'</td>\n\
                             <td class="text-right">'+data[i]["amount"]+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["amount"]==""?0:data[i]["amount"]);
                     }
+                   
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#supplier_payment_debit_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
                 }
                 else if(report=='supplier_payment_credit'){
                     $('.dataTable').hide();
                     $('#supplier_payment_credit_table').show();
                     $('#supplier_payment_credit_table tbody').remove();
                     $('#supplier_payment_credit_table').append('<tbody></tbody');
+                    $('#supplier_payment_credit_table tfoot').remove();
+                    $('#supplier_payment_credit_table').append('<tfoot></tfoot');
+                    var total_amount=0;
                     for(var i=0;i<data.length;i++){
                        
                         $('#supplier_payment_credit_table tbody').append('<tr> \n\
@@ -1293,14 +1316,34 @@
                             <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["added_date"]+'</td>\n\
                             <td class="text-right">'+data[i]["amount"]+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["amount"]==""?0:data[i]["amount"]);
                     }
+                   
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#supplier_payment_credit_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
                 }
                 else if(report=='customer_payment_debit'){
                     $('.dataTable').hide();
                     $('#customer_payment_debit_table').show();
                     $('#customer_payment_debit_table tbody').remove();
                     $('#customer_payment_debit_table').append('<tbody></tbody');
+                    $('#customer_payment_debit_table tfoot').remove();
+                    $('#customer_payment_debit_table').append('<tfoot></tfoot');
+                    var total_amount=0;
                     for(var i=0;i<data.length;i++){
                        
                         $('#customer_payment_debit_table tbody').append('<tr> \n\
@@ -1313,14 +1356,34 @@
                             <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["added_date"]+'</td>\n\
                             <td class="text-right">'+data[i]["amount"]+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["amount"]==""?0:data[i]["amount"]);
                     }
+                   
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#customer_payment_debit_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
                 }
                 else if(report=='customer_payment_credit'){
                     $('.dataTable').hide();
                     $('#customer_payment_credit_table').show();
                     $('#customer_payment_credit_table tbody').remove();
                     $('#customer_payment_credit_table').append('<tbody></tbody');
+                    $('#customer_payment_credit_table tfoot').remove();
+                    $('#customer_payment_credit_table').append('<tfoot></tfoot');
+                    var total_amount=0;
                     for(var i=0;i<data.length;i++){
                        
                         $('#customer_payment_credit_table tbody').append('<tr> \n\
@@ -1333,8 +1396,25 @@
                             <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["added_date"]+'</td>\n\
                             <td class="text-right">'+data[i]["amount"]+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["amount"]==""?0:data[i]["amount"]);
                     }
+                   
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#customer_payment_credit_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
                 }
                 
                 else if(report=='supplier_payable_debit'){
@@ -1342,6 +1422,11 @@
                     $('#supplier_payable_debit_table').show();
                     $('#supplier_payable_debit_table tbody').remove();
                     $('#supplier_payable_debit_table').append('<tbody></tbody');
+                    $('#supplier_payable_debit_table tfoot').remove();
+                    $('#supplier_payable_debit_table').append('<tfoot></tfoot');
+                    var total_amount=0;
+                    var total_paid_amount=0;
+                    var total_balance=0;
                     for(var i=0;i<data.length;i++){
                         var balance=parseFloat(data[i]["amount"])-parseFloat(data[i]["paid_amount"]);
                         $('#supplier_payable_debit_table tbody').append('<tr> \n\
@@ -1355,8 +1440,30 @@
                             <td class="text-right">'+data[i]["amount"]+'</td>\n\
                             <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
                             <td class="text-right">'+balance+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["amount"]==""?0:data[i]["amount"]);
+                        total_paid_amount=parseFloat(total_paid_amount)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
+                        total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
                     }
+                   
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_paid_amount);
+                    total_paid_amount=num.toFixed(point);
+                    var num = parseFloat(total_balance);
+                    total_balance=num.toFixed(point);
+                    $('#supplier_payable_debit_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_paid_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_balance+'</td>\n\
+                    </tr>');
                 }
                 
                 else if(report=='supplier_payable_credit'){
@@ -1364,6 +1471,11 @@
                     $('#supplier_payable_credit_table').show();
                     $('#supplier_payable_credit_table tbody').remove();
                     $('#supplier_payable_credit_table').append('<tbody></tbody');
+                    $('#supplier_payable_credit_table tfoot').remove();
+                    $('#supplier_payable_credit_table').append('<tfoot></tfoot');
+                    var total_amount=0;
+                    var total_paid_amount=0;
+                    var total_balance=0;
                     for(var i=0;i<data.length;i++){
                         var balance=parseFloat(data[i]["total_amount"])-parseFloat(data[i]["paid_amount"]);
                         $('#supplier_payable_credit_table tbody').append('<tr> \n\
@@ -1377,14 +1489,41 @@
                             <td class="text-right">'+data[i]["total_amount"]+'</td>\n\
                             <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
                             <td class="text-right">'+balance+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amount"]==""?0:data[i]["total_amount"]);
+                        total_paid_amount=parseFloat(total_paid_amount)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
+                        total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
                     }
+                   
+                    var num = parseFloat(total_balance);
+                    total_balance=num.toFixed(point);
+                    var num = parseFloat(total_paid_amount);
+                    total_paid_amount=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#supplier_payable_credit_table tfoot').append(' <tr >\n\
+                         <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_paid_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_balance+'</td>\n\
+                    </tr>');
                 }
                 else if(report=='customer_payable_debit'){
                     $('.dataTable').hide();
                     $('#customer_payable_debit_table').show();
                     $('#customer_payable_debit_table tbody').remove();
                     $('#customer_payable_debit_table').append('<tbody></tbody');
+                    $('#customer_payable_debit_table tfoot').remove();
+                    $('#customer_payable_debit_table').append('<tfoot></tfoot');
+                    var total_amount=0;
+                    var total_paid_amount=0;
+                    var total_balance=0;
                     for(var i=0;i<data.length;i++){
                         var balance=parseFloat(data[i]["total_amount"])-parseFloat(data[i]["paid_amount"]);
                         $('#customer_payable_debit_table tbody').append('<tr> \n\
@@ -1398,8 +1537,30 @@
                             <td class="text-right">'+data[i]["total_amount"]+'</td>\n\
                             <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
                             <td class="text-right">'+balance+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amount"]==""?0:data[i]["total_amount"]);
+                        total_paid_amount=parseFloat(total_paid_amount)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
+                        total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
                     }
+                   
+                    var num = parseFloat(total_balance);
+                    total_balance=num.toFixed(point);
+                    var num = parseFloat(total_paid_amount);
+                    total_paid_amount=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#customer_payable_debit_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_paid_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_balance+'</td>\n\
+                    </tr>');
                 }
                 
                 else if(report=='customer_payable_credit'){
@@ -1407,6 +1568,11 @@
                     $('#customer_payable_credit_table').show();
                     $('#customer_payable_credit_table tbody').remove();
                     $('#customer_payable_credit_table').append('<tbody></tbody');
+                    $('#customer_payable_credit_table tfoot').remove();
+                    $('#customer_payable_credit_table').append('<tfoot></tfoot');
+                    var total_amount=0;
+                    var total_paid_amount=0;
+                    var total_balance=0;
                     for(var i=0;i<data.length;i++){
                         var balance=parseFloat(data[i]["amount"])-parseFloat(data[i]["paid_amount"]);
                         $('#customer_payable_credit_table tbody').append('<tr> \n\
@@ -1420,8 +1586,30 @@
                             <td class="text-right">'+data[i]["amount"]+'</td>\n\
                             <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
                             <td class="text-right">'+balance+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["amount"]==""?0:data[i]["amount"]);
+                        total_paid_amount=parseFloat(total_paid_amount)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
+                        total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
                     }
+                   
+                    var num = parseFloat(total_balance);
+                    total_balance=num.toFixed(point);
+                    var num = parseFloat(total_paid_amount);
+                    total_paid_amount=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#customer_payable_credit_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_paid_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_balance+'</td>\n\
+                    </tr>');
                 }
                 else if(report=='customers'){
                     $('.dataTable').hide();
@@ -2416,6 +2604,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+          <tfoot></tfoot>
     </table>
    <table id="customer_payment_debit_table" class="dataTable table-condensed table-bordered">
         <thead>
@@ -2433,6 +2622,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+         <tfoot></tfoot>
     </table>
    <table id="customer_payment_credit_table" class="dataTable table-condensed table-bordered">
         <thead>
@@ -2450,6 +2640,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+         <tfoot></tfoot>
     </table>
    <table id="supplier_payment_credit_table" class="dataTable table-condensed table-bordered">
         <thead>
@@ -2467,6 +2658,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+        <tfoot></tfoot>
     </table>
    <table id="supplier_payable_debit_table" class="dataTable table-condensed table-bordered">
         <thead>
@@ -2485,6 +2677,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+       <tfoot></tfoot>
     </table>
    <table id="supplier_payable_credit_table" class="dataTable table-condensed table-bordered">
         <thead>
@@ -2503,6 +2696,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+        <tfoot></tfoot>
     </table>
    <table id="customer_payable_debit_table" class="dataTable table-condensed table-bordered">
         <thead>
@@ -2521,6 +2715,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+        <tfoot></tfoot>
     </table>
    <table id="customer_payable_credit_table" class="dataTable table-condensed table-bordered">
         <thead>
@@ -2539,6 +2734,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+         <tfoot></tfoot>
     </table>
    <table id="customers_table" class="dataTable table-condensed table-bordered">
         <thead>
@@ -2558,6 +2754,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+        
     </table>
    <table id="customer_category_table" class="dataTable table-condensed table-bordered">
         <thead>
