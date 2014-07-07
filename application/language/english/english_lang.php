@@ -772,5 +772,6 @@ $lang['credit_days']='Credit Days';
     $lang['debit_payable']='Debit payable';
     $lang['credit_payable']='Credit payable';
     $lang['added_date']='Added Date';
+    $lang['stock_history']='Stock History';
    
 ?>
