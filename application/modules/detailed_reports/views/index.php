@@ -46,19 +46,118 @@
     .no-border{
         border: none !important;
     }
+      
 </style>	
 <script type="text/javascript">
     function report(report){
         $('.dataTable').hide();
+        $('#branch_base').show();
+        $('#supplier_base').hide();
         var title=$('#'+report).text();
         $('#title').text(title+' <?php echo $this->lang->line('report') ?>');
         $('#report_val').val(report);
     }
     function get_report(){
+        
         var report= $('#report_val').val();
         var range=$('#date_range').val();
         var start_date=range.split(' - ')[0];
         var end_date=range.split(' - ')[1];
+        if(report=='purchase_branch_base'){
+            var branch =$('#select_branch').select2('data');
+            var branch_id=[];
+            for(var i=0;i<branch.length;i++){
+                branch_id[i]=branch[i]['id'];
+            }
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/detailed_reports/get_purchase_branch_base_report/",                      
+                data: {
+                    start:start_date,
+                    end:end_date,
+                    branch:branch_id
+
+                }, 
+                type:'POST',
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                    $('.dataTable').hide();
+                    $('#purchase_base_table').show();
+                    $('#purchase_base_table tbody').remove();
+                    $('#purchase_base_table').append('<tbody></tbody');
+                    $('#purchase_base_table tfoot').remove();
+                    $('#purchase_base_table').append('<tfoot></tfoot');
+                    var total_freight=0;
+                    var total_round_amt=0;
+                    var total_sales_discount=0;
+                    var total_items=0;
+                    var total_item_amount=0;
+                    var total_amount=0;
+                    var total_paid=0;
+                    var total_balance=0;
+                    var i=0;
+                    for(i=0;i<data.length;i++){
+                       var balance=parseFloat(data[i]['purchase_amount'])-parseFloat(data[i]['paid_amount'])
+                        $('#purchase_base_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
+                            <td class="text-right">'+balance+'</td>\n\
+                        </tr>');
+                        total_freight=parseFloat(total_freight)+parseFloat(data[i]["freight"]==""?0:data[i]["freight"]);
+                        total_round_amt=parseFloat(total_round_amt)+parseFloat(data[i]["round_amt"]==""?0:data[i]["round_amt"]);
+                        total_items=parseFloat(total_items)+parseFloat(data[i]["total_items"]==""?0:data[i]["total_items"]);                      
+                        total_sales_discount=parseFloat(total_sales_discount)+parseFloat(data[i]["discount_amt"]==""?0:data[i]["discount_amt"]);
+                        total_item_amount=parseFloat(total_item_amount)+parseFloat(data[i]["total_item_amt"]==""?0:data[i]["total_item_amt"]);
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amt"]==""?0:data[i]["total_amt"]);
+                        total_paid=parseFloat(total_paid)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
+                        total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
+                    }
+                    var num = parseFloat(total_freight);
+                    total_freight=num.toFixed(point);
+                    var num = parseFloat(total_round_amt);
+                    total_round_amt=num.toFixed(point);
+                    var num = parseFloat(total_sales_discount);
+                    total_sales_discount=num.toFixed(point);
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    var num = parseFloat(total_paid);
+                    totak_paid=num.toFixed(point);
+                    var num = parseFloat(total_balance);
+                    total_balance=num.toFixed(point);
+                    $('#purchase_base_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_sales_discount+'</td>\n\
+                        <td class="text-right table_footer">'+total_freight+'</td>\n\
+                        <td class="text-right table_footer">'+total_round_amt+'</td>\n\
+                        <td class="text-center table_footer">'+total_items+'</td>\n\
+                        <td class="text-right table_footer">'+total_item_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_paid+'</td>\n\
+                        <td class="text-right table_footer">'+total_balance+'</td>\n\
+                    </tr>');
+                }
+            });
+        }else{
         var branch =$('#select_branch').select2('data');
         var branch_id=[];
         for(var i=0;i<branch.length;i++){
@@ -1989,6 +2088,7 @@
             }
         });        
     }
+    }
 </script>
 
 <nav id="top_navigation">
@@ -2143,9 +2243,9 @@
 
                                                 <li><a href="javascript:void(0)"><?php echo $this->lang->line('purchase') ?></a>
                                                     <ul>
-                                                        <li><a href="javascript:report('customers')" id="customers"><?php echo $this->lang->line('supplier_base') ?></a></li>
-                                                        <li><a href="javascript:report('customers')" id="customers"><?php echo $this->lang->line('items_base') ?></a></li>
-                                                        <li><a href="javascript:report('customer_category')" id="customer_category"><?php echo $this->lang->line('branch_base') ?></a></li>							
+                                                        <li><a href="javascript:account_report('purchase_supplier_base')" id="purchase_supplier_base"><?php echo $this->lang->line('supplier_base') ?></a></li>
+                                                        <li><a href="javascript:account_report('purchase_items_base')" id="purchase_items_base"><?php echo $this->lang->line('items_base') ?></a></li>
+                                                        <li><a href="javascript:account_report('purchase_branch_base')" id="purchase_branch_base"><?php echo $this->lang->line('branch_base') ?></a></li>							
                                                     </ul>
                                                 </li>
                                                 <li><a href="javascript:report('')"><?php echo $this->lang->line('sales') ?></a>
@@ -2171,9 +2271,17 @@
             <h4 id='title' ></h4>
         </div>
         <div class="row">
-            <div class="col col-lg-4">
+            <div class="col col-lg-4" id="branch_base" style="display: none">
                 <lable><?php  echo $this->lang->line('branches') ?></lable>
                 <input id="select_branch" class="form-control" >                   
+            </div>
+            <div class="col col-lg-4" id="supplier_base" style="display: none">
+                <lable><?php  echo $this->lang->line('suppliers') ?></lable>
+                <input id="select_suppliers" class="form-control" >                   
+            </div>
+            <div class="col col-lg-4" id="select_purchase_items" style="display: none">
+                <lable><?php  echo $this->lang->line('items') ?></lable>
+                <input id="purchase_items" class="form-control" >                   
             </div>
            <div class="col col-sm-3" >
            <div class="form_sep">
@@ -2479,6 +2587,30 @@
                 <th><?php echo $this->lang->line('no_of_items') ?></th>
                 <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+         <tfoot></tfoot>
+    </table>
+    <table id="purchase_base_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('purchase_invoice') ?></th>
+                <th><?php echo $this->lang->line('supplier') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('order_date') ?></th>
+                <th><?php echo $this->lang->line('purchase')." ".$this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('freight') ?></th>
+                <th><?php echo $this->lang->line('round_off_amount') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                <th><?php echo $this->lang->line('paid_amount') ?></th>
+                <th><?php echo $this->lang->line('payable')." ".$this->lang->line('amount') ?></th>
                 
             </tr>
         </thead>

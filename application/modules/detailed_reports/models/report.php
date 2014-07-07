@@ -20,6 +20,38 @@ class Report extends CI_Model{
         }
                 
     }
+    function search_suppliers($search){
+        $this->db->select()->from('suppliers')->where('branch_id',  $this->session->userdata('branch_id'));
+        $this->db->or_like(array('first_name'=>$search,'email'=>$search,'phone'=>$search));
+        $sql=  $this->db->get();
+        return $sql->result();
+        
+    }
+    function search_purchase_items($search){
+        
+         $this->db->select('items_setting.purchase,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',0);
+         $this->db->join('items', "items.guid=stock.item",'left');
+         $this->db->join('items_category', 'items.category_id=items_category.guid ','left');
+         $this->db->join('items_setting', 'items.guid=items_setting.item_id AND items_setting.purchase=1','left');
+         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=stock.item ",'left');
+         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=stock.item ",'left');
+         $this->db->join('brands', 'items.brand_id=brands.guid','left');
+         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
+         $like=array('items.active_status'=>$search,'items.barcode'=>$search,'items.ean_upc_code'=>$search,'items.name'=>$search,'items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
+                $this->db->or_like($like);
+                $this->db->limit($this->session->userdata['data_limit']);
+                $sql=  $this->db->get();
+                $data=array();
+                foreach ($sql->result() as $row){
+                   
+                    $data[]=$row;
+                  
+                }
+               // $this->db->like('suppliers_x_items.supplier_id',$guid); 
+         
+         return $data;
+     
+     }
     function get_report($branch,$report,$start,$end){
         if($report=='sales_order'){
             $this->db->select('sales_order.*,branches.store_name,branches.code as bcode,customers.first_name as s_name,customers.company_name as c_name')->from('sales_order')->where('sales_order.branch_id',$branch)->where('sales_order.delete_status',0);
@@ -694,6 +726,53 @@ class Report extends CI_Model{
             }
             return $data;
         }
+    }
+    /* get purchase report based on branch
+    function start     */
+    function get_purchase_branch_base_report($branch,$start,$end){
+        $this->db->select('supplier_payable.paid_amount,supplier_payable.amount as purchase_amount,grn.grn_no as grn_code,grn.discount_amt as grn_discount_amt,purchase_order.freight as grn_freight,purchase_order.round_amt as grn_round_amt,purchase_order.total_items as grn_total_items,grn.total_item_amt as grn_total_item_amt,grn.total_amt as grn_total_amt,direct_grn.grn_no as dgrn_code,direct_grn.discount_amt as dg_discount_amt,direct_grn.freight as dg_freight,direct_grn.round_amt as dg_round_amt,direct_grn.total_items as dg_total_items,direct_grn.total_item_amt as dg_total_item_amt, direct_grn.total_amt as dg_total_amt,direct_invoice.invoice_no as di_code,direct_invoice.discount_amt as di_discount_amt,direct_invoice.freight as di_freight,direct_invoice.round_amt as di_round_amt,direct_invoice.total_items as di_total_items,direct_invoice.total_item_amt as di_total_item_amt, direct_invoice.total_amt as di_total_amt, branches.store_name,branches.code as bcode,direct_grn.grn_no,purchase_invoice.invoice,purchase_invoice.guid as invoice_guid, purchase_invoice.date,suppliers.first_name as s_name,suppliers.company_name as c_name');
+        $this->db->from('purchase_invoice')->where('purchase_invoice.branch_id',$branch);
+        $this->db->join('direct_invoice', 'direct_invoice.guid=purchase_invoice.direct_invoice_id','left');
+        $this->db->join('supplier_payable', 'supplier_payable.invoice_id=direct_invoice.guid OR supplier_payable.invoice_id=purchase_invoice.guid','left');
+        $this->db->join('branches', 'branches.guid=purchase_invoice.branch_id','left');
+        $this->db->join('direct_grn', 'direct_grn.guid=purchase_invoice.grn','left');
+        $this->db->join('grn', 'grn.guid=purchase_invoice.grn AND grn.po=purchase_invoice.po','left');
+        $this->db->join('purchase_order', 'purchase_order.guid=purchase_invoice.po','left');
+        $this->db->join('suppliers', 'suppliers.guid=purchase_order.supplier_id OR suppliers.guid=direct_grn.supplier_id OR suppliers.guid=direct_invoice.supplier_id','left');
+        $this->db->where('purchase_invoice.date >=', strtotime($start));
+        $this->db->where('purchase_invoice.date <=', strtotime($end));
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){  
+            $row['date']=date('d-m-Y',$row['date']);
+            if($row['di_code']!="" && $row['di_code']!=NULL){
+                $row['total_items']=$row['di_total_items'];
+                $row['discount_amt']=$row['di_discount_amt'];
+                $row['freight']=$row['di_freight'];
+                $row['round_amt']=$row['di_round_amt'];
+                $row['total_item_amt']=$row['di_total_item_amt'];
+                $row['total_amt']=$row['di_total_amt'];
+            }
+
+            if($row['grn_code']!="" && $row['grn_code']!=NULL){
+                $row['total_items']=$row['grn_total_items'];
+                $row['discount_amt']=$row['grn_discount_amt'];
+                $row['freight']=$row['grn_freight'];
+                $row['round_amt']=$row['grn_round_amt'];
+                $row['total_item_amt']=$row['grn_total_item_amt'];
+                $row['total_amt']=$row['grn_total_amt'];
+            }
+              if($row['dgrn_code']!="" && $row['dgrn_code']!=NULL){
+                $row['total_items']=$row['dg_total_items'];
+                $row['discount_amt']=$row['dg_discount_amt'];
+                $row['freight']=$row['dg_freight'];
+                $row['round_amt']=$row['dg_round_amt'];
+                $row['total_item_amt']=$row['dg_total_item_amt'];
+                $row['total_amt']=$row['dg_total_amt'];
+            }
+            $data[]=$row;
+        }
+        return $data; 
     }
 }
 ?>
