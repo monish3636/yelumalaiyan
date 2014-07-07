@@ -157,7 +157,103 @@
                     </tr>');
                 }
             });
-        }else{
+        }
+        else if(report=='purchase_supplier_base'){
+            var supplier =$('#select_suppliers').select2('data');
+            var supplier_id=[];
+            for(var i=0;i<supplier.length;i++){
+                supplier_id[i]=supplier[i]['id'];
+            }
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/detailed_reports/get_purchase_supplier_base_report/",                      
+                data: {
+                    start:start_date,
+                    end:end_date,
+                    supplier:supplier_id
+
+                }, 
+                type:'POST',
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                    $('.dataTable').hide();
+                    $('#purchase_base_table').show();
+                    $('#purchase_base_table tbody').remove();
+                    $('#purchase_base_table').append('<tbody></tbody');
+                    $('#purchase_base_table tfoot').remove();
+                    $('#purchase_base_table').append('<tfoot></tfoot');
+                    var total_freight=0;
+                    var total_round_amt=0;
+                    var total_sales_discount=0;
+                    var total_items=0;
+                    var total_item_amount=0;
+                    var total_amount=0;
+                    var total_paid=0;
+                    var total_balance=0;
+                    var i=0;
+                    for(i=0;i<data.length;i++){
+                       var balance=parseFloat(data[i]['purchase_amount'])-parseFloat(data[i]['paid_amount'])
+                        $('#purchase_base_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
+                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
+                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
+                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
+                            <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
+                            <td class="text-right">'+balance+'</td>\n\
+                        </tr>');
+                        total_freight=parseFloat(total_freight)+parseFloat(data[i]["freight"]==""?0:data[i]["freight"]);
+                        total_round_amt=parseFloat(total_round_amt)+parseFloat(data[i]["round_amt"]==""?0:data[i]["round_amt"]);
+                        total_items=parseFloat(total_items)+parseFloat(data[i]["total_items"]==""?0:data[i]["total_items"]);                      
+                        total_sales_discount=parseFloat(total_sales_discount)+parseFloat(data[i]["discount_amt"]==""?0:data[i]["discount_amt"]);
+                        total_item_amount=parseFloat(total_item_amount)+parseFloat(data[i]["total_item_amt"]==""?0:data[i]["total_item_amt"]);
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amt"]==""?0:data[i]["total_amt"]);
+                        total_paid=parseFloat(total_paid)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
+                        total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
+                    }
+                    var num = parseFloat(total_freight);
+                    total_freight=num.toFixed(point);
+                    var num = parseFloat(total_round_amt);
+                    total_round_amt=num.toFixed(point);
+                    var num = parseFloat(total_sales_discount);
+                    total_sales_discount=num.toFixed(point);
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    var num = parseFloat(total_paid);
+                    totak_paid=num.toFixed(point);
+                    var num = parseFloat(total_balance);
+                    total_balance=num.toFixed(point);
+                    $('#purchase_base_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_sales_discount+'</td>\n\
+                        <td class="text-right table_footer">'+total_freight+'</td>\n\
+                        <td class="text-right table_footer">'+total_round_amt+'</td>\n\
+                        <td class="text-center table_footer">'+total_items+'</td>\n\
+                        <td class="text-right table_footer">'+total_item_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                        <td class="text-right table_footer">'+total_paid+'</td>\n\
+                        <td class="text-right table_footer">'+total_balance+'</td>\n\
+                    </tr>');
+                }
+            });
+        }
+        else{
         var branch =$('#select_branch').select2('data');
         var branch_id=[];
         for(var i=0;i<branch.length;i++){
