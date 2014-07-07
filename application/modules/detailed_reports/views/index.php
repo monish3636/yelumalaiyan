@@ -520,6 +520,8 @@
                     $('#sales_bill_table').show();
                     $('#sales_bill_table tbody').remove();
                     $('#sales_bill_table').append('<tbody></tbody');
+                    $('#sales_bill_table tfoot').remove();
+                    $('#sales_bill_table').append('<tfoot></tfoot');
                     var total_freight=0;
                     var total_round_amt=0;
                     var total_customer_discount_amount=0;
@@ -605,7 +607,14 @@
                     $('#sales_return_table').show();
                     $('#sales_return_table tbody').remove();
                     $('#sales_return_table').append('<tbody></tbody');
-                    for(var i=0;i<data.length;i++){
+                    $('#sales_return_table tfoot').remove();
+                    $('#sales_return_table').append('<tfoot></tfoot');
+                   
+                    var total_items=0;                
+                    var total_item_amount=0;
+                    var total_amount=0;
+                    var i=0;
+                    for(i=0;i<data.length;i++){
                         var status='<?php echo $this->lang->line('waiting') ?>';
                         if(data[0]['order_status']==1){
                             var status='<?php echo $this->lang->line('approved') ?>';
@@ -620,8 +629,26 @@
                             <td class="text-center">'+data[i]["date"]+'</td>\n\
                             <td class="text-center">'+data[i]["no_items"]+'</td> \n\
                             <td class="text-right">'+data[i]["total_amount"]+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_items=parseFloat(total_items)+parseFloat(data[i]["no_items"]==""?0:data[i]["no_items"]);
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amount"]==""?0:data[i]["total_amount"]);
                     }
+                   
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#sales_return_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-center table_footer">'+total_items+'</td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
                 }
                 else if(report=='purchase_order'){
                     $('.dataTable').hide();
@@ -1837,6 +1864,7 @@
             </tr>
         </thead>
         <tbody></tbody>
+         <tfoot></tfoot>
     </table>
     <table id="purchase_order_table" class="dataTable table-condensed table-bordered">
         <thead>
