@@ -2111,41 +2111,16 @@
 							<li><a href="javascript:report('item_department')" id="item_department"><?php echo $this->lang->line('item_department') ?></a></li>							
 							<li><a href="javascript:report('item_brand')" id="item_brand"><?php echo $this->lang->line('brand') ?></a></li>							
 							<li><a href="javascript:report('items')" id="item_kit"><?php echo $this->lang->line('items') ?></a></li>
-													
-							
-							
-                                                </ul>
-                                        </li>
-                                        <li>
-						<a href="javascript:void(0)"><?php echo $this->lang->line('tax') ?></a>
-						<ul>
-							
-							<li><a href="javascript:report('item_tax')" id="item_tax"><?php echo $this->lang->line('taxes') ?></a></li>							
-							<li><a href="javascript:report('item_tax_type')" id="item_tax_type"><?php echo $this->lang->line('tax_type') ?></a></li>							
-							<li><a href="javascript:report('item_tax_area')" id="item_tax_area"><?php echo $this->lang->line('tax_area') ?></a></li>							
-							
-													
-							
-							
-                                                </ul>
-                                        </li>
-                                        <li>
-						<a href="javascript:void(0)"><?php echo $this->lang->line('decomposition') ?></a>
-						<ul>
-							
 							<li><a href="javascript:report('decomposition')" id="decomposition"><?php echo $this->lang->line('decomposition') ?></a></li>
 							<li><a href="javascript:report('decomposition_type')" id="decomposition_type"><?php echo $this->lang->line('decomposition_type') ?></a></li>							
 							<li><a href="javascript:report('decomposition_items')"  id="decomposition_items"><?php echo $this->lang->line('decomposition_items') ?></a></li>							
 							
 							
-                                                </ul>
-                                        </li>
-                                        <li>
-						<a href="javascript:void(0)"><?php echo $this->lang->line('item_kit') ?></a>
-						<ul>
-							
 							<li><a href="javascript:report('item_kit')" id="item_kit"><?php echo $this->lang->line('item_kit') ?></a></li>
 							<li><a href="javascript:report('kit_category')" id="kit_category"><?php echo $this->lang->line('kit_category') ?></a></li>							
+							<li><a href="javascript:report('item_tax')" id="item_tax"><?php echo $this->lang->line('taxes') ?></a></li>							
+							<li><a href="javascript:report('item_tax_type')" id="item_tax_type"><?php echo $this->lang->line('tax_type') ?></a></li>							
+							<li><a href="javascript:report('item_tax_area')" id="item_tax_area"><?php echo $this->lang->line('tax_area') ?></a></li>							
 													
 							
 							
@@ -2161,6 +2136,30 @@
 							
 							
                                                 </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)"><?php echo $this->lang->line('accounts') ?></a>
+                                            <ul>
+
+                                                <li><a href="javascript:void(0)"><?php echo $this->lang->line('purchase') ?></a>
+                                                    <ul>
+                                                        <li><a href="javascript:report('customers')" id="customers"><?php echo $this->lang->line('supplier_base') ?></a></li>
+                                                        <li><a href="javascript:report('customers')" id="customers"><?php echo $this->lang->line('items_base') ?></a></li>
+                                                        <li><a href="javascript:report('customer_category')" id="customer_category"><?php echo $this->lang->line('branch_base') ?></a></li>							
+                                                    </ul>
+                                                </li>
+                                                <li><a href="javascript:report('')"><?php echo $this->lang->line('sales') ?></a>
+                                                    <ul>
+                                                        <li><a href="javascript:report('customers')" id="customers"><?php echo $this->lang->line('customer_base') ?></a></li>
+                                                        <li><a href="javascript:report('customers')" id="customers"><?php echo $this->lang->line('items_base') ?></a></li>
+                                                        <li><a href="javascript:report('customer_category')" id="customer_category"><?php echo $this->lang->line('branch_base') ?></a></li>							
+                                                    </ul>
+                                                </li>							
+                                                <li><a href="javascript:report('profit_and_loss')" id="profit_and_loss"><?php echo $this->lang->line('profit_and_loss') ?></a></li>							
+
+
+
+                                            </ul>
                                         </li>
 										
                                         </ul>

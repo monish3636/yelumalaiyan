@@ -773,5 +773,11 @@ $lang['credit_days']='Credit Days';
     $lang['credit_payable']='Credit payable';
     $lang['added_date']='Added Date';
     $lang['stock_history']='Stock History';
+    $lang['accounts']='Accounts';
+    $lang['profit_and_loss']='Profit And Loss';
+    $lang['supplier_base']='Supplier Base';
+    $lang['customer_base']='Customer Base';
+    $lang['branch_base']='Branch Base';
+    $lang['items_base']='Items Base';
    
 ?>
