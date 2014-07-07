@@ -45,25 +45,131 @@
                 }
             }
         });
-        var test = $('#select_branch');
-$('#select_branch').change(function() {
-var ids =[];
-     ids = $(test).val(); // works
-    //var selections = $(test).filter('option:selected').text(); // doesn't work
-    //var ids = $(test).select2('data').id; // doesn't work (returns 'undefined')
-    //var selections = $(test).select2('data').text; // doesn't work (returns 'undefined')
-    //var selections = $(test).select2('data');
-    var selections = ( JSON.stringify($(test).select2('data')) );
-    var data =$(test).select2('data') ;
-  //  console.log('Selected IDs: ' + ids[1]);
-  console.log(data.length);
-  console.log(data[0]['id']);
-    console.log('Selected options: ' + selections);
-    //$('#selectedIDs').text(ids);
-    //$('#selectedText').text(selections);
-});
+        function format_supplier(sup) {
+            if (!sup.id) return sup.text;
+                return  sup.code+" "+sup.text;
+        }
+        $('#select_suppliers').select2({
+            formatResult: format_supplier,
+            formatSelection: format_supplier,
+            multiple:true,
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('suppliers') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/detailed_reports/search_suppliers',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.first_name,
+                            code: item.company_name
+                        });
+                    });
+                    return {
+                       results: results
+                    };
+                }
+            }
+        });
+          function format_item(sup) {
+            if (!sup.id) return sup.text;
+    return  "<p >"+sup.text+' '+sup.value+' '+sup.category+' '+sup.brand+' '+sup.department+"</p>";
+            }
+          $('#purchase_items').select2({
+             
+             
+                 formatResult: format_item,
+                formatSelection: format_item,
+                  multiple:true,
+                escapeMarkup: function(m) { return m; },
+                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('items') ?>",
+                ajax: {
+                     url: '<?php echo base_url() ?>index.php/detailed_reports/search_purchase_items/',
+                     data: function(term, page) {
+                            return {types: ["exercise"],
+                                limit: 2,
+                                term: term,
+                               
+                            };
+                     },
+                    type:'POST',
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term) {
+                        return {
+                            term: term
+                           
+                        };
+                    },
+                    results: function (data) {
+                      var results = [];
+                      
+                      $.each(data, function(index, item){
+                        results.push({
+                          id: item.i_guid,
+                          text: item.name,
+                          value: item.code,
+                          image: item.image,
+                          brand: item.b_name,
+                          category: item.c_name,
+                          department: item.d_name,
+                          quty: item.quty,
+                          cost: item.cost,
+                          price: item.price,
+                          mrp: item.mrp,
+                          tax_type: item.tax_type_name,
+                          tax_value: item.tax_value,
+                          tax_Inclusive : item.tax_Inclusive ,
+                        });
+                      });   
+                      return {
+                       
+                          results: results
+                      };
+                    }
+                }
+            });
 
     });
+    function account_report(report){
+        $('.dataTable').hide();
+        var title=$('#'+report).text();      
+        $('#report_val').val(report);
+        if(report=='purchase_branch_base'){
+            $('#branch_base').show();
+            $('#supplier_base').hide();
+            $('#select_purchase_items').hide();
+            $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
+        else if(report=='purchase_supplier_base'){
+            $('#branch_base').hide();
+            $('#supplier_base').show();
+            $('#select_purchase_items').hide();
+            $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
+        else if(report=='purchase_items_base'){
+            $('#branch_base').hide();
+            $('#supplier_base').hide();
+            $('#select_purchase_items').show();
+             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
     
+    
+        
+    }
    			
   </script>
