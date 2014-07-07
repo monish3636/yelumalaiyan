@@ -1007,6 +1007,8 @@
                     $('#purchase_return_table').show();
                     $('#purchase_return_table tbody').remove();
                     $('#purchase_return_table').append('<tbody></tbody');
+                    var total_items=0;
+                    var total_amount=0;
                     for(var i=0;i<data.length;i++){
                         var status='<?php echo $this->lang->line('waiting') ?>';
                         if(data[0]['stock_status']==1){
@@ -1023,8 +1025,26 @@
                             <td class="text-center">'+data[i]["no_items"]+'</td> \n\
                             <td class="text-right">'+data[i]["total_amount"]+'</td>\n\
                             <td class="text-right">'+status+'</td>\n\
-                        </tr>')
+                        </tr>');
+                        total_items=parseFloat(total_items)+parseFloat(data[i]["no_items"]==""?0:data[i]["no_items"]);
+                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amount"]==""?0:data[i]["total_amount"]);
                     }
+                   
+                    var num = parseFloat(total_items);
+                    total_items=num.toFixed(point);
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    $('#purchase_return_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-center table_footer">'+total_items+'</td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
                 }
                 else if(report=='opening_stock'){
                     $('.dataTable').hide();
