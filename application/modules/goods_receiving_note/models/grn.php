@@ -119,13 +119,13 @@ class Grn extends CI_Model{
      
      }
     function get_purchase_order($guid){
-        $this->db->select('items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers_x_items.quty as item_limit,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,purchase_order.*,purchase_order_items.discount_per as dis_per ,purchase_order_items.discount_amount as item_dis_amt ,purchase_order_items.tax as dis_amt ,purchase_order_items.tax as order_tax,purchase_order_items.item ,purchase_order_items.quty ,purchase_order_items.free,purchase_order_items.guid as o_i_guid ,purchase_order_items.received_quty ,purchase_order_items.received_free ,purchase_order_items.cost ,purchase_order_items.sell ,purchase_order_items.mrp,purchase_order_items.guid as o_i_guid ,purchase_order_items.amount ,purchase_order_items.date,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_order')->where('purchase_order.guid',$guid);
-        $this->db->join('purchase_order_items', 'purchase_order_items.order_id = purchase_order.guid AND purchase_order_items.delete_status=0','left');
-        $this->db->join('items', "items.guid=purchase_order_items.item AND purchase_order_items.order_id='".$guid."' AND purchase_order_items.delete_status=0",'left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_order_items.item  AND purchase_order_items.delete_status=0",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_order_items.item  AND purchase_order_items.delete_status=0",'left');
-        $this->db->join('suppliers', "suppliers.guid=purchase_order.supplier_id AND purchase_order_items.order_id='".$guid."'  AND purchase_order_items.delete_status=0",'left');
-        $this->db->join('suppliers_x_items', "suppliers_x_items.supplier_id=purchase_order.supplier_id AND suppliers_x_items.item_id=purchase_order_items.item AND purchase_order_items.order_id='".$guid."'  AND purchase_order_items.delete_status=0",'left');
+        $this->db->select('items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers_x_items.quty as item_limit,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,purchase_order.*,purchase_items.discount_per as dis_per ,purchase_items.discount_amount as item_dis_amt ,purchase_items.tax as dis_amt ,purchase_items.tax as order_tax,purchase_items.item ,purchase_items.quty ,purchase_items.free,purchase_items.guid as o_i_guid ,purchase_items.received_quty ,purchase_items.received_free ,purchase_items.cost ,purchase_items.sell ,purchase_items.mrp,purchase_items.guid as o_i_guid ,purchase_items.amount ,purchase_items.date,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_order')->where('purchase_order.guid',$guid);
+        $this->db->join('purchase_items', 'purchase_items.order_id = purchase_order.guid AND purchase_items.delete_status=0','left');
+        $this->db->join('items', "items.guid=purchase_items.item AND purchase_items.order_id='".$guid."' AND purchase_items.delete_status=0",'left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_items.item  AND purchase_items.delete_status=0",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item  AND purchase_items.delete_status=0",'left');
+        $this->db->join('suppliers', "suppliers.guid=purchase_order.supplier_id AND purchase_items.order_id='".$guid."'  AND purchase_items.delete_status=0",'left');
+        $this->db->join('suppliers_x_items', "suppliers_x_items.supplier_id=purchase_order.supplier_id AND suppliers_x_items.item_id=purchase_items.item AND purchase_items.order_id='".$guid."'  AND purchase_items.delete_status=0",'left');
         $sql=  $this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){             
@@ -137,15 +137,14 @@ class Grn extends CI_Model{
         return $data;
      }
     function get_goods_receiving_note($guid){
-        $this->db->select('grn.date as grn_date,grn.note as grn_note,grn.remark as grn_remark,grn.grn_no,grn_x_items.guid as grn_items_guid,grn_x_items.quty as rece_quty,grn_x_items.free as rece_free,items.tax_Inclusive ,grn.po,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers_x_items.quty as item_limit,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,purchase_order.*,purchase_order_items.discount_per as dis_per ,purchase_order_items.discount_amount as item_dis_amt ,purchase_order_items.tax as dis_amt ,purchase_order_items.tax as order_tax,purchase_order_items.item ,purchase_order_items.quty ,purchase_order_items.free,purchase_order_items.guid as o_i_guid ,purchase_order_items.received_quty ,purchase_order_items.received_free ,purchase_order_items.cost ,purchase_order_items.sell ,purchase_order_items.mrp,purchase_order_items.guid as o_i_guid ,purchase_order_items.amount ,purchase_order_items.date,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('grn')->where('grn.guid',$guid)->where('grn.delete_status',0);
+        $this->db->select('grn.date as grn_date,grn.note as grn_note,grn.remark as grn_remark,grn.grn_no,items.tax_Inclusive ,grn.po,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,purchase_order.*,purchase_items.discount_per as dis_per ,purchase_items.discount_amount as item_dis_amt ,purchase_items.tax as dis_amt ,purchase_items.tax as order_tax,purchase_items.item ,purchase_items.quty ,purchase_items.free,purchase_items.guid as o_i_guid ,purchase_items.received_quty ,purchase_items.received_free ,purchase_items.cost ,purchase_items.sell ,purchase_items.mrp,purchase_items.guid as o_i_guid ,purchase_items.amount ,purchase_items.date,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('grn')->where('grn.guid',$guid)->where('grn.delete_status',0);
         $this->db->join('purchase_order', 'grn.po=purchase_order.guid','left');
-        $this->db->join('grn_x_items', 'grn_x_items.grn=grn.guid','left');
-        $this->db->join('purchase_order_items', 'purchase_order_items.order_id = purchase_order.guid AND grn_x_items.item=purchase_order_items.item AND purchase_order_items.delete_status=0','left');
-        $this->db->join('items', "items.guid=purchase_order_items.item AND items.guid=grn_x_items.item AND purchase_order_items.order_id=purchase_order.guid AND purchase_order_items.delete_status=0",'left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_order_items.item  AND purchase_order_items.delete_status=0",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_order_items.item  AND purchase_order_items.delete_status=0",'left');
-        $this->db->join('suppliers', "suppliers.guid=purchase_order.supplier_id AND purchase_order_items.order_id=purchase_order.guid  AND purchase_order_items.delete_status=0",'left');
-        $this->db->join('suppliers_x_items', "suppliers_x_items.supplier_id=purchase_order.supplier_id AND suppliers_x_items.item_id=purchase_order_items.item AND purchase_order_items.order_id='".$guid."'  AND purchase_order_items.delete_status=0",'left');
+        $this->db->join('purchase_items', 'purchase_items.order_id = purchase_order.guid AND purchase_items.delete_status=0','left');
+        $this->db->join('items', "items.guid=purchase_items.item  AND purchase_items.order_id=purchase_order.guid AND purchase_items.delete_status=0",'left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_items.item  AND purchase_items.delete_status=0",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item  AND purchase_items.delete_status=0",'left');
+        $this->db->join('suppliers', "suppliers.guid=purchase_order.supplier_id AND purchase_items.order_id=purchase_order.guid  AND purchase_items.delete_status=0",'left');
+     
         $sql=  $this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){             
@@ -159,7 +158,7 @@ class Grn extends CI_Model{
      }
      function delete_order_item($guid){      
           $this->db->where('guid',$guid);
-          $this->db->update('purchase_order_items',array('delete_status'=>1));
+          $this->db->update('purchase_items',array('delete_status'=>1));
      }
      function deactive_order($guid){
          $this->db->select()->from('purchase_order')->where('guid',$guid)->where('order_status',0);
@@ -172,43 +171,15 @@ class Grn extends CI_Model{
              echo "approve";
          }
      }
-    function update_item_receving($po_item,$quty,$free){
-        $this->db->select()->from('purchase_order_items')->where('guid',$po_item);
-        $sql=  $this->db->get();
-        $received_quty;
-        $received_free;
-        $ordered_quty;
-        $ordered_free;
-        foreach ($sql->result() as $row){
-            $received_quty=$row->received_quty;
-            $received_free=$row->received_free;
-            $ordered_quty=$row->quty;
-            $ordered_free=$row->free;
-         }
-        $balance_quty=$ordered_quty-$received_quty;
-        $balance_free=$ordered_free-$received_free;
-        if($free>$balance_free){
-            $free=$balance_free;
-        }
-        if($quty>$balance_quty){
-            $quty=$balance_quty;
-        }
-        $data=array('received_quty'=>$received_quty+$quty,'received_free'=>$received_free+$free);
+    function received_items($po_item,$quty,$free,$guid){        
+        $data=array('received_quty'=>$quty,'received_free'=>$free,'grn_id'=>$guid);
         $this->db->where('guid',$po_item);
-        $this->db->update('purchase_order_items',$data);
-        
-         
+        $this->db->update('purchase_items',$data);
      }
     # Add Stock From Purchase Receve Note
-    function add_stock($guid,$po_item,$Bid){
-        $this->db->select('grn_x_items.*,grn.po')->from('grn')->where('grn.guid',$guid);
-        $this->db->join('grn_x_items', 'grn_x_items.grn=grn.guid','left');
-        $grn=$this->db->get();
-        foreach ($grn->result() as $grn_row){
-     
-        
-        $this->db->select('purchase_order_items.*,purchase_order.supplier_id')->from('purchase_order')->where('purchase_order.guid',$grn_row->po);
-        $this->db->join('purchase_order_items','purchase_order_items.order_id=purchase_order.guid','left');
+    function add_stock($guid,$po,$Bid){
+        $this->db->select('purchase_items.*,purchase_order.supplier_id')->from('purchase_order')->where('purchase_order.guid',$po);
+        $this->db->join('purchase_items','purchase_items.order_id=purchase_order.guid','left');
         $sql=  $this->db->get();
         $price;
         $supplier;
@@ -217,7 +188,7 @@ class Grn extends CI_Model{
            $cost=$row->cost;
            $supplier=$row->supplier_id;
         }
-        $this->db->select()->from('stock')->where('branch_id',$Bid)->where('item',$grn_row->item);
+        $this->db->select()->from('stock')->where('branch_id',$Bid)->where('item',$row->item);
         $sql_order=  $this->db->get();
         if($sql_order->num_rows()>0){
             $stock_quty;
@@ -228,112 +199,49 @@ class Grn extends CI_Model{
                 $stock_guid=$stock->guid;
             }
             if($selling==$price){
-            $this->db->where('branch_id',$Bid)->where('item',$grn_row->item);
-            $this->db->update('stock',array('quty'=>$grn_row->quty+$stock_quty,'price'=>$price));
-            $this->db->insert('stocks_history',array('stock_id'=>$stock_guid,'po_id'=>$grn_row->po,'grn_id'=>$guid,'supplier_id'=>$supplier,'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid'),'item_id'=>$grn_row->item,'quty'=>$grn_row->quty,'price'=>$price,'cost'=>$cost,'date'=>strtotime(date("Y/m/d"))));
+                $quty=$row->received_quty+$row->received_free;
+                $this->db->where('branch_id',$Bid)->where('item',$row->item);
+                $this->db->update('stock',array('quty'=>$quty+$stock_quty,'price'=>$price));
+                $this->db->insert('stocks_history',array('stock_id'=>$stock_guid,'po_id'=>$po,'grn_id'=>$guid,'supplier_id'=>$supplier,'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid'),'item_id'=>$row->item,'quty'=>$quty,'price'=>$price,'cost'=>$cost,'date'=>strtotime(date("Y/m/d"))));
                 $id=  $this->db->insert_id();
                 $this->db->where('id',$id);
-                $this->db->update('stocks_history',array('guid'=>  md5('stocks_history'.$grn_row->item.$id)));
+                $this->db->update('stocks_history',array('guid'=>  md5('stocks_history'.$row->item.$id)));
             
             }else{
-             $this->db->insert('stock',array('item'=>$grn_row->item,'quty'=>$grn_row->quty,'price'=>$price,'branch_id'=>$Bid));
-            $id=  $this->db->insert_id();
-            $this->db->where('id',$id);
-             
-            $this->db->update('stock',array('guid'=>  md5('stock'.$grn_row->item.$id)));
-                $this->db->insert('stocks_history',array('stock_id'=>md5('stock'.$grn_row->item.$id),'po_id'=>$grn_row->po,'grn_id'=>$guid,'supplier_id'=>$supplier,'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid'),'item_id'=>$grn_row->item,'quty'=>$grn_row->quty,'price'=>$price,'cost'=>$cost,'date'=>strtotime(date("Y/m/d"))));
+                $quty=$row->received_quty+$row->received_free;
+                $this->db->insert('stock',array('item'=>$row->item,'quty'=>$quty,'price'=>$price,'branch_id'=>$Bid));
                 $id=  $this->db->insert_id();
                 $this->db->where('id',$id);
-                $this->db->update('stocks_history',array('guid'=>  md5('stocks_history'.$grn_row->item.$id)));
+
+                $this->db->update('stock',array('guid'=>  md5('stock'.$row->item.$id)));
+                $this->db->insert('stocks_history',array('stock_id'=>md5('stock'.$row->item.$id),'po_id'=>$po,'grn_id'=>$guid,'supplier_id'=>$supplier,'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid'),'item_id'=>$row->item,'quty'=>$quty,'price'=>$price,'cost'=>$cost,'date'=>strtotime(date("Y/m/d"))));
+                $id=  $this->db->insert_id();
+                $this->db->where('id',$id);
+                $this->db->update('stocks_history',array('guid'=>  md5('stocks_history'.$row->item.$id)));
             }
         }else{
-            $this->db->insert('stock',array('item'=>$grn_row->item,'quty'=>$grn_row->quty,'price'=>$price,'branch_id'=>$Bid));
+            $quty=$row->received_quty+$row->received_free;
+            $this->db->insert('stock',array('item'=>$row->item,'quty'=>$quty,'price'=>$price,'branch_id'=>$Bid));
+            $id=  $this->db->insert_id();
+            $this->db->where('id',$id);             
+            $this->db->update('stock',array('guid'=>  md5('stock'.$row->item.$id)));
+            $this->db->insert('stocks_history',array('stock_id'=>md5('stock'.$row->item.$id),'po_id'=>$po,'grn_id'=>$guid,'supplier_id'=>$supplier,'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid'),'item_id'=>$row->item,'quty'=>$quty,'price'=>$price,'cost'=>$cost,'date'=>strtotime(date("Y/m/d"))));
             $id=  $this->db->insert_id();
             $this->db->where('id',$id);
-             
-            $this->db->update('stock',array('guid'=>  md5('stock'.$grn_row->item.$id)));
+            $this->db->update('stocks_history',array('guid'=>  md5('stocks_history'.$row->item.$id)));
             
             
-                $this->db->insert('stocks_history',array('stock_id'=>md5('stock'.$grn_row->item.$id),'po_id'=>$grn_row->po,'grn_id'=>$guid,'supplier_id'=>$supplier,'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid'),'item_id'=>$grn_row->item,'quty'=>$grn_row->quty,'price'=>$price,'cost'=>$cost,'date'=>strtotime(date("Y/m/d"))));
-                $id=  $this->db->insert_id();
-                $this->db->where('id',$id);
-                $this->db->update('stocks_history',array('guid'=>  md5('stocks_history'.$grn_row->item.$id)));
         }
         }
-    }
-    function update_grn_items_quty($guid,$quty,$free,$items,$po_item){
-        $this->db->select()->from('grn_x_items')->where('guid',$guid);        
-        $sql=  $this->db->get();
-      
-        $old_quty;
-        $old_free;
-        $oquty;
-        $ofree;
-        $rquty;
-        $rree;
-        foreach ($sql->result() as $row){
-           $old_free=$row->free;
-      $old_quty=$row->quty;
-        }
-        
-        $this->db->select()->from('purchase_order_items')->where('guid',$po_item);
-        $po=  $this->db->get();
-        foreach ($po->result() as $prow){
-            $ofree=$prow->free;
-           $oquty=$prow->quty;
-            $rfree=$prow->received_free;
-            $rquty=$prow->received_quty;
-        }
-       $old_received_quty=$rquty-$old_quty;
-      
-        $old_received_free=$rfree-$old_free;
-        $current_quty=$quty+$old_received_quty;
-        $current_free=$free+$old_received_free;
-        if($current_quty>$oquty){
-          $quty=$oquty-$old_received_quty;
-        }
-        if($current_free>$ofree){
-            $free=$ofree-$old_received_free;
-        }
-        $this->db->where('guid',$guid);
-        $this->db->update('grn_x_items',array('quty'=>$quty,'free'=>$free));
-        $this->db->where('guid',$po_item);
-        $this->db->update('purchase_order_items',array('received_quty'=>$old_received_quty+$quty,'received_free'=>$free+$old_received_free));
-        
-    }
+   
     function change_grn_status($guid){
         $this->db->where('guid',$guid);
         $this->db->update('grn',array('grn_status'=>1));
     }
     function delete_grn_items($guid){
-        $this->db->select()->from('grn')->where('guid',$guid);
-        $grn=  $this->db->get();
-        $order_id;
-        foreach ($grn->result() as $row){
-            $order_id= $row->po;
-        }
-        $this->db->select()->from('purchase_order_items')->where('order_id',$order_id);
-        $po=$this->db->get();
-        foreach ($po->result() as $item){
-            $quty;
-            $free;
-            $this->db->select()->from('grn_x_items')->where('grn',$guid)->where('item',$item->item) ;
-            $grn_item=  $this->db->get();
-            $grn_item_guid;
-            foreach ($grn_item->result() as $grn_row)
-            {
-                $quty=$grn_row->quty;   
-                $free=$grn_row->free; 
-                $grn_item_guid=$grn_row->guid; 
-            }
-            
-           
-            $this->db->where('guid',$item->guid);
-            $this->db->update('purchase_order_items',array('received_quty'=>$item->received_quty-$quty,'received_free'=>$item->received_free-$free));
-            $this->db->where('guid',$grn_item_guid);
-            $this->db->update('grn_x_items',array('active'=>0,'active_status'=>0));
-                    
-        }
+        $this->db->where('grn_id',$guid);
+        $this->db->delete('purchase_items');
+        
         
     }
     function check_approve($guid){
