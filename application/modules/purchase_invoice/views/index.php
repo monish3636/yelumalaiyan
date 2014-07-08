@@ -346,7 +346,7 @@
                                   if(!$('#'+data[i]['o_i_guid']).length){
                                     var  name=data[i]['items_name'];
                                     var  sku=data[i]['i_code'];
-                                    var  quty=data[i]['quty'];
+                                    var  quty=data[i]['received_quty'];
                                     var  limit=data[i]['item_limit'];
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
