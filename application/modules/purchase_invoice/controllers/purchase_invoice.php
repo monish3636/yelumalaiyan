@@ -108,11 +108,11 @@ function save(){
                    if($po=='non') {
                     $po="non";
                   
-                    $this->invoice->direct_grn_invoice_status($grn);
+                    $this->invoice->direct_grn_invoice_status($grn,$guid);
                     $this->invoice->direct_grn_payable_amount($grn,$guid);
                 }else{
                     
-                    $this->invoice->grn_invoice_status($grn);
+                    $this->invoice->grn_invoice_status($grn,$guid);
                     $this->invoice->grn_payable_amount($grn,$guid,$po);
                 }
                 $this->posnic->posnic_master_increment_max('purchase_invoice')  ;
