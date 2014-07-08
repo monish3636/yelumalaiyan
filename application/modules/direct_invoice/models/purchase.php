@@ -51,13 +51,13 @@ class Purchase extends CI_Model{
      
     }
     function get_direct_invoice($guid){
-         $this->db->select('items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers_x_items.quty as item_limit,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,direct_invoice.*,direct_invoice_items.discount_per as dis_per ,direct_invoice_items.discount_amount as item_dis_amt ,direct_invoice_items.tax as dis_amt ,direct_invoice_items.tax as order_tax,direct_invoice_items.item ,direct_invoice_items.quty ,direct_invoice_items.free ,direct_invoice_items.cost ,direct_invoice_items.sell ,direct_invoice_items.mrp,direct_invoice_items.guid as o_i_guid ,direct_invoice_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_invoice')->where('direct_invoice.guid',$guid);
-         $this->db->join('direct_invoice_items', 'direct_invoice_items.order_id = direct_invoice.guid ','left');
-         $this->db->join('items', "items.guid=direct_invoice_items.item AND direct_invoice_items.order_id='".$guid."' ",'left');
-         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=direct_invoice_items.item  ",'left');
-         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=direct_invoice_items.item ",'left');
-         $this->db->join('suppliers', "suppliers.guid=direct_invoice.supplier_id AND direct_invoice_items.order_id='".$guid."' ",'left');
-         $this->db->join('suppliers_x_items', "suppliers_x_items.supplier_id=direct_invoice.supplier_id AND suppliers_x_items.item_id=direct_invoice_items.item AND direct_invoice_items.order_id='".$guid."'  ",'left');
+         $this->db->select('items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers_x_items.quty as item_limit,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,direct_invoice.*,purchase_items.discount_per as dis_per ,purchase_items.discount_amount as item_dis_amt ,purchase_items.tax as dis_amt ,purchase_items.tax as order_tax,purchase_items.item ,purchase_items.quty ,purchase_items.free ,purchase_items.cost ,purchase_items.sell ,purchase_items.mrp,purchase_items.guid as o_i_guid ,purchase_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_invoice')->where('direct_invoice.guid',$guid);
+         $this->db->join('purchase_items', 'purchase_items.order_id = direct_invoice.guid ','left');
+         $this->db->join('items', "items.guid=purchase_items.item AND purchase_items.order_id='".$guid."' ",'left');
+         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_items.item  ",'left');
+         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item ",'left');
+         $this->db->join('suppliers', "suppliers.guid=direct_invoice.supplier_id AND purchase_items.order_id='".$guid."' ",'left');
+         $this->db->join('suppliers_x_items', "suppliers_x_items.supplier_id=direct_invoice.supplier_id AND suppliers_x_items.item_id=purchase_items.item AND purchase_items.order_id='".$guid."'  ",'left');
          $sql=  $this->db->get();
          $data=array();
          foreach($sql->result_array() as $row){
@@ -72,7 +72,7 @@ class Purchase extends CI_Model{
     }
     function delete_order_item($guid){      
           $this->db->where('guid',$guid);
-          $this->db->delete('direct_invoice_items');
+          $this->db->delete('purchase_items');
     }
     function approve_invoice($guid){
         $this->db->where('guid',$guid);
@@ -104,8 +104,8 @@ class Purchase extends CI_Model{
             
     }
     function direct_invoice_stock($guid,$Bid){
-        $this->db->select('direct_invoice_items.*,direct_invoice.supplier_id')->from('direct_invoice')->where('direct_invoice.guid',$guid);
-        $this->db->join('direct_invoice_items','direct_invoice_items.order_id=direct_invoice.guid','left');
+        $this->db->select('purchase_items.*,direct_invoice.supplier_id')->from('direct_invoice')->where('direct_invoice.guid',$guid);
+        $this->db->join('purchase_items','purchase_items.order_id=direct_invoice.guid','left');
         $invoice=$this->db->get();
         foreach ($invoice->result() as $invoice_row){
             $price=$invoice_row->sell;
@@ -153,10 +153,10 @@ class Purchase extends CI_Model{
          
     }
     function add_items($item_value){
-        $this->db->insert('direct_invoice_items',$item_value);
+        $this->db->insert('purchase_items',$item_value);
         $id=  $this->db->insert_id();
         $this->db->where('id',$id);
-        $this->db->update('direct_invoice_items',array('guid'=>  md5('direct_invoice_items'.$id)));
+        $this->db->update('purchase_items',array('guid'=>  md5('purchase_items'.$id)));
     }
     
 }
