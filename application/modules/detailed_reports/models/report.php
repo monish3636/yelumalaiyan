@@ -823,6 +823,32 @@ class Report extends CI_Model{
         }
         return $data; 
     }
+    function get_purchase_items_base_report($items,$start,$end){
+       $this->db->select('direct_invoice_items.quty as DI_quty,direct_grn_items.quty as DG_quty,grn_x_items.quty as G_quty,');
+        $this->db->from('purchase_invoice')->where('purchase_invoice.branch_id',$this->session->userdata('branch_id'));
+        $this->db->join('items', "items.guid='".$items."'",'left'); 
+        $this->db->join('direct_invoice', "direct_invoice.guid=purchase_invoice.direct_invoice_id ",'left'); 
+        $this->db->join('direct_invoice_items', "direct_invoice_items.order_id=direct_invoice.guid AND direct_invoice_items.order_id=purchase_invoice.direct_invoice_id AND direct_invoice_items.item=items.guid AND direct_invoice_items.item='".$items."'",'left');
+        $this->db->join('direct_grn', "direct_grn.guid=purchase_invoice.grn ",'left');
+        $this->db->join('direct_grn_items', "direct_grn_items.order_id=direct_invoice.guid AND direct_grn_items.order_id=purchase_invoice.grn AND direct_grn_items.item=items.guid AND direct_grn_items.item='".$items."'",'left');
+        $this->db->join('grn', 'grn.guid=purchase_invoice.grn AND grn.po=purchase_invoice.po','left');
+        $this->db->join('grn_x_items', "grn_x_items.grn=grn.guid AND grn_x_items.grn=purchase_invoice.grn AND grn.po=purchase_invoice.po AND grn_x_items.item=items.guid AND grn_x_items.item='".$items."'",'left');
+        $this->db->join('purchase_order', 'purchase_order.guid=purchase_invoice.po','left');
+
+        
+        $this->db->join('suppliers', 'suppliers.guid=purchase_order.supplier_id OR suppliers.guid=direct_grn.supplier_id OR suppliers.guid=direct_invoice.supplier_id','left');
+        $this->db->where('purchase_invoice.date >=', strtotime($start));
+        $this->db->where('purchase_invoice.date <=', strtotime($end));
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){  
+            
+            $data[]=$row;
+        }
+        echo '<pre>';
+        print_r($data);
+        return $data; 
+    }
     // function end
 }
 ?>

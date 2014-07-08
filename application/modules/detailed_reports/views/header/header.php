@@ -90,6 +90,7 @@
     return  "<p >"+sup.text+' '+sup.value+' '+sup.category+' '+sup.brand+' '+sup.department+"</p>";
             }
           $('#purchase_items').select2({
+              
              
              
                  formatResult: format_item,

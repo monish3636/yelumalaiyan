@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Purchase_order extends MX_Controller{
    function __construct() {
                 parent::__construct();
@@ -155,7 +155,7 @@ function save(){
                 for($i=0;$i<count($item);$i++){
               
                         $item_value=array('order_id'=>$guid,'discount_per'=>$per[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i]);
-                        $this->posnic->posnic_add_record($item_value,'purchase_order_items');
+                        $this->posnic->posnic_add_record($item_value,'purchase_items');
                 
                         
                 }
@@ -241,7 +241,7 @@ function save(){
                
                          $where=array('order_id'=>$guid,'item'=>$item[$i]);
                         $item_value=array('order_id'=>$guid,'discount_per'=>$per[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i]);
-                       $this->posnic->posnic_update_record($item_value,$where,'purchase_order_items');
+                       $this->posnic->posnic_update_record($item_value,$where,'purchase_items');
                 
                         
                 }
@@ -266,7 +266,7 @@ function save(){
           if($new_quty[$i]!=""){
              
                         $new_item_value=array('order_id'=>$guid,'discount_per'=>$new_per[$i],'discount_amount'=>$new_dis[$i],'tax'=>$new_tax[$i],'item'=>$new_item[$i],'quty'=>$new_quty[$i],'free'=>$new_free[$i],'cost'=>$new_cost[$i],'sell'=>$new_sell[$i],'mrp'=>$new_mrp[$i],'amount'=>$new_net[$i]);
-                        $this->posnic->posnic_add_record($new_item_value,'purchase_order_items');
+                        $this->posnic->posnic_add_record($new_item_value,'purchase_items');
           }
                         
                 }

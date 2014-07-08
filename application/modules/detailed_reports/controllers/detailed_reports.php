@@ -73,6 +73,18 @@ class Detailed_reports extends MX_Controller
         
         echo json_encode($data);
     }
+    function get_purchase_items_base_report(){
+        $this->load->model('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        $items=  $this->input->post('items');
+        $data=array();
+            for($i=0;$i<count($items);$i++){
+               $data= array_merge($data,  $this->report->get_purchase_items_base_report($items[$i],$start,$end));
+            }
+        
+        echo json_encode($data);
+    }
    
 }
 ?>

@@ -117,13 +117,13 @@ function save(){
                 $free=  $this->input->post('receive_free');
                 $items=  $this->input->post('items');
                 $po_item=  $this->input->post('order_items');
-           
+                $this->load->model('grn');
                 for($i=0;$i<count($items);$i++){
           
-                        $item_value=array('grn'=>$guid,'item'=>$items[$i],'quty'=>$quty[$i],'free'=>$free[$i]);
-                        $this->posnic->posnic_add_record($item_value,'grn_x_items');
-                        $this->load->model('grn');
-                        $this->grn->update_item_receving($po_item[$i],$quty[$i],$free[$i]);
+                       //// $item_value=array('grn'=>$guid,'item'=>$items[$i],'quty'=>$quty[$i],'free'=>$free[$i]);
+                      //  $this->posnic->posnic_add_record($item_value,'grn_x_items');
+                       
+                        $this->grn->received_items($po_item[$i],$quty[$i],$free[$i],$guid);
                         //$this->grn->add_stock($items[$i],$quty[$i]+$free[$i],$po_item[$i],$this->session->userdata['branch_id']);
                 }
                 $this->posnic->posnic_master_increment_max('grn')  ;
@@ -158,15 +158,13 @@ function save(){
                 $update_where=array('guid'=>$guid);
                 $this->posnic->posnic_update_record($value,$update_where,'grn');          
                 $quty=  $this->input->post('receive_quty');
-                $grn_item_guid=  $this->input->post('grn_items_guid');
                 $free=  $this->input->post('receive_free');
                 $items=  $this->input->post('items');
                 $po_item=  $this->input->post('order_items');
-           
+                $this->load->model('grn');
                 for($i=0;$i<count($items);$i++){
           
-                        $this->load->model('grn');
-                        $this->grn->update_grn_items_quty($grn_item_guid[$i],$quty[$i],$free[$i],$items[$i],$po_item[$i]);
+                        $this->grn->received_items($po_item[$i],$quty[$i],$free[$i],$guid);
                       
                 }
                     
