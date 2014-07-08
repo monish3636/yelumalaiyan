@@ -39,12 +39,10 @@ class Stock extends CI_Model{
     
     function search_items($search,$bill){
         $data=array();         
-        $this->db->select('direct_invoice_items.item,stocks_history.guid as stocks_history,purchase_invoice.invoice,direct_invoice_items.cost as di_cost,direct_invoice_items.quty as di_quty,,direct_grn_items.cost as dgrn_cost,direct_grn_items.quty as dgrn_quty,purchase_order_items.cost as grn_cost,grn_x_items.quty as grn_quty,items.code,items.uom,items.no_of_unit,items_setting.purchase_return,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id')->from('purchase_invoice')->where('purchase_invoice.guid',$bill)->where('purchase_invoice.branch_id',  $this->session->userdata('branch_id'));
-        $this->db->join('grn_x_items', 'grn_x_items.grn=purchase_invoice.grn','left');
-        $this->db->join('purchase_order_items', 'purchase_order_items.order_id=purchase_invoice.po','left');
-        $this->db->join('direct_invoice_items', 'direct_invoice_items.order_id=purchase_invoice.direct_invoice_id','left');
-        $this->db->join('direct_grn_items', 'direct_grn_items.order_id=purchase_invoice.grn AND purchase_invoice.po="non" ','left');     
-        $this->db->join('items', ' items.guid=direct_grn_items.item OR items.guid=grn_x_items.item OR items.guid=direct_invoice_items.item','left');
+        $this->db->select('stocks_history.guid as stocks_history,purchase_invoice.invoice,purchase_items.cost as cost,purchase_items.quty ,purchase_items.received_quty,purchase_items.received_free,items.code,items.uom,items.no_of_unit,items_setting.purchase_return,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id')->from('purchase_invoice')->where('purchase_invoice.guid',$bill)->where('purchase_invoice.branch_id',  $this->session->userdata('branch_id'));
+        
+        $this->db->join('purchase_items', 'purchase_items.order_id=purchase_invoice.grn OR purchase_items.order_id=purchase_invoice.direct_invoice_id OR purchase_items.order_id=purchase_invoice.po ','left');     
+        $this->db->join('items', ' items.guid=purchase_items.item','left');
         $this->db->join('stocks_history', ' stocks_history.invoice_id=purchase_invoice.guid AND stocks_history.item_id=items.guid OR stocks_history.grn_id=purchase_invoice.grn  AND stocks_history.item_id=items.guid','left');
         $this->db->join('items_category', 'items.category_id=items_category.guid','left');
         $this->db->join('brands', 'items.brand_id=brands.guid','left');
@@ -56,25 +54,10 @@ class Stock extends CI_Model{
         $sql=$this->db->get();
            
             foreach ($sql->result_array() as $row){
-                if($row['di_cost']!=""){
-                    $row['cost']=$row['di_cost'];
+                if($row['received_quty']!=""){
+                    $row['quty']=$row['received_quty']+$row['received_free'];
                 }
-                if($row['di_quty']!=""){
-                    $row['quty']=$row['di_quty'];
-                }
-                if($row['dgrn_cost']!=""){
-                    $row['cost']=$row['dgrn_cost'];
-                }
-                if($row['dgrn_quty']!=""){
-                    $row['quty']=$row['dgrn_quty'];
-                }
-
-                if($row['grn_cost']!=""){
-                    $row['cost']=$row['grn_cost'];
-                }
-                if($row['grn_quty']!=""){
-                    $row['quty']=$row['grn_quty'];
-                }
+               
                 $data[]=$row;
              
             }
@@ -83,46 +66,27 @@ class Stock extends CI_Model{
      
      }
      function get_purchase_return($guid){
-        $this->db->select('direct_invoice_items.quty as di_limit,direct_grn_items.quty as dgrn_limit,direct_invoice_items.cost as di_cost,direct_grn_items.cost as dgrn_cost,purchase_invoice.invoice ,suppliers.first_name,purchase_invoice.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,purchase_return_x_items.quty as item_limit,purchase_return.*,purchase_return_x_items.tax as order_tax,purchase_return_x_items.item ,purchase_return_x_items.quty ,purchase_return_x_items.sell ,purchase_return_x_items.guid as o_i_guid ,purchase_return_x_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_return')->where('purchase_return.guid',$guid);
+        $this->db->select('purchase_items.quty as item_limit,purchase_items.received_quty as received_quty,purchase_items.free as received_free,purchase_invoice.invoice ,suppliers.first_name,purchase_invoice.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,purchase_return.*,purchase_return_x_items.tax as order_tax,purchase_return_x_items.item ,purchase_return_x_items.quty ,purchase_return_x_items.cost ,purchase_return_x_items.sell ,purchase_return_x_items.guid as o_i_guid ,purchase_return_x_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_return')->where('purchase_return.guid',$guid);
         $this->db->join('purchase_invoice','purchase_invoice.guid=purchase_return.purchase_invoice_id','left');
-        
-        $this->db->join('direct_grn', 'direct_grn.guid=purchase_invoice.grn','left');
-        $this->db->join('direct_grn_items', 'direct_grn_items.order_id=direct_grn.guid','left');
-       
-        $this->db->join('direct_invoice', 'direct_invoice.guid=purchase_invoice.direct_invoice_id','left'); 
-        $this->db->join('direct_invoice_items', 'direct_invoice_items.order_id=direct_invoice.guid','left');
-         
-         
         $this->db->join('suppliers','suppliers.guid=purchase_invoice.supplier_id','left');
         $this->db->join('purchase_return_x_items', "purchase_return_x_items.purchase_return_id = purchase_return.guid ",'left');
-        $this->db->join('items', "items.guid=purchase_return_x_items.item AND purchase_return_x_items.purchase_return_id='".$guid."' ",'left');
+        $this->db->join('purchase_items', 'purchase_items.item=purchase_return_x_items.item AND purchase_items.order_id=purchase_invoice.grn  OR purchase_items.item=purchase_return_x_items.item AND purchase_items.order_id=purchase_invoice.direct_invoice_id OR purchase_items.item=purchase_return_x_items.item AND purchase_items.order_id=purchase_invoice.po ','left');     
+        $this->db->join('items', ' items.guid=purchase_items.item','left');
         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_return_x_items.item  ",'left');
         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_return_x_items.item  ",'left');
         $sql=  $this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){
-
             $row['date']=date('d-m-Y',$row['date']);
             $row['sales_date']=date('d-m-Y',$row['sales_date']);
-
-
-            if($row['dgrn_limit']!=""){
-                $row['item_limit']=$row['dgrn_limit'];
+            if($row['received_quty']!="" && $row['received_quty']!=NULL){
+                $row['item_limit']=$row['received_quty']+$row['received_free'];
+            }else{
+                $row['item_limit']=$row['item_limit'];
             }
-            if($row['di_limit']!=""){
-                $row['item_limit']=$row['di_limit'];
-            }
-            if($row['dgrn_cost']!=""){
-                $row['cost']=$row['dgrn_cost'];
-            }
-            if($row['di_cost']!=""){
-                $row['cost']=$row['di_cost'];
-            }
-          
-
           $data[]=$row;
         }
-           return $data;
+        return $data;
      }
     function delete_order_item($guid){      
         $this->db->where('guid',$guid);
