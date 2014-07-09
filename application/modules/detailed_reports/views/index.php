@@ -272,63 +272,64 @@
                 success: function(data)        
                 { 
                     $('.dataTable').hide();
-                    $('#purchase_base_table').show();
-                    $('#purchase_base_table tbody').remove();
-                    $('#purchase_base_table').append('<tbody></tbody');
-                    $('#purchase_base_table tfoot').remove();
-                    $('#purchase_base_table').append('<tfoot></tfoot');
-                    var total_freight=0;
-                    var total_round_amt=0;
-                    var total_sales_discount=0;
-                    var total_items=0;
-                    var total_item_amount=0;
+                    $('#purchase_item_base_table').show();
+                    $('#purchase_item_base_table tbody').remove();
+                    $('#purchase_item_base_table').append('<tbody></tbody');
+                    $('#purchase_item_base_table tfoot').remove();
+                    $('#purchase_item_base_table').append('<tfoot></tfoot');
+                    var total_item_discount=0;
                     var total_amount=0;
-                    var total_paid=0;
-                    var total_balance=0;
+                    var total_tax=0;
+                    var total_quty=0;
+                    var total_free=0;
                     var i=0;
                     for(i=0;i<data.length;i++){
-                       var balance=parseFloat(data[i]['purchase_amount'])-parseFloat(data[i]['paid_amount'])
-                        $('#purchase_base_table tbody').append('<tr> \n\
+                        var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"% (<?php echo $this->lang->line('inclusive') ?>)";
+                        var total=data[i]['amount'];
+                        if(data[i]['tax_Inclusive']==1){
+                            var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"(<?php echo $this->lang->line('exclusive') ?>)";
+                            var total=data[i]['amount']+data[i]['tax'];
+                            total_tax=parseFloat(total_tax)+parseFloat(data[i]["tax"]==""?0:data[i]["tax"]);
+                        }
+                        var quty=data[i]['quty'];
+                        var free=data[i]['free'];
+                        if(data[i]['received_quty']!=0 && data[i]['received_quty']!=""){
+                            var quty=data[i]['received_quty']; 
+                            var free=data[i]['received_free']; 
+                       }
+                        $('#purchase_item_base_table tbody').append('<tr> \n\
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
                             <td class="text-center">'+data[i]["invoice"]+'</td>\n\
-                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["date"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
-                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
-                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
-                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
-                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
-                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
-                            <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
-                            <td class="text-right">'+balance+'</td>\n\
+                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["cost"]+'</td>\n\
+                            <td class="text-right">'+data[i]["sell"]+'</td>\n\
+                            <td class="text-right">'+data[i]["mrp"]+'</td>\n\
+                            <td class="text-right">'+quty+'</td>\n\
+                            <td class="text-right">'+free+'</td>\n\
+                            <td class="text-right">'+tax+'</td>\n\
+                            <td class="text-right">'+data[i]["tax"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_per"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amount"]+'</td> \n\
+                            <td class="text-right">'+total+'</td>\n\
                         </tr>');
-                        total_freight=parseFloat(total_freight)+parseFloat(data[i]["freight"]==""?0:data[i]["freight"]);
-                        total_round_amt=parseFloat(total_round_amt)+parseFloat(data[i]["round_amt"]==""?0:data[i]["round_amt"]);
-                        total_items=parseFloat(total_items)+parseFloat(data[i]["total_items"]==""?0:data[i]["total_items"]);                      
-                        total_sales_discount=parseFloat(total_sales_discount)+parseFloat(data[i]["discount_amt"]==""?0:data[i]["discount_amt"]);
-                        total_item_amount=parseFloat(total_item_amount)+parseFloat(data[i]["total_item_amt"]==""?0:data[i]["total_item_amt"]);
-                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amt"]==""?0:data[i]["total_amt"]);
-                        total_paid=parseFloat(total_paid)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
-                        total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
+                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["discount_amount"]==""?0:data[i]["discount_amount"]);
+                        total_amount=parseFloat(total_amount)+parseFloat(total==""?0:total);
+                        total_quty=parseFloat(total_quty)+parseFloat(quty==""?0:quty);
+                        total_free=parseFloat(total_free)+parseFloat(free==""?0:free);
+                     
+                      //  total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
                     }
-                    var num = parseFloat(total_freight);
-                    total_freight=num.toFixed(point);
-                    var num = parseFloat(total_round_amt);
-                    total_round_amt=num.toFixed(point);
-                    var num = parseFloat(total_sales_discount);
-                    total_sales_discount=num.toFixed(point);
-                    var num = parseFloat(total_items);
-                    total_items=num.toFixed(point);
                     var num = parseFloat(total_amount);
                     total_amount=num.toFixed(point);
-                    var num = parseFloat(total_paid);
-                    totak_paid=num.toFixed(point);
-                    var num = parseFloat(total_balance);
-                    total_balance=num.toFixed(point);
-                    $('#purchase_base_table tfoot').append(' <tr >\n\
+                    var num = parseFloat(total_item_discount);
+                    total_item_discount=num.toFixed(point);
+                    var num = parseFloat(total_tax);
+                    total_tax=num.toFixed(point);
+                    $('#purchase_item_base_table tfoot').append(' <tr >\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
@@ -336,14 +337,16 @@
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
-                        <td class="text-right table_footer">'+total_sales_discount+'</td>\n\
-                        <td class="text-right table_footer">'+total_freight+'</td>\n\
-                        <td class="text-right table_footer">'+total_round_amt+'</td>\n\
-                        <td class="text-center table_footer">'+total_items+'</td>\n\
-                        <td class="text-right table_footer">'+total_item_amount+'</td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_quty+'</td>\n\
+                        <td class="text-right table_footer">'+total_free+'</td>\n\
+                        <td class="text-right table_footer"></td>\n\
+                        <td class="text-right table_footer">'+total_tax+'</td>\n\
+                        <td class="text-right table_footer"></td>\n\
+                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
                         <td class="text-right table_footer">'+total_amount+'</td>\n\
-                        <td class="text-right table_footer">'+total_paid+'</td>\n\
-                        <td class="text-right table_footer">'+total_balance+'</td>\n\
                     </tr>');
                 }
             });
@@ -2802,6 +2805,33 @@
                 <th><?php echo $this->lang->line('total_amount') ?></th>
                 <th><?php echo $this->lang->line('paid_amount') ?></th>
                 <th><?php echo $this->lang->line('payable')." ".$this->lang->line('amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+         <tfoot></tfoot>
+    </table>
+    <table id="purchase_item_base_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('purchase_invoice') ?></th>
+                <th><?php echo $this->lang->line('supplier') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>               
+                <th><?php echo $this->lang->line('cost') ?></th>
+                <th><?php echo $this->lang->line('selling_price') ?></th>
+                <th><?php echo $this->lang->line('mrp') ?></th>
+                <th><?php echo $this->lang->line('quantity') ?></th>
+                <th><?php echo $this->lang->line('free') ?></th>
+                <th><?php echo $this->lang->line('tax')?></th>
+                <th><?php echo $this->lang->line('tax_amount') ?></th>
+                <th><?php echo $this->lang->line('discount') ?> %</th>
+                <th><?php echo $this->lang->line('discount')." ".$this->lang->line('amount') ?></th>
+                <th><?php echo $this->lang->line('amount') ?></th>
+                
                 
             </tr>
         </thead>
