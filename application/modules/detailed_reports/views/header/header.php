@@ -179,6 +179,72 @@
                 }
             }
         });
+        $('#purchase_items_department').select2({
+            multiple:true,
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('item_department') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/detailed_reports/search_item_department',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.department_name,
+                        });
+                    });
+                    return {
+                       results: results
+                    };
+                }
+            }
+        });
+        $('#purchase_items_brand').select2({
+            multiple:true,
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('brand') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/detailed_reports/search_item_brand',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.name,
+                        });
+                    });
+                    return {
+                       results: results
+                    };
+                }
+            }
+        });
     });
     function account_report(report){
         $('.dataTable').hide();
@@ -206,6 +272,21 @@
             $('#branch_base').hide();
             $('#supplier_base').hide();
             $('#select_purchase_items_category').show();
+             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
+        else if(report=='purchase_items_department_base'){
+            $('#branch_base').hide();
+            $('#supplier_base').hide();
+            $('#select_purchase_items_category').hide();
+            $('#select_purchase_items_department').show();
+             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
+        else if(report=='purchase_items_brand_base'){
+            $('#branch_base').hide();
+            $('#supplier_base').hide();
+            $('#select_purchase_items_category').hide();
+            $('#items_department_base').hide();
+            $('#select_purchase_items_brand_base').show();
              $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
     
