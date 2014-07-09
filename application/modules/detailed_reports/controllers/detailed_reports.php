@@ -124,6 +124,17 @@ class Detailed_reports extends MX_Controller
             }        
         echo json_encode($data);
     }
+    function get_purchase_items_brand_base_report(){
+        $this->load->model('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        $brand=  $this->input->post('brand');
+        $data=array();
+            for($i=0;$i<count($brand);$i++){
+               $data= array_merge($data,  $this->report->get_purchase_items_brand_base_report($brand[$i],$start,$end));
+            }        
+        echo json_encode($data);
+    }
    
 }
 ?>
