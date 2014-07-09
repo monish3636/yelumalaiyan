@@ -305,6 +305,11 @@
                             <td class="text-center">'+data[i]["first_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["company_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["b_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["d_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
                             <td class="text-right">'+data[i]["cost"]+'</td>\n\
                             <td class="text-right">'+data[i]["sell"]+'</td>\n\
                             <td class="text-right">'+data[i]["mrp"]+'</td>\n\
@@ -330,6 +335,11 @@
                     var num = parseFloat(total_tax);
                     total_tax=num.toFixed(point);
                     $('#purchase_item_base_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
@@ -2821,6 +2831,11 @@
                 <th><?php echo $this->lang->line('supplier') ?></th>
                 <th><?php echo $this->lang->line('company') ?></th>
                 <th><?php echo $this->lang->line('date') ?></th>               
+                <th><?php echo $this->lang->line('item') ?></th>               
+                <th><?php echo $this->lang->line('sku') ?></th>               
+                <th><?php echo $this->lang->line('brand') ?></th>               
+                <th><?php echo $this->lang->line('item_department') ?></th>               
+                <th><?php echo $this->lang->line('category') ?></th>               
                 <th><?php echo $this->lang->line('cost') ?></th>
                 <th><?php echo $this->lang->line('selling_price') ?></th>
                 <th><?php echo $this->lang->line('mrp') ?></th>
