@@ -779,5 +779,6 @@ $lang['credit_days']='Credit Days';
     $lang['customer_base']='Customer Base';
     $lang['branch_base']='Branch Base';
     $lang['items_base']='Items Base';
+    $lang['items_category_base']='Items Category Base';
    
 ?>

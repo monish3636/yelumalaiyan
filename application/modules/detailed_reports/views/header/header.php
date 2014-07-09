@@ -145,6 +145,40 @@
                 }
             });
 
+        
+        $('#purchase_items_category').select2({
+            multiple:true,
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/detailed_reports/search_item_category',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.category_name,
+                        });
+                    });
+                    return {
+                       results: results
+                    };
+                }
+            }
+        });
     });
     function account_report(report){
         $('.dataTable').hide();
@@ -166,6 +200,12 @@
             $('#branch_base').hide();
             $('#supplier_base').hide();
             $('#select_purchase_items').show();
+             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
+        else if(report=='purchase_items_category_base'){
+            $('#branch_base').hide();
+            $('#supplier_base').hide();
+            $('#select_purchase_items_category').show();
              $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
     
