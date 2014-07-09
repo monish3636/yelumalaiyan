@@ -43,6 +43,12 @@ class Detailed_reports extends MX_Controller
         $data= $this->report->search_suppliers($like);
         echo json_encode($data); 
     }
+    function search_item_category(){
+        $like= $this->input->post('term');  
+        $this->load->model('report');
+        $data= $this->report->search_item_category($like);
+        echo json_encode($data); 
+    }
     function search_purchase_items(){
         $like= $this->input->post('term');  
         $this->load->model('report');
@@ -81,8 +87,18 @@ class Detailed_reports extends MX_Controller
         $data=array();
             for($i=0;$i<count($items);$i++){
                $data= array_merge($data,  $this->report->get_purchase_items_base_report($items[$i],$start,$end));
-            }
-        
+            }        
+        echo json_encode($data);
+    }
+    function get_purchase_items_category_base_report(){
+        $this->load->model('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        $category=  $this->input->post('category');
+        $data=array();
+            for($i=0;$i<count($category);$i++){
+               $data= array_merge($data,  $this->report->get_purchase_items_category_base_report($category[$i],$start,$end));
+            }        
         echo json_encode($data);
     }
    

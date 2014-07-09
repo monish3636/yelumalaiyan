@@ -361,6 +361,114 @@
                 }
             });
         }
+        else if(report=='purchase_items_category_base'){
+            var category =$('#purchase_items_category').select2('data');
+            var category_id=[];
+            for(var i=0;i<category.length;i++){
+                category_id[i]=category[i]['id'];
+            }
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/detailed_reports/get_purchase_items_category_base_report/",                      
+                data: {
+                    start:start_date,
+                    end:end_date,
+                    category:category_id
+
+                }, 
+                type:'POST',
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                    $('.dataTable').hide();
+                    $('#purchase_item_base_table').show();
+                    $('#purchase_item_base_table tbody').remove();
+                    $('#purchase_item_base_table').append('<tbody></tbody');
+                    $('#purchase_item_base_table tfoot').remove();
+                    $('#purchase_item_base_table').append('<tfoot></tfoot');
+                    var total_item_discount=0;
+                    var total_amount=0;
+                    var total_tax=0;
+                    var total_quty=0;
+                    var total_free=0;
+                    var i=0;
+                    for(i=0;i<data.length;i++){
+                        var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"% (<?php echo $this->lang->line('inclusive') ?>)";
+                        var total=data[i]['amount'];
+                        if(data[i]['tax_Inclusive']==1){
+                            var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"(<?php echo $this->lang->line('exclusive') ?>)";
+                            var total=data[i]['amount']+data[i]['tax'];
+                            total_tax=parseFloat(total_tax)+parseFloat(data[i]["tax"]==""?0:data[i]["tax"]);
+                        }
+                        var quty=data[i]['quty'];
+                        var free=data[i]['free'];
+                        if(data[i]['received_quty']!=0 && data[i]['received_quty']!=""){
+                            var quty=data[i]['received_quty']; 
+                            var free=data[i]['received_free']; 
+                       }
+                        $('#purchase_item_base_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["b_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["d_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-right">'+data[i]["cost"]+'</td>\n\
+                            <td class="text-right">'+data[i]["sell"]+'</td>\n\
+                            <td class="text-right">'+data[i]["mrp"]+'</td>\n\
+                            <td class="text-right">'+quty+'</td>\n\
+                            <td class="text-right">'+free+'</td>\n\
+                            <td class="text-right">'+tax+'</td>\n\
+                            <td class="text-right">'+data[i]["tax"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_per"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amount"]+'</td> \n\
+                            <td class="text-right">'+total+'</td>\n\
+                        </tr>');
+                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["discount_amount"]==""?0:data[i]["discount_amount"]);
+                        total_amount=parseFloat(total_amount)+parseFloat(total==""?0:total);
+                        total_quty=parseFloat(total_quty)+parseFloat(quty==""?0:quty);
+                        total_free=parseFloat(total_free)+parseFloat(free==""?0:free);
+                     
+                      //  total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
+                    }
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    var num = parseFloat(total_item_discount);
+                    total_item_discount=num.toFixed(point);
+                    var num = parseFloat(total_tax);
+                    total_tax=num.toFixed(point);
+                    $('#purchase_item_base_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_quty+'</td>\n\
+                        <td class="text-right table_footer">'+total_free+'</td>\n\
+                        <td class="text-right table_footer"></td>\n\
+                        <td class="text-right table_footer">'+total_tax+'</td>\n\
+                        <td class="text-right table_footer"></td>\n\
+                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
+                }
+            });
+        }
         else{
         var branch =$('#select_branch').select2('data');
         var branch_id=[];
@@ -2450,6 +2558,7 @@
                                                         <li><a href="javascript:account_report('purchase_supplier_base')" id="purchase_supplier_base"><?php echo $this->lang->line('supplier_base') ?></a></li>
                                                         <li><a href="javascript:account_report('purchase_items_base')" id="purchase_items_base"><?php echo $this->lang->line('items_base') ?></a></li>
                                                         <li><a href="javascript:account_report('purchase_branch_base')" id="purchase_branch_base"><?php echo $this->lang->line('branch_base') ?></a></li>							
+                                                        <li><a href="javascript:account_report('purchase_items_category_base')" id="purchase_items_category_base"><?php echo $this->lang->line('items_category_base') ?></a></li>
                                                     </ul>
                                                 </li>
                                                 <li><a href="javascript:report('')"><?php echo $this->lang->line('sales') ?></a>
@@ -2486,6 +2595,10 @@
             <div class="col col-lg-4" id="select_purchase_items" style="display: none">
                 <lable><?php  echo $this->lang->line('items') ?></lable>
                 <input id="purchase_items" class="form-control" >                   
+            </div>
+            <div class="col col-lg-4" id="select_purchase_items_category" style="display: none">
+                <lable><?php  echo $this->lang->line('category') ?></lable>
+                <input id="purchase_items_category" class="form-control" >                   
             </div>
            <div class="col col-sm-3" >
            <div class="form_sep">
