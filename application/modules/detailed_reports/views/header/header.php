@@ -285,8 +285,8 @@
             $('#branch_base').hide();
             $('#supplier_base').hide();
             $('#select_purchase_items_category').hide();
-            $('#items_department_base').hide();
-            $('#select_purchase_items_brand_base').show();
+            $('#select_purchase_items_department').hide();
+            $('#select_purchase_items_brand').show();
              $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
     
