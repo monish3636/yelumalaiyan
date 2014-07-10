@@ -561,7 +561,7 @@
                           date: item.date,
                           customer: item.s_name,
                           type: item.sales_delivery_note,
-                          sales_order: item.sales_order_guid,
+                          sales_order: item.so,
                           delivery_note: item.guid,
                         });
                       });

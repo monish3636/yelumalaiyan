@@ -269,7 +269,7 @@ function save(){
                 $value=array('customer_id'=>$customer,'invoice'=>$bill_no,'date'=>$date,'direct_sales_id'=>$direct_sales_guid,'remark'=>$remark,'note'=>$note);
                $invoice= $this->posnic->posnic_add_record($value,'sales_bill');
                 $this->load->model('sales');
-                $this->sales->bill_status($direct_sales_guid);
+                $this->sales->bill_status($direct_sales_guid,$invoice);
             
                  $this->posnic->posnic_master_increment_max('sales_bill')  ;
                  $this->sales->payable_amount($customer,$direct_sales_guid,$invoice)   ;

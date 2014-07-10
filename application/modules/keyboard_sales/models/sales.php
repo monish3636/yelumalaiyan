@@ -21,8 +21,8 @@ class Sales extends CI_Model{
           
           
     }
-    function add_keyboard_sales($guid,$item,$quty,$stock,$discount,$i,$price){         
-         $this->db->insert('direct_sales_x_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_id'=>$guid));
+    function add_keyboard_sales($guid,$item,$quty,$stock,$discount,$i,$price,$invoice){         
+         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item.uniqid()),'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_id'=>$guid,'invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s'))));
     }
    
     function payable_amount($customer_id,$guid,$amount){        
