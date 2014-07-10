@@ -27,6 +27,13 @@ class Report extends CI_Model{
         return $sql->result();
         
     }
+    function search_customer($search){
+        $this->db->select()->from('customers')->where('branch_id',  $this->session->userdata('branch_id'));
+        $this->db->or_like(array('first_name'=>$search,'company_name'=>$search,'email'=>$search,'phone'=>$search));
+        $sql=  $this->db->get();
+        return $sql->result();
+        
+    }
     function search_item_category($search){
         $this->db->select()->from('items_category')->where('branch_id',  $this->session->userdata('branch_id'));
         $this->db->or_like(array('category_name'=>$search));
@@ -799,7 +806,6 @@ class Report extends CI_Model{
     /* get purchase report based on supplier
     function start     */
     function get_purchase_supplier_base_report($supplier,$start,$end){
-         $supplier;
        $this->db->select('supplier_payable.paid_amount,supplier_payable.amount as purchase_amount,grn.grn_no as grn_code,grn.discount_amt as grn_discount_amt,purchase_order.freight as grn_freight,purchase_order.round_amt as grn_round_amt,purchase_order.total_items as grn_total_items,grn.total_item_amt as grn_total_item_amt,grn.total_amt as grn_total_amt,direct_grn.grn_no as dgrn_code,direct_grn.discount_amt as dg_discount_amt,direct_grn.freight as dg_freight,direct_grn.round_amt as dg_round_amt,direct_grn.total_items as dg_total_items,direct_grn.total_item_amt as dg_total_item_amt, direct_grn.total_amt as dg_total_amt,direct_invoice.invoice_no as di_code,direct_invoice.discount_amt as di_discount_amt,direct_invoice.freight as di_freight,direct_invoice.round_amt as di_round_amt,direct_invoice.total_items as di_total_items,direct_invoice.total_item_amt as di_total_item_amt, direct_invoice.total_amt as di_total_amt, branches.store_name,branches.code as bcode,direct_grn.grn_no,purchase_invoice.invoice,purchase_invoice.guid as invoice_guid, purchase_invoice.date,suppliers.first_name as s_name,suppliers.company_name as c_name');
         $this->db->from('purchase_invoice')->where('purchase_invoice.branch_id',$this->session->userdata('branch_id'))->where('purchase_invoice.supplier_id',$supplier);
         $this->db->join('direct_invoice', "direct_invoice.guid=purchase_invoice.direct_invoice_id AND direct_invoice.supplier_id='".$supplier."'",'left');
@@ -844,6 +850,71 @@ class Report extends CI_Model{
         }
         
         return $data; 
+    }
+    /* get sales report based on customer
+    function start     */
+    function get_sales_customer_base_report($customer,$start,$end){
+        $this->db->select(' branches.store_name,branches.code as bcode,sales_order.customer_discount_amount as sdn_customer_discount_amount,sales_order.discount as sdn_discount,sales_order.discount_amt as sdn_discount_amt,sales_order.freight as sdn_freight,sales_order.round_amt as sdn_round_amt,sales_order.total_tax as sdn_total_tax,sales_order.total_discount as sdn_total_discount,sales_order.total_item_amt as sdn_total_item_amt, sales_order.total_amt as sdn_total_amt,direct_sales_delivery.customer_discount_amount as dsd_customer_discount_amount,direct_sales_delivery.discount_amt as dsd_discount_amt,direct_sales_delivery.freight as dsd_freight,direct_sales_delivery.round_amt as dsd_round_amt,direct_sales_delivery.total_tax as dsd_total_tax,direct_sales_delivery.total_discount as dsd_total_discount,direct_sales_delivery.total_item_amt as dsd_total_item_amt, direct_sales_delivery.total_amt as dsd_total_amt,direct_sales.customer_discount_amount as ds_customer_discount_amount,direct_sales.discount_amt as ds_discount_amt,direct_sales.freight as ds_freight,direct_sales.round_amt as ds_round_amt,direct_sales.total_tax as ds_total_tax,direct_sales.total_discount as ds_total_discount,direct_sales.total_item_amt as ds_total_item_amt, direct_sales.total_amt as ds_total_amt,sales_bill.*,sales_order.total_items as so_total_items,sales_delivery_note.total_amount as sdn_amount,sales_delivery_note.sales_delivery_note_no as sdn_code,direct_sales_delivery.total_items as dsd_total_items ,direct_sales_delivery.total_amt as dsd_amount,direct_sales_delivery.code dsd_code,direct_sales.total_items as ds_total, direct_sales.code as ds_code ,direct_sales.total_amt as ds_amount,customers.first_name as s_name,customers.company_name as c_name');
+        $this->db->from('sales_bill')->where('sales_bill.branch_id',  $this->session->userdata('branch_id'))->where('sales_bill.customer_id',$customer);
+        $this->db->join('direct_sales', 'direct_sales.guid=sales_bill.direct_sales_id','left');
+        $this->db->join('direct_sales_delivery', 'direct_sales_delivery.guid=sales_bill.sdn','left');
+        $this->db->join('sales_delivery_note','sales_delivery_note.guid=sales_bill.sdn','left');
+        $this->db->join('sales_order','sales_order.guid=sales_delivery_note.so','left');
+        $this->db->join('customers', 'customers.guid=sales_order.customer_id OR customers.guid=direct_sales.customer_id OR customers.guid=direct_sales_delivery.customer_id','left');
+        $this->db->join('branches', 'branches.guid=sales_bill.branch_id','left');
+        $this->db->where('sales_bill.date >=', strtotime($start));
+        $this->db->where('sales_bill.date <=', strtotime($end));
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){  
+            $row['date']=date('d-m-Y',$row['date']);
+            if($row['sdn_code']!="" && $row['sdn_code']!=NULL){
+                $row['code']=$row['sdn_code'];
+                $row['total_items']=$row['so_total_items'];
+                $row['total_amount']=$row['sdn_amount'];
+                $row['customer_discount_amount']=$row['sdn_customer_discount_amount'];
+                $row['discount_amt']=$row['sdn_discount_amt'];
+                $row['discount']=$row['sdn_discount'];
+                $row['freight']=$row['sdn_freight'];
+                $row['round_amt']=$row['sdn_round_amt'];
+                $row['total_tax']=$row['sdn_total_tax'];
+                $row['total_discount']=$row['sdn_total_discount'];
+                $row['total_item_amt']=$row['sdn_total_item_amt'];
+                $row['total_amt']=$row['sdn_total_amt'];
+                if($row['discount']!=0 && $row['discount']!="" && $row['discount']!=NULL){
+                    $row['discount_amt']=$row['total_amount']*$row['discount']/100;
+                }
+
+            }
+            if($row['dsd_code']!="" && $row['dsd_code']!=NULL){
+                $row['code']=$row['dsd_code'];
+                $row['total_items']=$row['dsd_total_items'];
+                $row['total_amount']=$row['dsd_amount'];
+                $row['customer_discount_amount']=$row['dsd_customer_discount_amount'];
+                $row['discount_amt']=$row['dsd_discount_amt'];
+                $row['freight']=$row['dsd_freight'];
+                $row['round_amt']=$row['dsd_round_amt'];
+                $row['total_tax']=$row['dsd_total_tax'];
+                $row['total_discount']=$row['dsd_total_discount'];
+                $row['total_item_amt']=$row['dsd_total_item_amt'];
+                $row['total_amt']=$row['dsd_total_amt'];
+            }
+            if($row['ds_code']!="" && $row['ds_code']!=NULL){
+                $row['code']=$row['ds_code'];
+                $row['total_items']=$row['ds_total'];
+                $row['total_amount']=$row['ds_amount'];
+                $row['customer_discount_amount']=$row['ds_customer_discount_amount'];
+                $row['discount_amt']=$row['ds_discount_amt'];
+                $row['freight']=$row['ds_freight'];
+                $row['round_amt']=$row['ds_round_amt'];
+                $row['total_tax']=$row['ds_total_tax'];
+                $row['total_discount']=$row['ds_total_discount'];
+                $row['total_item_amt']=$row['ds_total_item_amt'];
+                $row['total_amt']=$row['ds_total_amt']; 
+            }
+            $data[]=$row;
+        }
+        return $data;
     }
 
     function get_purchase_items_all_report($to_time,$from_time,$supplier,$items,$category,$department,$brand,$start,$end){

@@ -86,6 +86,46 @@
                 }
             }
         });
+        function format_customer(cus) {
+            if (!cus.id) return cus.text;
+                return  cus.code+" "+ cus.text;
+        }
+        $('#select_customer').select2({
+            formatResult: format_customer,
+            formatSelection: format_customer,
+            multiple:true,
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('suppliers') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/detailed_reports/search_customer',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.first_name,
+                            code: item.company_name
+                        });
+                    });
+                    return {
+                       results: results
+                    };
+                }
+            }
+        });
           function format_item(sup) {
             if (!sup.id) return sup.text;
     return  "<p >"+sup.text+' '+sup.value+' '+sup.category+' '+sup.brand+' '+sup.department+"</p>";
@@ -253,7 +293,8 @@
         $('#report_val').val(report);
         if(report=='purchase_branch_base'){
             $('#branch_base').show();
-            $('#supplier_base').hide();
+            $('#supplier_base').hide();            
+            $('#customer_base').hide();
             $('#time_filtering').hide();
             $('#select_purchase_items').hide();
             $('#select_purchase_items_category').hide();
@@ -264,7 +305,7 @@
         else if(report=='purchase_supplier_base'){
             $('#branch_base').hide();
             $('#time_filtering').hide();
-            $('#supplier_base').show();
+            $('#customer_base').hide();
             $('#supplier_base').show();
             $('#select_purchase_items').hide();
             $('#select_purchase_items_category').hide();
@@ -272,7 +313,18 @@
             $('#select_purchase_items_brand').hide();
             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
-        else if(report=='purchase_all_base'){
+        else if(report=='sales_customers_base'){
+            $('#branch_base').hide();
+            $('#time_filtering').hide();
+            $('#customer_base').show();
+            $('#supplier_base').hide();
+            $('#select_purchase_items').hide();
+            $('#select_purchase_items_category').hide();
+            $('#select_purchase_items_department').hide();
+            $('#select_purchase_items_brand').hide();
+            $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
+        else if(report=='purchase_filering'){
             $('#time_filtering').show();
             $('#branch_base').hide();
             $('#supplier_base').show();
