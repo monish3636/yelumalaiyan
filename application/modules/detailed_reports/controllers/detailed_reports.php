@@ -117,6 +117,18 @@ class Detailed_reports extends MX_Controller
         
         echo json_encode($data);
     }
+    function get_sales_branch_base_report(){
+        $this->load->model('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        $branch=  $this->input->post('branch');
+        $data=array();
+            for($i=0;$i<count($branch);$i++){
+               $data= array_merge($data,  $this->report->get_sales_branch_base_report($branch[$i],$start,$end));
+            }
+        
+        echo json_encode($data);
+    }
 
      function get_purchase_items_all_report(){
         $this->load->model('report');
@@ -133,6 +145,24 @@ class Detailed_reports extends MX_Controller
         $data=array();
           for($i=0;$i<max(count($department),count($brand),count($item),count($category),count($supplier));$i++){
                $data= array_merge($data,  $this->report->get_purchase_items_all_report($to_time,$from_time,$supplier[$i],$item[$i],$category[$i],$department[$i],$brand[$i],$start,$end));
+          }
+        echo json_encode($data);
+    }
+     function get_sales_filtering_report(){
+        $this->load->model('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        $customer=  $this->input->post('customer');
+        $item=  $this->input->post('item');
+        $category=$this->input->post('category');
+        $department =$this->input->post('department');
+        $brand=$this->input->post('brand');
+        $to_time=$this->input->post('to_time');
+        $from_time=$this->input->post('from_time');
+       max(count($department),count($brand),count($item),count($category),count($customer));
+        $data=array();
+          for($i=0;$i<max(count($department),count($brand),count($item),count($category),count($customer));$i++){
+               $data= array_merge($data,  $this->report->get_sales_filtering_report($to_time,$from_time,$customer[$i],$item[$i],$category[$i],$department[$i],$brand[$i],$start,$end));
           }
         echo json_encode($data);
     }

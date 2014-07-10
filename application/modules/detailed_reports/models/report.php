@@ -854,12 +854,13 @@ class Report extends CI_Model{
     /* get sales report based on customer
     function start     */
     function get_sales_customer_base_report($customer,$start,$end){
-        $this->db->select(' branches.store_name,branches.code as bcode,sales_order.customer_discount_amount as sdn_customer_discount_amount,sales_order.discount as sdn_discount,sales_order.discount_amt as sdn_discount_amt,sales_order.freight as sdn_freight,sales_order.round_amt as sdn_round_amt,sales_order.total_tax as sdn_total_tax,sales_order.total_discount as sdn_total_discount,sales_order.total_item_amt as sdn_total_item_amt, sales_order.total_amt as sdn_total_amt,direct_sales_delivery.customer_discount_amount as dsd_customer_discount_amount,direct_sales_delivery.discount_amt as dsd_discount_amt,direct_sales_delivery.freight as dsd_freight,direct_sales_delivery.round_amt as dsd_round_amt,direct_sales_delivery.total_tax as dsd_total_tax,direct_sales_delivery.total_discount as dsd_total_discount,direct_sales_delivery.total_item_amt as dsd_total_item_amt, direct_sales_delivery.total_amt as dsd_total_amt,direct_sales.customer_discount_amount as ds_customer_discount_amount,direct_sales.discount_amt as ds_discount_amt,direct_sales.freight as ds_freight,direct_sales.round_amt as ds_round_amt,direct_sales.total_tax as ds_total_tax,direct_sales.total_discount as ds_total_discount,direct_sales.total_item_amt as ds_total_item_amt, direct_sales.total_amt as ds_total_amt,sales_bill.*,sales_order.total_items as so_total_items,sales_delivery_note.total_amount as sdn_amount,sales_delivery_note.sales_delivery_note_no as sdn_code,direct_sales_delivery.total_items as dsd_total_items ,direct_sales_delivery.total_amt as dsd_amount,direct_sales_delivery.code dsd_code,direct_sales.total_items as ds_total, direct_sales.code as ds_code ,direct_sales.total_amt as ds_amount,customers.first_name as s_name,customers.company_name as c_name');
+        $this->db->select('customer_payable.paid_amount,customer_payable.amount as sales_amount,branches.store_name,branches.code as bcode,sales_order.customer_discount_amount as sdn_customer_discount_amount,sales_order.discount as sdn_discount,sales_order.discount_amt as sdn_discount_amt,sales_order.freight as sdn_freight,sales_order.round_amt as sdn_round_amt,sales_order.total_tax as sdn_total_tax,sales_order.total_discount as sdn_total_discount,sales_order.total_item_amt as sdn_total_item_amt, sales_order.total_amt as sdn_total_amt,direct_sales_delivery.customer_discount_amount as dsd_customer_discount_amount,direct_sales_delivery.discount_amt as dsd_discount_amt,direct_sales_delivery.freight as dsd_freight,direct_sales_delivery.round_amt as dsd_round_amt,direct_sales_delivery.total_tax as dsd_total_tax,direct_sales_delivery.total_discount as dsd_total_discount,direct_sales_delivery.total_item_amt as dsd_total_item_amt, direct_sales_delivery.total_amt as dsd_total_amt,direct_sales.customer_discount_amount as ds_customer_discount_amount,direct_sales.discount_amt as ds_discount_amt,direct_sales.freight as ds_freight,direct_sales.round_amt as ds_round_amt,direct_sales.total_tax as ds_total_tax,direct_sales.total_discount as ds_total_discount,direct_sales.total_item_amt as ds_total_item_amt, direct_sales.total_amt as ds_total_amt,sales_bill.*,sales_order.total_items as so_total_items,sales_delivery_note.total_amount as sdn_amount,sales_delivery_note.sales_delivery_note_no as sdn_code,direct_sales_delivery.total_items as dsd_total_items ,direct_sales_delivery.total_amt as dsd_amount,direct_sales_delivery.code dsd_code,direct_sales.total_items as ds_total, direct_sales.code as ds_code ,direct_sales.total_amt as ds_amount,customers.first_name as s_name,customers.company_name as c_name');
         $this->db->from('sales_bill')->where('sales_bill.branch_id',  $this->session->userdata('branch_id'))->where('sales_bill.customer_id',$customer);
         $this->db->join('direct_sales', 'direct_sales.guid=sales_bill.direct_sales_id','left');
         $this->db->join('direct_sales_delivery', 'direct_sales_delivery.guid=sales_bill.sdn','left');
         $this->db->join('sales_delivery_note','sales_delivery_note.guid=sales_bill.sdn','left');
         $this->db->join('sales_order','sales_order.guid=sales_delivery_note.so','left');
+        $this->db->join('customer_payable', 'customer_payable.invoice_id=direct_sales.guid OR customer_payable.invoice_id=sales_bill.guid','left');
         $this->db->join('customers', 'customers.guid=sales_order.customer_id OR customers.guid=direct_sales.customer_id OR customers.guid=direct_sales_delivery.customer_id','left');
         $this->db->join('branches', 'branches.guid=sales_bill.branch_id','left');
         $this->db->where('sales_bill.date >=', strtotime($start));
@@ -916,8 +917,126 @@ class Report extends CI_Model{
         }
         return $data;
     }
+    /* get sales report based on customer
+    function start     */
+    function get_sales_branch_base_report($branch,$start,$end){
+        $this->db->select('customer_payable.paid_amount,customer_payable.amount as sales_amount,branches.store_name,branches.code as bcode,sales_order.customer_discount_amount as sdn_customer_discount_amount,sales_order.discount as sdn_discount,sales_order.discount_amt as sdn_discount_amt,sales_order.freight as sdn_freight,sales_order.round_amt as sdn_round_amt,sales_order.total_tax as sdn_total_tax,sales_order.total_discount as sdn_total_discount,sales_order.total_item_amt as sdn_total_item_amt, sales_order.total_amt as sdn_total_amt,direct_sales_delivery.customer_discount_amount as dsd_customer_discount_amount,direct_sales_delivery.discount_amt as dsd_discount_amt,direct_sales_delivery.freight as dsd_freight,direct_sales_delivery.round_amt as dsd_round_amt,direct_sales_delivery.total_tax as dsd_total_tax,direct_sales_delivery.total_discount as dsd_total_discount,direct_sales_delivery.total_item_amt as dsd_total_item_amt, direct_sales_delivery.total_amt as dsd_total_amt,direct_sales.customer_discount_amount as ds_customer_discount_amount,direct_sales.discount_amt as ds_discount_amt,direct_sales.freight as ds_freight,direct_sales.round_amt as ds_round_amt,direct_sales.total_tax as ds_total_tax,direct_sales.total_discount as ds_total_discount,direct_sales.total_item_amt as ds_total_item_amt, direct_sales.total_amt as ds_total_amt,sales_bill.*,sales_order.total_items as so_total_items,sales_delivery_note.total_amount as sdn_amount,sales_delivery_note.sales_delivery_note_no as sdn_code,direct_sales_delivery.total_items as dsd_total_items ,direct_sales_delivery.total_amt as dsd_amount,direct_sales_delivery.code dsd_code,direct_sales.total_items as ds_total, direct_sales.code as ds_code ,direct_sales.total_amt as ds_amount,customers.first_name as s_name,customers.company_name as c_name');
+        $this->db->from('sales_bill')->where('sales_bill.branch_id', $branch);
+        $this->db->join('direct_sales', 'direct_sales.guid=sales_bill.direct_sales_id','left');
+        $this->db->join('direct_sales_delivery', 'direct_sales_delivery.guid=sales_bill.sdn','left');
+        $this->db->join('sales_delivery_note','sales_delivery_note.guid=sales_bill.sdn','left');
+        $this->db->join('sales_order','sales_order.guid=sales_delivery_note.so','left');
+        $this->db->join('customer_payable', 'customer_payable.invoice_id=direct_sales.guid OR customer_payable.invoice_id=sales_bill.guid','left');
+        $this->db->join('customers', 'customers.guid=sales_order.customer_id OR customers.guid=direct_sales.customer_id OR customers.guid=direct_sales_delivery.customer_id','left');
+        $this->db->join('branches', 'branches.guid=sales_bill.branch_id','left');
+        if($start!="" && $end!=""){
+            $this->db->where('sales_bill.date >=', strtotime($start));
+            $this->db->where('sales_bill.date <=', strtotime($end));
+        }
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){  
+            $row['date']=date('d-m-Y',$row['date']);
+            if($row['sdn_code']!="" && $row['sdn_code']!=NULL){
+                $row['code']=$row['sdn_code'];
+                $row['total_items']=$row['so_total_items'];
+                $row['total_amount']=$row['sdn_amount'];
+                $row['customer_discount_amount']=$row['sdn_customer_discount_amount'];
+                $row['discount_amt']=$row['sdn_discount_amt'];
+                $row['discount']=$row['sdn_discount'];
+                $row['freight']=$row['sdn_freight'];
+                $row['round_amt']=$row['sdn_round_amt'];
+                $row['total_tax']=$row['sdn_total_tax'];
+                $row['total_discount']=$row['sdn_total_discount'];
+                $row['total_item_amt']=$row['sdn_total_item_amt'];
+                $row['total_amt']=$row['sdn_total_amt'];
+                if($row['discount']!=0 && $row['discount']!="" && $row['discount']!=NULL){
+                    $row['discount_amt']=$row['total_amount']*$row['discount']/100;
+                }
+
+            }
+            if($row['dsd_code']!="" && $row['dsd_code']!=NULL){
+                $row['code']=$row['dsd_code'];
+                $row['total_items']=$row['dsd_total_items'];
+                $row['total_amount']=$row['dsd_amount'];
+                $row['customer_discount_amount']=$row['dsd_customer_discount_amount'];
+                $row['discount_amt']=$row['dsd_discount_amt'];
+                $row['freight']=$row['dsd_freight'];
+                $row['round_amt']=$row['dsd_round_amt'];
+                $row['total_tax']=$row['dsd_total_tax'];
+                $row['total_discount']=$row['dsd_total_discount'];
+                $row['total_item_amt']=$row['dsd_total_item_amt'];
+                $row['total_amt']=$row['dsd_total_amt'];
+            }
+            if($row['ds_code']!="" && $row['ds_code']!=NULL){
+                $row['code']=$row['ds_code'];
+                $row['total_items']=$row['ds_total'];
+                $row['total_amount']=$row['ds_amount'];
+                $row['customer_discount_amount']=$row['ds_customer_discount_amount'];
+                $row['discount_amt']=$row['ds_discount_amt'];
+                $row['freight']=$row['ds_freight'];
+                $row['round_amt']=$row['ds_round_amt'];
+                $row['total_tax']=$row['ds_total_tax'];
+                $row['total_discount']=$row['ds_total_discount'];
+                $row['total_item_amt']=$row['ds_total_item_amt'];
+                $row['total_amt']=$row['ds_total_amt']; 
+            }
+            $data[]=$row;
+        }
+        return $data;
+    }
 
     function get_purchase_items_all_report($to_time,$from_time,$supplier,$items,$category,$department,$brand,$start,$end){
+        $this->db->select('branches.store_name,branches.code as bcode,purchase_invoice.date as invoice_date,purchase_invoice.invoice,suppliers.first_name,suppliers.company_name,direct_invoice.invoice_no,grn.grn_no,direct_grn.grn_no as drect_grn_no,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,purchase_items.*')->from('items')->where('items.branch_id',  $this->session->userdata('branch_id'))->where('purchase_items.invoice_id !=','');
+        if($category!=""){
+            $this->db->where('items.category_id',$category);
+        }
+        if($department!=""){
+            $this->db->where('items.depart_id',$department);
+        }
+        if($brand!=""){
+            $this->db->where('items.brand_id',$brand);
+        }
+        if($items!=""){
+            $this->db->where('items.guid',$items);
+        }
+        if($supplier!=""){
+            $this->db->where('purchase_invoice.supplier_id',$supplier);
+        }
+        $this->db->join('purchase_items', "purchase_items.item=items.guid",'left');
+        $this->db->join('purchase_invoice',"purchase_invoice.guid=purchase_items.invoice_id AND purchase_items.item=items.guid",'left');
+        $this->db->join('branches', 'branches.guid=purchase_invoice.branch_id','left');
+        $this->db->join('direct_invoice',"direct_invoice.guid=purchase_items.order_id AND direct_invoice.order_status=1 ",'left');
+        $this->db->join('grn',"grn.guid=purchase_items.grn_id AND grn.invoice_status=1",'left');
+        $this->db->join('direct_grn',"direct_grn.guid=purchase_items.order_id AND direct_grn.invoice_status=1",'left');
+        $this->db->join('items_category', 'items.category_id=items_category.guid','left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid  AND purchase_items.item=items.guid",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item AND purchase_items.item=items.guid",'left');
+        $this->db->join('brands', 'items.brand_id=brands.guid','left');
+        $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
+        $this->db->join('suppliers', 'suppliers.guid=purchase_invoice.supplier_id OR suppliers.guid=direct_invoice.supplier_id ','left' );
+      
+        if($start!="" && $end!=""){
+           $this->db->where('purchase_invoice.date >=', strtotime($start));
+        $this->db->where('purchase_invoice.date <=', strtotime($end));
+        }
+        if($start!="" && $end!="" && $from_time!="" && $to_time!="" && $to_time!='00:00' && $from_time!='00:00'){
+            $this->db->where('purchase_items.time >=', strtotime($from_time));
+            $this->db->where('purchase_items.time <=', strtotime($to_time));
+           
+        }
+        $sql=$this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){  
+            $row['invoice_date']=date('d-m-Y',$row['invoice_date']);
+            $row['time']=date('H:i',$row['time']);
+            $data[]=$row;
+        }
+        return $data;  
+      
+    }
+
+    function get_sales_filtering_report($to_time,$from_time,$customer,$items,$category,$department,$brand,$start,$end){
         $this->db->select('branches.store_name,branches.code as bcode,purchase_invoice.date as invoice_date,purchase_invoice.invoice,suppliers.first_name,suppliers.company_name,direct_invoice.invoice_no,grn.grn_no,direct_grn.grn_no as drect_grn_no,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,purchase_items.*')->from('items')->where('items.branch_id',  $this->session->userdata('branch_id'))->where('purchase_items.invoice_id !=','');
         if($category!=""){
             $this->db->where('items.category_id',$category);
