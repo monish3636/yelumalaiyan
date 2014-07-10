@@ -118,13 +118,13 @@ class Invoice extends CI_Model{
         $this->db->where('guid',$grn);
         $this->db->update('direct_grn',array('invoice_status'=>1));
         $this->db->where(array('order_id'=>$grn,'branch_id'=>  $this->session->userdata('branch_id')));
-        $this->db->update('purchase_items',array('invoice_id'=>$guid));
+        $this->db->update('purchase_items',array('invoice_id'=>$guid,'time'=>strtotime(date('H:i:s'))));
     }
     function grn_invoice_status($grn,$guid){
         $this->db->where('guid',$grn);
         $this->db->update('grn',array('invoice_status'=>1));
         $this->db->where(array('grn_id'=>$grn,'branch_id'=>  $this->session->userdata('branch_id')));
-        $this->db->update('purchase_items',array('invoice_id'=>$guid));
+        $this->db->update('purchase_items',array('invoice_id'=>$guid,'time'=>strtotime(date('H:i:s'))));
     }
     /*
      * supplier payable amount   from Direct Grn  */

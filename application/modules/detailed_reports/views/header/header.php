@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="<?php echo base_url() ?>template/date/css/daterangepicker-bs3.css"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>template/clock/bootstrap-clockpicker.min.css">
+<link rel="stylesheet" href="<?php echo base_url() ?>template/date/css/daterangepicker-bs3.css">
 <script src="<?php echo base_url() ?>template/date/js/moment.js"></script>
 <script src="<?php echo base_url() ?>template/date/js/daterangepicker.js"></script>
 <script type="text/javascript" charset="utf-8">
@@ -254,41 +255,30 @@
             $('#branch_base').show();
             $('#supplier_base').hide();
             $('#select_purchase_items').hide();
+            $('#select_purchase_items_category').hide();
+            $('#select_purchase_items_department').hide();
+            $('#select_purchase_items_brand').hide();
             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
         else if(report=='purchase_supplier_base'){
             $('#branch_base').hide();
             $('#supplier_base').show();
             $('#select_purchase_items').hide();
-            $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
-        }
-        else if(report=='purchase_items_base'){
-            $('#branch_base').hide();
-            $('#supplier_base').hide();
-            $('#select_purchase_items').show();
-             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
-        }
-        else if(report=='purchase_items_category_base'){
-            $('#branch_base').hide();
-            $('#supplier_base').hide();
-            $('#select_purchase_items_category').show();
-             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
-        }
-        else if(report=='purchase_items_department_base'){
-            $('#branch_base').hide();
-            $('#supplier_base').hide();
-            $('#select_purchase_items_category').hide();
-            $('#select_purchase_items_department').show();
-             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
-        }
-        else if(report=='purchase_items_brand_base'){
-            $('#branch_base').hide();
-            $('#supplier_base').hide();
             $('#select_purchase_items_category').hide();
             $('#select_purchase_items_department').hide();
-            $('#select_purchase_items_brand').show();
-             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+            $('#select_purchase_items_brand').hide();
+            $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
+        else if(report=='purchase_all_base'){
+            $('#branch_base').hide();
+            $('#supplier_base').show();
+            $('#select_purchase_items').show();
+            $('#select_purchase_items_category').show();
+            $('#select_purchase_items_department').show();
+            $('#select_purchase_items_brand').show();
+            $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
+        
     
     
         

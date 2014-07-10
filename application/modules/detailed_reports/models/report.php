@@ -845,34 +845,24 @@ class Report extends CI_Model{
         
         return $data; 
     }
-    function get_purchase_items_base_report($items,$start,$end){
-        $this->db->select('branches.store_name,branches.code as bcode,purchase_invoice.date as invoice_date,purchase_invoice.invoice,suppliers.first_name,suppliers.company_name,direct_invoice.invoice_no,grn.grn_no,direct_grn.grn_no as drect_grn_no,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,purchase_items.*')->from('purchase_items')->where('purchase_items.item',$items)->where('purchase_items.branch_id',  $this->session->userdata('branch_id'))->where('purchase_items.invoice_id !=','');
-        $this->db->join('purchase_invoice',"purchase_invoice.guid=purchase_items.invoice_id",'left');
-        $this->db->join('branches', 'branches.guid=purchase_invoice.branch_id','left');
-        $this->db->join('direct_invoice',"direct_invoice.guid=purchase_items.order_id AND direct_invoice.order_status=1 ",'left');
-        $this->db->join('grn',"grn.guid=purchase_items.grn_id AND grn.invoice_status=1",'left');
-        $this->db->join('direct_grn',"direct_grn.guid=purchase_items.order_id AND direct_grn.invoice_status=1",'left');
-        $this->db->join('items', "items.guid=purchase_items.item  AND items.guid='".$items."' ",'left');
-        $this->db->join('items_category', 'items.category_id=items_category.guid','left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_items.item AND purchase_items.item='".$items."'",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item AND purchase_items.item='".$items."'",'left');
-        $this->db->join('brands', 'items.brand_id=brands.guid','left');
-        $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-        $this->db->join('suppliers', 'suppliers.guid=purchase_invoice.supplier_id OR suppliers.guid=direct_invoice.supplier_id ','left' );
-        $this->db->where('purchase_invoice.date >=', strtotime($start));
-        $this->db->where('purchase_invoice.date <=', strtotime($end));
-        $sql=$this->db->get();
-        $data=array();
-        foreach($sql->result_array() as $row){  
-            $row['invoice_date']=date('d-m-Y',$row['invoice_date']);
-            $data[]=$row;
+
+    function get_purchase_items_all_report($to_time,$form_time,$supplier,$items,$category,$department,$brand,$start,$end){
+        $this->db->select('branches.store_name,branches.code as bcode,purchase_invoice.date as invoice_date,purchase_invoice.invoice,suppliers.first_name,suppliers.company_name,direct_invoice.invoice_no,grn.grn_no,direct_grn.grn_no as drect_grn_no,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,purchase_items.*')->from('items')->where('items.branch_id',  $this->session->userdata('branch_id'))->where('purchase_items.invoice_id !=','');
+        if($category!=""){
+            $this->db->where('items.category_id',$category);
         }
-        return $data; 
-    }
-    /* get purchase based on item category 
-    functon start     */
-    function get_purchase_items_category_base_report($category,$start,$end){
-        $this->db->select('branches.store_name,branches.code as bcode,purchase_invoice.date as invoice_date,purchase_invoice.invoice,suppliers.first_name,suppliers.company_name,direct_invoice.invoice_no,grn.grn_no,direct_grn.grn_no as drect_grn_no,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,purchase_items.*')->from('items')->where('items.category_id',$category)->where('items.branch_id',  $this->session->userdata('branch_id'))->where('purchase_items.invoice_id !=','');
+        if($department!=""){
+            $this->db->where('items.depart_id',$department);
+        }
+        if($brand!=""){
+            $this->db->where('items.brand_id',$brand);
+        }
+        if($items!=""){
+            $this->db->where('items.guid',$items);
+        }
+        if($supplier!=""){
+            $this->db->where('purchase_invoice.supplier_id',$supplier);
+        }
         $this->db->join('purchase_items', "purchase_items.item=items.guid",'left');
         $this->db->join('purchase_invoice',"purchase_invoice.guid=purchase_items.invoice_id AND purchase_items.item=items.guid",'left');
         $this->db->join('branches', 'branches.guid=purchase_invoice.branch_id','left');
@@ -887,71 +877,20 @@ class Report extends CI_Model{
         $this->db->join('suppliers', 'suppliers.guid=purchase_invoice.supplier_id OR suppliers.guid=direct_invoice.supplier_id ','left' );
         $this->db->where('purchase_invoice.date >=', strtotime($start));
         $this->db->where('purchase_invoice.date <=', strtotime($end));
+        if($start!="" && $end!="" && $from_time!="" && $to_time!=""){
+            $this->db->where('purchase_items.time >=', strtotime($from_time));
+            $this->db->where('purchase_items.date <=', strtotime($to_time));
+        }
         $sql=$this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){  
             $row['invoice_date']=date('d-m-Y',$row['invoice_date']);
             $data[]=$row;
         }
-        return $data; 
-       // return $data; 
-    }
-    // function end
-    /* get purchase based on item category 
-    functon start     */
-    function get_purchase_items_department_base_report($department,$start,$end){
-        $this->db->select('branches.store_name,branches.code as bcode,purchase_invoice.date as invoice_date,purchase_invoice.invoice,suppliers.first_name,suppliers.company_name,direct_invoice.invoice_no,grn.grn_no,direct_grn.grn_no as drect_grn_no,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,purchase_items.*')->from('items')->where('items.depart_id',$department)->where('items.branch_id',  $this->session->userdata('branch_id'))->where('purchase_items.invoice_id !=','');
-        $this->db->join('purchase_items', "purchase_items.item=items.guid",'left');
-        $this->db->join('purchase_invoice',"purchase_invoice.guid=purchase_items.invoice_id",'left');
-        $this->db->join('branches', 'branches.guid=purchase_invoice.branch_id','left');
-        $this->db->join('direct_invoice',"direct_invoice.guid=purchase_items.order_id AND direct_invoice.order_status=1 ",'left');
-        $this->db->join('grn',"grn.guid=purchase_items.grn_id AND grn.invoice_status=1",'left');
-        $this->db->join('direct_grn',"direct_grn.guid=purchase_items.order_id AND direct_grn.invoice_status=1",'left');
-        $this->db->join('items_category', 'items.category_id=items_category.guid','left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid AND purchase_items.item=items.guid",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item AND purchase_items.item=items.guid",'left');
-        $this->db->join('brands', 'items.brand_id=brands.guid','left');
-        $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-        $this->db->join('suppliers', 'suppliers.guid=purchase_invoice.supplier_id OR suppliers.guid=direct_invoice.supplier_id ','left' );
-        $this->db->where('purchase_invoice.date >=', strtotime($start));
-        $this->db->where('purchase_invoice.date <=', strtotime($end));
-        $sql=$this->db->get();
-        $data=array();
-        foreach($sql->result_array() as $row){  
-            $row['invoice_date']=date('d-m-Y',$row['invoice_date']);
-            $data[]=$row;
-        }
-        return $data; 
+        return $data;  
       
     }
-    // function end
-    /* get purchase based on item category 
-    functon start     */
-    function get_purchase_items_brand_base_report($brand,$start,$end){
-        $this->db->select('branches.store_name,branches.code as bcode,purchase_invoice.date as invoice_date,purchase_invoice.invoice,suppliers.first_name,suppliers.company_name,direct_invoice.invoice_no,grn.grn_no,direct_grn.grn_no as drect_grn_no,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,purchase_items.*')->from('items')->where('items.brand_id',$brand)->where('items.branch_id',  $this->session->userdata('branch_id'))->where('purchase_items.invoice_id !=','');
-        $this->db->join('purchase_items', "purchase_items.item=items.guid",'left');
-        $this->db->join('purchase_invoice',"purchase_invoice.guid=purchase_items.invoice_id AND purchase_items.item=items.guid",'left');
-        $this->db->join('branches', 'branches.guid=purchase_invoice.branch_id','left');
-        $this->db->join('direct_invoice',"direct_invoice.guid=purchase_items.order_id AND direct_invoice.order_status=1 ",'left');
-        $this->db->join('grn',"grn.guid=purchase_items.grn_id AND grn.invoice_status=1",'left');
-        $this->db->join('direct_grn',"direct_grn.guid=purchase_items.order_id AND direct_grn.invoice_status=1",'left');
-        $this->db->join('items_category', 'items.category_id=items_category.guid','left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid AND purchase_items.item=items.guid",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item AND purchase_items.item=items.guid",'left');
-        $this->db->join('brands', 'items.brand_id=brands.guid','left');
-        $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-        $this->db->join('suppliers', 'suppliers.guid=purchase_invoice.supplier_id OR suppliers.guid=direct_invoice.supplier_id ','left' );
-        $this->db->where('purchase_invoice.date >=', strtotime($start));
-        $this->db->where('purchase_invoice.date <=', strtotime($end));
-        $sql=$this->db->get();
-        $data=array();
-        foreach($sql->result_array() as $row){  
-            $row['invoice_date']=date('d-m-Y',$row['invoice_date']);
-            $data[]=$row;
-        }
-        return $data; 
-      
-    }
+  
     // function end
 }
 ?>
