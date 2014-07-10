@@ -93,7 +93,7 @@ class Purchase extends CI_Model{
             $this->db->where('id',$id);
             $this->db->update('supplier_payable',array('guid'=>  md5($row->supplier_id.$row->invoice_no.$id.$guid)));
             $this->db->where(array('order_id'=>$guid,'branch_id'=>  $this->session->userdata('branch_id')));
-            $this->db->update('purchase_items',array('invoice_id'=>$purchase_invoice_id));
+            $this->db->update('purchase_items',array('invoice_id'=>$purchase_invoice_id,'time'=>strtotime(date('H:i:s'))));
         }
     }
     function  check_approve($guid){

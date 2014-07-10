@@ -15,6 +15,10 @@ class Detailed_reports extends MX_Controller
         $this->load->view('template/app/navigation',$this->posnic->modules());
         $this->load->view('template/app/footer');
 
+//echo date('H:i:s:A');
+//echo '<pre><br>';
+//echo strtotime(date('H:i:s'));echo '<pre><br>';
+////echo date('H:i:s',strtotime(date('H:i:s')));
 
     }
     function get_branch(){
@@ -91,50 +95,24 @@ class Detailed_reports extends MX_Controller
         
         echo json_encode($data);
     }
-    function get_purchase_items_base_report(){
+
+     function get_purchase_items_all_report(){
         $this->load->model('report');
         $start=  $this->input->post('start');
         $end=  $this->input->post('end');
-        $items=  $this->input->post('items');
+        $supplier=  $this->input->post('supplier');
+        $item=  $this->input->post('item');
+        $category=$this->input->post('category');
+        $department =$this->input->post('department');
+        $brand=$this->input->post('brand');
+        $to_time=$this->input->post('to_time');
+        $form_time=$this->input->post('form_time');
+       max(count($department),count($brand),count($item),count($category),count($supplier));
         $data=array();
-            for($i=0;$i<count($items);$i++){
-               $data= array_merge($data,  $this->report->get_purchase_items_base_report($items[$i],$start,$end));
-            }        
+          for($i=0;$i<max(count($department),count($brand),count($item),count($category),count($supplier));$i++){
+               $data= array_merge($data,  $this->report->get_purchase_items_all_report($to_time,$form_time,$supplier[$i],$item[$i],$category[$i],$department[$i],$brand[$i],$start,$end));
+          }
         echo json_encode($data);
     }
-    function get_purchase_items_category_base_report(){
-        $this->load->model('report');
-        $start=  $this->input->post('start');
-        $end=  $this->input->post('end');
-        $category=  $this->input->post('category');
-        $data=array();
-            for($i=0;$i<count($category);$i++){
-               $data= array_merge($data,  $this->report->get_purchase_items_category_base_report($category[$i],$start,$end));
-            }        
-        echo json_encode($data);
-    }
-    function get_purchase_items_department_base_report(){
-        $this->load->model('report');
-        $start=  $this->input->post('start');
-        $end=  $this->input->post('end');
-        $department=  $this->input->post('department');
-        $data=array();
-            for($i=0;$i<count($department);$i++){
-               $data= array_merge($data,  $this->report->get_purchase_items_department_base_report($department[$i],$start,$end));
-            }        
-        echo json_encode($data);
-    }
-    function get_purchase_items_brand_base_report(){
-        $this->load->model('report');
-        $start=  $this->input->post('start');
-        $end=  $this->input->post('end');
-        $brand=  $this->input->post('brand');
-        $data=array();
-            for($i=0;$i<count($brand);$i++){
-               $data= array_merge($data,  $this->report->get_purchase_items_brand_base_report($brand[$i],$start,$end));
-            }        
-        echo json_encode($data);
-    }
-   
 }
 ?>

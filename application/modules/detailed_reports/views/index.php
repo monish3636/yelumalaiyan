@@ -22,7 +22,7 @@
         margin: 32px;
     }
     .table-condensed thead > tr > th, .table-condensed tbody > tr > th, .table-condensed tfoot > tr > th, .table-condensed thead > tr > td, .table-condensed tbody > tr > td, .table-condensed tfoot > tr > td {
-        padding: 3px 9px 2px;
+   padding: 3px 9px 2px;
     }
     .dataTable {
         max-width: 200% !important;
@@ -158,6 +158,140 @@
                 }
             });
         }
+         else if(report=='purchase_all_base'){
+            var supplier =$('#select_suppliers').select2('data');
+            var supplier_id=[];
+            for(var i=0;i<supplier.length;i++){
+                supplier_id[i]=supplier[i]['id'];
+            }
+            var item =$('#purchase_items').select2('data');
+            var item_id=[];
+            for(var i=0;i<item.length;i++){
+                item_id[i]=item[i]['id'];
+            }
+            var brand =$('#purchase_items_brand').select2('data');
+            var brand_id=[];
+            for(var i=0;i<brand.length;i++){
+                brand_id[i]=brand[i]['id'];
+            }
+            var department =$('#purchase_items_department').select2('data');
+            var department_id=[];
+            for(var i=0;i<department.length;i++){
+                department_id[i]=department[i]['id'];
+            }
+            var category =$('#purchase_items_category').select2('data');
+            var category_id=[];
+            for(var i=0;i<category.length;i++){
+                category_id[i]=category[i]['id'];
+            }
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/detailed_reports/get_purchase_items_all_report/",                      
+                data: {
+                    start:start_date,
+                    end:end_date,
+                    supplier:supplier_id,
+                    item:item_id,
+                    category:category_id,
+                    department:department_id,
+                    brand:brand_id,
+                    form_time:$('#form_time').val(),
+                    to_time:$('#to_time').val(),
+
+                }, 
+                type:'POST',
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                    $('.dataTable').hide();
+                    $('#purchase_item_base_table').show();
+                    $('#purchase_item_base_table tbody').remove();
+                    $('#purchase_item_base_table').append('<tbody></tbody');
+                    $('#purchase_item_base_table tfoot').remove();
+                    $('#purchase_item_base_table').append('<tfoot></tfoot');
+                    var total_item_discount=0;
+                    var total_amount=0;
+                    var total_tax=0;
+                    var total_quty=0;
+                    var total_free=0;
+                    var i=0;
+                    for(i=0;i<data.length;i++){
+                        var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"% (<?php echo $this->lang->line('inclusive') ?>)";
+                        var total=data[i]['amount'];
+                        if(data[i]['tax_Inclusive']==1){
+                            var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"(<?php echo $this->lang->line('exclusive') ?>)";
+                            var total=data[i]['amount']+data[i]['tax'];
+                            total_tax=parseFloat(total_tax)+parseFloat(data[i]["tax"]==""?0:data[i]["tax"]);
+                        }
+                        var quty=data[i]['quty'];
+                        var free=data[i]['free'];
+                        if(data[i]['received_quty']!=0 && data[i]['received_quty']!=""){
+                            var quty=data[i]['received_quty']; 
+                            var free=data[i]['received_free']; 
+                       }
+                        $('#purchase_item_base_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["b_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["d_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-right">'+data[i]["cost"]+'</td>\n\
+                            <td class="text-right">'+data[i]["sell"]+'</td>\n\
+                            <td class="text-right">'+data[i]["mrp"]+'</td>\n\
+                            <td class="text-right">'+quty+'</td>\n\
+                            <td class="text-right">'+free+'</td>\n\
+                            <td class="text-right">'+tax+'</td>\n\
+                            <td class="text-right">'+data[i]["tax"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_per"]+'</td>\n\
+                            <td class="text-right">'+data[i]["discount_amount"]+'</td> \n\
+                            <td class="text-right">'+total+'</td>\n\
+                        </tr>');
+                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["discount_amount"]==""?0:data[i]["discount_amount"]);
+                        total_amount=parseFloat(total_amount)+parseFloat(total==""?0:total);
+                        total_quty=parseFloat(total_quty)+parseFloat(quty==""?0:quty);
+                        total_free=parseFloat(total_free)+parseFloat(free==""?0:free);
+                     
+                      //  total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
+                    }
+                    var num = parseFloat(total_amount);
+                    total_amount=num.toFixed(point);
+                    var num = parseFloat(total_item_discount);
+                    total_item_discount=num.toFixed(point);
+                    var num = parseFloat(total_tax);
+                    total_tax=num.toFixed(point);
+                    $('#purchase_item_base_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_quty+'</td>\n\
+                        <td class="text-right table_footer">'+total_free+'</td>\n\
+                        <td class="text-right table_footer"></td>\n\
+                        <td class="text-right table_footer">'+total_tax+'</td>\n\
+                        <td class="text-right table_footer"></td>\n\
+                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
+                }
+            });
+        }
         else if(report=='purchase_supplier_base'){
             var supplier =$('#select_suppliers').select2('data');
             var supplier_id=[];
@@ -230,7 +364,7 @@
                     var num = parseFloat(total_amount);
                     total_amount=num.toFixed(point);
                     var num = parseFloat(total_paid);
-                    totak_paid=num.toFixed(point);
+                    total_paid=num.toFixed(point);
                     var num = parseFloat(total_balance);
                     total_balance=num.toFixed(point);
                     $('#purchase_base_table tfoot').append(' <tr >\n\
@@ -253,438 +387,7 @@
                 }
             });
         }
-        else if(report=='purchase_items_base'){
-            var items =$('#purchase_items').select2('data');
-            var items_id=[];
-            for(var i=0;i<items.length;i++){
-                items_id[i]=items[i]['id'];
-            }
-            $.ajax({                                      
-                url: "<?php echo base_url() ?>index.php/detailed_reports/get_purchase_items_base_report/",                      
-                data: {
-                    start:start_date,
-                    end:end_date,
-                    items:items_id
-
-                }, 
-                type:'POST',
-                dataType: 'json',               
-                success: function(data)        
-                { 
-                    $('.dataTable').hide();
-                    $('#purchase_item_base_table').show();
-                    $('#purchase_item_base_table tbody').remove();
-                    $('#purchase_item_base_table').append('<tbody></tbody');
-                    $('#purchase_item_base_table tfoot').remove();
-                    $('#purchase_item_base_table').append('<tfoot></tfoot');
-                    var total_item_discount=0;
-                    var total_amount=0;
-                    var total_tax=0;
-                    var total_quty=0;
-                    var total_free=0;
-                    var i=0;
-                    for(i=0;i<data.length;i++){
-                        var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"% (<?php echo $this->lang->line('inclusive') ?>)";
-                        var total=data[i]['amount'];
-                        if(data[i]['tax_Inclusive']==1){
-                            var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"(<?php echo $this->lang->line('exclusive') ?>)";
-                            var total=data[i]['amount']+data[i]['tax'];
-                            total_tax=parseFloat(total_tax)+parseFloat(data[i]["tax"]==""?0:data[i]["tax"]);
-                        }
-                        var quty=data[i]['quty'];
-                        var free=data[i]['free'];
-                        if(data[i]['received_quty']!=0 && data[i]['received_quty']!=""){
-                            var quty=data[i]['received_quty']; 
-                            var free=data[i]['received_free']; 
-                       }
-                        $('#purchase_item_base_table tbody').append('<tr> \n\
-                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
-                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
-                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
-                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
-                            <td class="text-center">'+data[i]["name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["code"]+'</td>\n\
-                            <td class="text-center">'+data[i]["b_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["d_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
-                            <td class="text-right">'+data[i]["cost"]+'</td>\n\
-                            <td class="text-right">'+data[i]["sell"]+'</td>\n\
-                            <td class="text-right">'+data[i]["mrp"]+'</td>\n\
-                            <td class="text-right">'+quty+'</td>\n\
-                            <td class="text-right">'+free+'</td>\n\
-                            <td class="text-right">'+tax+'</td>\n\
-                            <td class="text-right">'+data[i]["tax"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_per"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_amount"]+'</td> \n\
-                            <td class="text-right">'+total+'</td>\n\
-                        </tr>');
-                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["discount_amount"]==""?0:data[i]["discount_amount"]);
-                        total_amount=parseFloat(total_amount)+parseFloat(total==""?0:total);
-                        total_quty=parseFloat(total_quty)+parseFloat(quty==""?0:quty);
-                        total_free=parseFloat(total_free)+parseFloat(free==""?0:free);
-                     
-                      //  total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
-                    }
-                    var num = parseFloat(total_amount);
-                    total_amount=num.toFixed(point);
-                    var num = parseFloat(total_item_discount);
-                    total_item_discount=num.toFixed(point);
-                    var num = parseFloat(total_tax);
-                    total_tax=num.toFixed(point);
-                    $('#purchase_item_base_table tfoot').append(' <tr >\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="text-right table_footer">'+total_quty+'</td>\n\
-                        <td class="text-right table_footer">'+total_free+'</td>\n\
-                        <td class="text-right table_footer"></td>\n\
-                        <td class="text-right table_footer">'+total_tax+'</td>\n\
-                        <td class="text-right table_footer"></td>\n\
-                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
-                        <td class="text-right table_footer">'+total_amount+'</td>\n\
-                    </tr>');
-                }
-            });
-        }
-        else if(report=='purchase_items_category_base'){
-            var category =$('#purchase_items_category').select2('data');
-            var category_id=[];
-            for(var i=0;i<category.length;i++){
-                category_id[i]=category[i]['id'];
-            }
-            $.ajax({                                      
-                url: "<?php echo base_url() ?>index.php/detailed_reports/get_purchase_items_category_base_report/",                      
-                data: {
-                    start:start_date,
-                    end:end_date,
-                    category:category_id
-
-                }, 
-                type:'POST',
-                dataType: 'json',               
-                success: function(data)        
-                { 
-                    $('.dataTable').hide();
-                    $('#purchase_item_base_table').show();
-                    $('#purchase_item_base_table tbody').remove();
-                    $('#purchase_item_base_table').append('<tbody></tbody');
-                    $('#purchase_item_base_table tfoot').remove();
-                    $('#purchase_item_base_table').append('<tfoot></tfoot');
-                    var total_item_discount=0;
-                    var total_amount=0;
-                    var total_tax=0;
-                    var total_quty=0;
-                    var total_free=0;
-                    var i=0;
-                    for(i=0;i<data.length;i++){
-                        var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"% (<?php echo $this->lang->line('inclusive') ?>)";
-                        var total=data[i]['amount'];
-                        if(data[i]['tax_Inclusive']==1){
-                            var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"(<?php echo $this->lang->line('exclusive') ?>)";
-                            var total=data[i]['amount']+data[i]['tax'];
-                            total_tax=parseFloat(total_tax)+parseFloat(data[i]["tax"]==""?0:data[i]["tax"]);
-                        }
-                        var quty=data[i]['quty'];
-                        var free=data[i]['free'];
-                        if(data[i]['received_quty']!=0 && data[i]['received_quty']!=""){
-                            var quty=data[i]['received_quty']; 
-                            var free=data[i]['received_free']; 
-                       }
-                        $('#purchase_item_base_table tbody').append('<tr> \n\
-                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
-                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
-                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
-                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
-                            <td class="text-center">'+data[i]["name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["code"]+'</td>\n\
-                            <td class="text-center">'+data[i]["b_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["d_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
-                            <td class="text-right">'+data[i]["cost"]+'</td>\n\
-                            <td class="text-right">'+data[i]["sell"]+'</td>\n\
-                            <td class="text-right">'+data[i]["mrp"]+'</td>\n\
-                            <td class="text-right">'+quty+'</td>\n\
-                            <td class="text-right">'+free+'</td>\n\
-                            <td class="text-right">'+tax+'</td>\n\
-                            <td class="text-right">'+data[i]["tax"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_per"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_amount"]+'</td> \n\
-                            <td class="text-right">'+total+'</td>\n\
-                        </tr>');
-                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["discount_amount"]==""?0:data[i]["discount_amount"]);
-                        total_amount=parseFloat(total_amount)+parseFloat(total==""?0:total);
-                        total_quty=parseFloat(total_quty)+parseFloat(quty==""?0:quty);
-                        total_free=parseFloat(total_free)+parseFloat(free==""?0:free);
-                     
-                      //  total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
-                    }
-                    var num = parseFloat(total_amount);
-                    total_amount=num.toFixed(point);
-                    var num = parseFloat(total_item_discount);
-                    total_item_discount=num.toFixed(point);
-                    var num = parseFloat(total_tax);
-                    total_tax=num.toFixed(point);
-                    $('#purchase_item_base_table tfoot').append(' <tr >\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="text-right table_footer">'+total_quty+'</td>\n\
-                        <td class="text-right table_footer">'+total_free+'</td>\n\
-                        <td class="text-right table_footer"></td>\n\
-                        <td class="text-right table_footer">'+total_tax+'</td>\n\
-                        <td class="text-right table_footer"></td>\n\
-                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
-                        <td class="text-right table_footer">'+total_amount+'</td>\n\
-                    </tr>');
-                }
-            });
-        }
-        else if(report=='purchase_items_department_base'){
-            var department =$('#purchase_items_department').select2('data');
-            var department_id=[];
-            for(var i=0;i<department.length;i++){
-                department_id[i]=department[i]['id'];
-            }
-            $.ajax({                                      
-                url: "<?php echo base_url() ?>index.php/detailed_reports/get_purchase_items_department_base_report/",                      
-                data: {
-                    start:start_date,
-                    end:end_date,
-                    department:department_id
-
-                }, 
-                type:'POST',
-                dataType: 'json',               
-                success: function(data)        
-                { 
-                    $('.dataTable').hide();
-                    $('#purchase_item_base_table').show();
-                    $('#purchase_item_base_table tbody').remove();
-                    $('#purchase_item_base_table').append('<tbody></tbody');
-                    $('#purchase_item_base_table tfoot').remove();
-                    $('#purchase_item_base_table').append('<tfoot></tfoot');
-                    var total_item_discount=0;
-                    var total_amount=0;
-                    var total_tax=0;
-                    var total_quty=0;
-                    var total_free=0;
-                    var i=0;
-                    for(i=0;i<data.length;i++){
-                        var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"% (<?php echo $this->lang->line('inclusive') ?>)";
-                        var total=data[i]['amount'];
-                        if(data[i]['tax_Inclusive']==1){
-                            var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"(<?php echo $this->lang->line('exclusive') ?>)";
-                            var total=data[i]['amount']+data[i]['tax'];
-                            total_tax=parseFloat(total_tax)+parseFloat(data[i]["tax"]==""?0:data[i]["tax"]);
-                        }
-                        var quty=data[i]['quty'];
-                        var free=data[i]['free'];
-                        if(data[i]['received_quty']!=0 && data[i]['received_quty']!=""){
-                            var quty=data[i]['received_quty']; 
-                            var free=data[i]['received_free']; 
-                       }
-                        $('#purchase_item_base_table tbody').append('<tr> \n\
-                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
-                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
-                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
-                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
-                            <td class="text-center">'+data[i]["name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["code"]+'</td>\n\
-                            <td class="text-center">'+data[i]["b_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["d_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
-                            <td class="text-right">'+data[i]["cost"]+'</td>\n\
-                            <td class="text-right">'+data[i]["sell"]+'</td>\n\
-                            <td class="text-right">'+data[i]["mrp"]+'</td>\n\
-                            <td class="text-right">'+quty+'</td>\n\
-                            <td class="text-right">'+free+'</td>\n\
-                            <td class="text-right">'+tax+'</td>\n\
-                            <td class="text-right">'+data[i]["tax"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_per"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_amount"]+'</td> \n\
-                            <td class="text-right">'+total+'</td>\n\
-                        </tr>');
-                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["discount_amount"]==""?0:data[i]["discount_amount"]);
-                        total_amount=parseFloat(total_amount)+parseFloat(total==""?0:total);
-                        total_quty=parseFloat(total_quty)+parseFloat(quty==""?0:quty);
-                        total_free=parseFloat(total_free)+parseFloat(free==""?0:free);
-                     
-                      //  total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
-                    }
-                    var num = parseFloat(total_amount);
-                    total_amount=num.toFixed(point);
-                    var num = parseFloat(total_item_discount);
-                    total_item_discount=num.toFixed(point);
-                    var num = parseFloat(total_tax);
-                    total_tax=num.toFixed(point);
-                    $('#purchase_item_base_table tfoot').append(' <tr >\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="text-right table_footer">'+total_quty+'</td>\n\
-                        <td class="text-right table_footer">'+total_free+'</td>\n\
-                        <td class="text-right table_footer"></td>\n\
-                        <td class="text-right table_footer">'+total_tax+'</td>\n\
-                        <td class="text-right table_footer"></td>\n\
-                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
-                        <td class="text-right table_footer">'+total_amount+'</td>\n\
-                    </tr>');
-                }
-            });
-        }
-        else if(report=='purchase_items_brand_base'){
-            var brand =$('#purchase_items_brand').select2('data');
-            var brand_id=[];
-            for(var i=0;i<brand.length;i++){
-                brand_id[i]=brand[i]['id'];
-            }
-            $.ajax({                                      
-                url: "<?php echo base_url() ?>index.php/detailed_reports/get_purchase_items_brand_base_report/",                      
-                data: {
-                    start:start_date,
-                    end:end_date,
-                    brand:brand_id
-
-                }, 
-                type:'POST',
-                dataType: 'json',               
-                success: function(data)        
-                { 
-                    $('.dataTable').hide();
-                    $('#purchase_item_base_table').show();
-                    $('#purchase_item_base_table tbody').remove();
-                    $('#purchase_item_base_table').append('<tbody></tbody');
-                    $('#purchase_item_base_table tfoot').remove();
-                    $('#purchase_item_base_table').append('<tfoot></tfoot');
-                    var total_item_discount=0;
-                    var total_amount=0;
-                    var total_tax=0;
-                    var total_quty=0;
-                    var total_free=0;
-                    var i=0;
-                    for(i=0;i<data.length;i++){
-                        var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"% (<?php echo $this->lang->line('inclusive') ?>)";
-                        var total=data[i]['amount'];
-                        if(data[i]['tax_Inclusive']==1){
-                            var tax=data[i]['tax_type_name']+'-'+data[i]['tax_value']+"(<?php echo $this->lang->line('exclusive') ?>)";
-                            var total=data[i]['amount']+data[i]['tax'];
-                            total_tax=parseFloat(total_tax)+parseFloat(data[i]["tax"]==""?0:data[i]["tax"]);
-                        }
-                        var quty=data[i]['quty'];
-                        var free=data[i]['free'];
-                        if(data[i]['received_quty']!=0 && data[i]['received_quty']!=""){
-                            var quty=data[i]['received_quty']; 
-                            var free=data[i]['received_free']; 
-                       }
-                        $('#purchase_item_base_table tbody').append('<tr> \n\
-                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
-                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
-                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
-                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
-                            <td class="text-center">'+data[i]["name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["code"]+'</td>\n\
-                            <td class="text-center">'+data[i]["b_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["d_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
-                            <td class="text-right">'+data[i]["cost"]+'</td>\n\
-                            <td class="text-right">'+data[i]["sell"]+'</td>\n\
-                            <td class="text-right">'+data[i]["mrp"]+'</td>\n\
-                            <td class="text-right">'+quty+'</td>\n\
-                            <td class="text-right">'+free+'</td>\n\
-                            <td class="text-right">'+tax+'</td>\n\
-                            <td class="text-right">'+data[i]["tax"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_per"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_amount"]+'</td> \n\
-                            <td class="text-right">'+total+'</td>\n\
-                        </tr>');
-                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["discount_amount"]==""?0:data[i]["discount_amount"]);
-                        total_amount=parseFloat(total_amount)+parseFloat(total==""?0:total);
-                        total_quty=parseFloat(total_quty)+parseFloat(quty==""?0:quty);
-                        total_free=parseFloat(total_free)+parseFloat(free==""?0:free);
-                     
-                      //  total_balance=parseFloat(total_balance)+parseFloat(balance==""?0:balance);
-                    }
-                    var num = parseFloat(total_amount);
-                    total_amount=num.toFixed(point);
-                    var num = parseFloat(total_item_discount);
-                    total_item_discount=num.toFixed(point);
-                    var num = parseFloat(total_tax);
-                    total_tax=num.toFixed(point);
-                    $('#purchase_item_base_table tfoot').append(' <tr >\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="text-right table_footer">'+total_quty+'</td>\n\
-                        <td class="text-right table_footer">'+total_free+'</td>\n\
-                        <td class="text-right table_footer"></td>\n\
-                        <td class="text-right table_footer">'+total_tax+'</td>\n\
-                        <td class="text-right table_footer"></td>\n\
-                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
-                        <td class="text-right table_footer">'+total_amount+'</td>\n\
-                    </tr>');
-                }
-            });
-        }
+      
         else{
         var branch =$('#select_branch').select2('data');
         var branch_id=[];
@@ -2771,12 +2474,11 @@
 
                                                 <li><a href="javascript:void(0)"><?php echo $this->lang->line('purchase') ?></a>
                                                     <ul>
-                                                        <li><a href="javascript:account_report('purchase_supplier_base')" id="purchase_supplier_base"><?php echo $this->lang->line('supplier_base') ?></a></li>
-                                                        <li><a href="javascript:account_report('purchase_items_base')" id="purchase_items_base"><?php echo $this->lang->line('items_base') ?></a></li>
+                                                        <li><a href="javascript:account_report('purchase_supplier_base')" id="purchase_supplier_base"><?php echo $this->lang->line('purchase') ?></a></li>
+                                                        <li><a href="javascript:account_report('purchase_all_base')" id="purchase_all_base"><?php echo $this->lang->line('items_base') ?></a></li>
+                                                       
                                                         <li><a href="javascript:account_report('purchase_branch_base')" id="purchase_branch_base"><?php echo $this->lang->line('branch_base') ?></a></li>							
-                                                        <li><a href="javascript:account_report('purchase_items_category_base')" id="purchase_items_category_base"><?php echo $this->lang->line('items_category_base') ?></a></li>
-                                                        <li><a href="javascript:account_report('purchase_items_department_base')" id="purchase_items_department_base"><?php echo $this->lang->line('items_department_base') ?></a></li>
-                                                        <li><a href="javascript:account_report('purchase_items_brand_base')" id="purchase_items_brand_base"><?php echo $this->lang->line('items_brand_base') ?></a></li>
+                                                    
                                                     </ul>
                                                 </li>
                                                 <li><a href="javascript:report('')"><?php echo $this->lang->line('sales') ?></a>
@@ -2836,7 +2538,31 @@
                             
                         </div>
                         </div>
-               </div>  <label >.</label>
+               </div> 
+           <div class="col col-sm-2" >
+            <div class="form-group" >
+                
+                <label><?php echo $this->lang->line('from') ?></label>
+                 <div class="input-group clockpicker" id="from_clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                    <input type="text" class="form-control" value="<?php ?>">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+                <label><?php echo $this->lang->line('to') ?></label>
+                 <div class="input-group clockpicker" id="to_clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                    <input type="text" class="form-control" value="">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+
+            </div>
+               <input type="hidden" name="from_time" id="from_time">
+               <input type="hidden" name="to_time" id="to_time">
+           </div> 
+            
+            <label >.</label>
             <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-eye-open"></i> <?php echo $this->lang->line('view') ?></a>
             <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('xlsx') ?></a>
             <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('csv') ?></a>
@@ -3706,14 +3432,17 @@
         <tbody></tbody>
     </table>
 </section>
+
+	
 </div>
    
          
 
 
 <script type="text/javascript">
+    
     $('#date_range').daterangepicker({
-//       {timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'
+
            ranges: {
                'Today': [moment(), moment()],
                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
@@ -3723,13 +3452,29 @@
                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
            },
            startDate: moment().subtract('days', 29),
-           endDate: moment()
+           endDate: moment(),
+         
+            
        },
        function(start, end) {
            $('#date_range span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
        }
     );
 </script>
-   
+<script type="text/javascript" src="<?php echo base_url() ?>template/clock/bootstrap-clockpicker.min.js"></script>
+<script type="text/javascript">
+$('#to_clockpicker').clockpicker()
+	.find('input').change(function(){
+		$('#to_time').val(this.value);
+	});
+$('#from_clockpicker').clockpicker()
+	.find('input').change(function(){
+		$('#from_time').val(this.value);
+	});
+
+
+
+</script>
+
 <script src="<?php echo base_url() ?>template/app/js/lib/jMenu/js/jMenu.jquery.js"></script>
       
