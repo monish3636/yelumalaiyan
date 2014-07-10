@@ -15,11 +15,15 @@ class Detailed_reports extends MX_Controller
         $this->load->view('template/app/navigation',$this->posnic->modules());
         $this->load->view('template/app/footer');
 
-//echo date('H:i:s:A');
+//echo date('H:i');
 //echo '<pre><br>';
-//echo strtotime(date('H:i:s'));echo '<pre><br>';
-////echo date('H:i:s',strtotime(date('H:i:s')));
+//echo $time=strtotime('04:20');
+//echo '<pre><br>';
+//echo date('H:i',strtotime(date('H:i')));
 
+
+    // Then call the date functions
+ 
     }
     function get_branch(){
         $like= $this->input->post('term');  
@@ -106,11 +110,11 @@ class Detailed_reports extends MX_Controller
         $department =$this->input->post('department');
         $brand=$this->input->post('brand');
         $to_time=$this->input->post('to_time');
-        $form_time=$this->input->post('form_time');
+        $from_time=$this->input->post('from_time');
        max(count($department),count($brand),count($item),count($category),count($supplier));
         $data=array();
           for($i=0;$i<max(count($department),count($brand),count($item),count($category),count($supplier));$i++){
-               $data= array_merge($data,  $this->report->get_purchase_items_all_report($to_time,$form_time,$supplier[$i],$item[$i],$category[$i],$department[$i],$brand[$i],$start,$end));
+               $data= array_merge($data,  $this->report->get_purchase_items_all_report($to_time,$from_time,$supplier[$i],$item[$i],$category[$i],$department[$i],$brand[$i],$start,$end));
           }
         echo json_encode($data);
     }

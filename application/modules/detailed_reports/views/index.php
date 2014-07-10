@@ -194,7 +194,7 @@
                     category:category_id,
                     department:department_id,
                     brand:brand_id,
-                    form_time:$('#form_time').val(),
+                    from_time:$('#from_time').val(),
                     to_time:$('#to_time').val(),
 
                 }, 
@@ -236,6 +236,7 @@
                             <td class="text-center">'+data[i]["first_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["company_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["time"]+'</td>\n\
                             <td class="text-center">'+data[i]["name"]+'</td>\n\
                             <td class="text-center">'+data[i]["code"]+'</td>\n\
                             <td class="text-center">'+data[i]["b_name"]+'</td>\n\
@@ -266,6 +267,7 @@
                     var num = parseFloat(total_tax);
                     total_tax=num.toFixed(point);
                     $('#purchase_item_base_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
@@ -2896,6 +2898,7 @@
                 <th><?php echo $this->lang->line('supplier') ?></th>
                 <th><?php echo $this->lang->line('company') ?></th>
                 <th><?php echo $this->lang->line('date') ?></th>               
+                <th><?php echo $this->lang->line('time') ?></th>               
                 <th><?php echo $this->lang->line('item') ?></th>               
                 <th><?php echo $this->lang->line('sku') ?></th>               
                 <th><?php echo $this->lang->line('brand') ?></th>               
@@ -3466,6 +3469,8 @@
 $('#to_clockpicker').clockpicker()
 	.find('input').change(function(){
 		$('#to_time').val(this.value);
+           
+            
 	});
 $('#from_clockpicker').clockpicker()
 	.find('input').change(function(){
