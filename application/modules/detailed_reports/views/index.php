@@ -2477,7 +2477,7 @@
                                                 <li><a href="javascript:void(0)"><?php echo $this->lang->line('purchase') ?></a>
                                                     <ul>
                                                         <li><a href="javascript:account_report('purchase_supplier_base')" id="purchase_supplier_base"><?php echo $this->lang->line('purchase') ?></a></li>
-                                                        <li><a href="javascript:account_report('purchase_all_base')" id="purchase_all_base"><?php echo $this->lang->line('items_base') ?></a></li>
+                                                        <li><a href="javascript:account_report('purchase_all_base')" id="purchase_all_base"><?php echo $this->lang->line('filtering') ?></a></li>
                                                        
                                                         <li><a href="javascript:account_report('purchase_branch_base')" id="purchase_branch_base"><?php echo $this->lang->line('branch_base') ?></a></li>							
                                                     
@@ -2541,7 +2541,7 @@
                         </div>
                         </div>
                </div> 
-           <div class="col col-sm-2" >
+           <div class="col col-sm-2" id="time_filtering" style="display: none" >
             <div class="form-group" >
                 
                 <label><?php echo $this->lang->line('from') ?></label>
@@ -2566,9 +2566,9 @@
             
             <label >.</label>
             <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-eye-open"></i> <?php echo $this->lang->line('view') ?></a>
-            <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('xlsx') ?></a>
+<!--            <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('xlsx') ?></a>
             <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('csv') ?></a>
-            <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('pdf') ?></a>
+            <a href="javascript:get_report()" class="btn btn-default"><i class="icon icon-table"></i> <?php echo $this->lang->line('pdf') ?></a>-->
            </div>
             
      
