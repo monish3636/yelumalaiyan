@@ -302,6 +302,17 @@
             $('#select_purchase_items_brand').hide();
             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
+        else if(report=='sales_branch_base'){
+            $('#branch_base').show();
+            $('#supplier_base').hide();            
+            $('#customer_base').hide();
+            $('#time_filtering').hide();
+            $('#select_purchase_items').hide();
+            $('#select_purchase_items_category').hide();
+            $('#select_purchase_items_department').hide();
+            $('#select_purchase_items_brand').hide();
+            $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
         else if(report=='purchase_supplier_base'){
             $('#branch_base').hide();
             $('#time_filtering').hide();
@@ -333,6 +344,18 @@
             $('#select_purchase_items_department').show();
             $('#select_purchase_items_brand').show();
             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
+        }
+        
+        else if(report=='sales_filter'){
+            $('#time_filtering').show();
+            $('#branch_base').hide();
+            $('#supplier_base').show();
+            $('#customer_base').show();
+            $('#select_purchase_items').show();
+            $('#select_purchase_items_category').show();
+            $('#select_purchase_items_department').show();
+            $('#select_purchase_items_brand').show();
+            $('#title').text(' <?php echo $this->lang->line('sales')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
         
     
