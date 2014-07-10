@@ -254,6 +254,7 @@
         if(report=='purchase_branch_base'){
             $('#branch_base').show();
             $('#supplier_base').hide();
+            $('#time_filtering').hide();
             $('#select_purchase_items').hide();
             $('#select_purchase_items_category').hide();
             $('#select_purchase_items_department').hide();
@@ -262,6 +263,8 @@
         }
         else if(report=='purchase_supplier_base'){
             $('#branch_base').hide();
+            $('#time_filtering').hide();
+            $('#supplier_base').show();
             $('#supplier_base').show();
             $('#select_purchase_items').hide();
             $('#select_purchase_items_category').hide();
@@ -270,6 +273,7 @@
             $('#title').text(' <?php echo $this->lang->line('purchase')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
         else if(report=='purchase_all_base'){
+            $('#time_filtering').show();
             $('#branch_base').hide();
             $('#supplier_base').show();
             $('#select_purchase_items').show();

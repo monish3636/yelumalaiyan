@@ -116,11 +116,11 @@ function save(){
                
                 if($this->input->post('sales_order_id')){
                     $this->sales->delivery_payable_amount($customer,$sdn_guid,$guid);
-                    $this->sales->update_sales_delivery_note($sdn_guid);
+                    $this->sales->update_sales_delivery_note($sdn_guid,$guid);
                 }
                 else{
                     $this->sales->direct_delivery_payable_amount($sdn_guid,$guid);
-                    $this->sales->update_direct_sales_delivery_note($sdn_guid);
+                    $this->sales->update_direct_sales_delivery_note($sdn_guid,$guid);
                 }
                  $this->posnic->posnic_master_increment_max('sales_bill')  ;
                  echo 'TRUE';

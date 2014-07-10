@@ -64,7 +64,7 @@ function save(){
                     $stock=  $this->input->post('items_stock_id');
                     $item_discount=  $this->input->post('items_discount_per');           
                     for($i=0;$i<count($item);$i++){
-                        $this->sales->add_keyboard_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i,$price[$i]);
+                        $this->sales->add_keyboard_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i,$price[$i],$invoice);
                          $this->stock->reduce_stock($item[$i],$quty[$i],$price[$i]);
                     }
                     $this->posnic->posnic_master_increment_max('keyboard_sales')  ;
