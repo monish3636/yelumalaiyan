@@ -51,6 +51,12 @@ class Detailed_reports extends MX_Controller
         $data= $this->report->search_suppliers($like);
         echo json_encode($data); 
     }
+    function search_customer(){
+        $like= $this->input->post('term');  
+        $this->load->model('report');
+        $data= $this->report->search_customer($like);
+        echo json_encode($data); 
+    }
     function search_item_category(){
         $like= $this->input->post('term');  
         $this->load->model('report');
@@ -95,6 +101,18 @@ class Detailed_reports extends MX_Controller
         $data=array();
             for($i=0;$i<count($supplier);$i++){
                $data= array_merge($data,  $this->report->get_purchase_supplier_base_report($supplier[$i],$start,$end));
+            }
+        
+        echo json_encode($data);
+    }
+    function get_sales_customer_base_report(){
+        $this->load->model('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        $customer=  $this->input->post('customer');
+        $data=array();
+            for($i=0;$i<count($customer);$i++){
+               $data= array_merge($data,  $this->report->get_sales_customer_base_report($customer[$i],$start,$end));
             }
         
         echo json_encode($data);
