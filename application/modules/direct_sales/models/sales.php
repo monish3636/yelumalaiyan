@@ -187,9 +187,9 @@ class Sales extends CI_Model{
          $this->db->where('guid',$guid);
          $this->db->update('direct_sales',array('receipt_status'=>1));
          $this->db->where('direct_sales_id',$guid);
-         $this->db->update('sales_items',array('invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s'))));
+         $this->db->update('sales_items',array('invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s')),'branch_id'=>$this->session->userdata('branch_id')));
      }
-     function add_direct_sales($guid,$item,$quty,$stock,$discount,$i){
+     function add_direct_sales($guid,$item,$quty,$stock,$discount,$tax,$i){
          
          $this->db->select()->from('stock')->where('guid',$stock);
          $sql=  $this->db->get();
@@ -198,7 +198,7 @@ class Sales extends CI_Model{
          {
              $price=$row->price;
          }
-         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_id'=>$guid));
+         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'tax'=>$tax,'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_id'=>$guid,'branch_id'=>$this->session->userdata('branch_id')));
          
                
      }

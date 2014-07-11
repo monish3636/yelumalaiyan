@@ -151,14 +151,14 @@ class Sales extends CI_Model{
         $this->db->where('guid',$so);
         $this->db->update('direct_sales_delivery',array('bill_status'=>1));
         $this->db->where('direct_sales_delivery_id',$so);
-        $this->db->update('sales_items',array('invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s'))));
+        $this->db->update('sales_items',array('invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s')),'branch_id'=>$this->session->userdata('branch_id')));
             
     }
     function update_sales_delivery_note($so,$invoice){
         $this->db->where('guid',$so);
         $this->db->update('sales_delivery_note',array('bill_status'=>1));   
         $this->db->where('delivery_note_id',$so);
-        $this->db->update('sales_items',array('invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s'))));
+        $this->db->update('sales_items',array('invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s')),'branch_id'=>$this->session->userdata('branch_id')));
     }
   
   

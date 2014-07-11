@@ -120,8 +120,8 @@ class Stock extends CI_Model{
          }
        return $data; 
     }
-    function add_touch_sales($guid,$item,$quty,$stock,$discount,$i,$price,$invoice){         
-         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item.uniqid()),'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_id'=>$guid,'invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s'))));
+    function add_touch_sales($guid,$item,$quty,$stock,$discount,$tax,$i,$price,$invoice){         
+         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item.uniqid()),'tax'=>$tax,'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_id'=>$guid,'invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s')),'branch_id'=>$this->session->userdata('branch_id')));
     }
        
     function payable_amount($customer_id,$guid,$amount){        

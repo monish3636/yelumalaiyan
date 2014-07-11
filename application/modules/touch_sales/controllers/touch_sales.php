@@ -47,6 +47,7 @@ class Touch_sales extends MX_Controller{
         $this->form_validation->set_rules('items_price[]', $this->lang->line('items_price'), 'required|numeric');                      
         $this->form_validation->set_rules('items_quty[]', $this->lang->line('items_price'), 'required|numeric');                      
         $this->form_validation->set_rules('items_discount_per[]', $this->lang->line('items_discount_per'), 'required|numeric'); 
+        $this->form_validation->set_rules('items_tax_value[]', $this->lang->line('items_tax_value'), 'required|numeric'); 
             if ( $this->form_validation->run() !== false ) {    
                 $customer=  $this->input->post('customers_guid');
                 $order_number=  $this->input->post('touch_sales_bill_number');              
@@ -83,8 +84,9 @@ class Touch_sales extends MX_Controller{
                     $price=  $this->input->post('items_price');
                     $stock=  $this->input->post('items_stock_id');
                     $item_discount=  $this->input->post('items_discount_per');           
+                    $item_tax=  $this->input->post('items_tax_value');           
                     for($i=0;$i<count($item);$i++){
-                        $this->stock->add_touch_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i,$price[$i],$invoice);
+                        $this->stock->add_touch_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$item_tax[]$i,$i,$price[$i],$invoice);
                         $this->stock->reduce_stock($item[$i],$quty[$i],$price[$i]);
                     }
                     $this->posnic->posnic_master_increment_max('touch_sales')  ;
