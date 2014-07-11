@@ -675,31 +675,23 @@
                     $('#sales_base_table').append('<tbody></tbody');
                     $('#sales_base_table tfoot').remove();
                     $('#sales_base_table').append('<tfoot></tfoot');
-                    var total_freight=0;
-                    var total_round_amt=0;
-                    var total_customer_discount_amount=0;
-                    var total_sales_discount=0;
-                    var total_items=0;
                     var total_tax=0;
                     var total_item_discount=0;
-                    var total_item_amount=0;
                     var total_amount=0;
-                     var total_paid=0;
-                    var total_payable=0;
                     var i=0;
                     for(i=0;i<data.length;i++){
                         var status='<?php echo $this->lang->line('waiting') ?>';
-                        var total_amount=parseFloat(data[i]["quty"])*parseFloat(data[i]["price"]);
-                        var tax_amount=parseFloat(total_amount)*parseFloat(data[i]["tax"])/100;
-                        var discount_amount=parseFloat(total_amount)*parseFloat(data[i]["discount"])/100;
+                        var amount=parseFloat(data[i]["quty"])*parseFloat(data[i]["price"]);
+                        var tax_amount=parseFloat(amount)*parseFloat(data[i]["tax"])/100;
+                        var discount_amount=parseFloat(amount)*parseFloat(data[i]["discount"])/100;
                         var tax=data[i]['tax_type_name']+'-'+data[i]["tax"]+'<?php echo $this->lang->line('inclusive') ?>';
                         if(data[0]['tax_Inclusive']==1){
-                          total_amount=parseFloat(total_amount)+parseFloat(tax_amount);
+                          amount=parseFloat(amount)+parseFloat(tax_amount);
                            var tax=data[i]['tax_type_name']+'-'+data[i]["tax"]+'<?php echo $this->lang->line('exclusive') ?>';
                         }                       
-                        total_amount=parseFloat(total_amount)-parseFloat(discount_amount);
-                        var num = parseFloat(total_amount);
-                        total_amount=num.toFixed(point);
+                        amount=parseFloat(amount)-parseFloat(discount_amount);
+                        var num = parseFloat(amount);
+                        amount=num.toFixed(point);
                         
                         $('#sales_base_table tbody').append('<tr> \n\
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
@@ -722,36 +714,19 @@
                             <td class="text-right">'+tax_amount+'</td>\n\
                             <td class="text-right">'+data[i]["discount"]+'%</td>\n\
                             <td class="text-right">'+discount_amount+'</td>\n\
-                            <td class="text-right">'+total_amount+'</td>\n\
+                            <td class="text-right">'+amount+'</td>\n\
                         </tr>');
-                        total_freight=parseFloat(total_freight)+parseFloat(data[i]["freight"]==""?0:data[i]["freight"]);
-                        total_round_amt=parseFloat(total_round_amt)+parseFloat(data[i]["round_amt"]==""?0:data[i]["round_amt"]);
-                        total_customer_discount_amount=parseFloat(total_customer_discount_amount)+parseFloat(data[i]["customer_discount_amount"]==""?0:data[i]["customer_discount_amount"]);
-                        total_sales_discount=parseFloat(total_sales_discount)+parseFloat(data[i]["discount_amt"]==""?0:data[i]["discount_amt"]);
-                        total_items=parseFloat(total_items)+parseFloat(data[i]["total_items"]==""?0:data[i]["total_items"]);
-                        total_tax=parseFloat(total_tax)+parseFloat(data[i]["total_tax"]==""?0:data[i]["total_tax"]);
-                        total_item_discount=parseFloat(total_item_discount)+parseFloat(data[i]["total_discount"]==""?0:data[i]["total_discount"]);
-                        total_item_amount=parseFloat(total_item_amount)+parseFloat(data[i]["total_item_amt"]==""?0:data[i]["total_item_amt"]);
-                        total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amt"]==""?0:data[i]["total_amt"]);
-                        total_paid=parseFloat(total_paid)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
+                      
+                        total_tax=parseFloat(total_tax)+parseFloat(tax_amount==""?0:tax_amount);
+                        total_item_discount=parseFloat(total_item_discount)+parseFloat(discount_amount==""?0:discount_amount);
+                        total_amount=parseFloat(total_amount)+parseFloat(amount==""?0:amount);
+                      
                    
                     }
-                    var num = parseFloat(total_freight);
-                    total_freight=num.toFixed(point);
-                    var num = parseFloat(total_round_amt);
-                    total_round_amt=num.toFixed(point);
-                    var num = parseFloat(total_customer_discount_amount);
-                    total_customer_discount_amount=num.toFixed(point);
-                    var num = parseFloat(total_sales_discount);
-                    total_sales_discount=num.toFixed(point);
-                    var num = parseFloat(total_items);
-                    total_items=num.toFixed(point);
                     var num = parseFloat(total_tax);
                     total_tax=num.toFixed(point);
                     var num = parseFloat(total_item_discount);
                     total_item_discount=num.toFixed(point);
-                    var num = parseFloat(total_item_amount);
-                    total_item_amount=num.toFixed(point);
                     var num = parseFloat(total_amount);
                     total_amount=num.toFixed(point);
                     $('#sales_base_table tfoot').append(' <tr >\n\
@@ -762,17 +737,20 @@
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
                         <td class="no-border"></td>\n\
-                        <td class="text-right table_footer">'+total_customer_discount_amount+'</td>\n\
-                        <td class="text-right table_footer">'+total_sales_discount+'</td>\n\
-                        <td class="text-right table_footer">'+total_freight+'</td>\n\
-                        <td class="text-right table_footer">'+total_round_amt+'</td>\n\
-                        <td class="text-center table_footer">'+total_items+'</td>\n\
-                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
                         <td class="text-right table_footer">'+total_tax+'</td>\n\
-                        <td class="text-right table_footer">'+total_item_amount+'</td>\n\
+                        <td class="text-right table_footer"></td>\n\
+                        <td class="text-right table_footer">'+total_item_discount+'</td>\n\
                         <td class="text-right table_footer">'+total_amount+'</td>\n\
-                        <td class="text-right table_footer">'+total_paid+'</td>\n\
-                        <td class="text-right table_footer">'+total_payable+'</td>\n\
                     </tr>');
                 }
             
