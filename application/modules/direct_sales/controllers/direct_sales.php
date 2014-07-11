@@ -114,6 +114,7 @@ function save(){
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'), 'required');                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'required|numeric');                      
         $this->form_validation->set_rules('new_item_discount[]', $this->lang->line('new_item_discount'), 'required|numeric');                      
+        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'numeric');                      
         $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id'), 'required');                      
            
             if ( $this->form_validation->run() !== false ) {    
@@ -142,11 +143,12 @@ function save(){
                 $quty=  $this->input->post('new_item_quty');
                 $stock=  $this->input->post('new_item_stock_id');
                 $item_discount=  $this->input->post('new_item_discount');
+                $item_tax=  $this->input->post('new_item_tax');
            
                 for($i=0;$i<count($item);$i++){
               
                     $this->load->model('sales');
-                    $this->sales->add_direct_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i);
+                    $this->sales->add_direct_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$item_tax[$i],$i);
                 
                         
                 }
@@ -176,6 +178,7 @@ function save(){
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'numeric');                      
         $this->form_validation->set_rules('new_item_discount[]', $this->lang->line('new_item_discount'), 'numeric');                      
+        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax')); 
         $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id')); 
         
         $this->form_validation->set_rules('items_id[]', $this->lang->line('items_id')); 
@@ -224,12 +227,13 @@ function save(){
                  $item=  $this->input->post('new_item_id');
                 $quty=  $this->input->post('new_item_quty');
                 $stock=  $this->input->post('new_item_stock_id');
+                $item_tax=  $this->input->post('new_item_tax');
                
                 $item_discount=  $this->input->post('new_item_discount');
            if(count($stock)>0){
                 for($i=0;$i<count($stock);$i++){
                     if($item[$i]!="" || $item[$i]!=0){
-                    $this->sales->add_direct_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i);
+                    $this->sales->add_direct_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$item_tax[$i],$i);
                     }
                         
                 }

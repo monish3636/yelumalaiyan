@@ -131,7 +131,7 @@ class Sales extends CI_Model{
             }
             
      }
-     function add_sales_order($guid,$item,$quty,$stock,$discount,$i){
+     function add_sales_order($guid,$item,$quty,$stock,$discount,$tax,$i){
          
          $this->db->select()->from('stock')->where('guid',$stock);
          $sql=  $this->db->get();
@@ -140,7 +140,7 @@ class Sales extends CI_Model{
          {
              $price=$row->price;
          }
-         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'sales_order_id'=>$guid));
+         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'tax'=>$tax,'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'sales_order_id'=>$guid));
          
                
      }

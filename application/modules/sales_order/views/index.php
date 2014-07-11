@@ -635,6 +635,7 @@
 <input type="hidden" name="new_item_stock_id[]" value="'+data[i]['stock_id']+'"  id="new_item_stock_id_'+items_id+'">\n\
 <input type="hidden" name="new_item_quty[]" value="'+quty+'" id="new_item_quty_'+items_id+'"> \n\
 <input type="hidden" name="new_item_discount[]" value="'+per+'" id="new_item_discount_id_'+items_id+'"> \n\
+<input type="hidden" name="new_item_tax[]" value="'+tax_value+'" id="new_item_tax_'+items_id+'">\n\
 <input type="hidden" name="new_item_price[]" value="'+price+'" id="new_item_price_'+items_id+'">\n\
 <input type="hidden" name="new_item_total[]"  value="'+parseFloat(quty)*parseFloat(price)+'" id="new_item_total_'+items_id+'">\n\
 </div>');

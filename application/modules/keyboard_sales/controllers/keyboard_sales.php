@@ -26,6 +26,7 @@ function save(){
         $this->form_validation->set_rules('items_price[]', $this->lang->line('items_price'), 'required|numeric');                      
         $this->form_validation->set_rules('items_quty[]', $this->lang->line('items_price'), 'required|numeric');                      
         $this->form_validation->set_rules('items_discount_per[]', $this->lang->line('items_discount_per'), 'required|numeric'); 
+        $this->form_validation->set_rules('items_tax_value[]', $this->lang->line('items_tax_value'), 'numeric'); 
             if ( $this->form_validation->run() !== false ) {    
                 $customer=  $this->input->post('customers_guid');
                 $order_number=  $this->input->post('keyboard_sales_bill_number');              
@@ -63,6 +64,7 @@ function save(){
                     $price=  $this->input->post('items_price');
                     $stock=  $this->input->post('items_stock_id');
                     $item_discount=  $this->input->post('items_discount_per');           
+                    $item_tax=  $this->input->post('items_tax_value');           
                     for($i=0;$i<count($item);$i++){
                         $this->sales->add_keyboard_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$i,$price[$i],$invoice);
                          $this->stock->reduce_stock($item[$i],$quty[$i],$price[$i]);
