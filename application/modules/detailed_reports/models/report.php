@@ -1037,7 +1037,7 @@ class Report extends CI_Model{
     }
 
     function get_sales_filtering_report($to_time,$from_time,$customer,$items,$category,$department,$brand,$start,$end){
-        $this->db->select('branches.store_name,branches.code as bcode,sales_bill.date as invoice_date,sales_bill.invoice,customers.first_name,customers.company_name,direct_sales.code as invoice_no,sales_delivery_note.sales_delivery_note_no,direct_sales_delivery.code as dsd_code,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,sales_items.*')->from('sales_items');//->where('sales_items.branch_id',  $this->session->userdata('branch_id'))->where('sales_items.invoice_id !=','');
+        $this->db->select('branches.store_name,branches.code as bcode,sales_bill.date as invoice_date,sales_bill.invoice,customers.first_name,customers.company_name,direct_sales.code as invoice_no,sales_delivery_note.sales_delivery_note_no,direct_sales_delivery.code as dsd_code,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,sales_items.*')->from('sales_items')->where('sales_items.branch_id',  $this->session->userdata('branch_id'))->where('sales_items.invoice_id !=','');
         if($category!=""){
             $this->db->where('items.category_id',$category);
         }
