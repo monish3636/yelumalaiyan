@@ -689,31 +689,40 @@
                     var i=0;
                     for(i=0;i<data.length;i++){
                         var status='<?php echo $this->lang->line('waiting') ?>';
-                        if(data[0]['order_status']==1){
-                            var status='<?php echo $this->lang->line('approved') ?>';
-                        }
-                        var balance=parseFloat(data[i]["sales_amount"])-parseFloat(data[i]["paid_amount"]);
-                        var num = parseFloat(balance);
-                        balance=num.toFixed(point);
+                        var total_amount=parseFloat(data[i]["quty"])*parseFloat(data[i]["price"]);
+                        var tax_amount=parseFloat(total_amount)*parseFloat(data[i]["tax"])/100;
+                        var discount_amount=parseFloat(total_amount)*parseFloat(data[i]["discount"])/100;
+                        var tax=data[i]['tax_type_name']+'-'+data[i]["tax"]+'<?php echo $this->lang->line('inclusive') ?>';
+                        if(data[0]['tax_Inclusive']==1){
+                          total_amount=parseFloat(total_amount)+parseFloat(tax_amount);
+                           var tax=data[i]['tax_type_name']+'-'+data[i]["tax"]+'<?php echo $this->lang->line('exclusive') ?>';
+                        }                       
+                        total_amount=parseFloat(total_amount)-parseFloat(discount_amount);
+                        var num = parseFloat(total_amount);
+                        total_amount=num.toFixed(point);
+                        
                         $('#sales_base_table tbody').append('<tr> \n\
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
                             <td class="text-center">'+data[i]["code"]+'</td>\n\
-                            <td class="text-center">'+data[i]["s_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["c_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["date"]+'</td>\n\
-                            <td class="text-right">'+data[i]["customer_discount_amount"]+'</td>\n\
-                            <td class="text-right">'+data[i]["discount_amt"]+'</td>\n\
-                            <td class="text-right">'+data[i]["freight"]+'</td>\n\
-                            <td class="text-right">'+data[i]["round_amt"]+'</td>\n\
-                            <td class="text-center">'+data[i]["total_items"]+'</td> \n\
-                            <td class="text-right">'+data[i]["total_discount"]+'</td>\n\
-                            <td class="text-right">'+data[i]["total_tax"]+'</td>\n\
-                            <td class="text-right">'+data[i]["total_item_amt"]+'</td>\n\
-                            <td class="text-right">'+data[i]["total_amt"]+'</td>\n\
-                            <td class="text-right">'+data[i]["paid_amount"]+'</td>\n\
-                            <td class="text-right">'+balance+'</td>\n\
+                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["time"]+'</td>\n\
+                            <td class="text-right">'+data[i]["name"]+'</td>\n\
+                            <td class="text-right">'+data[i]["code"]+'</td>\n\
+                            <td class="text-right">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["b_name"]+'</td> \n\
+                            <td class="text-right">'+data[i]["d_name"]+'</td>\n\
+                            <td class="text-right">'+data[i]["price"]+'</td>\n\
+                            <td class="text-right">'+data[i]["quty"]+'</td>\n\
+                            <td class="text-right">'+parseFloat(data[i]["quty"])*parseFloat(data[i]["price"])+'</td>\n\
+                            <td class="text-right">'+tax+'</td>\n\
+                            <td class="text-right">'+tax_amount+'</td>\n\
+                            <td class="text-right">'+data[i]["discount"]+'%</td>\n\
+                            <td class="text-right">'+discount_amount+'</td>\n\
+                            <td class="text-right">'+total_amount+'</td>\n\
                         </tr>');
                         total_freight=parseFloat(total_freight)+parseFloat(data[i]["freight"]==""?0:data[i]["freight"]);
                         total_round_amt=parseFloat(total_round_amt)+parseFloat(data[i]["round_amt"]==""?0:data[i]["round_amt"]);
@@ -725,7 +734,7 @@
                         total_item_amount=parseFloat(total_item_amount)+parseFloat(data[i]["total_item_amt"]==""?0:data[i]["total_item_amt"]);
                         total_amount=parseFloat(total_amount)+parseFloat(data[i]["total_amt"]==""?0:data[i]["total_amt"]);
                         total_paid=parseFloat(total_paid)+parseFloat(data[i]["paid_amount"]==""?0:data[i]["paid_amount"]);
-                        total_payable=parseFloat(total_payable)+parseFloat(balance==""?0:balance);
+                   
                     }
                     var num = parseFloat(total_freight);
                     total_freight=num.toFixed(point);
@@ -3126,18 +3135,21 @@
                 <th><?php echo $this->lang->line('sales_bill') ?></th>
                 <th><?php echo $this->lang->line('customer') ?></th>
                 <th><?php echo $this->lang->line('company') ?></th>
-                <th><?php echo $this->lang->line('order_date') ?></th>
-                <th><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?></th>
-                <th><?php echo $this->lang->line('sales')." ".$this->lang->line('discount') ?></th>
-                <th><?php echo $this->lang->line('freight') ?></th>
-                <th><?php echo $this->lang->line('round_off_amount') ?></th>
-                <th><?php echo $this->lang->line('no_of_items') ?></th>
-                <th><?php echo $this->lang->line('items')." ". $this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('time') ?></th>
+                <th><?php echo $this->lang->line('items') ?></th>
+                <th><?php echo $this->lang->line('sku') ?></th>
+                <th><?php echo $this->lang->line('category') ?></th>
+                <th><?php echo $this->lang->line('brand') ?></th>
+                <th><?php echo $this->lang->line('item_department') ?></th>
+                <th><?php echo $this->lang->line('price') ?></th>
+                <th><?php echo $this->lang->line('quantity') ?></th>
+                <th><?php echo $this->lang->line('subtotal') ?></th>
                 <th><?php echo $this->lang->line('tax') ?></th>
-                <th><?php echo $this->lang->line('items')." ".$this->lang->line('total') ?></th>
+                <th><?php echo $this->lang->line('tax')." ".$this->lang->line('amount') ?></th>
+                <th><?php echo $this->lang->line('discount') ?></th>
+                <th><?php echo $this->lang->line('discount')." ".$this->lang->line('amount') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
-                <th><?php echo $this->lang->line('paid_amount') ?></th>
-                <th><?php echo $this->lang->line('payable_amount') ?></th>
                 
             </tr>
         </thead>
