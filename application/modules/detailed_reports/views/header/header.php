@@ -185,6 +185,62 @@
                     }
                 }
             });
+          function format_decomposition_items(sup) {
+            if (!sup.id) return sup.text;
+    return  "<p >"+sup.text+' '+sup.value+' '+sup.category+' '+sup.brand+' '+sup.department+"</p>";
+            }
+          $('#decomposition_items').select2({
+              
+             
+             
+                 formatResult: format_decomposition_items,
+                formatSelection: format_decomposition_items,
+                  multiple:true,
+                escapeMarkup: function(m) { return m; },
+                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('items') ?>",
+                ajax: {
+                     url: '<?php echo base_url() ?>index.php/detailed_reports/search_decomposition_items/',
+                     data: function(term, page) {
+                            return {types: ["exercise"],
+                                limit: 2,
+                                term: term,
+                               
+                            };
+                     },
+                    type:'POST',
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term) {
+                        return {
+                            term: term
+                           
+                        };
+                    },
+                    results: function (data) {
+                      var results = [];
+                      
+                      $.each(data, function(index, item){
+                        results.push({
+                          id: item.i_guid,
+                          text: item.name,
+                          value: item.code,
+                          image: item.image,
+                          brand: item.b_name,
+                          category: item.c_name,
+                          department: item.d_name,
+                          quty: item.quty,
+                          cost: item.cost,
+                          price: item.price,
+                          mrp: item.mrp,
+                        });
+                      });   
+                      return {
+                       
+                          results: results
+                      };
+                    }
+                }
+            });
 
         
         $('#purchase_items_category').select2({
@@ -351,6 +407,8 @@
             $('#branch_base').hide();
             $('#supplier_base').hide();
             $('#customer_base').show();
+            $('#decomposition_div').show();
+            $('#kit_div').show();
             $('#select_purchase_items').show();
             $('#select_purchase_items_category').show();
             $('#select_purchase_items_department').show();
