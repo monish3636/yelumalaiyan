@@ -545,6 +545,10 @@
                                     if(data[i]['kit_code']){
                                         sku=data[i]['kit_code'];
                                     }
+                                    if(data[i]['deco_code']){
+                                        sku=data[i]['deco_code'];
+                                        name=data[i]['items_name']+"-"+data[i]['deco_value'];
+                                    }
                                     
                                     var  quty=data[i]['quty'];
                                     var  tax_type=data[i]['tax_type_name'];

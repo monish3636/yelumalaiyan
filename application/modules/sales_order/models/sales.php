@@ -140,7 +140,7 @@ class Sales extends CI_Model{
          {
              $price=$row->price;
          }
-         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'tax'=>$tax,'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'sales_order_id'=>$guid));
+         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'tax'=>$tax,'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'sales_order_id'=>$guid,'branch_id'=>  $this->session->userdata('branch_id')));
          
                
      }
