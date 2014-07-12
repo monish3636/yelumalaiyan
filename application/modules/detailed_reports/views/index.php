@@ -651,6 +651,16 @@
             for(var i=0;i<category.length;i++){
                 category_id[i]=category[i]['id'];
             }
+            var item_kit =$('#item_kit_input').select2('data');
+            var item_kit_id=[];
+            for(var i=0;i<item_kit.length;i++){
+                item_kit_id[i]=item_kit[i]['id'];
+            }
+            var decomposition =$('#decomposition_input').select2('data');
+            var decomposition_id=[];
+            for(var i=0;i<decomposition.length;i++){
+                decomposition_id[i]=decomposition[i]['id'];
+            }
             $.ajax({                                      
                 url: "<?php echo base_url() ?>index.php/detailed_reports/get_sales_filtering_report/",                      
                 data: {
@@ -661,6 +671,8 @@
                     category:category_id,
                     department:department_id,
                     brand:brand_id,
+                    decomposition:decomposition_id,
+                    item_kit:item_kit_id,
                     from_time:$('#from_time').val(),
                     to_time:$('#to_time').val(),
 

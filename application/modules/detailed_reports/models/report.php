@@ -1076,7 +1076,7 @@ class Report extends CI_Model{
       
     }
 
-    function get_sales_filtering_report($to_time,$from_time,$customer,$items,$category,$department,$brand,$start,$end){
+    function get_sales_filtering_report($to_time,$from_time,$customer,$items,$category,$department,$brand,$decomposition,$item_kit,$start,$end){
         $this->db->select('item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax,item_kit.tax_amount as kit_tax_amount,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,branches.store_name,branches.code as bcode,sales_bill.date as invoice_date,sales_bill.invoice,customers.first_name,customers.company_name,direct_sales.code as invoice_no,sales_delivery_note.sales_delivery_note_no,direct_sales_delivery.code as dsd_code,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,sales_items.*')->from('sales_items')->where('sales_items.branch_id',  $this->session->userdata('branch_id'))->where('sales_items.invoice_id !=','');
         if($category!=""){
             $this->db->where('items.category_id',$category);
@@ -1092,6 +1092,12 @@ class Report extends CI_Model{
         }
         if($customer!=""){
             $this->db->where('sales_bill.customer_id',$customer);
+        }
+        if($decomposition!=""){
+            $this->db->where('sales_items.item',$decomposition);
+        }
+        if($item_kit!=""){
+            $this->db->where('sales_items.item',$item_kit);
         }
        
         $this->db->join('item_kit','item_kit.guid=sales_items.item','left');
