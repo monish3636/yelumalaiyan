@@ -349,7 +349,7 @@
         else if(report=='sales_filter'){
             $('#time_filtering').show();
             $('#branch_base').hide();
-            $('#supplier_base').show();
+            $('#supplier_base').hide();
             $('#customer_base').show();
             $('#select_purchase_items').show();
             $('#select_purchase_items_category').show();
