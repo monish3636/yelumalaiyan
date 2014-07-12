@@ -189,7 +189,7 @@
             if (!sup.id) return sup.text;
     return  "<p >"+sup.text+' '+sup.value+' '+sup.category+' '+sup.brand+' '+sup.department+"</p>";
             }
-          $('#decomposition_items').select2({
+          $('#decomposition_input').select2({
               
              
              
@@ -232,6 +232,54 @@
                           cost: item.cost,
                           price: item.price,
                           mrp: item.mrp,
+                        });
+                      });   
+                      return {
+                       
+                          results: results
+                      };
+                    }
+                }
+            });
+          function format_item_kit(sup) {
+            if (!sup.id) return sup.text;
+    return  "<p >"+sup.text+' '+sup.value+' '+sup.category+' '+sup.quty+' '+sup.price+"</p>";
+            }
+          $('#item_kit_input').select2({
+                formatResult: format_item_kit,
+                formatSelection: format_item_kit,
+                  multiple:true,
+                escapeMarkup: function(m) { return m; },
+                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('items') ?>",
+                ajax: {
+                     url: '<?php echo base_url() ?>index.php/detailed_reports/search_item_kits/',
+                     data: function(term, page) {
+                            return {types: ["exercise"],
+                                limit: -1,
+                                term: term,
+                               
+                            };
+                     },
+                    type:'POST',
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term) {
+                        return {
+                            term: term
+                           
+                        };
+                    },
+                    results: function (data) {
+                      var results = [];
+                      
+                      $.each(data, function(index, item){
+                        results.push({
+                          id: item.guid,
+                          text: item.name,
+                          value: item.code,
+                          category: item.c_name,
+                          quty: item.no_of_items,
+                          price: item.selling_price,
                         });
                       });   
                       return {
