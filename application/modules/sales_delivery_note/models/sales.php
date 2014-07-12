@@ -111,10 +111,10 @@ class Sales extends CI_Model{
      }
     
     
-    function update_item_receving($items,$quty,$so){
+    function update_item_receving($items,$quty,$so,$guid){
         $where=array('sales_order_id'=>$so,'item'=>$items);
         $this->db->where($where);
-        $this->db->update('sales_items',array('delivered_quty'=>$quty));
+        $this->db->update('sales_items',array('delivered_quty'=>$quty,'delivery_note_id'=>$guid));
      }
    
     function sdn_approve($guid,$so){

@@ -123,7 +123,7 @@ function save(){
            
                 for($i=0;$i<count($items);$i++){
                         $this->load->model('sales');
-                        $this->sales->update_item_receving($items[$i],$quty[$i],$so);
+                        $this->sales->update_item_receving($items[$i],$quty[$i],$so,$guid);
                         // $quty[$i];
                        
                 }
