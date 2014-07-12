@@ -1076,8 +1076,8 @@ class Report extends CI_Model{
         $this->db->where('sales_bill.date <=', strtotime($end));
         }
         if($start!="" && $end!="" && $from_time!="" && $to_time!="" && $to_time!='00:00' && $from_time!='00:00'){
-            $this->db->where('sales_items.time >=', strtotime($from_time));
-            $this->db->where('sales_items.time <=', strtotime($to_time));
+           // $this->db->where('sales_items.time >=', strtotime($from_time));
+           // $this->db->where('sales_items.time <=', strtotime($to_time));
            
         }
         $sql=$this->db->get();
@@ -1098,8 +1098,10 @@ class Report extends CI_Model{
                 $row['tax_Inclusive']=$row['kit_tax'];
             }
             $data[]=$row;
+           
         }
-        return $data;  
+       
+       return $data;  
       
     }
   
