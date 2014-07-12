@@ -2893,11 +2893,11 @@
             </div>
             <div class="col col-lg-4" id="decomposition_div" style="display: none">
                 <lable><?php  echo $this->lang->line('decomposition') ?></lable>
-                <input id="decomposition_items" class="form-control" >                   
+                <input id="decomposition_input" class="form-control" >                   
             </div>
             <div class="col col-lg-4" id="kit_div" style="display: none">
                 <lable><?php  echo $this->lang->line('item_kit') ?></lable>
-                <input id="item_kit" class="form-control" >                   
+                <input id="item_kit_input" class="form-control" >                   
             </div>
             <div class="col col-lg-4" id="select_purchase_items_category" style="display: none">
                 <lable><?php  echo $this->lang->line('category') ?></lable>

@@ -83,10 +83,16 @@ class Detailed_reports extends MX_Controller
         $data= $this->report->search_purchase_items($like);
         echo json_encode($data); 
     }
-    function decomposition_items(){
+    function search_decomposition_items(){
         $like= $this->input->post('term');  
         $this->load->model('report');
         $data= $this->report->decomposition_items($like);
+        echo json_encode($data); 
+    }
+    function search_item_kits(){
+        $like= $this->input->post('term');  
+        $this->load->model('report');
+        $data= $this->report->search_item_kits($like);
         echo json_encode($data); 
     }
     function get_purchase_branch_base_report(){

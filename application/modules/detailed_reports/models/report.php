@@ -82,25 +82,41 @@ class Report extends CI_Model{
      }
     function decomposition_items($search){
         
-         $this->db->select('decomposition_type.type_name,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,decomposition_items.code,stock.*')->from('stock')->where('stock.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',0);
+         $this->db->select('decomposition_type.value ,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,decomposition_items.code,stock.*')->from('stock')->where('stock.branch_id',$this->session->userdata['branch_id'])->where('items.active_status',1)->where('items.delete_status',0);
          $this->db->join('decomposition_items', "decomposition_items.guid=stock.item",'left');
          $this->db->join('items', "items.guid=decomposition_items.item_id AND decomposition_items.guid=stock.item",'left');
          $this->db->join('decomposition_type', 'decomposition_type.guid=decomposition_items.type_id ','left');
          $this->db->join('items_category', 'items.category_id=items_category.guid ','left');
          $this->db->join('brands', 'items.brand_id=brands.guid','left');
          $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-         $like=array('items.active_status'=>$search,'items.barcode'=>$search,'items.ean_upc_code'=>$search,'items.name'=>$search,'items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
+         $like=array('items.active_status'=>$search,'items.barcode'=>$search,'items.ean_upc_code'=>$search,'items.name'=>$search,'decomposition_items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
                 $this->db->or_like($like);
                 $this->db->limit($this->session->userdata['data_limit']);
                 $sql=  $this->db->get();
                 $data=array();
-                foreach ($sql->result() as $row){
-                   $row['name']=$row['name']+$row['decomposition_type'];
+                foreach ($sql->result_array() as $row){
+                   $row['name']=$row['name']."-".$row['value'];
                     $data[]=$row;
                   
                 }
-               // $this->db->like('suppliers_x_items.supplier_id',$guid); 
-         
+            
+         return $data;
+     
+     }
+    function search_item_kits($search){        
+        $this->db->select('item_kit.*,kit_category.category_name as c_name')->from('item_kit')->where('item_kit.branch_id',$this->session->userdata['branch_id'])->where('item_kit.active_status',1)->where('item_kit.delete_status',0);
+        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
+        $like=array('item_kit.name'=>$search,'item_kit.barcode'=>$search,'item_kit.code'=>$search,'kit_category.category_name'=>$search);
+                $this->db->or_like($like);
+                $this->db->limit($this->session->userdata['data_limit']);
+                $sql=  $this->db->get();
+                $data=array();
+                foreach ($sql->result_array() as $row){
+                   $row['name']=$row['name'];
+                    $data[]=$row;
+                  
+                }
+            
          return $data;
      
      }
