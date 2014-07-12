@@ -336,7 +336,7 @@
                                  var round_amt=data[0]['round_amt']
                                  if(isNaN(round_amt) || round_amt==""){round_amt=0;}
                                  
-                                 var grand=parseFloat(total_amount)-parseFloat(so_discount)+parseFloat(freight)+parseFloat(round_amt);
+                                 var grand=parseFloat(data[0]['total_amt']);
                                    var num = parseFloat(total_amount);
                                     total_amount=num.toFixed(point);
                                     $('#demo_total_amount').val(total_amount);

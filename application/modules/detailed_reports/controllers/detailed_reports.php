@@ -19,6 +19,8 @@ class Detailed_reports extends MX_Controller
 //echo '<pre><br>';
 //echo $time=strtotime('04:20');
 //echo '<pre><br>';
+//echo $time=strtotime('04:20:28');
+//echo '<pre><br>';
 //echo date('H:i',strtotime(date('H:i')));
 
 
