@@ -286,6 +286,60 @@
                 }
             }
         });
+        jQuery('#item_type').change(function(e) {
+           $("#item_type").each(function(){
+                var selectedOption = $('option:selected', this);
+                var value=selectedOption.val();
+                if(value=='1'){
+                    $('#decomposition_div').hide();
+                    $('#kit_div').hide();
+                    $('#select_purchase_items').show();
+                }
+                else if(value=='2'){
+                    $('#decomposition_div').hide();
+                    $('#kit_div').hide();
+                    $('#select_purchase_items').show();
+                }
+                else if(value=='3'){
+                    $('#decomposition_div').show();
+                    $('#kit_div').hide();
+                    $('#select_purchase_items').hide();
+                }
+                else{
+                    $('#decomposition_div').hide();
+                    $('#kit_div').show();
+                    $('#select_purchase_items').hide();
+                }
+            });
+        });
+      $('#patientType').on("change",function(e) {
+          alert('jibi');
+           $("#item_type").each(function(){
+             
+                var selectedOption = $('option:selected', this);
+                var value=selectedOption.val();
+                if(value=='1'){
+                    $('#decomposition_div').hide();
+                    $('#kit_div').hide();
+                    $('#select_purchase_items').show();
+                }
+                else if(value=='2'){
+                    $('#decomposition_div').hide();
+                    $('#kit_div').hide();
+                    $('#select_purchase_items').show();
+                }
+                else if(value=='3'){
+                    $('#decomposition_div').show();
+                    $('#kit_div').hide();
+                    $('#select_purchase_items').hide();
+                }
+                else{
+                    $('#decomposition_div').hide();
+                    $('#kit_div').show();
+                    $('#select_purchase_items').hide();
+                }
+            });
+        });
     });
     function account_report(report){
         $('.dataTable').hide();
@@ -350,6 +404,7 @@
             $('#time_filtering').show();
             $('#branch_base').hide();
             $('#supplier_base').hide();
+            $('#select_item_type').show();
             $('#customer_base').show();
             $('#select_purchase_items').show();
             $('#select_purchase_items_category').show();
@@ -358,9 +413,11 @@
             $('#title').text(' <?php echo $this->lang->line('sales')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
         
-    
+   
     
         
     }
-   			
+    function change_item_type(value){
+        console.log(value)
+    }		
   </script>

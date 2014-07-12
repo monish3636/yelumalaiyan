@@ -2886,9 +2886,27 @@
                 <lable><?php  echo $this->lang->line('customer') ?></lable>
                 <input id="select_customer" class="form-control" >                   
             </div>
+            <div class="col col-lg-2" id="select_item_type" style="display: none">
+                <lable><?php  echo $this->lang->line('type') ?></lable>
+                <select class="form-control select" id="item_type">
+                    <option value="1" onchange="change_item_type(1)"><?php  echo $this->lang->line('all') ?></option>
+                    <option value="2" onchange="change_item_type(2)"><?php  echo $this->lang->line('item') ?></option>
+                    <option value="3" onchange="change_item_type(3)"><?php  echo $this->lang->line('decomposition') ?></option>
+                    <option value="4" onchange="change_item_type(4)"><?php  echo $this->lang->line('item_kit') ?></option>
+                </select>
+                    
+            </div>
             <div class="col col-lg-4" id="select_purchase_items" style="display: none">
                 <lable><?php  echo $this->lang->line('items') ?></lable>
                 <input id="purchase_items" class="form-control" >                   
+            </div>
+            <div class="col col-lg-4" id="decomposition_div" style="display: none">
+                <lable><?php  echo $this->lang->line('decomposition') ?></lable>
+                <input id="decomposition_items" class="form-control" >                   
+            </div>
+            <div class="col col-lg-4" id="kit_div" style="display: none">
+                <lable><?php  echo $this->lang->line('item_kit') ?></lable>
+                <input id="item_kit" class="form-control" >                   
             </div>
             <div class="col col-lg-4" id="select_purchase_items_category" style="display: none">
                 <lable><?php  echo $this->lang->line('category') ?></lable>
