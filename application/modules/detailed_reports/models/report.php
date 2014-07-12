@@ -1059,7 +1059,7 @@ class Report extends CI_Model{
         $this->db->join('decomposition_items','decomposition_items.guid=sales_items.item','left');
         $this->db->join('items', "items.guid=sales_items.item OR items.guid=decomposition_items.item_id",'left');
         $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
-        $this->db->join('sales_bill',"sales_bill.guid=sales_items.invoice_id AND sales_items.item=items.guid",'left');
+        $this->db->join('sales_bill',"sales_bill.guid=sales_items.invoice_id AND sales_items.item=items.guid OR item_kit.guid=sales_items.item OR items.guid=decomposition_items.item_id",'left');
         $this->db->join('branches', 'branches.guid=sales_bill.branch_id','left');
         $this->db->join('direct_sales',"direct_sales.guid=sales_items.direct_sales_id AND direct_sales.order_status=1 ",'left');
         $this->db->join('sales_delivery_note',"sales_delivery_note.guid=sales_items.delivery_note_id AND sales_delivery_note.bill_status=1",'left');
@@ -1092,6 +1092,10 @@ class Report extends CI_Model{
             if($row['kit_name']!="" && $row['kit_name']!=NULL){
                 $row['code']=$row['kit_code'];
                 $row['name']=$row['kit_name'];
+                $row['c_name']=$row['kit_category'];
+                $row['d_name']="";
+                $row['b_name']="";
+                $row['tax_Inclusive']=$row['kit_tax'];
             }
             $data[]=$row;
         }
