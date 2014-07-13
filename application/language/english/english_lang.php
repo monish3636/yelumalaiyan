@@ -786,5 +786,6 @@ $lang['credit_days']='Credit Days';
     $lang['filtering']='Filtering';
     $lang['subtotal']='Sub Total';
     $lang['all']='All';
+    $lang['journal_cashier']='Journal Cashier';
    
 ?>
