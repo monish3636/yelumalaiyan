@@ -1158,7 +1158,7 @@ class Report extends CI_Model{
     /* get profit and loss report
      function start     */
     function get_profit_and_loss_report($to_time,$from_time,$start,$end){
-        $this->db->select('branches.store_name,branches.code as bcode,payment.*,customers.first_name as customer,suppliers.first_name as supplier,purchase_return.code as purchase_return,sales_return.code as sales_return')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->select('sales_bill.code as sales_bill,branches.store_name,branches.code as bcode,payment.*,customers.first_name as customer,suppliers.first_name as supplier,purchase_return.code as purchase_return,sales_return.code as sales_return')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
         $this->db->join('supplier_payable','supplier_payable.guid=payment.payable_id','left');
         $this->db->join('purchase_return','purchase_return.guid=payment.return_id','left');
         $this->db->join('sales_return','sales_return.guid=payment.return_id','left');
@@ -1170,11 +1170,36 @@ class Report extends CI_Model{
         $sql=  $this->db->get();
         $data=array();
         foreach ($sql->result_array() as $row){
-            $row['payment_date']=date('d-m-Y H:i',$row['payment_date']);
+            $row['time']=date('H:i',$row['payment_date']);
+            $row['payment_date']=date('d-m-Y',$row['payment_date']);
+            if($row['customer']!="" && $row['customer']!=NULL){
+                $row['income']=$row['amount'];
+                $row['supplier']="";
+                $row['expence']="";
+            }else if($row['supplier']!="" && $row['supplier']!=NULL){
+                $row['expence']=$row['amount'];
+                $row['customer']="";
+                $row['income']="";
+            }
             if($row['sales_return']!="" && $row['sales_return']!=NULL){
                 $row['type']=  $this->lang->line('credit');
+                $row['sales_return_amount']=$row['amount'];
+                $row['purchase_return_amount']='';
+                $row['expence']='';
+                $row['supplier']="";
+                $row['income']="";
+                
             }else if($row['purchase_return']!="" && $row['purchase_return']!=NULL){
                 $row['type']=  $this->lang->line('debit');
+                $row['purchase_return_amount']=$row['amount'];
+                $row['sales_return_amount']='';
+                $row['expence']='';
+                $row['customer']="";
+                $row['income']="";
+            }else{
+                $row['purchase_return_amount']="";
+                $row['sales_return_amount']="";
+                $row['type']=  $this->lang->line($row['type']);
             }
             $data[]=$row;
         }

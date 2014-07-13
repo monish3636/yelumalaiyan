@@ -788,5 +788,8 @@ $lang['credit_days']='Credit Days';
     $lang['all']='All';
     $lang['journal_cashier']='Journal Cashier';
     $lang['payment_id']='Payment Id';
+    $lang['expence']='Expence';
+    $lang['income']='Income';
+    $lang['invoice_or_bill_id']='Invoice / Bill Id';
    
 ?>
