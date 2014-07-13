@@ -1158,7 +1158,21 @@ class Report extends CI_Model{
     /* get profit and loss report
      function start     */
     function get_profit_and_loss_report($to_time,$from_time,$start,$end){
-        
+        $this->db->select('payment.code,payment.amount,customers.first_name as customer,suppliers.first_name as supplier,purchase_return.code as purchase_return,sales_return.code as sales_return')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->join('supplier_payable','supplier_payable.guid=payment.payable_id','left');
+        $this->db->join('purchase_return','purchase_return.guid=payment.return_id','left');
+        $this->db->join('sales_return','sales_return.guid=payment.return_id','left');
+        $this->db->join('suppliers',' suppliers.guid=payment.supplier_id','left');
+        $this->db->join('customer_payable','customer_payable.guid=payment.payable_id','left');
+        $this->db->join('sales_bill','sales_bill.guid=payment.invoice_id','left');
+        $this->db->join('customers',' customers.guid=payment.customer_id','left');
+        $sql=  $this->db->get();
+        $data=array();
+        foreach ($sql->result_array() as $row){
+            $data[]=$row;
+        }
+        echo '<pre>';
+        print_r($data);
     }
     // function end
 }

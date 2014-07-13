@@ -2741,7 +2741,7 @@
 </script>
 
 <nav id="top_navigation">
-    <input type="hidden" id='report_val'>
+    <input type="text" id='report_val'>
     <div class="container">
 					<ul id="text_nav_h" class="clearfix j_menu top_text_nav">
 					<li>
