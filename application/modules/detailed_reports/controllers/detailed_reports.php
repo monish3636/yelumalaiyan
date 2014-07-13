@@ -175,11 +175,20 @@ class Detailed_reports extends MX_Controller
         $item_kit=$this->input->post('item_kit');
         $to_time=$this->input->post('to_time');
         $from_time=$this->input->post('from_time');
-       max(count($department),count($brand),count($item),count($category),count($customer),count($decomposition),count($item_kit));
+        max(count($department),count($brand),count($item),count($category),count($customer),count($decomposition),count($item_kit));
         $data=array();
           for($i=0;$i<max(count($department),count($brand),count($item),count($category),count($customer),count($decomposition),count($item_kit));$i++){
                $data= array_merge($data,  $this->report->get_sales_filtering_report($to_time,$from_time,$customer[$i],$item[$i],$category[$i],$department[$i],$brand[$i],$decomposition[$i],$item_kit[$i],$start,$end));
           }
+        echo json_encode($data);
+    }
+     function get_profit_and_loss_report(){
+        $this->load->model('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        $to_time=$this->input->post('to_time');
+        $from_time=$this->input->post('from_time');
+        $data=$this->report->get_profit_and_loss_report($to_time,$from_time,$start,$end);
         echo json_encode($data);
     }
 }

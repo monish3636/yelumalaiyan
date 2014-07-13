@@ -768,6 +768,42 @@
             
             });
         }
+        else if(report=='profit_and_loss'){
+         
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/detailed_reports/get_profit_and_loss_report/",                      
+                data: {
+                    start:start_date,
+                    end:end_date,
+                    from_time:$('#from_time').val(),
+                    to_time:$('#to_time').val(),
+
+                }, 
+                type:'POST',
+                dataType: 'json',               
+                success: function(data)        
+                {
+                    $('.dataTable').hide();
+                    $('#profit_and_loss_table').show();
+                    $('#profit_and_loss tbody').remove();
+                    $('#profit_and_loss').append('<tbody></tbody');
+                    $('#profit_and_loss tfoot').remove();
+                    $('#profit_and_loss').append('<tfoot></tfoot');
+                    var total_tax=0;
+                    var total_item_discount=0;
+                    var total_amount=0;
+                    var i=0;
+                    for(i=0;i<data.length;i++){
+                      
+                      
+                   
+                    }
+                    $('#profit_and_loss tfoot').append(' <tr >\n\
+                    </tr>');
+                }
+            
+            });
+        }
       
         else{
         var branch =$('#select_branch').select2('data');
@@ -2850,10 +2886,7 @@
 							
                                                 </ul>
                                         </li>
-                                        <li>
-						<a href="javascript:journal_cashier_report()"><?php echo $this->lang->line('journal_cashier') ?></a>
-						
-                                        </li>
+                                        
                                         <li>
                                             <a href="javascript:void(0)"><?php echo $this->lang->line('accounts') ?></a>
                                             <ul>
@@ -2874,13 +2907,16 @@
                                                         <li><a href="javascript:account_report('sales_branch_base')" id="customer_category"><?php echo $this->lang->line('branch_base') ?></a></li>							
                                                     </ul>
                                                 </li>							
-                                                <li><a href="javascript:report('profit_and_loss')" id="profit_and_loss"><?php echo $this->lang->line('profit_and_loss') ?></a></li>							
+                                                <li><a href="javascript:account_report('profit_and_loss')" id="profit_and_loss"><?php echo $this->lang->line('profit_and_loss') ?></a></li>							
 
 
 
                                             </ul>
                                         </li>
-										
+					<li>
+						<a href="javascript:journal_cashier_report()"><?php echo $this->lang->line('journal_cashier') ?></a>
+						
+                                        </li>					
                                         </ul>
 				</div>
 </nav>
@@ -3158,6 +3194,24 @@
         </thead>
         <tbody></tbody>
         <tfoot></tfoot>
+    </table>
+    <table id="profit_and_loss" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('sales_return') ?></th>
+                <th><?php echo $this->lang->line('customer') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('no_of_items') ?></th>
+                <th><?php echo $this->lang->line('total_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+         <tfoot></tfoot>
     </table>
     <table id="sales_return_table" class="dataTable table-condensed table-bordered">
         <thead>
