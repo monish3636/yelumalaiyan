@@ -2851,6 +2851,10 @@
                                                 </ul>
                                         </li>
                                         <li>
+						<a href="javascript:journal_cashier_report()"><?php echo $this->lang->line('journal_cashier') ?></a>
+						
+                                        </li>
+                                        <li>
                                             <a href="javascript:void(0)"><?php echo $this->lang->line('accounts') ?></a>
                                             <ul>
 
