@@ -805,7 +805,10 @@
                             <td class="text-center">'+data[i]["payment_date"]+'</td>\n\
                             <td class="text-center">'+data[i]["time"]+'</td>\n\
                             <td class="text-center">'+data[i]["type"]+'</td>\n\
-                            <td class="text-center">'+data[i]["amount"]+'</td>\n\
+                            <td class="text-center">'+data[i]["sales_return_amount"]+'</td>\n\
+                            <td class="text-center">'+data[i]["purchase_return_amount"]+'</td>\n\
+                            <td class="text-center">'+data[i]["income"]+'</td>\n\
+                            <td class="text-center">'+data[i]["expence"]+'</td>\n\
                                 </tr>');
                       
                    
@@ -3214,12 +3217,16 @@
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>
                 <th><?php echo $this->lang->line('payment_id') ?></th>
+                <th><?php echo $this->lang->line('invoice_or_bill_id') ?></th>
                 <th><?php echo $this->lang->line('customer') ?></th>
                 <th><?php echo $this->lang->line('supplier') ?></th>
                 <th><?php echo $this->lang->line('date') ?></th>
                 <th><?php echo $this->lang->line('time') ?></th>
                 <th><?php echo $this->lang->line('payment') ?></th>
-                <th><?php echo $this->lang->line('amount') ?></th>
+                <th><?php echo $this->lang->line('sales_return') ?></th>                
+                <th><?php echo $this->lang->line('purchase_return') ?></th>                
+                <th><?php echo $this->lang->line('income') ?></th>                
+                <th><?php echo $this->lang->line('expence') ?></th>
                 
             </tr>
         </thead>
