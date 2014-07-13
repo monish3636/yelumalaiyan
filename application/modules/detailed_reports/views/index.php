@@ -785,20 +785,32 @@
                 {
                     $('.dataTable').hide();
                     $('#profit_and_loss_table').show();
-                    $('#profit_and_loss tbody').remove();
-                    $('#profit_and_loss').append('<tbody></tbody');
-                    $('#profit_and_loss tfoot').remove();
-                    $('#profit_and_loss').append('<tfoot></tfoot');
+                    $('#profit_and_loss_table tbody').remove();
+                    $('#profit_and_loss_table').append('<tbody></tbody');
+                    $('#profit_and_loss_table tfoot').remove();
+                    $('#profit_and_loss_table').append('<tfoot></tfoot');
                     var total_tax=0;
                     var total_item_discount=0;
                     var total_amount=0;
                     var i=0;
                     for(i=0;i<data.length;i++){
-                      
+                       
+                        $('#profit_and_loss_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["supplier"]+'</td>\n\
+                            <td class="text-center">'+data[i]["customer"]+'</td>\n\
+                            <td class="text-center">'+data[i]["payment_date"]+'</td>\n\
+                            <td class="text-center">'+data[i]["time"]+'</td>\n\
+                            <td class="text-center">'+data[i]["type"]+'</td>\n\
+                            <td class="text-center">'+data[i]["amount"]+'</td>\n\
+                                </tr>');
                       
                    
                     }
-                    $('#profit_and_loss tfoot').append(' <tr >\n\
+                    $('#profit_and_loss_table tfoot').append(' <tr >\n\
                     </tr>');
                 }
             
@@ -2741,7 +2753,7 @@
 </script>
 
 <nav id="top_navigation">
-    <input type="text" id='report_val'>
+    <input type="hidden" id='report_val'>
     <div class="container">
 					<ul id="text_nav_h" class="clearfix j_menu top_text_nav">
 					<li>
@@ -3195,18 +3207,19 @@
         <tbody></tbody>
         <tfoot></tfoot>
     </table>
-    <table id="profit_and_loss" class="dataTable table-condensed table-bordered">
+    <table id="profit_and_loss_table" class="dataTable table-condensed table-bordered">
         <thead>
             <tr>
                 <th><?php echo $this->lang->line('sl_no') ?></th>
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>
-                <th><?php echo $this->lang->line('sales_return') ?></th>
+                <th><?php echo $this->lang->line('payment_id') ?></th>
                 <th><?php echo $this->lang->line('customer') ?></th>
-                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('supplier') ?></th>
                 <th><?php echo $this->lang->line('date') ?></th>
-                <th><?php echo $this->lang->line('no_of_items') ?></th>
-                <th><?php echo $this->lang->line('total_amount') ?></th>
+                <th><?php echo $this->lang->line('time') ?></th>
+                <th><?php echo $this->lang->line('payment') ?></th>
+                <th><?php echo $this->lang->line('amount') ?></th>
                 
             </tr>
         </thead>
