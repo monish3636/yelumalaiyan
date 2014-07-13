@@ -441,6 +441,10 @@
             $('#select_purchase_items_brand').show();
             $('#title').text(' <?php echo $this->lang->line('sales')?> '+title+' <?php echo $this->lang->line('report') ?>');
         }
+        else if(report=='profit_and_loss'){
+            $('#time_filtering').show();
+            $('#title').text(title+' <?php echo $this->lang->line('report') ?>');
+        }
         
     
     

@@ -1060,17 +1060,20 @@ class Report extends CI_Model{
            $this->db->where('purchase_invoice.date >=', strtotime($start));
         $this->db->where('purchase_invoice.date <=', strtotime($end));
         }
-        if($start!="" && $end!="" && $from_time!="" && $to_time!="" && $to_time!='00:00' && $from_time!='00:00'){
-            $this->db->where('purchase_items.time >=', strtotime($from_time));
-            $this->db->where('purchase_items.time <=', strtotime($to_time));
-           
-        }
         $sql=$this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){  
+            $time=date('H:i',$row['time']);
+            $time =strtotime($time);
             $row['invoice_date']=date('d-m-Y',$row['invoice_date']);
             $row['time']=date('H:i',$row['time']);
-            $data[]=$row;
+             if($start!="" && $end!="" && $from_time!="" && $to_time!="" && $to_time!='00:00' && $from_time!='00:00'){
+                if($time >=strtotime($from_time) && $time <=strtotime($to_time)){
+                    $data[]=$row;
+                }
+            }else{
+                $data[]=$row;
+            }
         }
         return $data;  
       
@@ -1099,7 +1102,6 @@ class Report extends CI_Model{
         if($item_kit!=""){
             $this->db->where('sales_items.item',$item_kit);
         }
-       
         $this->db->join('item_kit','item_kit.guid=sales_items.item','left');
         $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
         $this->db->join('decomposition_items','decomposition_items.guid=sales_items.item','left');
@@ -1116,21 +1118,16 @@ class Report extends CI_Model{
         $this->db->join('brands', 'items.brand_id=brands.guid','left');
         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
         $this->db->join('customers', 'customers.guid=sales_bill.customer_id OR customers.guid=direct_sales.customer_id ','left' );
-      
         if($start!="" && $end!=""){
            $this->db->where('sales_bill.date >=', strtotime($start));
         $this->db->where('sales_bill.date <=', strtotime($end));
-        }
-        if($start!="" && $end!="" && $from_time!="" && $to_time!="" && $to_time!='00:00' && $from_time!='00:00'){
-           // $this->db->where('sales_items.time >=', strtotime($from_time));
-           // $this->db->where('sales_items.time <=', strtotime($to_time));
-           
         }
         $sql=$this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){  
             $row['invoice_date']=date('d-m-Y',$row['invoice_date']);
-            $row['time']=date('H:i',$row['time']);
+            $time=date('H:i',$row['time']);
+            $time =strtotime($time);
             if($row['deco_code']!="" && $row['deco_code']!=NULL){
                 $row['name']=$row['name']."-".$row['deco_value'];
                 $row['code']=$row['deco_code'];
@@ -1143,14 +1140,26 @@ class Report extends CI_Model{
                 $row['b_name']="";
                 $row['tax_Inclusive']=$row['kit_tax'];
             }
-            $data[]=$row;
+            $row['time']=date('H:i',$row['time']);
+            if($start!="" && $end!="" && $from_time!="" && $to_time!="" && $to_time!='00:00' && $from_time!='00:00'){
+                if($time >=strtotime($from_time) && $time <=strtotime($to_time)){
+                    $data[]=$row;
+                }
+
+            }else{
+                $data[]=$row;
+            }
            
         }
        
        return $data;  
       
     }
-  
+    /* get profit and loss report
+     function start     */
+    function get_profit_and_loss_report($to_time,$from_time,$start,$end){
+        
+    }
     // function end
 }
 ?>
