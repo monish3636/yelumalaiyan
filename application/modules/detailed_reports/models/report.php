@@ -1158,7 +1158,7 @@ class Report extends CI_Model{
     /* get profit and loss report
      function start     */
     function get_profit_and_loss_report($to_time,$from_time,$start,$end){
-        $this->db->select('payment.code,payment.amount,customers.first_name as customer,suppliers.first_name as supplier,purchase_return.code as purchase_return,sales_return.code as sales_return')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->select('branches.store_name,branches.code as bcode,payment.*,customers.first_name as customer,suppliers.first_name as supplier,purchase_return.code as purchase_return,sales_return.code as sales_return')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
         $this->db->join('supplier_payable','supplier_payable.guid=payment.payable_id','left');
         $this->db->join('purchase_return','purchase_return.guid=payment.return_id','left');
         $this->db->join('sales_return','sales_return.guid=payment.return_id','left');
@@ -1166,13 +1166,21 @@ class Report extends CI_Model{
         $this->db->join('customer_payable','customer_payable.guid=payment.payable_id','left');
         $this->db->join('sales_bill','sales_bill.guid=payment.invoice_id','left');
         $this->db->join('customers',' customers.guid=payment.customer_id','left');
+        $this->db->join('branches', 'branches.guid=payment.branch_id','left');
         $sql=  $this->db->get();
         $data=array();
         foreach ($sql->result_array() as $row){
+            $row['payment_date']=date('d-m-Y H:i',$row['payment_date']);
+            if($row['sales_return']!="" && $row['sales_return']!=NULL){
+                $row['type']=  $this->lang->line('credit');
+            }else if($row['purchase_return']!="" && $row['purchase_return']!=NULL){
+                $row['type']=  $this->lang->line('debit');
+            }
             $data[]=$row;
         }
-        echo '<pre>';
-        print_r($data);
+        return $data;
+//        echo '<pre>';
+//        print_r($data);
     }
     // function end
 }
