@@ -794,19 +794,18 @@
                     var total_amount=0;
                     var i=0;
                     for(i=0;i<data.length;i++){
-                        
+                        var type=0;
                         $('#journal_cashier_table tbody').append('<tr> \n\
                             <td class="text-center">'+parseInt(i+1)+'</td>\n\
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
                             <td class="text-center">'+data[i]["code"]+'</td>\n\
                             <td class="text-center">'+data[i]["sales_bill"]+'</td>\n\
-                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
-                            <td class="text-right">'+data[i]["time"]+'</td>\n\
                             <td class="text-center">'+data[i]["first_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["username"]+'</td>\n\
-                            <td class="text-right">'+data[i]["name"]+'</td>\n\
-                            <td class="text-right">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["payment_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["time"]+'</td>\n\
+                            <td class="text-right">'+type+'</td>\n\
                             <td class="text-right">'+data[i]["amount"]+'</td>\n\
                         </tr>');
                       
@@ -814,20 +813,7 @@
                       
                    
                     }
-                    $('#journal_cashier_table tfoot').append(' <tr >\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="no-border"></td>\n\
-                        <td class="text-right table_footer">'+total_amount+'</td>\n\
-                    </tr>');
+                    
                 }
             
             });
@@ -3389,13 +3375,12 @@
                 <th><?php echo $this->lang->line('sl_no') ?></th>
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>
-                <th><?php echo $this->lang->line('sales_bill') ?></th>
-                <th><?php echo $this->lang->line('customer') ?></th>
-                <th><?php echo $this->lang->line('company') ?></th>
-                <th><?php echo $this->lang->line('date') ?></th>
-                <th><?php echo $this->lang->line('time') ?></th>
+                <th><?php echo $this->lang->line('payment') ?></th>
+                <th><?php echo $this->lang->line('sales') ?></th>
                 <th><?php echo $this->lang->line('user') ?></th>
                 <th><?php echo $this->lang->line('username') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('time') ?></th>
                 <th><?php echo $this->lang->line('payament_type') ?></th>
                 <th><?php echo $this->lang->line('amount') ?></th>
                 
