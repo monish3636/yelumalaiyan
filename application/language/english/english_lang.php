@@ -795,5 +795,6 @@ $lang['credit_days']='Credit Days';
     $lang['profit']='Profit';
     $lang['total_expence']='Total Expence';
     $lang['total_income']='Total Income';
+    $lang['payament_type']='Payment Type';
    
 ?>

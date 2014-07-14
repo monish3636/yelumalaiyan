@@ -1213,7 +1213,7 @@ class Report extends CI_Model{
     /* get jorurnal cashier report
      function start     */
     function get_journal_cashier_report($to_time,$from_time,$start,$end){
-        $this->db->select('users.first_name,users.username,sales_bill.invoice as sales_bill,branches.store_name,branches.code as bcode,payment.*')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->select('users.first_name,users.username,sales_bill.invoice as sales_bill,branches.store_name,branches.code as bcode,payment.*,customers.first_name as customer')->from('payment')->where('payment.type','credit')->where('payment.branch_id',  $this->session->userdata('branch_id'));
         $this->db->join('customer_payable','customer_payable.guid=payment.payable_id','left');
         $this->db->join('sales_bill','payment.invoice_id=sales_bill.guid','left');
         $this->db->join('customers',' customers.guid=payment.customer_id','left');
