@@ -800,14 +800,14 @@
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
                             <td class="text-center">'+data[i]["code"]+'</td>\n\
-                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["sales_bill"]+'</td>\n\
                             <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
                             <td class="text-right">'+data[i]["time"]+'</td>\n\
+                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["username"]+'</td>\n\
                             <td class="text-right">'+data[i]["name"]+'</td>\n\
                             <td class="text-right">'+data[i]["code"]+'</td>\n\
-                            <td class="text-right">'+data[i]["c_name"]+'</td>\n\
-                            <td class="text-center">'+data[i]["b_name"]+'</td> \n\
+                            <td class="text-right">'+data[i]["amount"]+'</td>\n\
                         </tr>');
                       
                         
