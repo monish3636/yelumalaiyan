@@ -191,5 +191,14 @@ class Detailed_reports extends MX_Controller
         $data=$this->report->get_profit_and_loss_report($to_time,$from_time,$start,$end);
         echo json_encode($data);
     }
+     function get_journal_cashier_report(){
+        $this->load->model('report');
+        $start=  $this->input->post('start');
+        $end=  $this->input->post('end');
+        $to_time=$this->input->post('to_time');
+        $from_time=$this->input->post('from_time');
+        $data=$this->report->get_journal_cashier_report($to_time,$from_time,$start,$end);
+        echo json_encode($data);
+    }
 }
 ?>

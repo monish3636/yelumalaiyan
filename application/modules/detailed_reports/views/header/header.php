@@ -451,6 +451,20 @@
         
     }
     function journal_cashier_report(){
+        $('.dataTable').hide();
+        var title=$('#journal_cashier').text();      
+        $('#report_val').val('journal_cashier');
+        $('#decomposition_div').hide();
+        $('#kit_div').hide();
+        $('#supplier_base').hide();            
+        $('#customer_base').hide();
+        $('#time_filtering').show();
+        $('#select_purchase_items').hide();
+        $('#select_purchase_items_category').hide();
+        $('#select_purchase_items_department').hide();
+        $('#select_purchase_items_brand').hide();
+         $('#title').text(''+title+' <?php echo $this->lang->line('report') ?>');
+        
     }
    			
   </script>

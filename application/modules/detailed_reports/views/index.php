@@ -768,6 +768,70 @@
             
             });
         }
+        else if(report=='journal_cashier'){
+           
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/detailed_reports/get_journal_cashier_report/",                      
+                data: {
+                    start:start_date,
+                    end:end_date,
+                    from_time:$('#from_time').val(),
+                    to_time:$('#to_time').val(),
+
+                }, 
+                type:'POST',
+                dataType: 'json',               
+                success: function(data)        
+                {
+                    $('.dataTable').hide();
+                    $('#journal_cashier_table').show();
+                    $('#journal_cashier_table tbody').remove();
+                    $('#journal_cashier_table').append('<tbody></tbody');
+                    $('#journal_cashier_table tfoot').remove();
+                    $('#journal_cashier_table').append('<tfoot></tfoot');
+                    var total_tax=0;
+                    var total_item_discount=0;
+                    var total_amount=0;
+                    var i=0;
+                    for(i=0;i<data.length;i++){
+                        
+                        $('#journal_cashier_table tbody').append('<tr> \n\
+                            <td class="text-center">'+parseInt(i+1)+'</td>\n\
+                            <td class="text-center">'+data[i]['store_name']+'</td>\n\
+                            <td class="text-center">'+data[i]["bcode"]+'</td>\n\
+                            <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["first_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["company_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice_date"]+'</td>\n\
+                            <td class="text-right">'+data[i]["time"]+'</td>\n\
+                            <td class="text-right">'+data[i]["name"]+'</td>\n\
+                            <td class="text-right">'+data[i]["code"]+'</td>\n\
+                            <td class="text-right">'+data[i]["c_name"]+'</td>\n\
+                            <td class="text-center">'+data[i]["b_name"]+'</td> \n\
+                        </tr>');
+                      
+                        
+                      
+                   
+                    }
+                    $('#journal_cashier_table tfoot').append(' <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_amount+'</td>\n\
+                    </tr>');
+                }
+            
+            });
+        }
         else if(report=='profit_and_loss'){
          
             $.ajax({                                      
@@ -3038,7 +3102,7 @@
                                             </ul>
                                         </li>
 					<li>
-						<a href="javascript:journal_cashier_report()"><?php echo $this->lang->line('journal_cashier') ?></a>
+						<a href="javascript:journal_cashier_report()" id="journal_cashier"><?php echo $this->lang->line('journal_cashier') ?></a>
 						
                                         </li>					
                                         </ul>
@@ -3313,6 +3377,27 @@
                 <th><?php echo $this->lang->line('discount') ?></th>
                 <th><?php echo $this->lang->line('discount')." ".$this->lang->line('amount') ?></th>
                 <th><?php echo $this->lang->line('total_amount') ?></th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+    </table>
+    <table id="journal_cashier_table" class="dataTable table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?php echo $this->lang->line('sl_no') ?></th>
+                <th><?php echo $this->lang->line('branch_code') ?></th>
+                <th><?php echo $this->lang->line('branch_name') ?></th>
+                <th><?php echo $this->lang->line('sales_bill') ?></th>
+                <th><?php echo $this->lang->line('customer') ?></th>
+                <th><?php echo $this->lang->line('company') ?></th>
+                <th><?php echo $this->lang->line('date') ?></th>
+                <th><?php echo $this->lang->line('time') ?></th>
+                <th><?php echo $this->lang->line('user') ?></th>
+                <th><?php echo $this->lang->line('username') ?></th>
+                <th><?php echo $this->lang->line('payament_type') ?></th>
+                <th><?php echo $this->lang->line('amount') ?></th>
                 
             </tr>
         </thead>
