@@ -135,7 +135,7 @@
                     var num = parseFloat(total_amount);
                     total_amount=num.toFixed(point);
                     var num = parseFloat(total_paid);
-                    totak_paid=num.toFixed(point);
+                    total_paid=num.toFixed(point);
                     var num = parseFloat(total_balance);
                     total_balance=num.toFixed(point);
                     $('#purchase_base_table tfoot').append(' <tr >\n\
@@ -789,9 +789,10 @@
                     $('#profit_and_loss_table').append('<tbody></tbody');
                     $('#profit_and_loss_table tfoot').remove();
                     $('#profit_and_loss_table').append('<tfoot></tfoot');
-                    var total_tax=0;
-                    var total_item_discount=0;
-                    var total_amount=0;
+                    var total_sales_return=0;
+                    var total_purchase_return=0;
+                    var total_income=0;
+                    var total_expence=0;
                     var i=0;
                     for(i=0;i<data.length;i++){
                        
@@ -800,6 +801,7 @@
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
                             <td class="text-center">'+data[i]["code"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
                             <td class="text-center">'+data[i]["supplier"]+'</td>\n\
                             <td class="text-center">'+data[i]["customer"]+'</td>\n\
                             <td class="text-center">'+data[i]["payment_date"]+'</td>\n\
@@ -811,10 +813,117 @@
                             <td class="text-center">'+data[i]["expence"]+'</td>\n\
                                 </tr>');
                       
+                    total_expence=parseFloat(total_expence)+parseFloat(data[i]['expence']==""?0:data[i]['expence']);
+                    total_income=parseFloat(total_income)+parseFloat(data[i]['income']==""?0:data[i]['income']);
+                    total_sales_return=parseFloat(total_sales_return)+parseFloat(data[i]['sales_return_amount']==""?0:data[i]['sales_return_amount']);
+                    total_purchase_return=parseFloat(total_purchase_return)+parseFloat(data[i]['purchase_return_amount']==""?0:data[i]['purchase_return_amount']);
                    
+                            }
+                    var num = parseFloat(total_expence);
+                    total_expence=num.toFixed(point);
+                    var num = parseFloat(total_income);
+                    total_income=num.toFixed(point);
+                    var num = parseFloat(total_sales_return);
+                    total_sales_return=num.toFixed(point);
+                    var num = parseFloat(total_purchase_return);
+                    total_purchase_return=num.toFixed(point);
+                    var expence=parseFloat(total_expence)-parseFloat(total_purchase_return);
+                    var income=parseFloat(total_income)-parseFloat(total_sales_return);
+                    var balance=parseFloat(income)-parseFloat(expence);
+                    if(balance<0){
+                        var text_value='<?php echo $this->lang->line('loss') ?>';
+                        balance=parseFloat(balance)*-1;
+                    }else{
+                        var text_value='<?php echo $this->lang->line('profit') ?>';
                     }
-                    $('#profit_and_loss_table tfoot').append(' <tr >\n\
-                    </tr>');
+                    var num = parseFloat(balance);
+                    balance=num.toFixed(point);
+                    var num = parseFloat(expence);
+                    expence=num.toFixed(point);
+                    var num = parseFloat(income);
+                    income=num.toFixed(point);
+                    $('#profit_and_loss_table tfoot').append(' \n\
+                        <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="text-right table_footer">'+total_sales_return+'</td>\n\
+                        <td class="text-right table_footer">'+total_purchase_return+'</td>\n\
+                        <td class="text-right table_footer">'+total_income+'</td>\n\
+                        <td class="text-right table_footer">'+total_expence+'</td>\n\
+                    </tr>\n\
+                        <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                    </tr>\n\
+                        <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border text-right "><strong><?php echo $this->lang->line('total_expence') ?></strong></td>\n\
+                        <td class="text-right table_footer">'+expence+'</td>\n\
+                    </tr>\n\
+                        <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                      <td class="no-border text-right "><strong><?php echo $this->lang->line('total_income') ?></strong></td>\n\
+                        <td class="text-right table_footer">'+income+'</td>\n\
+                    </tr>\n\
+                        <tr >\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border"></td>\n\
+                        <td class="no-border text-right "><strong>'+text_value+'</strong></td>\n\
+                        <td class="text-right table_footer">'+parseFloat(balance)+'</td>\n\
+                    </tr>\n\
+                            ');
                 }
             
             });

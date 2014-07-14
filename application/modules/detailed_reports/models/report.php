@@ -1158,13 +1158,14 @@ class Report extends CI_Model{
     /* get profit and loss report
      function start     */
     function get_profit_and_loss_report($to_time,$from_time,$start,$end){
-        $this->db->select('sales_bill.code as sales_bill,branches.store_name,branches.code as bcode,payment.*,customers.first_name as customer,suppliers.first_name as supplier,purchase_return.code as purchase_return,sales_return.code as sales_return')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->select('sales_bill.invoice as sales_bill,purchase_invoice.invoice as purchase_invoice,branches.store_name,branches.code as bcode,payment.*,customers.first_name as customer,suppliers.first_name as supplier,purchase_return.code as purchase_return,sales_return.code as sales_return')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
         $this->db->join('supplier_payable','supplier_payable.guid=payment.payable_id','left');
         $this->db->join('purchase_return','purchase_return.guid=payment.return_id','left');
         $this->db->join('sales_return','sales_return.guid=payment.return_id','left');
         $this->db->join('suppliers',' suppliers.guid=payment.supplier_id','left');
         $this->db->join('customer_payable','customer_payable.guid=payment.payable_id','left');
-        $this->db->join('sales_bill','sales_bill.guid=payment.invoice_id','left');
+        $this->db->join('sales_bill','payment.invoice_id=sales_bill.guid','left');
+        $this->db->join('purchase_invoice','payment.invoice_id=purchase_invoice.guid','left');
         $this->db->join('customers',' customers.guid=payment.customer_id','left');
         $this->db->join('branches', 'branches.guid=payment.branch_id','left');
         $sql=  $this->db->get();
@@ -1176,10 +1177,12 @@ class Report extends CI_Model{
                 $row['income']=$row['amount'];
                 $row['supplier']="";
                 $row['expence']="";
+                $row['invoice']=$row['sales_bill'];
             }else if($row['supplier']!="" && $row['supplier']!=NULL){
                 $row['expence']=$row['amount'];
                 $row['customer']="";
                 $row['income']="";
+                $row['invoice']=$row['purchase_invoice'];
             }
             if($row['sales_return']!="" && $row['sales_return']!=NULL){
                 $row['type']=  $this->lang->line('credit');

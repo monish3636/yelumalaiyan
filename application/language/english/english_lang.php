@@ -791,5 +791,9 @@ $lang['credit_days']='Credit Days';
     $lang['expence']='Expence';
     $lang['income']='Income';
     $lang['invoice_or_bill_id']='Invoice / Bill Id';
+    $lang['loss']='Loss';
+    $lang['profit']='Profit';
+    $lang['total_expence']='Total Expence';
+    $lang['total_income']='Total Income';
    
 ?>
