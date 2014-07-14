@@ -87,7 +87,7 @@ class Payment extends CI_Model{
         $this->db->where('guid',$payment);
         $this->db->update('supplier_payable',array('payment_status'=>$payment_status,'paid_amount'=>$amount+$paid)); // update paid amount to supplier payable
         
-        $data=array('invoice_id'=>$invoice_id,'code'=>$code,'type'=>'debit','payable_id'=>$payment,'supplier_id'=>$supplier,'memo'=>$memo,'amount'=>$amount,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
+        $data=array('invoice_id'=>$invoice_id,'code'=>$code,'type'=>'debit','payable_id'=>$payment,'supplier_id'=>$supplier,'memo'=>$memo,'amount'=>$amount,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d H:i")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
         $this->db->insert('payment',$data);
         $id=  $this->db->insert_id();
         $this->db->where('id',$id);
@@ -109,7 +109,7 @@ class Payment extends CI_Model{
         $this->db->update('purchase_return',array('paid_amount'=>$amount+$paid_amount));
         
         
-        $data=array('invoice_id'=>$invoice_id,'return_id'=>$return_id,'code'=>$code,'type'=>'debit','supplier_id'=>$supplier,'memo'=>$memo,'amount'=>$amount,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
+        $data=array('invoice_id'=>$invoice_id,'return_id'=>$return_id,'code'=>$code,'type'=>'debit','supplier_id'=>$supplier,'memo'=>$memo,'amount'=>$amount,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d H:i")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
         $this->db->insert('payment',$data);
          $id=  $this->db->insert_id();
         $this->db->where('id',$id);
