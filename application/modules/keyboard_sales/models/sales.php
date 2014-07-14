@@ -44,7 +44,7 @@ class Sales extends CI_Model{
             $code=$row->prefix.$row->max;
         }
         
-        $data=array('invoice_id'=>$guid,'code'=>$code,'type'=>'credit','payable_id'=>$payable_id,'customer_id'=>$customer_id,'amount'=>$amount,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
+        $data=array('invoice_id'=>$guid,'code'=>$code,'type'=>'credit','payable_id'=>$payable_id,'customer_id'=>$customer_id,'amount'=>$amount,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d H:i")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
         $this->db->insert('payment',$data);
         $id=  $this->db->insert_id();
         $this->db->where('id',$id);
@@ -63,7 +63,7 @@ class Sales extends CI_Model{
             $code=$row->prefix.$row->max;
         }
         
-        $data=array('invoice_id'=>$guid,'code'=>$code,'type'=>'credit','payable_id'=>$payable_id,'customer_id'=>$customer_id,'amount'=>$paid,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
+        $data=array('invoice_id'=>$guid,'code'=>$code,'type'=>'credit','payable_id'=>$payable_id,'customer_id'=>$customer_id,'amount'=>$paid,'payment_date'=>$date,'added_date'=>strtotime(date("Y/m/d H:i")),'branch_id'=>  $this->session->userdata['branch_id'],'added_by'=>  $this->session->userdata['guid']);
         $this->db->insert('payment',$data);
         $id=  $this->db->insert_id();
         $this->db->where('id',$id);
