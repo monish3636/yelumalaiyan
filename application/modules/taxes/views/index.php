@@ -37,7 +37,7 @@
                                        $("#add_taxes").trigger('reset');
                                        posnic_taxes_lists();
                                     }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#tax_value').val()+' <?php echo $this->lang->line('taxes').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                         $.bootstrapGrowl('<?php echo $this->lang->line('tax_value');?> '+$('#add_taxes #tax_value').val()+' <?php echo $this->lang->line('is_already_added')." ".$this->lang->line('for');?> '+$('#add_taxes #taxes_type :selected').text(), { type: "warning" });                           
                                     }else  if(response['responseText']=='FALSE'){
                                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
                                     }else{
@@ -64,7 +64,7 @@
                                        $("#parsley_reg").trigger('reset');
                                        posnic_taxes_lists();
                                     }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#taxes_name').val()+' <?php echo $this->lang->line('taxes').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                           $.bootstrapGrowl('<?php echo $this->lang->line('tax_value');?> '+$('#parsley_reg #tax_value').val()+' <?php echo $this->lang->line('is_already_added')." ".$this->lang->line('for');?> '+$('#parsley_reg #taxes_type :selected').text(), { type: "warning" });                           
                                     }else  if(response['responseText']=='FALSE'){
                                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
                                     }else{
@@ -102,7 +102,7 @@ function posnic_taxes_lists(){
       $('#taxes_lists').attr("disabled",'disabled');
 }
 function clear_add_taxes(){
-      $("#posnic_user_2").trigger('reset');
+      $("#add_taxes").trigger('reset');
 }
 function reload_update_user(){
     var id=$('#guid').val();
@@ -215,8 +215,9 @@ function reload_update_user(){
                     <div class="row">
                                 <div class="col-lg-4"></div>
                                   <div class="col col-lg-4 text-center"><br><br>
+                                      <a href="javascript:posnic_taxes_lists()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('list') ?></a>
                                       <button id="add_new_taxes"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
-                                      <a href="javascript:clear_add_taxes()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                      <a href="javascript:clear_add_taxes()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('clear') ?></a>
                                   </div>
                               </div>
                 </div>
@@ -283,8 +284,9 @@ function reload_update_user(){
                    <div class="row">
                         <div class="col-lg-4"></div>
                       <div class="col col-lg-4 text-center"><br><br>
+                            <a href="javascript:posnic_taxes_lists()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('list') ?></a>
                           <button id="update_taxes"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('update') ?></button>
-                          <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('reload') ?></a>
+                          <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('reload') ?></a>
                       </div>
                   </div>
                 </div>

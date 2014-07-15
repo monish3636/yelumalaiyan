@@ -50,7 +50,7 @@ class Taxes extends MX_Controller
 		
 			if ( $_GET['sSearch'] != "" )
 		{
-		$like =array('name'=>  $this->input->get_post('sSearch'));
+		$like =array('tax_types.type'=>  $this->input->get_post('sSearch'));
 				
 			}
                         $select='taxes.*,tax_types.type as tax_type';
