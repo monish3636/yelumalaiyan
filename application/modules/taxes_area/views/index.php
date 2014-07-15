@@ -24,16 +24,17 @@
      $(document).ready( function () {
          $('#add_new_brand').click(function() { 
                 <?php if($this->session->userdata['taxes_area_per']['add']==1){ ?>
-                var inputs = $('#add_brand').serialize();
+                var inputs = $('#add_tax_area').serialize();
+                if($('#add_tax_area').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/taxes_area/add_taxes_area')?>",
                             data: inputs,
                             type:'POST',
                             complete: function(response) {
                                 if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('taxes_area').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                      $.bootstrapGrowl('<?php echo $this->lang->line('new').' '.$this->lang->line('taxes_area').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
                                        $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#add_brand").trigger('reset');
+                                       $("#add_tax_area").trigger('reset');
                                        posnic_taxes_area_lists();
                                     }else  if(response['responseText']=='ALREADY'){
                                            $.bootstrapGrowl($('#taxes_area').val()+' <?php echo $this->lang->line('taxes_area').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
@@ -43,13 +44,15 @@
                                           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('taxes_area');?>', { type: "error" });                           
                                     }
                        }
-                });<?php }else{ ?>
+                })
+                };<?php }else{ ?>
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('taxes_area');?>', { type: "error" });                       
                     <?php }?>
         });
          $('#update_taxes_area').click(function() { 
                 <?php if($this->session->userdata['taxes_area_per']['edit']==1){ ?>
                 var inputs = $('#parsley_reg').serialize();
+                if($('#parsley_reg').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/taxes_area/update_taxes_area')?>",
                             data: inputs,
@@ -69,6 +72,7 @@
                                     }
                        }
                  });
+                 }
                  <?php }else{ ?>
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('taxes_area');?>', { type: "error" });                        
                     <?php }?>
@@ -77,7 +81,7 @@
 function posnic_add_new(){
     <?php if($this->session->userdata['taxes_area_per']['add']==1){ ?>
       $("#user_list").hide();
-      $('#add_brand_form').show('slow');
+      $('#add_tax_area_form').show('slow');
       $('#delete').attr("disabled", "disabled");
       $('#posnic_add_taxes_area').attr("disabled", "disabled");
       $('#active').attr("disabled", "disabled");
@@ -89,7 +93,7 @@ function posnic_add_new(){
 }
 function posnic_taxes_area_lists(){
       $('#edit_brand_form').hide('hide');
-      $('#add_brand_form').hide('hide');      
+      $('#add_tax_area_form').hide('hide');      
       $("#user_list").show('slow');
       $('#delete').removeAttr("disabled");
       $('#active').removeAttr("disabled");
@@ -151,8 +155,8 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_brand_form" class="container clearfix main_section">
-     <?php   $form =array('id'=>'add_brand',
+<section id="add_tax_area_form" class="container clearfix main_section"  style="display: none">
+     <?php   $form =array('id'=>'add_tax_area',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
        echo form_open_multipart('taxes_area/add_pos_taxes_area_details/',$form);?>
@@ -191,15 +195,16 @@ function reload_update_user(){
                     <div class="row">
                                 <div class="col-lg-4"></div>
                                   <div class="col col-lg-4 text-center"><br><br>
+                                        <a href="javascript:posnic_taxes_area_lists()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('list') ?></a>
                                       <button id="add_new_brand"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
-                                      <a href="javascript:clear_add_taxes_area()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                      <a href="javascript:clear_add_taxes_area()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('clear') ?></a>
                                   </div>
                               </div>
                 </div>
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_brand_form" class="container clearfix main_section">
+<section id="edit_brand_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -239,8 +244,9 @@ function reload_update_user(){
                    <div class="row">
                         <div class="col-lg-4"></div>
                       <div class="col col-lg-4 text-center"><br><br>
+                             <a href="javascript:posnic_taxes_area_lists()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('list') ?></a>
                           <button id="update_taxes_area"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('update') ?></button>
-                          <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('reload') ?></a>
+                          <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('reload') ?></a>
                       </div>
                   </div>
                 </div>
