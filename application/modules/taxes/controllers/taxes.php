@@ -103,7 +103,7 @@ class Taxes extends MX_Controller
     function update_taxes(){
             if($this->session->userdata['taxes_per']['edit']==1){
            if($this->input->post('guid')){
-                $this->form_validation->set_rules("tax_value",$this->lang->line('tax_value'),'required'); 
+                $this->form_validation->set_rules("tax_value",$this->lang->line('tax_value'),'required|numeric'); 
                 $this->form_validation->set_rules("taxes_type",$this->lang->line('taxes_type'),'required'); 
                 if ( $this->form_validation->run() !== false ) { 
                       $name=$this->input->post('brands_name');                

@@ -805,10 +805,11 @@
                     </div>
                     <div class="col col-lg-2">
                         <div class="form_sep">
-                            <label for="formula_tax" class="req"><?php echo $this->lang->line('tax') ?></label>                                                                                                       
+                            <label for="formula_tax" ><?php echo $this->lang->line('tax') ?></label>                                                                                                       
                             <?php $formula_tax=array('name'=>'formula_tax',
                                 'class'=>'required form-control number',
                                 'id'=>'formula_tax',
+                                'disabled'=>'disabled',
                                 'onKeyPress'=>"return numbersonly(event)");
                             echo form_input($formula_tax)?> 
                         </div>
