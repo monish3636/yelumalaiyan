@@ -25,6 +25,7 @@
          $('#add_new_taxes').click(function() { 
                 <?php if($this->session->userdata['taxes_per']['add']==1){ ?>
                 var inputs = $('#add_taxes').serialize();
+                  if($('#add_taxes').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/taxes/add_taxes')?>",
                             data: inputs,
@@ -36,20 +37,22 @@
                                        $("#add_taxes").trigger('reset');
                                        posnic_taxes_lists();
                                     }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#taxes_name').val()+' <?php echo $this->lang->line('taxes').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                           $.bootstrapGrowl($('#tax_value').val()+' <?php echo $this->lang->line('taxes').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
                                     }else  if(response['responseText']=='FALSE'){
                                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
                                     }else{
                                           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('taxes');?>', { type: "error" });                           
                                     }
                        }
-                });<?php }else{ ?>
+                });
+                }<?php }else{ ?>
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('taxes');?>', { type: "error" });                       
                     <?php }?>
         });
          $('#update_taxes').click(function() { 
                 <?php if($this->session->userdata['taxes_per']['edit']==1){ ?>
                 var inputs = $('#parsley_reg').serialize();
+                if($('#parsley_reg').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/taxes/update_taxes')?>",
                             data: inputs,
@@ -69,6 +72,7 @@
                                     }
                        }
                  });
+                 }
                  <?php }else{ ?>
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('taxes');?>', { type: "error" });                        
                     <?php }?>
@@ -151,7 +155,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_taxes_form" class="container clearfix main_section">
+<section id="add_taxes_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'add_taxes',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -175,7 +179,7 @@ function reload_update_user(){
                                                     <div class="form_sep">
                                                          <label for="taxes_name" class="req"><?php echo $this->lang->line('tax_value') ?></label>                                                                                                       
                                                            <?php $tax_value=array('name'=>'tax_value',
-                                                                                    'class'=>'required form-control',
+                                                                                    'class'=>'required form-control number',
                                                                                     'id'=>'tax_value',
                                                                                     'value'=>set_value('tax_value'));
                                                            echo form_input($tax_value)?> 
@@ -219,7 +223,7 @@ function reload_update_user(){
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_taxes_form" class="container clearfix main_section">
+<section id="edit_taxes_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -243,7 +247,7 @@ function reload_update_user(){
                                                     <div class="form_sep">
                                                          <label for="tax_value" class="req"><?php echo $this->lang->line('tax_value') ?></label>                                                                                                       
                                                            <?php $tax_value=array('name'=>'tax_value',
-                                                                                    'class'=>'required form-control',
+                                                                                    'class'=>'required form-control number',
                                                                                     'id'=>'tax_value',
                                                                                     'value'=>set_value('tax_value'));
                                                            echo form_input($tax_value)?> 
