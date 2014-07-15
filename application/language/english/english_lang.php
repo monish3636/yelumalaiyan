@@ -797,5 +797,9 @@ $lang['credit_days']='Credit Days';
     $lang['total_income']='Total Income';
     $lang['payament_type']='Payment Type';
     $lang['invoice_type']='Invoice Type';
+    $lang['pricing_formula']='Pricing Formula';
+    $lang['click']='Click';
+    $lang['cost_price']='Cost Price';
+    $lang['discount_after_tax']='Discount After Tax';
    
 ?>
