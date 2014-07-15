@@ -800,7 +800,8 @@
                             <td class="text-center">'+data[i]['store_name']+'</td>\n\
                             <td class="text-center">'+data[i]["bcode"]+'</td>\n\
                             <td class="text-center">'+data[i]["code"]+'</td>\n\
-                            <td class="text-center">'+data[i]["sales_bill"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice"]+'</td>\n\
+                            <td class="text-center">'+data[i]["invoice_type"]+'</td>\n\
                             <td class="text-center">'+data[i]["first_name"]+'</td>\n\
                             <td class="text-center">'+data[i]["username"]+'</td>\n\
                             <td class="text-center">'+data[i]["payment_date"]+'</td>\n\
@@ -3376,7 +3377,8 @@
                 <th><?php echo $this->lang->line('branch_code') ?></th>
                 <th><?php echo $this->lang->line('branch_name') ?></th>
                 <th><?php echo $this->lang->line('payment') ?></th>
-                <th><?php echo $this->lang->line('sales') ?></th>
+                <th><?php echo $this->lang->line('invoice') ?></th>
+                <th><?php echo $this->lang->line('invoice_type') ?></th>
                 <th><?php echo $this->lang->line('user') ?></th>
                 <th><?php echo $this->lang->line('username') ?></th>
                 <th><?php echo $this->lang->line('date') ?></th>
