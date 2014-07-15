@@ -1119,8 +1119,8 @@ class Report extends CI_Model{
         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
         $this->db->join('customers', 'customers.guid=sales_bill.customer_id OR customers.guid=direct_sales.customer_id ','left' );
         if($start!="" && $end!=""){
-           $this->db->where('sales_bill.date >=', strtotime($start));
-        $this->db->where('sales_bill.date <=', strtotime($end));
+            $this->db->where('sales_bill.date >=', strtotime($start));
+            $this->db->where('sales_bill.date <=', strtotime($end));
         }
         $sql=$this->db->get();
         $data=array();
@@ -1168,10 +1168,16 @@ class Report extends CI_Model{
         $this->db->join('purchase_invoice','payment.invoice_id=purchase_invoice.guid','left');
         $this->db->join('customers',' customers.guid=payment.customer_id','left');
         $this->db->join('branches', 'branches.guid=payment.branch_id','left');
+        if($start!="" && $end!=""){
+            $this->db->where('payment.payment_date >=', strtotime($start));
+            $this->db->where('payment.payment_date <=', strtotime($end));
+        }
         $sql=  $this->db->get();
         $data=array();
         foreach ($sql->result_array() as $row){
-            $row['time']=date('H:i',$row['payment_date']);
+           
+            $time=date('H:i',$row['payment_date']);
+            $time =strtotime($time);
             $row['payment_date']=date('d-m-Y',$row['payment_date']);
             if($row['customer']!="" && $row['customer']!=NULL){
                 $row['income']=$row['amount'];
@@ -1204,7 +1210,15 @@ class Report extends CI_Model{
                 $row['sales_return_amount']="";
                 $row['type']=  $this->lang->line($row['type']);
             }
-            $data[]=$row;
+            $row['time']=date('H:i',$time);
+            if($start!="" && $end!="" && $from_time!="" && $to_time!="" && $to_time!='00:00' && $from_time!='00:00'){
+                if($time >=strtotime($from_time) && $time <=strtotime($to_time)){
+                    $data[]=$row;
+                }
+
+            }else{
+                $data[]=$row;
+            }
         }
         return $data;
 //        echo '<pre>';
@@ -1213,19 +1227,52 @@ class Report extends CI_Model{
     /* get jorurnal cashier report
      function start     */
     function get_journal_cashier_report($to_time,$from_time,$start,$end){
-        $this->db->select('users.first_name,users.username,sales_bill.invoice as sales_bill,branches.store_name,branches.code as bcode,payment.*,customers.first_name as customer')->from('payment')->where('payment.type','credit')->where('payment.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->select('users.first_name,users.username,sales_bill.invoice as sales_bill,purchase_invoice.invoice as purchase_invoice,branches.store_name,branches.code as bcode,payment.*,customers.first_name as customer,suppliers.first_name as supplier,purchase_return.code as purchase_return,sales_return.code as sales_return')->from('payment')->where('payment.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->join('supplier_payable','supplier_payable.guid=payment.payable_id','left');
+        $this->db->join('purchase_return','purchase_return.guid=payment.return_id','left');
+        $this->db->join('sales_return','sales_return.guid=payment.return_id','left');
+        $this->db->join('suppliers',' suppliers.guid=payment.supplier_id','left');
         $this->db->join('customer_payable','customer_payable.guid=payment.payable_id','left');
         $this->db->join('sales_bill','payment.invoice_id=sales_bill.guid','left');
+        $this->db->join('purchase_invoice','payment.invoice_id=purchase_invoice.guid','left');
         $this->db->join('customers',' customers.guid=payment.customer_id','left');
         $this->db->join('users', 'users.guid=payment.added_by','left');
         $this->db->join('branches', 'branches.guid=payment.branch_id','left');
+        if($start!="" && $end!=""){
+            $this->db->where('payment.payment_date >=', strtotime($start));
+            $this->db->where('payment.payment_date <=', strtotime($end));
+        }
         $sql=  $this->db->get();
         $data=array();
         foreach ($sql->result_array() as $row){
-            $row['time']=date('H:i',$row['payment_date']);
+            
+            $time=date('H:i',$row['payment_date']);
+            $time =strtotime($time);
             $row['payment_date']=date('d-m-Y',$row['payment_date']);
-           
-            $data[]=$row;
+            
+            if($row['sales_bill']!="" && $row['sales_bill']!=NULL){
+                $row['invoice']=$row['sales_bill'];
+                $row['invoice_type']=  $this->lang->line('sales');
+            }else if($row['purchase_invoice']!="" && $row['purchase_invoice']!=NULL){
+                $row['invoice']=$row['purchase_invoice'];
+                $row['invoice_type']=  $this->lang->line('purchase');
+            }else if($row['sales_return']!="" && $row['sales_return']!=NULL){
+                $row['invoice']=$row['sales_return'];
+                $row['invoice_type']=  $this->lang->line('sales_return');            
+            }else if($row['purchase_return']!="" && $row['purchase_return']!=NULL){
+                $row['invoice']=$row['purchase_return'];
+                $row['invoice_type']=  $this->lang->line('purchase_return');
+            }
+            
+            $row['time']=date('H:i',$time);
+            if($start!="" && $end!="" && $from_time!="" && $to_time!="" && $to_time!='00:00' && $from_time!='00:00'){
+                if($time >=strtotime($from_time) && $time <=strtotime($to_time)){
+                    $data[]=$row;
+                }
+
+            }else{
+                $data[]=$row;
+            }
         }
         return $data;
 //        echo '<pre>';
