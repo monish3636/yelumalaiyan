@@ -80,15 +80,9 @@ class Posnic{
         }
     }
     function posnic_module_count($module){
-         $CI=  get_instance();
-         $mod=$this->session->userdata['posnic_module'];
-        if($this->session->userdata[$mod.'_per']['read']==1){
-           
-                return $CI->posnic_model->get_data_count_for_user($this->CI->session->userdata['branch_id'],$module);
-                 
-        }else{
-            echo 'You have no permission';
-        }
+        $CI=  get_instance();
+        return $CI->posnic_model->get_data_count_for_user($this->CI->session->userdata['branch_id'],$module);
+         
     }
     function posnic_limit_result($limit,$start){
          $CI=  get_instance();
