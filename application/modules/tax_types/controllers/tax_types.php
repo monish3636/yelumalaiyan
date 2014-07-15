@@ -18,6 +18,11 @@ class Tax_types extends MX_Controller
         $this->load->view('template/app/navigation',$this->posnic->modules());
         $this->load->view('template/app/footer');
     }
+    function get_tax_type_list(){
+        $data=array();
+        $data=$this->posnic->posnic_module('tax_types');
+        echo json_encode($data);
+    }
     function tax_types_data_table(){
         $aColumns = array( 'guid','type','type','type','type','active_status' );	
 	$start = "";

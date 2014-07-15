@@ -1,23 +1,28 @@
 
 <script type="text/javascript" charset="utf-8">
-          $(document).ready( function () {
-           
-                    $('#add_taxes_form').hide();
-                    $('#edit_taxes_form').hide();
-                              posnic_table();
-                                add_taxes.onsubmit=function()
-                                { 
-                                  return false;
-                                } 
-                                parsley_reg.onsubmit=function()
-                                { 
-                                  return false;
-                                } 
-                         
-                        } );
+    $(document).ready( function () {
+        list_tax_type();
+        $('#add_taxes_form').hide();
+        $('#edit_taxes_form').hide();
+        posnic_table();
+        add_taxes.onsubmit=function()
+        { 
+          return false;
+        } 
+        parsley_reg.onsubmit=function()
+        { 
+          return false;
+        } 
+
+        add_tax_type.onsubmit=function()
+        { 
+          return false;
+        } 
+
+    } );
                         
-           function posnic_table(){
-           $('#dt_table_tools').dataTable({
+    function posnic_table(){
+        $('#dt_table_tools').dataTable({
                                       "bProcessing": true,
 				      "bServerSide": true,
                                       "sAjaxSource": "<?php echo base_url() ?>index.php/taxes/data_table",
@@ -28,7 +33,7 @@
                    						"bSortable": false,
                                                                 
                    						"fnRender": function (oObj) {
-                   							return "<input type=checkbox value='"+oObj.aData[0]+"' ><input type='hidden' id='name_"+oObj.aData[0]+"' value='"+oObj.aData[2]+"'>";
+                   							return "<input type=checkbox value='"+oObj.aData[0]+"' ><input type='hidden' id='name_"+oObj.aData[0]+"' value='"+oObj.aData[2]+" "+ oObj.aData[3]+"'>";
 								},
 								
 								
@@ -68,108 +73,103 @@
  							
 
  						]
-		}
-						
-						
-                                    
-                                    );
-                                   
-			}
+		}						
+	);                                   
+    }
     function user_function(guid){
-     var taxes=$('#name_'+guid).val();
-    <?php if($this->session->userdata['taxes_per']['delete']==1){ ?>
+        var taxes=$('#name_'+guid).val();
+        <?php if($this->session->userdata['taxes_per']['delete']==1){ ?>
              bootbox.confirm("Are you Sure To Delete This taxes ("+taxes+")", function(result) {
              if(result){
-            $.ajax({
-                url: '<?php echo base_url() ?>/index.php/taxes/delete',
-                type: "POST",
-                data: {
-                    guid: guid
-                    
-                },
-                success: function(response)
-                {
-                    if(response){
-                           $.bootstrapGrowl('<?php echo $this->lang->line('taxes') ?> '+taxes+' <?php echo $this->lang->line('deleted');?>', { type: "error" });
-                        $("#dt_table_tools").dataTable().fnDraw();
-                    }}
-            });
+                $.ajax({
+                    url: '<?php echo base_url() ?>/index.php/taxes/delete',
+                    type: "POST",
+                    data: {
+                        guid: guid
+
+                    },
+                    success: function(response)
+                    {
+                        if(response){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('taxes') ?> '+taxes+' <?php echo $this->lang->line('deleted');?>', { type: "error" });
+                            $("#dt_table_tools").dataTable().fnDraw();
+                        }
+                    }
+                });
         
 
                         }
-    }); <?php }else{?>
+            }); <?php }else{?>
            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('taxes');?>', { type: "error" });                       
-   <?php }
-?>
-                        }
-            function posnic_deactive(guid){
-                 var taxes=$('#name_'+guid).val();
-                $.ajax({
-                url: '<?php echo base_url() ?>index.php/taxes/deactive',
-                type: "POST",
-                data: {
-                    guid: guid
-                    
-                },
-                success: function(response)
-                {
-                    if(response){
-                         $.bootstrapGrowl(taxes+' <?php echo $this->lang->line('isdeactivated');?>', { type: "danger" });
-                        $("#dt_table_tools").dataTable().fnDraw();
-                    }
+        <?php }       ?>
+    }
+    function posnic_deactive(guid){
+        var taxes=$('#name_'+guid).val();
+        $.ajax({
+            url: '<?php echo base_url() ?>index.php/taxes/deactive',
+            type: "POST",
+            data: {
+                guid: guid
+
+            },
+            success: function(response)
+            {
+                if(response){
+                     $.bootstrapGrowl(taxes+' <?php echo $this->lang->line('isdeactivated');?>', { type: "danger" });
+                    $("#dt_table_tools").dataTable().fnDraw();
                 }
-            });
             }
-            function posnic_active(guid){
-             var taxes=$('#name_'+guid).val();
-             
-                           $.ajax({
-                url: '<?php echo base_url() ?>index.php/taxes/active',
-                type: "POST",
-                data: {
-                    guid: guid
-                    
-                },
-                success: function(response)
-                {
-                    if(response){
-                         $.bootstrapGrowl(taxes+' <?php echo $this->lang->line('isactivated');?>', { type: "success" });
-                        $("#dt_table_tools").dataTable().fnDraw();
-                    }
+        });
+    }
+    function posnic_active(guid){
+        var taxes=$('#name_'+guid).val();
+        $.ajax({
+            url: '<?php echo base_url() ?>index.php/taxes/active',
+            type: "POST",
+            data: {
+                guid: guid
+
+            },
+            success: function(response)
+            {
+                if(response){
+                     $.bootstrapGrowl(taxes+' <?php echo $this->lang->line('isactivated');?>', { type: "success" });
+                    $("#dt_table_tools").dataTable().fnDraw();
                 }
-            });
             }
-           function edit_function(guid){
-                       $("#parsley_reg").trigger('reset');
-                        <?php if($this->session->userdata['taxes_per']['edit']==1){ ?>
-                            $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/taxes/edit_taxes/"+guid,                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             {    
-                                 $("#user_list").hide();
-                                 $('#edit_taxes_form').show('slow');
-                                 $('#delete').attr("disabled", "disabled");
-                                 $('#posnic_add_taxes').attr("disabled", "disabled");
-                                 $('#active').attr("disabled", "disabled");
-                                 $('#deactive').attr("disabled", "disabled");
-                                 $('#taxes_lists').removeAttr("disabled");
-                                 $('#parsley_reg #guid').val(data[0]['guid']);
-                                 $('#parsley_reg #tax_value').val(data[0]['value']);
-                                 $('#parsley_reg #taxes_type').val(data[0]['type']);
-                               
-                             } 
-                           });
+         });
+    }
+    function edit_function(guid){
+        $("#parsley_reg").trigger('reset');
+        <?php if($this->session->userdata['taxes_per']['edit']==1){ ?>
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/taxes/edit_taxes/"+guid,                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                {    
+                    $("#user_list").hide();
+                    $('#edit_taxes_form').show('slow');
+                    $('#delete').attr("disabled", "disabled");
+                    $('#posnic_add_taxes').attr("disabled", "disabled");
+                    $('#active').attr("disabled", "disabled");
+                    $('#deactive').attr("disabled", "disabled");
+                    $('#taxes_lists').removeAttr("disabled");
+                    $('#parsley_reg #guid').val(data[0]['guid']);
+                    $('#parsley_reg #tax_value').val(data[0]['value']);
+                    $('#parsley_reg #taxes_type').val(data[0]['type']);
+
+                } 
+           });
+
+        <?php }else{?>
+                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('taxes');?>', { type: "error" });                       
+        <?php }?>
+    }
+</script>
                          
                         
                               
-                         
-                        <?php }else{?>
-                                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('taxes');?>', { type: "error" });                       
-                        <?php }?>
-                       }
-		</script>
                 <script type="text/javascript" charset="utf-8" language="javascript" src="<?php echo base_url() ?>template/data_table/js/DT_bootstrap.js"></script>
 
 

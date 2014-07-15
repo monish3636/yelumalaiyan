@@ -2,10 +2,10 @@
 <script type="text/javascript" charset="utf-8">
           $(document).ready( function () {
            
-                    $('#add_brand_form').hide();
+                    $('#add_tax_type_form').hide();
                     $('#edit_brand_form').hide();
                               posnic_table();
-                                add_brand.onsubmit=function()
+                                add_tax_type.onsubmit=function()
                                 { 
                                   return false;
                                 } 

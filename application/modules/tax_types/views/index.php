@@ -22,9 +22,9 @@
 </style>	
 <script type="text/javascript">
      $(document).ready( function () {
-         $('#add_new_brand').click(function() { 
+         $('#add_new_tax_type').click(function() { 
                 <?php if($this->session->userdata['tax_types_per']['add']==1){ ?>
-                var inputs = $('#add_brand').serialize();
+                var inputs = $('#add_tax_type').serialize();
                       $.ajax ({
                             url: "<?php echo base_url('index.php/tax_types/add_tax_types')?>",
                             data: inputs,
@@ -33,7 +33,7 @@
                                 if(response['responseText']=='TRUE'){
                                       $.bootstrapGrowl('<?php echo $this->lang->line('tax_types').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
                                        $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#add_brand").trigger('reset');
+                                       $("#add_tax_type").trigger('reset');
                                        posnic_tax_types_lists();
                                     }else  if(response['responseText']=='ALREADY'){
                                            $.bootstrapGrowl($('#tax_types').val()+' <?php echo $this->lang->line('tax_types').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
@@ -77,7 +77,7 @@
 function posnic_add_new(){
     <?php if($this->session->userdata['tax_types_per']['add']==1){ ?>
       $("#user_list").hide();
-      $('#add_brand_form').show('slow');
+      $('#add_tax_type_form').show('slow');
       $('#delete').attr("disabled", "disabled");
       $('#posnic_add_tax_types').attr("disabled", "disabled");
       $('#active').attr("disabled", "disabled");
@@ -89,7 +89,7 @@ function posnic_add_new(){
 }
 function posnic_tax_types_lists(){
       $('#edit_brand_form').hide('hide');
-      $('#add_brand_form').hide('hide');      
+      $('#add_tax_type_form').hide('hide');      
       $("#user_list").show('slow');
       $('#delete').removeAttr("disabled");
       $('#active').removeAttr("disabled");
@@ -151,8 +151,8 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_brand_form" class="container clearfix main_section">
-     <?php   $form =array('id'=>'add_brand',
+<section id="add_tax_type_form" class="container clearfix main_section">
+     <?php   $form =array('id'=>'add_tax_type',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
        echo form_open_multipart('tax_types/add_pos_tax_types_details/',$form);?>
@@ -191,7 +191,7 @@ function reload_update_user(){
                     <div class="row">
                                 <div class="col-lg-4"></div>
                                   <div class="col col-lg-4 text-center"><br><br>
-                                      <button id="add_new_brand"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
+                                      <button id="add_new_tax_type"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
                                       <a href="javascript:clear_add_tax_types()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
                                   </div>
                               </div>
