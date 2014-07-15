@@ -624,6 +624,14 @@
     function change_orm_to_case_update(){
         $('#parsley_reg #hidden_no_unit').show();
     }
+    function pricing_formula(){
+        if($('#add_item #taxes').val()!=""){
+            $('#formula-model').modal('show');
+            $('#formula_tax').val($('#add_item #search_taxes').select2('data').value);
+        }else{
+            $.bootstrapGrowl(' <?php echo $this->lang->line('please_select').' '.$this->lang->line('tax');?>', { type: "warning" });                   
+        }
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
@@ -755,6 +763,86 @@
         </div>
     <?php echo form_close();?>
 </section>
+<div class="modal fade" id="formula-model">
+    
+    <div class="modal-dialog" style="width: 70% !important">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="cost" class="req"><?php echo $this->lang->line('cost_price') ?></label>                                                                                                       
+                            <?php $formula_cost=array('name'=>'formula_cost',
+                                'class'=>'required form-control number',
+                                'id'=>'formula_cost',
+                                'onKeyPress'=>"return numbersonly(event)");
+                            echo form_input($formula_cost)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="cost" class="req"><?php echo $this->lang->line('discount') ?> % 1</label>                                                                                                       
+                            <?php $formula_discount1=array('name'=>'formula_discount1',
+                                'class'=>'form-control number',
+                                'id'=>'formula_discount1',
+                                'onKeyPress'=>"return numbersonly(event)");
+                            echo form_input($formula_discount1)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="formula_discount2" ><?php echo $this->lang->line('discount') ?>% 2</label>                                                                                                       
+                            <?php $formula_discount2=array('name'=>'formula_discount2',
+                                'class'=>' form-control number',
+                                'id'=>'formula_discount2',
+                                'onKeyPress'=>"return numbersonly(event)");
+                            echo form_input($formula_discount2)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="formula_tax" class="req"><?php echo $this->lang->line('tax') ?></label>                                                                                                       
+                            <?php $formula_tax=array('name'=>'formula_tax',
+                                'class'=>'required form-control number',
+                                'id'=>'formula_tax',
+                                'onKeyPress'=>"return numbersonly(event)");
+                            echo form_input($formula_tax)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="cost" class="req"><?php echo $this->lang->line('discount_after_tax') ?></label>                                                                                                       
+                            <?php $discount_after_tax=array('name'=>'discount_after_tax',
+                                'class'=>'required form-control number',
+                                'id'=>'discount_after_tax',
+                                'onKeyPress'=>"return numbersonly(event)");
+                            echo form_input($discount_after_tax)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="cost" class="req"><?php echo $this->lang->line('selling_price') ?></label>                                                                                                       
+                            <?php $formula_cost=array('name'=>'formula_cost',
+                                'class'=>'required form-control number',
+                                'id'=>'formula_cost',
+                                'disabled'=>'disabled',
+                                'onKeyPress'=>"return numbersonly(event)");
+                            echo form_input($formula_cost)?> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <section id="import_message_section" class="container clearfix main_section">
      <?php   $form =array('id'=>'import_message',
                           'runat'=>'server',
@@ -1668,7 +1756,7 @@ function items_decomposition(){
                                         </div> 
                                        <div class="col col-lg-4" >
                                                     <div class="form_sep">
-                                                         <label for="taxes_area" class="req"><?php echo $this->lang->line('taxes_area') ?></label>                                                                                                       
+                                                         <label for="taxes_area" ><?php echo $this->lang->line('taxes_area') ?></label>                                                                                                       
                                                            <?php $taxes_area=array('name'=>'search_taxes_area',
                                                                                     'class'=>'form-control',
                                                                                     'id'=>'search_taxes_area',
@@ -1694,7 +1782,7 @@ function items_decomposition(){
                                   
                               </div>
                               <div class="row" style="margin-left:10px;margin-right: 10px">
-                                  <div class="col col-lg-4" >
+                                  <div class="col col-lg-3" >
                                            
                                                     <div class="form_sep">
                                                          <label for="cost" class="req"><?php echo $this->lang->line('cost') ?></label>                                                                                                       
@@ -1706,7 +1794,7 @@ function items_decomposition(){
                                                            echo form_input($cost)?> 
                                                     </div>
                                         </div>                              
-                                       <div class="col col-lg-4" >
+                                       <div class="col col-lg-3" >
                                           
                                                     <div class="form_sep">
                                                          <label for="mrp" class="req"><?php echo $this->lang->line('mrp') ?></label>                                                                                                       
@@ -1719,7 +1807,7 @@ function items_decomposition(){
                                                     </div>
                                                   
                                         </div>                              
-                                       <div class="col col-lg-4" >
+                                       <div class="col col-lg-3" >
                                           
                                                     <div class="form_sep">
                                                          <label for="selling_price" class="req"><?php echo $this->lang->line('selling_price') ?></label>                                                                                                       
@@ -1729,6 +1817,15 @@ function items_decomposition(){
                                                                                     'onKeyPress'=>"new_price(event);return numbersonly(event)",
                                                                                     'value'=>set_value('selling_price'));
                                                            echo form_input($selling_price)?> 
+                                                    </div>
+                                                   
+                                        </div>  
+                                       <div class="col col-lg-3" >
+                                          
+                                                    <div class="form_sep">
+                                                         <label for="selling_price" class="req"><?php echo $this->lang->line('pricing_formula') ?></label>                                                                                                       
+                                                         <a href="javascript:pricing_formula()" class="btn btn-default"><?php echo $this->lang->line('click')
+                                                                 ?></a>
                                                     </div>
                                                    
                                         </div>  
