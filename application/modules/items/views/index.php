@@ -476,6 +476,45 @@
             }
         });
         
+     
+        
+        $('#formula_tax').select2({
+            formatResult: format_tax,
+            formatSelection: format_tax,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/items/get_taxes',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
+                        results.push({
+                            id: item.guid,
+                            text: item.name,
+                            value: item.value
+                        });
+                    });
+                    return {
+                        results: results
+                    };
+                }
+            }
+        });
+        
         
         $('#add_item #search_supplier').change(function() {
             var guid = $('#add_item #search_supplier').select2('data').id;
@@ -657,8 +696,9 @@
         var net_cost=parseFloat(cost)-(parseFloat(cost)*parseFloat(formula_discount1)/100);
         net_cost=parseFloat(net_cost)-(parseFloat(net_cost)*parseFloat(formula_discount2)/100);
         
+        net_cost=parseFloat(net_cost)-(parseFloat(net_cost)*parseFloat(discount_after_tax)/100);
         if(tax_inclusive==0){
-            net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(discount_after_tax)/100);
+          
             var tax=parseFloat($('#add_item #search_taxes').select2('data').value);
             net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(tax)/100);
         }
@@ -853,7 +893,6 @@
                             <?php $formula_tax=array('name'=>'formula_tax',
                                 'class'=>'required form-control number',
                                 'id'=>'formula_tax',
-                                'disabled'=>'disabled',
                                 'onKeyPress'=>"return numbersonly(event)");
                             echo form_input($formula_tax)?> 
                         </div>
