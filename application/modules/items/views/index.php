@@ -632,6 +632,47 @@
             $.bootstrapGrowl(' <?php echo $this->lang->line('please_select').' '.$this->lang->line('tax');?>', { type: "warning" });                   
         }
     }
+    function formula_selling_price(){
+        var cost=parseFloat($('#formula_cost').val());
+        var formula_discount1=parseFloat($('#formula_discount1').val());
+        var formula_discount2=parseFloat($('#formula_discount2').val());
+        var discount_after_tax=parseFloat($('#discount_after_tax').val());
+        var formula_profit=parseFloat($('#formula_profit').val());
+        if (isNaN(cost)) {
+            cost=0;
+        }
+        if (isNaN(formula_discount1)) {
+            cost=0;
+        }
+        if (isNaN(formula_discount2)) {
+            formula_discount2=0;
+        }
+        if (isNaN(discount_after_tax)) {
+            discount_after_tax=0;
+        }
+        if (isNaN(formula_profit)) {
+            formula_profit=0;
+        }
+        var tax_inclusive=$('#add_item #tax_Inclusive :selected').val();
+        var net_cost=parseFloat(cost)-(parseFloat(cost)*parseFloat(formula_discount1)/100);
+        net_cost=parseFloat(net_cost)-(parseFloat(net_cost)*parseFloat(formula_discount2)/100);
+        
+        if(tax_inclusive==0){
+            net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(discount_after_tax)/100);
+            var tax=parseFloat($('#add_item #search_taxes').select2('data').value);
+            net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(tax)/100);
+        }
+        var net_price=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(formula_profit)/100);
+        if (isNaN(net_price)) {
+            net_price=0;
+        }
+         if (isNaN(net_cost)) {
+            net_cost=0;
+        }
+        $('#formula_net_cost').val(net_cost) ;
+        $('#formula_selling_price').val(net_price) ;
+       
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
@@ -779,6 +820,7 @@
                             <?php $formula_cost=array('name'=>'formula_cost',
                                 'class'=>'required form-control number',
                                 'id'=>'formula_cost',
+                                'onKeyUp'=>'formula_selling_price()',
                                 'onKeyPress'=>"return numbersonly(event)");
                             echo form_input($formula_cost)?> 
                         </div>
@@ -789,6 +831,7 @@
                             <?php $formula_discount1=array('name'=>'formula_discount1',
                                 'class'=>'form-control number',
                                 'id'=>'formula_discount1',
+                                 'onKeyUp'=>'formula_selling_price()',
                                 'onKeyPress'=>"return numbersonly(event)");
                             echo form_input($formula_discount1)?> 
                         </div>
@@ -799,6 +842,7 @@
                             <?php $formula_discount2=array('name'=>'formula_discount2',
                                 'class'=>' form-control number',
                                 'id'=>'formula_discount2',
+                                 'onKeyUp'=>'formula_selling_price()',
                                 'onKeyPress'=>"return numbersonly(event)");
                             echo form_input($formula_discount2)?> 
                         </div>
@@ -820,19 +864,42 @@
                             <?php $discount_after_tax=array('name'=>'discount_after_tax',
                                 'class'=>'required form-control number',
                                 'id'=>'discount_after_tax',
+                                 'onKeyUp'=>'formula_selling_price()',
                                 'onKeyPress'=>"return numbersonly(event)");
                             echo form_input($discount_after_tax)?> 
                         </div>
                     </div>
                     <div class="col col-lg-2">
                         <div class="form_sep">
-                            <label for="cost" class="req"><?php echo $this->lang->line('selling_price') ?></label>                                                                                                       
-                            <?php $formula_cost=array('name'=>'formula_cost',
+                            <label for="formula_profit" class="req"><?php echo $this->lang->line('profit_margin') ?></label>                                                                                                       
+                            <?php $formula_profit=array('name'=>'formula_profit',
                                 'class'=>'required form-control number',
-                                'id'=>'formula_cost',
+                                'id'=>'formula_profit',
+                                 'onKeyUp'=>'formula_selling_price()',
+                                'onKeyPress'=>"return numbersonly(event)");
+                            echo form_input($formula_profit)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="net_cost" class="req"><?php echo $this->lang->line('net_cost') ?></label>                                                                                                       
+                            <?php $formula_net_cost=array('name'=>'formula_net_cost',
+                                'class'=>'required form-control number',
+                                'id'=>'formula_net_cost',
                                 'disabled'=>'disabled',
                                 'onKeyPress'=>"return numbersonly(event)");
-                            echo form_input($formula_cost)?> 
+                            echo form_input($formula_net_cost)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="formula_selling_price" class="req"><?php echo $this->lang->line('selling_price') ?></label>                                                                                                       
+                            <?php $formula_selling_price=array('name'=>'formula_selling_price',
+                                'class'=>'required form-control number',
+                                'id'=>'formula_selling_price',
+                                'disabled'=>'disabled',
+                                'onKeyPress'=>"return numbersonly(event)");
+                            echo form_input($formula_selling_price)?> 
                         </div>
                     </div>
                 </div>
