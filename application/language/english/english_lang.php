@@ -801,5 +801,7 @@ $lang['credit_days']='Credit Days';
     $lang['click']='Click';
     $lang['cost_price']='Cost Price';
     $lang['discount_after_tax']='Discount After Tax';
+    $lang['profit_margin']='Profit Margin';
+    $lang['net_cost']='Net Cost';
    
 ?>
