@@ -805,5 +805,6 @@ $lang['credit_days']='Credit Days';
     $lang['net_cost']='Net Cost';
     $lang['tax_1_Inclusive']='Tax 1 Inclusive';
     $lang['tax_2_Inclusive']='Tax 2 Inclusive';
+    $lang['please_enter_cost_and_profit']='Please Enter Cost And Profit';
    
 ?>
