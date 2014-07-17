@@ -106,7 +106,7 @@ class Core_model extends CI_Model{
                 $this->db->join('suppliers', 'items.supplier_id=suppliers.guid','left');
                 $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
                 $this->db->join('taxes_area', 'items.tax_area_id=taxes_area.guid','left');
-                $this->db->join('taxes', 'items.tax_id=taxes.guid','left');
+                $this->db->join('taxes', 'items.tax_id=taxes.guid OR items.tax2=taxes.guid','left');
                 $this->db->join('tax_types', 'taxes.type=tax_types.guid','left');
                 
                 $query=$this->db->get();
