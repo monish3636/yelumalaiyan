@@ -666,13 +666,17 @@
         }
        
         var net_cost=cost;
-        if($('#add_item #tax_Inclusive :selected').val()==0){
-            net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(formula_tax1)/100);
+        if(formula_tax1!=0 && formula_tax1!=""){
+            if($('#add_item #tax_Inclusive :selected').val()==0){
+                net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(formula_tax1)/100);
+            }
         }
-        if($('#add_item #tax_2_Inclusive :selected').val()==0){
-            net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(formula_tax2)/100);
+        if(formula_tax2!=0 && formula_tax2!=""){
+            if($('#add_item #tax_2_Inclusive :selected').val()==0){
+                net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(formula_tax2)/100);
+            }
         }
-        var net_cost=parseFloat(cost)-(parseFloat(cost)*parseFloat(formula_discount1)/100);
+        net_cost=parseFloat(net_cost)-(parseFloat(net_cost)*parseFloat(formula_discount1)/100);
         net_cost=parseFloat(net_cost)-(parseFloat(net_cost)*parseFloat(formula_discount2)/100);
         
         
