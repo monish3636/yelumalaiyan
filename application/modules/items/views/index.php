@@ -644,11 +644,15 @@
         }
     }
     function update_pricing_formula(){
-        if($('#add_item #taxes').val()!=""){
+        if($('#parsley_reg #taxes').val()!=""){
             $('#parsley_reg #formula-model').modal('show');
             $('#parsley_reg #formula_tax1').val($('#parsley_reg #search_taxes').select2('data').value);
             $('#parsley_reg #formula_tax2').val($('#parsley_reg #search_taxes2').select2('data').value);
-            update_selling_price();
+            if($('#parsley_reg #formula_profit').val()!=""){
+                $('#parsley_reg #formula_cost').val( $('#parsley_reg #cost').val());
+                $('#parsley_reg #formula_selling_price').val($('#parsley_reg #selling_price').val());
+            }
+            //update_selling_price();
         }else{
             $.bootstrapGrowl(' <?php echo $this->lang->line('please_select').' '.$this->lang->line('tax');?>', { type: "warning" });                   
         }
@@ -2221,7 +2225,7 @@ function items_decomposition(){
                                         <?php $formula_cost=array('name'=>'formula_cost',
                                             'class'=>'required form-control number',
                                             'id'=>'formula_cost',
-                                            'onKeyUp'=>'new_selling_price()',
+                                            'onKeyUp'=>'update_selling_price()',
                                             'onKeyPress'=>"return numbersonly(event)");
                                         echo form_input($formula_cost)?> 
                                     </div>
@@ -2252,7 +2256,7 @@ function items_decomposition(){
                                         <?php $formula_discount1=array('name'=>'formula_discount1',
                                             'class'=>'form-control number',
                                             'id'=>'formula_discount1',
-                                             'onKeyUp'=>'new_selling_price()',
+                                             'onKeyUp'=>'update_selling_price()',
                                             'onKeyPress'=>"return numbersonly(event)");
                                         echo form_input($formula_discount1)?> 
                                     </div>
@@ -2263,7 +2267,7 @@ function items_decomposition(){
                                         <?php $formula_discount2=array('name'=>'formula_discount2',
                                             'class'=>' form-control number',
                                             'id'=>'formula_discount2',
-                                             'onKeyUp'=>'new_selling_price()',
+                                             'onKeyUp'=>'update_selling_price()',
                                             'onKeyPress'=>"return numbersonly(event)");
                                         echo form_input($formula_discount2)?> 
                                     </div>
@@ -2275,7 +2279,7 @@ function items_decomposition(){
                                         <?php $formula_profit=array('name'=>'formula_profit',
                                             'class'=>'required form-control number',
                                             'id'=>'formula_profit',
-                                             'onKeyUp'=>'new_selling_price()',
+                                             'onKeyUp'=>'update_selling_price()',
                                             'onKeyPress'=>"return numbersonly(event)");
                                         echo form_input($formula_profit)?> 
                                     </div>
