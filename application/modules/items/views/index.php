@@ -698,9 +698,13 @@
        
     }
     function save_formula(){
-        $('#add_item #cost').val($('#formula_cost').val());
-        $('#add_item #selling_price').val($('#formula_selling_price').val());
-        $('#add_item #formula-model').modal('hide');
+        if($('#add_item #formula_profit').val()!="" && $('#add_item #formula_cost').val()!=""){
+            $('#add_item #cost').val($('#formula_cost').val());
+            $('#add_item #selling_price').val($('#formula_selling_price').val());
+            $('#add_item #formula-model').modal('hide');
+        }else{
+            $.bootstrapGrowl(' <?php echo $this->lang->line('please_enter_cost_and_profit').' '.$this->lang->line('tax');?>', { type: "warning" });                   
+        }
     }
 </script>
 <nav id="top_navigation">
