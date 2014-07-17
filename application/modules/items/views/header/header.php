@@ -1,5 +1,6 @@
 
 <script type="text/javascript" charset="utf-8">
+    var point=3;
           $(document).ready( function () {
            
                     $('#add_item_form').hide();
