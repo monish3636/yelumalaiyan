@@ -220,7 +220,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_user_form" class="container clearfix main_section">
+<section id="add_user_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'posnic_user_2',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -576,7 +576,7 @@ function reload_update_user(){
         </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_user_form" class="container clearfix main_section">
+<section id="edit_user_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
