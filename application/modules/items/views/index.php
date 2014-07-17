@@ -393,16 +393,19 @@
         });
         
         
-         $('#add_item #search_taxes_area').change(function() {
-                var guid = $('#add_item #search_taxes_area').select2('data').id;
-                $('#add_item #taxes_area').val(guid);
+         $('#add_item #search_taxes2').change(function() {
+                var guid = $('#add_item #search_taxes2').select2('data').id;
+                $('#add_item #taxes2').val(guid);
           });
-        $('#add_item #search_taxes_area').select2({
-            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes_area') ?>",
+        $('#add_item #search_taxes2').select2({
+            formatResult: format_tax,
+            formatSelection: format_tax,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes') ?>",
             ajax: {
-                url: '<?php echo base_url() ?>index.php/items/get_taxes_area',
+                url: '<?php echo base_url() ?>index.php/items/get_taxes',
                 data: function(term, page) {
-                        return {types: ["exercise"],
+                    return {types: ["exercise"],
                         limit: -1,
                         term: term
                     };
@@ -420,7 +423,8 @@
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
-                            text: item.name
+                            text: item.name,
+                            value: item.value
                         });
                     });
                     return {
@@ -429,7 +433,6 @@
                 }
             }
         });
-        
         
         $('#add_item #search_taxes').change(function() {
             var guid = $('#add_item #search_taxes').select2('data').id;
@@ -477,44 +480,7 @@
         });
         
      
-        
-        $('#formula_tax').select2({
-            formatResult: format_tax,
-            formatSelection: format_tax,
-            escapeMarkup: function(m) { return m; },
-            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('taxes') ?>",
-            ajax: {
-                url: '<?php echo base_url() ?>index.php/items/get_taxes',
-                data: function(term, page) {
-                    return {types: ["exercise"],
-                        limit: -1,
-                        term: term
-                    };
-                },
-                type:'POST',
-                dataType: 'json',
-                quietMillis: 100,
-                data: function (term) {
-                    return {
-                        term: term
-                    };
-                },
-                results: function (data) {
-                    var results = [];
-                    $.each(data, function(index, item){
-                        results.push({
-                            id: item.guid,
-                            text: item.name,
-                            value: item.value
-                        });
-                    });
-                    return {
-                        results: results
-                    };
-                }
-            }
-        });
-        
+      
         
         $('#add_item #search_supplier').change(function() {
             var guid = $('#add_item #search_supplier').select2('data').id;
@@ -666,7 +632,8 @@
     function pricing_formula(){
         if($('#add_item #taxes').val()!=""){
             $('#formula-model').modal('show');
-            $('#formula_tax').val($('#add_item #search_taxes').select2('data').value);
+            $('#formula_tax1').val($('#add_item #search_taxes').select2('data').value);
+            $('#formula_tax2').val($('#add_item #search_taxes2').select2('data').value);
         }else{
             $.bootstrapGrowl(' <?php echo $this->lang->line('please_select').' '.$this->lang->line('tax');?>', { type: "warning" });                   
         }
@@ -675,7 +642,9 @@
         var cost=parseFloat($('#formula_cost').val());
         var formula_discount1=parseFloat($('#formula_discount1').val());
         var formula_discount2=parseFloat($('#formula_discount2').val());
-        var discount_after_tax=parseFloat($('#discount_after_tax').val());
+        var formula_tax1=parseFloat($('#formula_tax1').val());
+        var formula_tax2=parseFloat($('#formula_tax2').val());
+        
         var formula_profit=parseFloat($('#formula_profit').val());
         if (isNaN(cost)) {
             cost=0;
@@ -686,22 +655,27 @@
         if (isNaN(formula_discount2)) {
             formula_discount2=0;
         }
-        if (isNaN(discount_after_tax)) {
-            discount_after_tax=0;
+        if (isNaN(formula_tax1)) {
+            formula_tax1=0;
+        }
+        if (isNaN(formula_tax2)) {
+            formula_tax2=0;
         }
         if (isNaN(formula_profit)) {
             formula_profit=0;
         }
-        var tax_inclusive=$('#add_item #tax_Inclusive :selected').val();
+       
+        var net_cost=cost;
+        if($('#add_item #tax_Inclusive :selected').val()==0){
+            net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(formula_tax1)/100);
+        }
+        if($('#add_item #tax_2_Inclusive :selected').val()==0){
+            net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(formula_tax2)/100);
+        }
         var net_cost=parseFloat(cost)-(parseFloat(cost)*parseFloat(formula_discount1)/100);
         net_cost=parseFloat(net_cost)-(parseFloat(net_cost)*parseFloat(formula_discount2)/100);
         
-        net_cost=parseFloat(net_cost)-(parseFloat(net_cost)*parseFloat(discount_after_tax)/100);
-        if(tax_inclusive==0){
-          
-            var tax=parseFloat($('#add_item #search_taxes').select2('data').value);
-            net_cost=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(tax)/100);
-        }
+        
         var net_price=parseFloat(net_cost)+(parseFloat(net_cost)*parseFloat(formula_profit)/100);
         if (isNaN(net_price)) {
             net_price=0;
@@ -867,6 +841,26 @@
                     </div>
                     <div class="col col-lg-2">
                         <div class="form_sep">
+                            <label for="formula_tax1" class="req"><?php echo $this->lang->line('tax') ?> 1</label>                                                                                                       
+                            <?php $formula_tax1=array('name'=>'formula_tax1',
+                                'class'=>'required form-control number',
+                                'id'=>'formula_tax1',
+                                'disabled'=>'disabled',);
+                            echo form_input($formula_tax1)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
+                            <label for="formula_tax2" ><?php echo $this->lang->line('tax') ?> 2</label>                                                                                                       
+                            <?php $formula_tax2=array('name'=>'formula_tax2',
+                                'class'=>'required form-control number',
+                                'id'=>'formula_tax2',
+                                'disabled'=>'disabled');
+                            echo form_input($formula_tax2)?> 
+                        </div>
+                    </div>
+                    <div class="col col-lg-2">
+                        <div class="form_sep">
                             <label for="cost" class="req"><?php echo $this->lang->line('discount') ?> % 1</label>                                                                                                       
                             <?php $formula_discount1=array('name'=>'formula_discount1',
                                 'class'=>'form-control number',
@@ -887,27 +881,7 @@
                             echo form_input($formula_discount2)?> 
                         </div>
                     </div>
-                    <div class="col col-lg-2">
-                        <div class="form_sep">
-                            <label for="formula_tax" ><?php echo $this->lang->line('tax') ?></label>                                                                                                       
-                            <?php $formula_tax=array('name'=>'formula_tax',
-                                'class'=>'required form-control number',
-                                'id'=>'formula_tax',
-                                'onKeyPress'=>"return numbersonly(event)");
-                            echo form_input($formula_tax)?> 
-                        </div>
-                    </div>
-                    <div class="col col-lg-2">
-                        <div class="form_sep">
-                            <label for="cost" class="req"><?php echo $this->lang->line('discount_after_tax') ?></label>                                                                                                       
-                            <?php $discount_after_tax=array('name'=>'discount_after_tax',
-                                'class'=>'required form-control number',
-                                'id'=>'discount_after_tax',
-                                 'onKeyUp'=>'formula_selling_price()',
-                                'onKeyPress'=>"return numbersonly(event)");
-                            echo form_input($discount_after_tax)?> 
-                        </div>
-                    </div>
+                    
                     <div class="col col-lg-2">
                         <div class="form_sep">
                             <label for="formula_profit" class="req"><?php echo $this->lang->line('profit_margin') ?></label>                                                                                                       
@@ -1618,8 +1592,8 @@ function new_tax(e){
          if (unicode!=27){
         }
        else{
-            $('#add_item #search_taxes_area').focus();
-            $('#add_item #search_taxes_area').select2('open');
+            $('#add_item #search_taxes2').focus();
+            $('#add_item #search_taxes2').select2('open');
         }   
     }
 function new_cost(e){    
@@ -1851,9 +1825,9 @@ function items_decomposition(){
                               </div>
                              
                               <div class="row" style="margin-left:10px;margin-right: 10px">
-                                   <div class="col col-lg-4" >
+                                   <div class="col col-lg-3" >
                                                     <div class="form_sep">
-                                                         <label for="tax_Inclusive" class="req"><?php echo $this->lang->line('tax_Inclusive') ?></label>                                                                                                       
+                                                         <label for="tax_Inclusive" class="req"><?php echo $this->lang->line('tax_1_Inclusive') ?></label>                                                                                                       
                                                          <select name="tax_Inclusive" id="tax_Inclusive" class="form-control">
                                                              <option value="1"><?php echo $this->lang->line('yes') ?></option>
                                                              <option value="0"><?php echo $this->lang->line('no') ?></option>
@@ -1861,21 +1835,10 @@ function items_decomposition(){
                                                     </div>
                                                    
                                         </div> 
-                                       <div class="col col-lg-4" >
+                                                                   
+                                       <div class="col col-lg-3" >
                                                     <div class="form_sep">
-                                                         <label for="taxes_area" ><?php echo $this->lang->line('taxes_area') ?></label>                                                                                                       
-                                                           <?php $taxes_area=array('name'=>'search_taxes_area',
-                                                                                    'class'=>'form-control',
-                                                                                    'id'=>'search_taxes_area',
-                                                                                    'value'=>set_value('taxes_area'));
-                                                           echo form_input($taxes_area)?> 
-                                                         <input type="hidden" name='taxes_area' id='taxes_area'>
-                                                    </div>
-                                                   
-                                        </div>                              
-                                       <div class="col col-lg-4" >
-                                                    <div class="form_sep">
-                                                         <label for="taxes" class="req"><?php echo $this->lang->line('taxes') ?></label>                                                                                                       
+                                                         <label for="taxes" class="req"><?php echo $this->lang->line('taxes') ?> 1</label>                                                                                                       
                                                            <?php $taxes=array('name'=>'search_taxes',
                                                                                     'class'=>'required form-control',
                                                                                     'id'=>'search_taxes',
@@ -1885,6 +1848,28 @@ function items_decomposition(){
                                                     </div>
                                                   
                                         </div>
+                                   <div class="col col-lg-3" >
+                                                    <div class="form_sep">
+                                                         <label for="tax_2_Inclusive" class="req"><?php echo $this->lang->line('tax_2_Inclusive') ?></label>                                                                                                       
+                                                         <select name="tax_2_Inclusive" id="tax_2_Inclusive" class="form-control">
+                                                             <option value="1"><?php echo $this->lang->line('yes') ?></option>
+                                                             <option value="0"><?php echo $this->lang->line('no') ?></option>
+                                                         </select>
+                                                    </div>
+                                                   
+                                        </div> 
+                                        <div class="col col-lg-3" >
+                                                    <div class="form_sep">
+                                                         <label for="taxes_area" ><?php echo $this->lang->line('taxes') ?> 2</label>                                                                                                       
+                                                           <?php $search_taxes2=array('name'=>'search_taxes2',
+                                                                                    'class'=>'form-control',
+                                                                                    'id'=>'search_taxes2',
+                                                                                    'value'=>set_value('search_taxes2'));
+                                                           echo form_input($search_taxes2)?> 
+                                                         <input type="hidden" name='taxes2' id='taxes2'>
+                                                    </div>
+                                                   
+                                        </div>  
                                        
                                   
                               </div>
