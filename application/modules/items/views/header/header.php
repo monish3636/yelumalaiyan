@@ -205,10 +205,11 @@
                                 
                                 $("#parsley_reg #search_supplier").select2('data', {id:data[0]['supplier_id'],text: data[0]['company_name'],first: data[0]['s_first_name'],phone: data[0]['s_phone'],email: data[0]['s_email']});
                                 $('#parsley_reg #supplier').val(data[0]['s_guid']);
-                                
-                                $("#parsley_reg #search_taxes2").select2('data', {id:data[1]['tax_id'],text: data[1]['type'],value:data[1]['value']});
-                                $('#parsley_reg #taxes2').val(data[1]['tax_area_id']);
-                                
+                                if(data[1]){
+                                    $("#parsley_reg #search_taxes2").select2('data', {id:data[1]['tax_id'],text: data[1]['type'],value:data[1]['value']});
+                                    $('#parsley_reg #taxes2').val(data[1]['tax_area_id']);
+                                }
+                          
                                 $("#parsley_reg #search_taxes").select2('data', {id:data[0]['tax_id'],text: data[0]['type'],value:data[0]['value']});
                                 $('#parsley_reg #taxes').val(data[0]['tax_id']);
                                

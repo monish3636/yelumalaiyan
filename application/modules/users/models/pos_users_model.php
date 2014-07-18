@@ -99,7 +99,7 @@ class Pos_users_model extends CI_Model{
     }    
     }
    }
-   function update_pos_users($blood,$file_name,$age,$sex,$id,$first_name,$last_name,$user_id,$address,$city,$state,$zip,$country,$email,$phone,$dob,$password){
+   function update_pos_users($blood,$file_name,$age,$sex,$id,$first_name,$last_name,$user_id,$address,$city,$state,$zip,$country,$email,$phone,$dob,$password,$image){
        
        if($password!=""){
            $data=array(
@@ -141,7 +141,9 @@ class Pos_users_model extends CI_Model{
           
        );
        }
-
+        if($image!=""){
+            $data=  array_merge($data,array('image'=>$image));
+        }
        $this->db->where('guid',$id);
        $this->db->update('users',$data);
    }
