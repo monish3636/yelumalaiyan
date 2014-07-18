@@ -109,6 +109,7 @@ class Core_model extends CI_Model{
                 $this->db->join('taxes', 'items.tax_id=taxes.guid OR items.tax2=taxes.guid','left');
                 $this->db->join('tax_types', 'taxes.type=tax_types.guid','left');
                 
+                
                 $query=$this->db->get();
                 $data=array();
                 foreach ($query->result_array() as $row){

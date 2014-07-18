@@ -226,16 +226,16 @@ class Items extends MX_Controller{
                             $this->form_validation->set_rules('item_department', $this->lang->line('item_department'),'required'); 
                             $this->form_validation->set_rules('userfile', 'userfile', 'callback_add_items_image');
                             if ( $this->form_validation->run() !== false ) {
+                                $this->add_items_image();
+                                
                                     $data=array('code'=>$this->input->post('sku'),
                                     'barcode'=>$this->input->post('barcode'),
                                     'name'=>$this->input->post('name'),
                                     'description'=>$this->input->post('description'),
                                     'cost_price'=>$this->input->post('cost'),
                                     'selling_price'=>$this->input->post('selling_price'),                                   
-                                    'profit_margin'=>$this->input->post('formula_profit'),                                   
                                     'mrp'=>$this->input->post('mrp'),
-                                    'discount1'=>$this->input->post('formula_discount1'),
-                                    'discount2'=>$this->input->post('formula_discount2'),
+                                  
                                     'discount'=>$this->input->post('discount_per'),
                                     'start_date'=>  strtotime($this->input->post('starting_date')),
                                     'end_date'=>strtotime($this->input->post('ending_date')),
@@ -312,11 +312,8 @@ class Items extends MX_Controller{
                                     'name'=>$this->input->post('name'),
                                     'description'=>$this->input->post('description'),
                                     'cost_price'=>$this->input->post('cost'),
-                                    'selling_price'=>$this->input->post('selling_price'),                                   
-                                    'profit_margin'=>$this->input->post('formula_profit'),                                   
+                                    'selling_price'=>$this->input->post('selling_price'),                                    
                                     'mrp'=>$this->input->post('mrp'),
-                                    'discount1'=>$this->input->post('formula_discount1'),
-                                    'discount2'=>$this->input->post('formula_discount2'),
                                     'discount'=>$this->input->post('discount_per'),
                                     'start_date'=>$this->input->post('starting_date'),
                                     'end_date'=>$this->input->post('ending_date'),
@@ -341,10 +338,7 @@ class Items extends MX_Controller{
                                     'description'=>$this->input->post('description'),
                                     'cost_price'=>$this->input->post('cost'),
                                     'selling_price'=>$this->input->post('selling_price'),                                   
-                                    'profit_margin'=>$this->input->post('formula_profit'),                                   
                                     'mrp'=>$this->input->post('mrp'),
-                                    'discount1'=>$this->input->post('formula_discount1'),
-                                    'discount2'=>$this->input->post('formula_discount2'),
                                     'discount'=>$this->input->post('discount_per'),
                                     'start_date'=>$this->input->post('starting_date'),
                                     'end_date'=>$this->input->post('ending_date'),

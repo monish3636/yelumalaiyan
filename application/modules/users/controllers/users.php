@@ -150,8 +150,10 @@ class Users extends MX_Controller{
                 $this->form_validation->set_rules('pos_users_id','pos_users_id',"required");
                 $this->form_validation->set_rules('guid','guid',"required");
                 $this->form_validation->set_rules('country','country',"required");
+                $this->form_validation->set_rules('userfile', 'userfile', 'callback_add_user_image');
                $id=  $this->input->post('guid');	  
 	    if ( $this->form_validation->run() !== false ) {
+                $this->add_user_image();
 			  $this->load->model('pos_users_model');
                           $first_name=$this->input->post('first_name');
                           $last_name=  $this->input->post('last_name');
@@ -165,7 +167,7 @@ class Users extends MX_Controller{
                           $zip=$this->input->post('zip');
                           $country=$this->input->post('country');                        
                           $yourdatetime =$this->input->post('dob');
-                          $image_name=$this->input->post('image_name');
+                        echo   $image_name=$this->user_image;
                           $age=  $this->input->post('age');
                           $sex= $this->input->post('sex');                          
                           $blood= $this->input->post('blood');                          
@@ -174,7 +176,7 @@ class Users extends MX_Controller{
                              if($this->pos_users_model->user_update_checking($email,$phone,$id)==FALSE){
                            
                                            $file_name='';
-                            $this->pos_users_model->update_pos_users($blood,$file_name,$age,$sex,$id,$first_name,$last_name,$username,$address,$city,$state,$zip,$country,$email,$phone,$dob,$password);
+                            $this->pos_users_model->update_pos_users($blood,$file_name,$age,$sex,$id,$first_name,$last_name,$username,$address,$city,$state,$zip,$country,$email,$phone,$dob,$password,$image_name);
                             $deleted_group=$this->input->post('deleted_groups') ;
                             if($this->input->post('deleted_groups')){
                             $deleted_groups=array_unique($deleted_group);
