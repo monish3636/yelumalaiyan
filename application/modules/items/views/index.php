@@ -633,7 +633,164 @@
     function change_orm_to_case_update(){
         $('#parsley_reg #hidden_no_unit').show();
     }
-  
+    function pricing_formula(){
+        if($('#add_item #taxes').val()!=""){
+            $('#add_item #formula-model').modal('show');
+            $('#add_item #formula_tax1').val($('#add_item #search_taxes').select2('data').value);
+            $('#add_item #formula_tax2').val($('#add_item #search_taxes2').select2('data').value);
+            new_selling_price();
+        }else{
+            $.bootstrapGrowl(' <?php echo $this->lang->line('please_select').' '.$this->lang->line('tax');?>', { type: "warning" });                   
+        }
+    }
+    function update_pricing_formula(){
+        if($('#parsley_reg #taxes').val()!=""){
+            $('#parsley_reg #formula-model').modal('show');
+            $('#parsley_reg #formula_tax1').val($('#parsley_reg #search_taxes').select2('data').value);
+            $('#parsley_reg #formula_tax2').val($('#parsley_reg #search_taxes2').select2('data').value);
+            if($('#parsley_reg #formula_profit').val()!=""){
+                $('#parsley_reg #formula_cost').val( $('#parsley_reg #cost').val());
+                $('#parsley_reg #formula_selling_price').val($('#parsley_reg #selling_price').val());
+            }
+            //update_selling_price();
+        }else{
+            $.bootstrapGrowl(' <?php echo $this->lang->line('please_select').' '.$this->lang->line('tax');?>', { type: "warning" });                   
+        }
+    }
+    function new_selling_price(){
+        var cost=parseFloat($('#add_item #formula_cost').val());
+        var formula_discount1=parseFloat($('#add_item #formula_discount1').val());
+        var formula_discount2=parseFloat($('#add_item #formula_discount2').val());
+        var formula_tax1=parseFloat($('#add_item #formula_tax1').val());
+        var formula_tax2=parseFloat($('#add_item #formula_tax2').val());
+       
+        var formula_profit=parseFloat($('#add_item #formula_profit').val());
+        if (isNaN(cost)) {
+            cost=0;
+        }
+       
+        if (isNaN(formula_discount1)) {
+            formula_discount1=0;
+        }
+        if (isNaN(formula_discount2)) {
+            formula_discount2=0;
+        }
+        if (isNaN(formula_tax1)) {
+            formula_tax1=0;
+        }
+        if (isNaN(formula_tax2)) {
+            formula_tax2=0;
+        }
+        if (isNaN(formula_profit)) {
+            formula_profit=0;
+        }
+       
+        var net_price=cost;
+         
+        if(formula_tax1!=0 && formula_tax1!=""){
+            if($('#add_item #tax_Inclusive :selected').val()==0){
+                net_price=parseFloat(net_price)+(parseFloat(net_price)*parseFloat(formula_tax1)/100);
+            }
+        }
+        
+        if(formula_tax2!=0 && formula_tax2!=""){
+            if($('#add_item #tax_2_Inclusive :selected').val()==0){
+                net_price=parseFloat(net_price)+(parseFloat(net_price)*parseFloat(formula_tax2)/100);
+            }
+        }
+        net_price=parseFloat(net_price)-(parseFloat(net_price)*parseFloat(formula_discount1)/100);
+        net_price=parseFloat(net_price)-(parseFloat(net_price)*parseFloat(formula_discount2)/100);
+       
+     
+        if(formula_profit!=0 && formula_profit!=""){
+            var net_price=parseFloat(net_price)+(parseFloat(net_price)*parseFloat(formula_profit)/100);
+           
+        }
+       
+        if (isNaN(net_price)) {
+            net_price=0;
+        }
+        net_price=parseFloat(net_price);
+        net_price=net_price.toFixed(point);
+        $('#add_item #formula_selling_price').val(net_price) ;
+       
+    }
+    function update_selling_price(){
+        var cost=parseFloat($('#parsley_reg #formula_cost').val());
+        var formula_discount1=parseFloat($('#parsley_reg #formula_discount1').val());
+        var formula_discount2=parseFloat($('#parsley_reg #formula_discount2').val());
+        var formula_tax1=parseFloat($('#parsley_reg #formula_tax1').val());
+        var formula_tax2=parseFloat($('#parsley_reg #formula_tax2').val());
+       
+        var formula_profit=parseFloat($('#parsley_reg #formula_profit').val());
+        if (isNaN(cost)) {
+            cost=0;
+        }
+       
+        if (isNaN(formula_discount1)) {
+            formula_discount1=0;
+        }
+        if (isNaN(formula_discount2)) {
+            formula_discount2=0;
+        }
+        if (isNaN(formula_tax1)) {
+            formula_tax1=0;
+        }
+        if (isNaN(formula_tax2)) {
+            formula_tax2=0;
+        }
+        if (isNaN(formula_profit)) {
+            formula_profit=0;
+        }
+       
+        var net_price=cost;
+         
+        if(formula_tax1!=0 && formula_tax1!=""){
+            if($('#parsley_reg #tax_Inclusive :selected').val()==0){
+                net_price=parseFloat(net_price)+(parseFloat(net_price)*parseFloat(formula_tax1)/100);
+            }
+        }
+        
+        if(formula_tax2!=0 && formula_tax2!=""){
+            if($('#parsley_reg #tax_2_Inclusive :selected').val()==0){
+                net_price=parseFloat(net_price)+(parseFloat(net_price)*parseFloat(formula_tax2)/100);
+            }
+        }
+        net_price=parseFloat(net_price)-(parseFloat(net_price)*parseFloat(formula_discount1)/100);
+        net_price=parseFloat(net_price)-(parseFloat(net_price)*parseFloat(formula_discount2)/100);
+       
+     
+        if(formula_profit!=0 && formula_profit!=""){
+            var net_price=parseFloat(net_price)+(parseFloat(net_price)*parseFloat(formula_profit)/100);
+           
+        }
+       
+        if (isNaN(net_price)) {
+            net_price=0;
+        }
+        net_price=parseFloat(net_price);
+        net_price=net_price.toFixed(point);
+        $('#parsley_reg #formula_selling_price').val(net_price) ;
+       
+    }
+    function save_formula(){
+        if($('#add_item #formula_profit').val()!="" && $('#add_item #formula_cost').val()!=""){
+            $('#add_item #cost').val($('#add_item #formula_cost').val());
+            $('#add_item #selling_price').val($('#add_item #formula_selling_price').val());
+            $('#add_item #formula-model').modal('hide');
+        }else{
+            $.bootstrapGrowl(' <?php echo $this->lang->line('please_enter_cost_and_profit').' '.$this->lang->line('tax');?>', { type: "warning" });                   
+        }
+    }
+    function update_formula(){
+        if($('#parsley_reg #formula_profit').val()!="" && $('#parsley_reg #formula_cost').val()!=""){
+            $('#parsley_reg #cost').val($('#parsley_reg #formula_cost').val());
+            $('#parsley_reg #selling_price').val($('#parsley_reg #formula_selling_price').val());
+            $('#parsley_reg #formula-model').modal('hide');
+        }else{
+            $.bootstrapGrowl(' <?php echo $this->lang->line('please_enter_cost_and_profit').' '.$this->lang->line('tax');?>', { type: "warning" });                   
+        }
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
@@ -1534,7 +1691,104 @@ function items_decomposition(){
                           'runat'=>'server',
                           'class'=>'form-horizontal');
        echo form_open_multipart('items/add_new_item/',$form);?>
-     
+     <div class="modal fade" id="formula-model">
+
+                <div class="modal-dialog" style="width: 70% !important">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="cost" class="req"><?php echo $this->lang->line('cost_price') ?></label>                                                                                                       
+                                        <?php $formula_cost=array('name'=>'formula_cost',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_cost',
+                                            'onKeyUp'=>'new_selling_price()',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_cost)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_tax1" class="req"><?php echo $this->lang->line('tax') ?> 1</label>                                                                                                       
+                                        <?php $formula_tax1=array('name'=>'formula_tax1',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_tax1',
+                                            'disabled'=>'disabled',);
+                                        echo form_input($formula_tax1)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_tax2" ><?php echo $this->lang->line('tax') ?> 2</label>                                                                                                       
+                                        <?php $formula_tax2=array('name'=>'formula_tax2',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_tax2',
+                                            'disabled'=>'disabled');
+                                        echo form_input($formula_tax2)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="cost" class="req"><?php echo $this->lang->line('discount') ?> % 1</label>                                                                                                       
+                                        <?php $formula_discount1=array('name'=>'formula_discount1',
+                                            'class'=>'form-control number',
+                                            'id'=>'formula_discount1',
+                                             'onKeyUp'=>'new_selling_price()',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_discount1)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_discount2" ><?php echo $this->lang->line('discount') ?>% 2</label>                                                                                                       
+                                        <?php $formula_discount2=array('name'=>'formula_discount2',
+                                            'class'=>' form-control number',
+                                            'id'=>'formula_discount2',
+                                             'onKeyUp'=>'new_selling_price()',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_discount2)?> 
+                                    </div>
+                                </div>
+
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_profit" class="req"><?php echo $this->lang->line('profit_margin') ?></label>                                                                                                       
+                                        <?php $formula_profit=array('name'=>'formula_profit',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_profit',
+                                             'onKeyUp'=>'new_selling_price()',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_profit)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-5">
+
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_selling_price" class="req"><?php echo $this->lang->line('selling_price') ?></label>                                                                                                       
+                                        <?php $formula_selling_price=array('name'=>'formula_selling_price',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_selling_price',
+                                            'disabled'=>'disabled',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_selling_price)?> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><?php  echo $this->lang->line('close') ?></button>
+                                <a href="javascript:save_formula()" class="btn btn-primary"><?php echo $this->lang->line('save') ?></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div id="main_content_outer" class="clearfix">
            <div id="main_content">
                  <div class="row">
@@ -1718,7 +1972,7 @@ function items_decomposition(){
                                   
                               </div>
                               <div class="row" style="margin-left:10px;margin-right: 10px">
-                                  <div class="col col-lg-4" >
+                                  <div class="col col-lg-3" >
                                            
                                                     <div class="form_sep">
                                                          <label for="cost" class="req"><?php echo $this->lang->line('cost') ?></label>                                                                                                       
@@ -1730,7 +1984,7 @@ function items_decomposition(){
                                                            echo form_input($cost)?> 
                                                     </div>
                                         </div>                              
-                                       <div class="col col-lg-4" >
+                                       <div class="col col-lg-3" >
                                           
                                                     <div class="form_sep">
                                                          <label for="mrp" class="req"><?php echo $this->lang->line('mrp') ?></label>                                                                                                       
@@ -1743,7 +1997,7 @@ function items_decomposition(){
                                                     </div>
                                                   
                                         </div>                              
-                                       <div class="col col-lg-4" >
+                                       <div class="col col-lg-3" >
                                           
                                                     <div class="form_sep">
                                                          <label for="selling_price" class="req"><?php echo $this->lang->line('selling_price') ?></label>                                                                                                       
@@ -1756,7 +2010,15 @@ function items_decomposition(){
                                                     </div>
                                                    
                                         </div>  
-                                       
+                                       <div class="col col-lg-3" >
+                                          
+                                                    <div class="form_sep">
+                                                         <label for="selling_price" class="req"><?php echo $this->lang->line('pricing_formula') ?></label>                                                                                                       
+                                                         <a href="javascript:pricing_formula()" class="btn btn-default"><?php echo $this->lang->line('click')
+                                                                 ?></a>
+                                                    </div>
+                                                   
+                                        </div>  
                                       
                                   
                               </div>
@@ -1947,7 +2209,104 @@ function items_decomposition(){
                           'runat'=>'server',
                           'class'=>'form-horizontal');
        echo form_open_multipart('items/update_items/',$form);?>
-    
+    <div class="modal fade" id="formula-model">
+
+                <div class="modal-dialog" style="width: 70% !important">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="cost" class="req"><?php echo $this->lang->line('cost_price') ?></label>                                                                                                       
+                                        <?php $formula_cost=array('name'=>'formula_cost',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_cost',
+                                            'onKeyUp'=>'update_selling_price()',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_cost)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_tax1" class="req"><?php echo $this->lang->line('tax') ?> 1</label>                                                                                                       
+                                        <?php $formula_tax1=array('name'=>'formula_tax1',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_tax1',
+                                            'disabled'=>'disabled',);
+                                        echo form_input($formula_tax1)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_tax2" ><?php echo $this->lang->line('tax') ?> 2</label>                                                                                                       
+                                        <?php $formula_tax2=array('name'=>'formula_tax2',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_tax2',
+                                            'disabled'=>'disabled');
+                                        echo form_input($formula_tax2)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="cost" class="req"><?php echo $this->lang->line('discount') ?> % 1</label>                                                                                                       
+                                        <?php $formula_discount1=array('name'=>'formula_discount1',
+                                            'class'=>'form-control number',
+                                            'id'=>'formula_discount1',
+                                             'onKeyUp'=>'update_selling_price()',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_discount1)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_discount2" ><?php echo $this->lang->line('discount') ?>% 2</label>                                                                                                       
+                                        <?php $formula_discount2=array('name'=>'formula_discount2',
+                                            'class'=>' form-control number',
+                                            'id'=>'formula_discount2',
+                                             'onKeyUp'=>'update_selling_price()',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_discount2)?> 
+                                    </div>
+                                </div>
+
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_profit" class="req"><?php echo $this->lang->line('profit_margin') ?></label>                                                                                                       
+                                        <?php $formula_profit=array('name'=>'formula_profit',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_profit',
+                                             'onKeyUp'=>'update_selling_price()',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_profit)?> 
+                                    </div>
+                                </div>
+                                <div class="col col-lg-5">
+
+                                </div>
+                                <div class="col col-lg-2">
+                                    <div class="form_sep">
+                                        <label for="formula_selling_price" class="req"><?php echo $this->lang->line('selling_price') ?></label>                                                                                                       
+                                        <?php $formula_selling_price=array('name'=>'formula_selling_price',
+                                            'class'=>'required form-control number',
+                                            'id'=>'formula_selling_price',
+                                            'disabled'=>'disabled',
+                                            'onKeyPress'=>"return numbersonly(event)");
+                                        echo form_input($formula_selling_price)?> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><?php  echo $this->lang->line('close') ?></button>
+                                <a href="javascript:update_formula()" class="btn btn-primary"><?php echo $this->lang->line('save') ?></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
     <div id="main_content">
                  <div class="row">
                     
@@ -2130,7 +2489,7 @@ function items_decomposition(){
                                   
                               </div>
                               <div class="row" style="margin-left:10px;margin-right: 10px">
-                                  <div class="col col-lg-4" >
+                                  <div class="col col-lg-3" >
                                            
                                                     <div class="form_sep">
                                                          <label for="cost" class="req"><?php echo $this->lang->line('cost') ?></label>                                                                                                       
@@ -2142,7 +2501,7 @@ function items_decomposition(){
                                                            echo form_input($cost)?> 
                                                     </div>
                                         </div>                              
-                                       <div class="col col-lg-4" >
+                                       <div class="col col-lg-3" >
                                           
                                                     <div class="form_sep">
                                                          <label for="mrp" class="req"><?php echo $this->lang->line('mrp') ?></label>                                                                                                       
@@ -2155,7 +2514,7 @@ function items_decomposition(){
                                                     </div>
                                                   
                                         </div>                              
-                                       <div class="col col-lg-4" >
+                                       <div class="col col-lg-3" >
                                           
                                                     <div class="form_sep">
                                                          <label for="selling_price" class="req"><?php echo $this->lang->line('selling_price') ?></label>                                                                                                       
@@ -2168,7 +2527,15 @@ function items_decomposition(){
                                                     </div>
                                                    
                                         </div>
-                                    
+                                  <div class="col col-lg-3" >
+                                          
+                                                    <div class="form_sep">
+                                                         <label for="selling_price" class="req"><?php echo $this->lang->line('pricing_formula') ?></label>                                                                                                       
+                                                         <a href="javascript:update_pricing_formula()" class="btn btn-default"><?php echo $this->lang->line('click')
+                                                                 ?></a>
+                                                    </div>
+                                                   
+                                        </div>  
                                       
                                   
                               </div>
