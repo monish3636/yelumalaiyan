@@ -27,6 +27,7 @@
          $('#set_new_code').click(function() { 
                 <?php if($this->session->userdata['items_setting_per']['set']==1){ ?>
                 var inputs = $('#add_item').serialize();
+                if($('#add_item').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/items_setting/set_items_setting')?>",
                             data: inputs,
@@ -45,13 +46,15 @@
                                           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Set')." ".$this->lang->line('items_setting');?>', { type: "error" });                           
                                     }
                        }
-                });<?php }else{ ?>
+                });
+                }<?php }else{ ?>
                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_setting');?>', { type: "error" });                           
                     <?php }?>
         });
          $('#update_items').click(function() { 
                 <?php if($this->session->userdata['items_setting_per']['set']==1){ ?>
                 var inputs = $('#parsley_reg').serialize();
+                  if($('#add_item').valid()){
                        $.ajax ({
                             url: "<?php echo base_url('index.php/items_setting/set_items_setting')?>",
                             data: inputs,
@@ -71,6 +74,7 @@
                                     }
                        }
                  });
+                 }
                  <?php }else{ ?>
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('items_setting');?>', { type: "error" });                           
                     <?php }?>
@@ -160,7 +164,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_item_form" class="container clearfix main_section">
+<section id="add_item_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'add_item',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -394,7 +398,7 @@ function reload_update_user(){
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_item_form" class="container clearfix main_section">
+<section id="edit_item_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');

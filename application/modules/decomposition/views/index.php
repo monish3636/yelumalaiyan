@@ -763,7 +763,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
 </script>
 
   
-<section id="add_new_decomposition" class="container clearfix main_section">
+<section id="add_new_decomposition" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'name'=>'items_form',
