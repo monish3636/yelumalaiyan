@@ -150,7 +150,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_brand_form" class="container clearfix main_section">
+<section id="add_brand_form" class="container clearfix main_section"  style="display: none">
      <?php   $form =array('id'=>'add_brand',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -198,7 +198,7 @@ function reload_update_user(){
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_brand_form" class="container clearfix main_section">
+<section id="edit_brand_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -306,7 +306,7 @@ function reload_update_user(){
                         
                           $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('items_category');?>', { type: "warning" });
                       }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
+                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete') ?>", function(result) {
              if(result){
               
              
