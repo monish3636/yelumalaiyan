@@ -25,6 +25,7 @@
          $('#add_new_decomposition_type').click(function() { 
                 <?php if($this->session->userdata['decomposition_type_per']['add']==1){ ?>
                 var inputs = $('#add_decomposition_type').serialize();
+                if($('#add_decomposition_type').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/decomposition_type/add_decomposition_type')?>",
                             data: inputs,
@@ -43,13 +44,15 @@
                                           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                           
                                     }
                        }
-                });<?php }else{ ?>
+                });
+                }<?php }else{ ?>
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                       
                     <?php }?>
         });
          $('#update_decomposition_type').click(function() { 
                 <?php if($this->session->userdata['decomposition_type_per']['edit']==1){ ?>
                 var inputs = $('#parsley_reg').serialize();
+                if($('#parsley_reg').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/decomposition_type/update_decomposition_type')?>",
                             data: inputs,
@@ -69,6 +72,7 @@
                                     }
                        }
                  });
+                 }
                  <?php }else{ ?>
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('decomposition_type');?>', { type: "error" });                        
                     <?php }?>
@@ -153,7 +157,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_decomposition_type_form" class="container clearfix main_section">
+<section id="add_decomposition_type_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'add_decomposition_type',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -233,7 +237,7 @@ function reload_update_user(){
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_decomposition_type_form" class="container clearfix main_section">
+<section id="edit_decomposition_type_form" class="container clearfix main_section"  style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
