@@ -77,7 +77,7 @@
 			}
     function user_function(brands,guid){
     <?php if($this->session->userdata['brands_per']['delete']==1){ ?>
-             bootbox.confirm("Are you Sure To Delete This brands ("+brands+")", function(result) {
+             bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete'); ?>  ("+brands+")", function(result) {
              if(result){
             $.ajax({
                 url: '<?php echo base_url() ?>/index.php/brands/delete',

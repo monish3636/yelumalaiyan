@@ -78,7 +78,7 @@
     function user_function(guid){
     var items_category=$('#name_'+guid).val();
     <?php if($this->session->userdata['items_category_per']['delete']==1){ ?>
-             bootbox.confirm("Are you Sure To Delete This items_category ("+items_category+")", function(result) {
+             bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete'); ?> ("+items_category+")", function(result) {
              if(result){
             $.ajax({
                 url: '<?php echo base_url() ?>/index.php/items_category/delete',
