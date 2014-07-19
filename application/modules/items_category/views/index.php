@@ -25,6 +25,7 @@
          $('#add_new_brand').click(function() { 
                 <?php if($this->session->userdata['items_category_per']['add']==1){ ?>
                 var inputs = $('#add_brand').serialize();
+                  if($('#add_brand').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/items_category/add_items_category')?>",
                             data: inputs,
@@ -43,13 +44,15 @@
                                           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_category');?>', { type: "error" });                           
                                     }
                        }
-                });<?php }else{ ?>
+                });
+                }<?php }else{ ?>
                  $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_category');?>', { type: "error" });         
                     <?php }?>
         });
          $('#update_items_category').click(function() { 
                 <?php if($this->session->userdata['items_category_per']['edit']==1){ ?>
                 var inputs = $('#parsley_reg').serialize();
+                  if($('#parsley_reg').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/items_category/update_items_category')?>",
                             data: inputs,
@@ -69,6 +72,7 @@
                                     }
                        }
                  });
+                 }
                  <?php }else{ ?>
                  $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('items_category');?>', { type: "error" });         
                     <?php }?>
