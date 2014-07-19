@@ -25,6 +25,7 @@
          $('#add_new_brand').click(function() { 
                 <?php if($this->session->userdata['items_department_per']['add']==1){ ?>
                 var inputs = $('#add_brand').serialize();
+                if($('#add_brand').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/items_department/add_items_department')?>",
                             data: inputs,
@@ -43,13 +44,15 @@
                                           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_department');?>', { type: "error" });                           
                                     }
                        }
-                });<?php }else{ ?>
+                });
+                }<?php }else{ ?>
                  $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_department');?>', { type: "error" });         
                     <?php }?>
         });
          $('#update_items_department').click(function() { 
                 <?php if($this->session->userdata['items_department_per']['edit']==1){ ?>
                 var inputs = $('#parsley_reg').serialize();
+                 if($('#parsley_reg').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/items_department/update_items_department')?>",
                             data: inputs,
@@ -69,6 +72,7 @@
                                     }
                        }
                  });
+                 }
                  <?php }else{ ?>
                  $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('items_department');?>', { type: "error" });         
                     <?php }?>
@@ -150,7 +154,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_brand_form" class="container clearfix main_section">
+<section id="add_brand_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'add_brand',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -198,7 +202,7 @@ function reload_update_user(){
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_brand_form" class="container clearfix main_section">
+<section id="edit_brand_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
