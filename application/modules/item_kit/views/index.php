@@ -151,7 +151,8 @@
                             type:'POST',
                             complete: function(response) {
                                 if(response['responseText']=='TRUE'){
-                                    $.bootstrapGrowl('<?php echo $this->lang->line('taxes').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('taxes').' '.$this->lang->line('added');?>', { type: "success" });   
+                                  
                                     $('#tax_modal').modal('hide');
                                     $("#add_taxes").trigger('reset');
                                 }else  if(response['responseText']=='ALREADY'){
@@ -360,6 +361,7 @@
         if($('#parsley_reg #search_taxes').select2('data').id==101){
             list_tax_type()
             $('#tax_modal').modal('show');
+              $("#parsley_reg #search_taxes").select2('data', {id:'',text:'',value:'' });
         }
             var guid = $('#parsley_reg #search_taxes').select2('data').id;
             $('#parsley_reg #taxes').val(guid);
@@ -1462,6 +1464,10 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                              </div>
                                
                    <?php echo form_close();?>
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->lang->line('close') ?></button>
+                    
             </div>
         </div>
     </div>
