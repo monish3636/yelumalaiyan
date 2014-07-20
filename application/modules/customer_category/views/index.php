@@ -31,7 +31,7 @@
                             type:'POST',
                             complete: function(response) {
                                 if(response['responseText']=='TRUE'){
-                                      $.bootstrapGrowl('<?php echo $this->lang->line('customer_category').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                      $.bootstrapGrowl('<?php echo $this->lang->line('new').' '.$this->lang->line('customer_category').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
                                        $("#dt_table_tools").dataTable().fnDraw();
                                        $("#add_customer_category").trigger('reset');
                                        posnic_customer_category_lists();
@@ -98,7 +98,7 @@ function posnic_customer_category_lists(){
       $('#customer_category_lists').attr("disabled",'disabled');
 }
 function clear_add_customer_category(){
-      $("#posnic_user_2").trigger('reset');
+      $("#add_customer_category").trigger('reset');
 }
 function reload_update_user(){
     var id=$('#guid').val();
@@ -152,7 +152,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_customer_category_form" class="container clearfix main_section">
+<section id="add_customer_category_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'add_customer_category',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -216,7 +216,7 @@ function reload_update_user(){
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_customer_category_form" class="container clearfix main_section">
+<section id="edit_customer_category_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -341,7 +341,7 @@ function reload_update_user(){
                         
                           $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('customer_category');?>', { type: "warning" });
                       }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
+                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('customer_category') ?>", function(result) {
              if(result){
               
              
