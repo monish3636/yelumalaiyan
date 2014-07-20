@@ -115,7 +115,59 @@
             $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items');?>', { type: "error" });                       
         <?php }?>
     }
-    function update_item_kit(){
+       function save_new_tax_type() { 
+                <?php if($this->session->userdata['tax_types_per']['add']==1){ ?>
+                var inputs = $('#add_tax_type').serialize();
+                      $.ajax ({
+                            url: "<?php echo base_url('index.php/tax_types/add_tax_types')?>",
+                            data: inputs,
+                            type:'POST',
+                            complete: function(response) {
+                                if(response['responseText']=='TRUE'){
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('tax_types').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                    
+                                    $('#tax-type-modal').modal('hide');
+                                    $("#add_tax_type").trigger('reset');
+                                    list_tax_type();
+                                }else  if(response['responseText']=='ALREADY'){
+                                       $.bootstrapGrowl($('#tax_types').val()+' <?php echo $this->lang->line('tax_types').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                }else  if(response['responseText']=='FALSE'){
+                                       $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                                }else{
+                                      $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('tax_types');?>', { type: "error" });                           
+                                }
+                            }
+                });<?php }else{ ?>
+                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('tax_types');?>', { type: "error" });                       
+                    <?php }?>
+        }
+        function save_new_tax(){
+             <?php if($this->session->userdata['taxes_per']['add']==1){ ?>
+                var inputs = $('#add_taxes').serialize();
+                  if($('#add_taxes').valid()){
+                      $.ajax ({
+                            url: "<?php echo base_url('index.php/taxes/add_taxes')?>",
+                            data: inputs,
+                            type:'POST',
+                            complete: function(response) {
+                                if(response['responseText']=='TRUE'){
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('taxes').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                    $('#tax_modal').modal('hide');
+                                    $("#add_taxes").trigger('reset');
+                                }else  if(response['responseText']=='ALREADY'){
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('tax_value');?> '+$('#add_taxes #tax_value').val()+' <?php echo $this->lang->line('is_already_added')." ".$this->lang->line('for');?> '+$('#add_taxes #taxes_type :selected').text(), { type: "warning" });                           
+                                }else  if(response['responseText']=='FALSE'){
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                                }else{
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('taxes');?>', { type: "error" });                           
+                                }
+                       }
+                });
+                }<?php }else{ ?>
+                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('taxes');?>', { type: "error" });                       
+                    <?php }?>
+        }
+        function update_item_kit(){
         <?php if($this->session->userdata['item_kit_per']['edit']==1){ ?>
             if($('#parsley_reg').valid()){
                 var oTable = $('#selected_item_table').dataTable();
@@ -305,6 +357,10 @@
             }
         });     
         $('#parsley_reg #search_taxes').change(function() {
+        if($('#parsley_reg #search_taxes').select2('data').id==101){
+            list_tax_type()
+            $('#tax_modal').modal('show');
+        }
             var guid = $('#parsley_reg #search_taxes').select2('data').id;
             $('#parsley_reg #taxes').val(guid);
             $('#parsley_reg #kit_tax_value').val($('#parsley_reg #search_taxes').select2('data').value);
@@ -312,6 +368,9 @@
             selling_item_kit_price();
         });
         function format_tax(sup) {
+            if(sup.id==101){
+                return  sup.text;
+            }
             if (!sup.id) return sup.text; 
                 return  sup.text+" ( "+sup.value+" )";
         }
@@ -337,7 +396,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<a style='color:black' ><?php  echo $this->lang->line('add_new') ?></a>","value":""}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -877,12 +936,27 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
             }
         }               
     }
-
-
+    function list_tax_type(){
+        $.ajax({                                      
+            url: "<?php echo base_url() ?>index.php/tax_types/get_tax_type_list/",                      
+            data: "", 
+            dataType: 'json',               
+            success: function(data)        
+            {    
+                $('#add_taxes #taxes_type option[value!=0]').remove()
+                for(var i=0;i<data.length;i++){
+                    $('#add_taxes #taxes_type').append('<option value="'+data[i]['guid']+'">'+data[i]['type']+'</option>');
+                }
+            }
+        });
+     }
+    function add_new_tax_type(){
+        $('#tax-type-modal').modal('show');
+    }
 </script>
 
   
-<section id="add_new_item_kit" class="container clearfix main_section">
+<section id="add_new_item_kit" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'name'=>'items_form',
@@ -1319,11 +1393,143 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
     </div>
     <?php echo form_close();?>
 </section>    
+<div class="modal fade" id="tax_modal">
+    
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title text-center"><?php  echo $this->lang->line('tax');?></h4>
+            </div>
+            <div class="modal-body">
+                    <?php   $form =array('id'=>'add_taxes',
+                                         'runat'=>'server',
+                                         'class'=>'form-horizontal');
+                      echo form_open_multipart('taxes/add_pos_taxes_details/',$form);?>
+                       
+                                
+                                   
+                                    
+                                             <div class="row">
+                                                      <div class="col col-lg-12" >
+                                                          <div class="row">
+                                                              <div class="col col-lg-4"></div>
+                                                              <div class="col col-lg-4">
+                                                                   <div class="form_sep">
+                                                                        <label for="taxes_name" class="req"><?php echo $this->lang->line('tax_value') ?></label>                                                                                                       
+                                                                          <?php $tax_value=array('name'=>'tax_value',
+                                                                                                   'class'=>'required form-control number',
+                                                                                                   'id'=>'tax_value',
+                                                                                                   'value'=>set_value('tax_value'));
+                                                                          echo form_input($tax_value)?> 
+                                                                   </div>
+                                                                  </div>
+                                                              <div class="col col-lg-4"></div>
+                                                              </div>
+                                                       </div>                              
+                                             </div>
+                                             <div class="row">
+                                                      <div class="col col-lg-12" >
+                                                          <div class="row">
+                                                              <div class="col col-lg-4"></div>
+                                                              <div class="col col-lg-4">
+                                                                   <div class="form_sep">
+                                                                        <label for="taxes_type" class="req"><?php echo $this->lang->line('taxes_type') ?></label>                                                                                                       
+                                                                        <select name="taxes_type" id="taxes_type" class="form-control">
+
+                                                                           <?php foreach ($type as $row){ ?>
+                                                                            <option value="<?php echo $row->guid ?>"><?php echo $row->type ?></option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                   </div>
+                                                                  </div>
+                                                              <div class="col col-lg-4">
+                                                                  <label for="taxes_type" ><?php echo $this->lang->line('new')." ".$this->lang->line('tax_type') ?></label>                                
+                                                                  <a href="javascript:add_new_tax_type()" class="btn btn-default"><i class="icon icon-play"></i></a>
+                                                              </div>
+                                                              </div>
+                                                       </div>                              
+                                             </div>
+                                             <br><br>
+                                         
+                               
+                                   <div class="row">
+                                               <div class="col-lg-3"></div>
+                                                 <div class="col col-lg-6 text-center"><br><br>
+                                                    <a href="javascript:save_new_tax()"   name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></a>
+                                                     <a href="javascript:clear_add_taxes()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                                 </div>
+                                             </div>
+                               
+                   <?php echo form_close();?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="tax-type-modal">
+    
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title text-center"><?php  echo $this->lang->line('tax_type');?></h4>
+            </div>
+            <div class="modal-body">
+                <section id="add_tax_type_form" class="container clearfix main_section">
+                <?php   $form =array('id'=>'add_tax_type',
+                                     'runat'=>'server',
+                                     'class'=>'form-horizontal');
+                  echo form_open_multipart('tax_types/add_pos_tax_types_details/',$form);?>
+                   <div id="main_content_outer" class="clearfix">
+                      <div id="main_content">
+                            <div class="row">
+                                <div class="col-lg-2"></div>
+                                <div class="col-lg-8">
+                                         <div class="row">
+                                                  <div class="col col-lg-12" >
+                                                      <div class="row">
+                                                          <div class="col col-lg-1"></div>
+                                                          <div class="col col-lg-10">
+                                                               <div class="form_sep">
+                                                                    <label for="tax_types" class="req"><?php echo $this->lang->line('tax_types') ?></label>                                                                                                       
+                                                                      <?php $tax_types=array('name'=>'tax_types',
+                                                                                               'class'=>'required form-control',
+                                                                                               'id'=>'tax_types',
+                                                                                               'value'=>set_value('tax_types'));
+                                                                      echo form_input($tax_types)?> 
+                                                               </div>
+                                                              </div>
+                                                          <div class="col col-lg-1"></div>
+                                                          </div>
+                                                   </div>                              
+                                         </div>
+                                </div>
+                           </div>
+                               <div class="row">
+                                           <div class="col-lg-4"></div>
+                                             <div class="col col-lg-4 text-center"><br><br>
+                                                 <a href="javascript:save_new_tax_type()"   type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></a>
+                                                 <a href="javascript:clear_add_tax_types()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                             </div>
+                                         </div>
+                           </div>
+                     </div>
+                   <?php echo form_close();?>
+               </section>
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->lang->line('close') ?></button>
+                    
+            </div>
+        </div>
+    </div>
+</div>
            <div id="footer_space">
               
            </div>
 		</div>
-	
+                
+
 <script type="text/javascript"> 
     function posnic_delete(){
         <?php if($this->session->userdata['item_kit_per']['delete']==1){ ?>
