@@ -1263,7 +1263,7 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                     <div class="panel-heading">
                                             <h4 class="panel-title"><?php echo $this->lang->line('item_kit_items') ?></h4>                                                                               
                                     </div>
-                                <table id='selected_item_table' class="table table-striped dataTable ">
+                                    <table id='selected_item_table' class="table table-striped dataTable " style="width:100% !important">
                                     <thead>
                                         <tr>
                                             

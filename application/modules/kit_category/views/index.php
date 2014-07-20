@@ -77,7 +77,7 @@
 function posnic_add_new(){
     <?php if($this->session->userdata['kit_category_per']['add']==1){ ?>
       $("#user_list").hide();
-      $('#kit_category_form_form').show('slow');
+      $('#kit_category_form_section').show('slow');
       $('#delete').attr("disabled", "disabled");
       $('#posnic_add_kit_category').attr("disabled", "disabled");
       $('#active').attr("disabled", "disabled");
@@ -89,7 +89,7 @@ function posnic_add_new(){
 }
 function posnic_kit_category_lists(){
       $('#edit_category_form').hide('hide');
-      $('#kit_category_form_form').hide('hide');      
+      $('#kit_category_form_section').hide('hide');      
       $("#user_list").show('slow');
       $('#delete').removeAttr("disabled");
       $('#active').removeAttr("disabled");
@@ -150,7 +150,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="kit_category_form_form" class="container clearfix main_section">
+<section id="kit_category_form_section" class="container clearfix main_section">
      <?php   $form =array('id'=>'kit_category_form',
                           'runat'=>'server',
                           'class'=>'form-horizontal');

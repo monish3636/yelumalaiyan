@@ -2,7 +2,7 @@
 <script type="text/javascript" charset="utf-8">
           $(document).ready( function () {
            
-                    $('#kit_category_form_form').hide();
+                    $('#kit_category_form_section').hide();
                     $('#edit_category_form').hide();
                               posnic_table();
                                 kit_category_form.onsubmit=function()
