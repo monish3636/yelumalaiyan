@@ -98,7 +98,7 @@ function posnic_kit_category_lists(){
       $('#kit_category_lists').attr("disabled",'disabled');
 }
 function clear_add_kit_category(){
-      $("#posnic_user_2").trigger('reset');
+      $("#kit_category_form").trigger('reset');
 }
 function reload_update_user(){
     var id=$('#guid').val();
@@ -150,7 +150,7 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="kit_category_form_section" class="container clearfix main_section">
+<section id="kit_category_form_section" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'kit_category_form',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -198,7 +198,7 @@ function reload_update_user(){
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_category_form" class="container clearfix main_section">
+<section id="edit_category_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
