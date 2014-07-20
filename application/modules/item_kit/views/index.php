@@ -141,6 +141,32 @@
                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('tax_types');?>', { type: "error" });                       
                     <?php }?>
         }
+       function save_new_category() { 
+          <?php if($this->session->userdata['items_category_per']['add']==1){ ?>
+                var inputs = $('#add_categoy').serialize();
+                  if($('#add_categoy').valid()){
+                      $.ajax ({
+                            url: "<?php echo base_url('index.php/kit_category/add_kit_category')?>",
+                            data: inputs,
+                            type:'POST',
+                            complete: function(response) {
+                                if(response['responseText']=='TRUE'){
+                                        $.bootstrapGrowl('<?php echo $this->lang->line('items_category').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                        $('#category_modal').modal('hide');
+                                        $("#add_categoy").trigger('reset');
+                                    }else  if(response['responseText']=='ALREADY'){
+                                           $.bootstrapGrowl($('#items_category_name').val()+' <?php echo $this->lang->line('items_category').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                    }else  if(response['responseText']=='FALSE'){
+                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                                    }else{
+                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_category');?>', { type: "error" });                           
+                                    }
+                       }
+                });
+                }<?php }else{ ?>
+                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('items_category');?>', { type: "error" });         
+                    <?php }?>
+        }
         function save_new_tax(){
              <?php if($this->session->userdata['taxes_per']['add']==1){ ?>
                 var inputs = $('#add_taxes').serialize();
@@ -319,9 +345,15 @@
                 }
             }
         });      
-        $('#parsley_reg #category').change(function() {           
-            var guid = $('#parsley_reg #category').select2('data').id;
-            $('#parsley_reg #category_id').val(guid);
+        $('#parsley_reg #category').change(function() {  
+            if($('#parsley_reg #category').select2('data').id==101){
+                list_tax_type()
+                $('#category_modal').modal('show');
+                $("#parsley_reg #category").select2('data', {id:'',text:'',value:'' });
+            }else{
+                var guid = $('#parsley_reg #category').select2('data').id;
+                $('#parsley_reg #category_id').val(guid);
+            }
         });
         $('#parsley_reg #category').select2({
             escapeMarkup: function(m) { return m; },
@@ -344,7 +376,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<a style='color:black' ><?php  echo $this->lang->line('add_new') ?></a>","value":""}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -358,16 +390,17 @@
             }
         });     
         $('#parsley_reg #search_taxes').change(function() {
-        if($('#parsley_reg #search_taxes').select2('data').id==101){
-            list_tax_type()
-            $('#tax_modal').modal('show');
-              $("#parsley_reg #search_taxes").select2('data', {id:'',text:'',value:'' });
-        }
-            var guid = $('#parsley_reg #search_taxes').select2('data').id;
-            $('#parsley_reg #taxes').val(guid);
-            $('#parsley_reg #kit_tax_value').val($('#parsley_reg #search_taxes').select2('data').value);
-            $('#parsley_reg #kit_tax_type').val($('#parsley_reg #search_taxes').select2('data').text);
-            selling_item_kit_price();
+            if($('#parsley_reg #search_taxes').select2('data').id==101){
+                list_tax_type()
+                $('#tax_modal').modal('show');
+                  $("#parsley_reg #search_taxes").select2('data', {id:'',text:'',value:'' });
+            }else{
+                var guid = $('#parsley_reg #search_taxes').select2('data').id;
+                $('#parsley_reg #taxes').val(guid);
+                $('#parsley_reg #kit_tax_value').val($('#parsley_reg #search_taxes').select2('data').value);
+                $('#parsley_reg #kit_tax_type').val($('#parsley_reg #search_taxes').select2('data').text);
+                selling_item_kit_price();
+            }
         });
         function format_tax(sup) {
             if(sup.id==101){
@@ -1516,6 +1549,64 @@ $("#parsley_reg #select_item").select2('data', {id:'',text: '<?php echo $this->l
                                              <div class="col col-lg-4 text-center"><br><br>
                                                  <a href="javascript:save_new_tax_type()"   type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></a>
                                                  <a href="javascript:clear_add_tax_types()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                             </div>
+                                         </div>
+                           </div>
+                     </div>
+                   <?php echo form_close();?>
+               </section>
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->lang->line('close') ?></button>
+                    
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="category_modal">
+    
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title text-center"><?php  echo $this->lang->line('items_category');?></h4>
+            </div>
+            <div class="modal-body">
+                <section id="add_tax_type_form" class="container clearfix main_section">
+                <?php   $form =array('id'=>'add_categoy',
+                                     'runat'=>'server',
+                                     'class'=>'form-horizontal');
+                  echo form_open_multipart('tax_types/add_pos_tax_types_details/',$form);?>
+                   <div id="main_content_outer" class="clearfix">
+                      <div id="main_content">
+                            <div class="row">
+                                <div class="col-lg-2"></div>
+                                <div class="col-lg-8">
+                                         <div class="row">
+                                                  <div class="col col-lg-12" >
+                                                      <div class="row">
+                                                          <div class="col col-lg-1"></div>
+                                                          <div class="col col-lg-10">
+                                                                    <div class="form_sep">
+                                                                         <label for="items_category_name" class="req"><?php echo $this->lang->line('items_category_name') ?></label>                                                                                                       
+                                                                           <?php $items_category_name=array('name'=>'items_category_name',
+                                                                                                    'class'=>'required form-control',
+                                                                                                    'id'=>'items_category_name',
+                                                                                                    'value'=>set_value('items_category_name'));
+                                                                           echo form_input($items_category_name)?> 
+                                                                    </div>
+                                                              </div>
+                                                          <div class="col col-lg-1"></div>
+                                                          </div>
+                                                   </div>                              
+                                         </div>
+                                </div>
+                           </div>
+                               <div class="row">
+                                           <div class="col-lg-4"></div>
+                                             <div class="col col-lg-4 text-center"><br><br>
+                                                 <a href="javascript:save_new_category()"   type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></a>
+                                                 <a href="javascript:clear_category()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
                                              </div>
                                          </div>
                            </div>

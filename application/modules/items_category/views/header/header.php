@@ -2,10 +2,10 @@
 <script type="text/javascript" charset="utf-8">
           $(document).ready( function () {
            
-                    $('#add_brand_form').hide();
-                    $('#edit_brand_form').hide();
+                    $('#add_category_form').hide();
+                    $('#edit_category_form').hide();
                               posnic_table();
-                                add_brand.onsubmit=function()
+                                add_category.onsubmit=function()
                                 { 
                                   return false;
                                 } 
@@ -149,7 +149,7 @@
                              success: function(data)        
                              {    
                                  $("#user_list").hide();
-                                 $('#edit_brand_form').show('slow');
+                                 $('#edit_category_form').show('slow');
                                  $('#delete').attr("disabled", "disabled");
                                  $('#posnic_add_items_category').attr("disabled", "disabled");
                                  $('#active').attr("disabled", "disabled");
