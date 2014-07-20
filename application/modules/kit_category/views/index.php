@@ -22,7 +22,7 @@
 </style>	
 <script type="text/javascript">
      $(document).ready( function () {
-         $('#add_new_brand').click(function() { 
+         $('#add_new_category').click(function() { 
                 <?php if($this->session->userdata['kit_category_per']['add']==1){ ?>
                 var inputs = $('#kit_category_form').serialize();
                       $.ajax ({
@@ -190,7 +190,7 @@ function reload_update_user(){
                     <div class="row">
                                 <div class="col-lg-4"></div>
                                   <div class="col col-lg-4 text-center"><br><br>
-                                      <button id="add_new_brand"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
+                                      <button id="add_new_category"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
                                       <a href="javascript:clear_add_kit_category()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
                                   </div>
                               </div>
