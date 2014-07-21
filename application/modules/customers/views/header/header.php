@@ -36,14 +36,14 @@
 								
 							},
         
-        null, null, null, null, null, null, 
+        null, null, null, null, null, 
 
  							{	"sName": "ID",
                    						"bSearchable": false,
                    						"bSortable": false,
                                                                 
                    						"fnRender": function (oObj) {
-                   							if(oObj.aData[9]==1){
+                   							if(oObj.aData[8]==1){
                                                                             return '<span data-toggle="tooltip" class="text-success hint--top hint--success" ><?php echo $this->lang->line('active') ?></span>';
                                                                         }else{
                                                                             return '<span data-toggle="tooltip" class="text-danger hint--top data-hint="<?php echo $this->lang->line('active') ?>" ><?php echo $this->lang->line('deactive') ?></span>';
@@ -57,7 +57,7 @@
                    						"bSortable": false,
                                                                 
                    						"fnRender": function (oObj) {
-                                                                if(oObj.aData[9]==1){
+                                                                if(oObj.aData[8]==1){
                    							return '<a href=javascript:posnic_deactive("'+oObj.aData[0]+'")><span data-toggle="tooltip" class="label label-warning hint--top hint--warning" data-hint="<?php echo $this->lang->line('deactive') ?>"><i class="icon-pause"></i></span></a>&nbsp<a href=javascript:edit_function("'+oObj.aData[0]+'")  ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit') ?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete') ?>'><i class='icon-trash'></i></span> </a>";
 								}else{
                                                                         return '<a href=javascript:posnic_active("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-success hint--top hint--success" data-hint="<?php echo $this->lang->line('active') ?>"><i class="icon-play"></i></span></a>&nbsp<a href=javascript:edit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php  echo $this->lang->line('edit') ?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete') ?>'><i class='icon-trash'></i></span> </a>";
@@ -171,9 +171,7 @@
                 $('#parsley_reg #country').val(data[0]['country']);
                 $('#parsley_reg #company').val(data[0]['company_name']);
                 $('#parsley_reg #website').val(data[0]['website']);
-                $('#parsley_reg #credit_days').val(data[0]['cdays']);
-                $('#parsley_reg #credit_limit').val(data[0]['credit_limit']);
-                $('#parsley_reg #balance').val(data[0]['month_credit_bal']);
+      
                 $('#parsley_reg #bank_name').val(data[0]['bank_name']);
                 $('#parsley_reg #bank_location').val(data[0]['bank_location']);
                 $('#parsley_reg #account_no').val(data[0]['account_number']);
@@ -184,8 +182,6 @@
                 $('#parsley_reg #phone').val(data[0]['phone']);
                 $("#parsley_reg #customer_category").select2('data', {id:data[0]['category_id'],text: data[0]['c_name']});
                 $('#parsley_reg #category').val(data[0]['category_id']);
-                $("#parsley_reg #payment_type").select2('data', {id:data[0]['payment'],text: data[0]['type']});
-                $('#parsley_reg #payment').val(data[0]['payment']);
                 $('#loading').modal('hide');
            } 
         });

@@ -475,7 +475,6 @@
                                           <th><?php echo $this->lang->line('phone') ?></th>
                                           <th><?php echo $this->lang->line('email') ?></th>
                                           <th><?php echo $this->lang->line('category') ?></th>
-                                          <th><?php echo $this->lang->line('payment') ?></th>
                                           <th><?php echo $this->lang->line('status') ?></th>
                                           <th><?php echo $this->lang->line('action') ?></th>
                                          </tr>
