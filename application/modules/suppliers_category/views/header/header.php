@@ -28,7 +28,7 @@
                    						"bSortable": false,
                                                                 
                    						"fnRender": function (oObj) {
-                   							return "<input type=checkbox value='"+oObj.aData[0]+"' >";
+                   							return "<input type=checkbox value='"+oObj.aData[0]+"' ><input type=hidden id='name_"+oObj.aData[0]+"' value='"+oObj.aData[1]+"' >";
 								},
 								
 								
@@ -112,7 +112,7 @@
                 success: function(response)
                 {
                     if(response){
-                         $.bootstrapGrowl('<?php echo $this->lang->line('isdeactivated');?>', { type: "danger" });
+                         $.bootstrapGrowl($('#name_'+guid).val()+'<?php echo $this->lang->line('isdeactivated');?>', { type: "danger" });
                         $("#dt_table_tools").dataTable().fnDraw();
                     }
                 }
@@ -129,7 +129,7 @@
                 success: function(response)
                 {
                     if(response){
-                         $.bootstrapGrowl('<?php echo $this->lang->line('isactivated');?>', { type: "success" });
+                         $.bootstrapGrowl($('#name_'+guid).val()+'<?php echo $this->lang->line('isactivated');?>', { type: "success" });
                         $("#dt_table_tools").dataTable().fnDraw();
                     }
                 }
