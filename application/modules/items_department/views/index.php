@@ -24,8 +24,8 @@
      $(document).ready( function () {
          $('#add_new_brand').click(function() { 
                 <?php if($this->session->userdata['items_department_per']['add']==1){ ?>
-                var inputs = $('#add_brand').serialize();
-                if($('#add_brand').valid()){
+                var inputs = $('#add_department').serialize();
+                if($('#add_department').valid()){
                       $.ajax ({
                             url: "<?php echo base_url('index.php/items_department/add_items_department')?>",
                             data: inputs,
@@ -34,7 +34,7 @@
                                 if(response['responseText']=='TRUE'){
                                       $.bootstrapGrowl('<?php echo $this->lang->line('items_department').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
                                        $("#dt_table_tools").dataTable().fnDraw();
-                                       $("#add_brand").trigger('reset');
+                                       $("#add_department").trigger('reset');
                                        posnic_items_department_lists();
                                     }else  if(response['responseText']=='ALREADY'){
                                            $.bootstrapGrowl($('#items_department_name').val()+' <?php echo $this->lang->line('items_department').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
@@ -81,7 +81,7 @@
 function posnic_add_new(){
     <?php if($this->session->userdata['items_department_per']['add']==1){ ?>
       $("#user_list").hide();
-      $('#add_brand_form').show('slow');
+      $('#add_department_form').show('slow');
       $('#delete').attr("disabled", "disabled");
       $('#posnic_add_items_department').attr("disabled", "disabled");
       $('#active').attr("disabled", "disabled");
@@ -93,7 +93,7 @@ function posnic_add_new(){
 }
 function posnic_items_department_lists(){
       $('#edit_brand_form').hide('hide');
-      $('#add_brand_form').hide('hide');      
+      $('#add_department_form').hide('hide');      
       $("#user_list").show('slow');
       $('#delete').removeAttr("disabled");
       $('#active').removeAttr("disabled");
@@ -154,8 +154,8 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_brand_form" class="container clearfix main_section" style="display: none">
-     <?php   $form =array('id'=>'add_brand',
+<section id="add_department_form" class="container clearfix main_section" style="display: none">
+     <?php   $form =array('id'=>'add_department',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
        echo form_open_multipart('items_department/add_pos_items_department_details/',$form);?>
