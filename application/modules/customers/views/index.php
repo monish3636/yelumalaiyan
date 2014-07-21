@@ -96,46 +96,17 @@
             }
         });
         
-        $('#add_customer_details_form #payment_type').change(function() {
-                var guid = $('#add_customer_details_form #payment_type').select2('data').id;
-                $('#add_customer_details_form #payment').val(guid);
-        });
-        $('#add_customer_details_form #payment_type').select2({
-            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
-            ajax: {
-                url: '<?php echo base_url() ?>index.php/customers/get_payment',
-                data: function(term, page) {
-                    return {types: ["exercise"],
-                        limit: -1,
-                        term: term
-                    };
-                },
-                type:'POST',
-                dataType: 'json',
-                quietMillis: 100,
-                data: function (term) {
-                    return {
-                        term: term
-                    };
-                },
-                results: function (data) {
-                    var results = [];
-                    $.each(data, function(index, item){
-                        results.push({
-                            id: item.guid,
-                            text: item.type
-                        });
-                    });
-                    return {
-                        results: results
-                    };
-                }
-            }
-        });
+        
         
         $('#parsley_reg #customer_category').change(function() {
-            var guid = $('#parsley_reg #customer_category').select2('data').id;                
-            $('#parsley_reg #category').val(guid);
+          
+              if($('#parsley_reg #customer_category').select2('data').id==101){
+                $('#category_modal').modal('show');
+                $("#parsley_reg #customer_category").select2('data', {id:'',text:'',value:'' });
+            }else{
+                var guid = $('#parsley_reg #customer_category').select2('data').id;                
+                $('#parsley_reg #category').val(guid);
+            }
         });
         $('#parsley_reg #customer_category').select2({
             placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
@@ -156,7 +127,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<?php  echo $this->lang->line('add_new') ?>"}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -170,42 +141,7 @@
             }
         });
         
-        $('#parsley_reg #payment_type').change(function() {
-                var guid = $('#parsley_reg #payment_type').select2('data').id;
-                $('#parsley_reg #payment').val(guid);
-        });
-        $('#parsley_reg #payment_type').select2({
-            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
-            ajax: {
-                url: '<?php echo base_url() ?>index.php/customers/get_payment',
-                data: function(term, page) {
-                    return {types: ["exercise"],
-                        limit: -1,
-                        term: term
-                    };
-                },
-                type:'POST',
-                dataType: 'json',
-                quietMillis: 100,
-                data: function (term) {
-                    return {
-                        term: term
-                    };
-                },
-                results: function (data) {
-                    var results = [];
-                    $.each(data, function(index, item){
-                        results.push({
-                            id: item.guid,
-                            text: item.type
-                        });
-                    });
-                    return {
-                          results: results
-                    };
-                }
-            }
-        });      
+          
         
         $('#add_new_customer').click(function() { 
             <?php if($this->session->userdata['customers_per']['add']==1){ ?>
@@ -444,7 +380,10 @@
         $("#dt_table_tools").dataTable().fnDraw();
     }
     function clear_add_customers(){
-        $("#posnic_user_2").trigger('reset');
+        $("#add_customer_form").trigger('reset');
+    }
+    function clear_category(){
+        $("#add_customer_category").trigger('reset');
     }
     function reload_update_user(){
         var id=$('#guid').val();
@@ -1107,69 +1046,8 @@
                           </div>
                          </div>
                      </div>
-                     <div  class="col-lg-6" style="padding:0px 25px;">
-                         <div class="row">
-                          <div class="panel panel-default">
-                               <div class="panel-heading">
-                                     <h4 class="panel-title"><?php echo $this->lang->line('payment_details') ?></h4>                                                                                 
-                               </div>
-                              <div class="row">
-                                 
-                                 
-                                       <div class="col col-sm-12" style="padding-left: 25px;padding-right: 25px;">
-                                           <div class="row">
-                                               <div class="col col-sm-4">
-                                                   <div class="form_sep">
-                                                        <label for="payment_type" ><?php echo $this->lang->line('customers_payment_type') ?></label>													
-                                                                  <?php $payment_type=array('name'=>'payment_type',
-                                                                                    'class'=>'required  form-control',
-                                                                                    'id'=>'payment_type',
-                                                                                    'value'=>set_value('payment_type'));
-                                                                     echo form_input($payment_type)?>
-                                                        <input type="hidden" name="payment" id='payment'>
-                                                  </div>
-                                                   </div>
-                                               <div class="col col-sm-4">
-                                                   <div class="form_sep">
-                                                        <label for="credit_days" ><?php echo $this->lang->line('credit_days') ?></label>													
-                                                                  <?php $credit_days=array('name'=>'credit_days',
-                                                                                    'class'=>' form-control',
-                                                                                    'id'=>'credit_days',
-                                                                                    'value'=>set_value('credit_days'));
-                                                                     echo form_input($credit_days)?>
-                                                  </div>
-                                                   </div>
-                                               <div class="col col-sm-4">
-                                                    <div class="form_sep">
-                                                            <label for="credit_limit" ><?php echo $this->lang->line('credit_limit') ?></label>													
-                                                                     <?php $credit_limit=array('name'=>'credit_limit',
-                                                                                        'class'=>'form-control',
-                                                                                        'id'=>'credit_limit',
-                                                                                        'value'=>set_value('credit_limit'));
-                                                                         echo form_input($credit_limit)?>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           <div class="row">
-                                                  <div class="col col-sm-4">
-                                                      <div class="form_sep">
-                                                            <label for="balance" ><?php echo $this->lang->line('monthly_credit_balance') ?></label>
-
-                                                                       <?php $balance=array('name'=>'balance',
-                                                                                        'class'=>' form-control',
-                                                                                        'id'=>'balance',
-                                                                                        'value'=>set_value('balance'));
-                                                                         echo form_input($balance)?>
-                                                    </div>
-                                                   </div>
-                                                  
-                                               </div>
-                                           
-                                           <br>
-                                        </div>                              
-                              </div>
-                          </div>
-                          </div>
+                     <div  class="col-lg-6" style="padding:0px 25px" >
+                         
                          <div class="row">
                              <div class="panel panel-default">
                                <div class="panel-heading">
@@ -1515,69 +1393,8 @@
                           </div>
                          </div>
                      </div>
-                     <div  class="col-lg-6" style="padding:0px 25px;">
-                         <div class="row">
-                          <div class="panel panel-default">
-                               <div class="panel-heading">
-                                     <h4 class="panel-title"><?php echo $this->lang->line('payment_details') ?></h4>                                                                                 
-                               </div>
-                              <div class="row">
-                                 
-                                 
-                                       <div class="col col-sm-12" style="padding-left: 25px;padding-right: 25px;">
-                                           <div class="row">
-                                               <div class="col col-sm-4">
-                                                   <div class="form_sep">
-                                                        <label for="payment_type" ><?php echo $this->lang->line('customers_payment_type') ?></label>													
-                                                                  <?php $payment_type=array('name'=>'payment_type',
-                                                                                    'class'=>'required  form-control',
-                                                                                    'id'=>'payment_type',
-                                                                                    'value'=>set_value('payment_type'));
-                                                                     echo form_input($payment_type)?>
-                                                        <input type="hidden" name="payment" id='payment'>
-                                                  </div>
-                                                   </div>
-                                               <div class="col col-sm-4">
-                                                   <div class="form_sep">
-                                                        <label for="credit_days" ><?php echo $this->lang->line('credit_days') ?></label>													
-                                                                  <?php $credit_days=array('name'=>'credit_days',
-                                                                                    'class'=>' form-control',
-                                                                                    'id'=>'credit_days',
-                                                                                    'value'=>set_value('credit_days'));
-                                                                     echo form_input($credit_days)?>
-                                                  </div>
-                                                   </div>
-                                               <div class="col col-sm-4">
-                                                    <div class="form_sep">
-                                                            <label for="credit_limit" ><?php echo $this->lang->line('credit_limit') ?></label>													
-                                                                     <?php $credit_limit=array('name'=>'credit_limit',
-                                                                                        'class'=>'form-control',
-                                                                                        'id'=>'credit_limit',
-                                                                                        'value'=>set_value('credit_limit'));
-                                                                         echo form_input($credit_limit)?>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           <div class="row">
-                                                  <div class="col col-sm-4">
-                                                      <div class="form_sep">
-                                                            <label for="balance" ><?php echo $this->lang->line('monthly_credit_balance') ?></label>
-
-                                                                       <?php $balance=array('name'=>'balance',
-                                                                                        'class'=>' form-control',
-                                                                                        'id'=>'balance',
-                                                                                        'value'=>set_value('balance'));
-                                                                         echo form_input($balance)?>
-                                                    </div>
-                                                   </div>
-                                                  
-                                               </div>
-                                           
-                                           <br>
-                                        </div>                              
-                              </div>
-                          </div>
-                          </div>
+                     <div  class="col-lg-6" style="padding:0px 25px;" >
+                         
                          <div class="row">
                              <div class="panel panel-default">
                                <div class="panel-heading">
@@ -1756,7 +1573,7 @@
                                                <div class="col-lg-3"></div>
                                                  <div class="col col-lg-6 text-center"><br><br>
                                                     <a href="javascript:save_new_category()"   name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></a>
-                                                     <a href="javascript:clear_add_taxes()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                                     <a href="javascript:clear_category()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('clear') ?></a>
                                                  </div>
                                              </div>
                                
