@@ -97,7 +97,7 @@ class Customers extends MX_Controller
         $this->load->view('template/app/footer');
     }
     function customers_data_table(){
-        $aColumns = array( 'guid','guid','first_name','company_name','phone','email','c_name','type','type','active_status' );	
+        $aColumns = array( 'guid','guid','first_name','company_name','phone','email','c_name','active_status','active_status' );	
 	$start = "";
         $end="";
         if ( $this->input->get_post('iDisplayLength') != '-1' )	{
@@ -189,18 +189,14 @@ class Customers extends MX_Controller
                 $this->form_validation->set_rules("first_name",$this->lang->line('first_name'),"required"); 
                 $this->form_validation->set_rules("last_name",$this->lang->line('last_name'),"required"); 
                 $this->form_validation->set_rules("category",$this->lang->line('category'),"required"); 
-                $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
-                $this->form_validation->set_rules("payment",$this->lang->line('payment'),"required"); 
+                $this->form_validation->set_rules("address",$this->lang->line('address'),"required");                
                 $this->form_validation->set_rules("city",$this->lang->line('city'),"required"); 
                 $this->form_validation->set_rules("state",$this->lang->line('state'),"required"); 
                 $this->form_validation->set_rules("zip",$this->lang->line('zip'),"required"); 
                 $this->form_validation->set_rules("country",$this->lang->line('country'),"required"); 
                 $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
                 $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'max_length[12]|regex_match[/^[0-9]+$/]|xss_clean');
-                $this->form_validation->set_rules('credit_days', $this->lang->line('credit_days'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
-                $this->form_validation->set_rules('credit_limit', $this->lang->line('credit_limit'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
-                $this->form_validation->set_rules('balance', $this->lang->line('balance'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
-                $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email'); 
+               $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');
                 
                 if ( $this->form_validation->run() !== false ) {
                     $values=array(
@@ -216,12 +212,7 @@ class Customers extends MX_Controller
                         'website'=>$this->input->post('website'),
                         'account_number'=>$this->input->post('account'),
                         'address'=>$this->input->post('address'),
-                        'company_name'=>$this->input->post('company'),                                    
-
-                        'payment'=>$this->input->post('payment'),
-                        'credit_limit'=>$this->input->post('credit_limit'),
-                        'cdays'=>$this->input->post('credit_days'),
-                        'month_credit_bal'=>$this->input->post('balance'),
+                        'company_name'=>$this->input->post('company'), 
                         'bday'=>strtotime($this->input->post('dob')),
                         'mday'=>strtotime($this->input->post('marragedate')),
                         'title'=>$this->input->post('title'),
@@ -282,16 +273,12 @@ class Customers extends MX_Controller
                             $this->form_validation->set_rules("last_name",$this->lang->line('last_name'),"required"); 
                             $this->form_validation->set_rules("category",$this->lang->line('category'),"required"); 
                             $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
-                            $this->form_validation->set_rules("payment",$this->lang->line('payment'),"required"); 
                             $this->form_validation->set_rules("city",$this->lang->line('city'),"required"); 
                             $this->form_validation->set_rules("state",$this->lang->line('state'),"required"); 
                             $this->form_validation->set_rules("zip",$this->lang->line('zip'),"required"); 
                             $this->form_validation->set_rules("country",$this->lang->line('country'),"required"); 
                             $this->form_validation->set_rules("address",$this->lang->line('address'),"required"); 
                             $this->form_validation->set_rules('phone', $this->lang->line('phone'), 'max_length[12]|regex_match[/^[0-9]+$/]|xss_clean');
-                            $this->form_validation->set_rules('credit_days', $this->lang->line('credit_days'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
-                            $this->form_validation->set_rules('credit_limit', $this->lang->line('credit_limit'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
-                            $this->form_validation->set_rules('balance', $this->lang->line('balance'), 'max_length[10]|regex_match[/^[0-9 .]+$/]|xss_clean');
                             $this->form_validation->set_rules('email', $this->lang->line('email'), 'required|valid_email');                             	  
                         if ( $this->form_validation->run() !== false ) {
                             $values=array(
@@ -307,17 +294,11 @@ class Customers extends MX_Controller
                                     'website'=>$this->input->post('website'),
                                     'account_number'=>$this->input->post('account'),
                                     'address'=>$this->input->post('address'),
-                                    'company_name'=>$this->input->post('company'),                                    
-                                    
-                                    'payment'=>$this->input->post('payment'),
-                                    'credit_limit'=>$this->input->post('credit_limit'),
-                                    'cdays'=>$this->input->post('credit_days'),
-                                    'month_credit_bal'=>$this->input->post('balance'),
+                                    'company_name'=>$this->input->post('company'),
                                     'bday'=>strtotime($this->input->post('dob')),
                                     'mday'=>strtotime($this->input->post('marragedate')),
                                     'title'=>$this->input->post('title'),
-                                    'category_id'=>$this->input->post('category'),
-                                
+                                    'category_id'=>$this->input->post('category'),                                
                                     'bank_name'=>$this->input->post('bank_name'),
                                     'bank_location'=>$this->input->post('bank_location'),
                                     'account_number'=>$this->input->post('account_no'),
