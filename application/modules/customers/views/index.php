@@ -55,8 +55,13 @@
         }; 
         $("#import_form").ajaxForm(options);
         $('#add_customer_details_form #customer_category').change(function() {
-            var guid = $('#add_customer_details_form #customer_category').select2('data').id;                  
-            $('#add_customer_details_form #category').val(guid);
+            if($('#add_customer_details_form #customer_category').select2('data').id==101){
+                $('#category_modal').modal('show');
+                $("#add_customer_details_form #customer_category").select2('data', {id:'',text:'',value:'' });
+            }else{
+                var guid = $('#add_customer_details_form #customer_category').select2('data').id;                  
+                $('#add_customer_details_form #category').val(guid);
+            }
         });
         $('#add_customer_details_form #customer_category').select2({
             placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
@@ -77,7 +82,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<?php  echo $this->lang->line('add_new') ?>"}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -255,7 +260,29 @@
             <?php }?>
         });
      });
-    
+     function save_new_category(){
+      <?php if($this->session->userdata['customer_category_per']['add']==1){ ?>
+                var inputs = $('#add_customer_category').serialize();
+                      $.ajax ({
+                            url: "<?php echo base_url('index.php/customer_category/add_customer_category')?>",
+                            data: inputs,
+                            type:'POST',
+                            complete: function(response) {
+                                if(response['responseText']=='TRUE'){
+                                      $.bootstrapGrowl('<?php echo $this->lang->line('new').' '.$this->lang->line('customer_category').' '.$this->lang->line('added');?>', { type: "success" });                                                                                  
+                                       $("#category_modal").modal('hide');
+                                    }else  if(response['responseText']=='ALREADY'){
+                                           $.bootstrapGrowl($('#customer_category').val()+' <?php echo $this->lang->line('customer_category').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                    }else  if(response['responseText']=='FALSE'){
+                                           $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                                    }else{
+                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer_category');?>', { type: "error" });                           
+                                    }
+                       }
+                });<?php }else{ ?>
+                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer_category');?>', { type: "error" });                       
+                    <?php }?>
+     }
     function posnic_mapping_import() { 
         <?php if($this->session->userdata['customers_per']['add']==1){ ?>
             if($('#mapping_form').valid()){
@@ -530,7 +557,7 @@
                     
         </div>
 </div>
-<section id="import_section" class="container clearfix main_section">
+<section id="import_section" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'import_form',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -609,7 +636,7 @@
         </div>
     <?php echo form_close();?>
 </section>
-<section id="import_message_section" class="container clearfix main_section">
+<section id="import_message_section" class="container clearfix main_section"  style="display: none">
      <?php   $form =array('id'=>'import_message',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -642,7 +669,7 @@
         </div>
     <?php echo form_close(); ?>
 </section>
-<section id="export_section" class="container clearfix main_section">
+<section id="export_section" class="container clearfix main_section"  style="display: none">
      <?php   $form =array('id'=>'export_customer',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -698,7 +725,7 @@
 </section>
     
     
-<section id="mapping_section" class="container clearfix main_section">
+<section id="mapping_section" class="container clearfix main_section"  style="display: none">
      <?php   $form =array('id'=>'mapping_form',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -857,7 +884,7 @@
         </div>
     <?php echo form_close();?>
 </section>
-<section id="add_customer_details_form" class="container clearfix main_section">
+<section id="add_customer_details_form" class="container clearfix main_section"  style="display: none">
      <?php   $form =array('id'=>'add_customer_form',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -1265,7 +1292,7 @@
     <?php echo form_close();?>
 </section> 
 
-<section id="edit_customer_form" class="container clearfix main_section">
+<section id="edit_customer_form" class="container clearfix main_section"  style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
@@ -1668,7 +1695,80 @@
                   
           </div>
     <?php echo form_close();?>
-</section>    
+</section>  
+<div class="modal fade" id="category_modal">
+    
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title text-center"><?php  echo $this->lang->line('tax');?></h4>
+            </div>
+            <div class="modal-body">
+                   <?php   $form =array('id'=>'add_customer_category',
+                          'runat'=>'server',
+                          'class'=>'form-horizontal');
+                         echo form_open_multipart('customer_category/add_pos_customer_category_details/',$form);?>
+                       
+                                
+                                   
+                                    
+                                             <div class="row">
+                                                      <div class="col col-lg-12" >
+                                                          <div class="row">
+                                                              <div class="col col-lg-4"></div>
+                                                              <div class="col col-lg-4">
+                                                                  <div class="form_sep">
+                                                                        <label for="customer_category" class="req"><?php echo $this->lang->line('customer_category') ?></label>                                                                                                       
+                                                                          <?php $customer_category=array('name'=>'customer_category',
+                                                                                                   'class'=>'required form-control',
+                                                                                                   'id'=>'customer_category',
+                                                                                                   'value'=>set_value('customer_category'));
+                                                                          echo form_input($customer_category)?> 
+                                                                   </div>
+                                                                  </div>
+                                                              <div class="col col-lg-4"></div>
+                                                              </div>
+                                                       </div>                              
+                                             </div>
+                                             <div class="row">
+                                                      <div class="col col-lg-12" >
+                                                          <div class="row">
+                                                              <div class="col col-lg-4"></div>
+                                                              <div class="col col-lg-4">
+                                                                  <div class="form_sep">
+                                                                    <label for="discount" ><?php echo $this->lang->line('discount') ?>%</label>                                                                                                       
+                                                                      <?php $discount=array('name'=>'discount',
+                                                                                               'class'=>'form-control',
+                                                                                               'id'=>'discount',
+                                                                                               'value'=>set_value('discount'));
+                                                                      echo form_input($discount)?> 
+                                                               </div>
+                                                                  </div>
+                                                              
+                                                              </div>
+                                                       </div>                              
+                                             </div>
+                                             <br><br>
+                                         
+                               
+                                   <div class="row">
+                                               <div class="col-lg-3"></div>
+                                                 <div class="col col-lg-6 text-center"><br><br>
+                                                    <a href="javascript:save_new_category()"   name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></a>
+                                                     <a href="javascript:clear_add_taxes()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                                 </div>
+                                             </div>
+                               
+                   <?php echo form_close();?>
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->lang->line('close') ?></button>
+                    
+            </div>
+        </div>
+    </div>
+</div>
            <div id="footer_space">
               
            </div>

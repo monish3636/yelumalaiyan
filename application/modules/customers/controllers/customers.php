@@ -250,11 +250,9 @@ class Customers extends MX_Controller
     }
     function get_category(){
         $search= $this->input->post('term');
-            if($search!=""){
-                $like=array('category_name'=>$search);
-                $data= $this->posnic->posnic_or_like('customer_category',$like);      
-                echo json_encode($data);
-           }
+        $like=array('category_name'=>$search);
+        $data= $this->posnic->posnic_or_like('customer_category',$like);      
+        echo json_encode($data);
     }
     function get_payment(){
         $search= $this->input->post('term');
