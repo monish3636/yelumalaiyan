@@ -151,11 +151,11 @@ function reload_update_user(){
              </div>
         </div>
 </section>    
-<section id="add_suppliers_category_form" class="container clearfix main_section">
+<section id="add_suppliers_category_form" class="container clearfix main_section" style="display:none">
      <?php   $form =array('id'=>'add_suppliers_category',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
-       echo form_open_multipart('suppliers_category/add_pos_suppliers_category_details/',$form);?>
+       echo form_open_multipart('',$form);?>
         <div id="main_content_outer" class="clearfix">
            <div id="main_content">
                  <div class="row">
@@ -191,19 +191,20 @@ function reload_update_user(){
                     <div class="row">
                                 <div class="col-lg-4"></div>
                                   <div class="col col-lg-4 text-center"><br><br>
+                                       <a href="javascript:posnic_suppliers_category_lists()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('back_to_list') ?></a>
                                       <button id="add_new_suppliers_category"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('save') ?></button>
-                                      <a href="javascript:clear_add_suppliers_category()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('clear') ?></a>
+                                      <a href="javascript:clear_add_suppliers_category()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('reload') ?></a>
                                   </div>
                               </div>
                 </div>
           </div>
     <?php echo form_close();?>
 </section>    
-<section id="edit_suppliers_category_form" class="container clearfix main_section">
+<section id="edit_suppliers_category_form" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'class'=>'form-horizontal');
-       echo form_open_multipart('suppliers_category/upadate_pos_suppliers_category_details/',$form);?>
+       echo form_open_multipart('',$form);?>
         <div id="main_content_outer" class="clearfix">
            <div id="main_content">
                 <div class="row">
@@ -239,8 +240,10 @@ function reload_update_user(){
                    <div class="row">
                         <div class="col-lg-4"></div>
                       <div class="col col-lg-4 text-center"><br><br>
+                        
+                          <a href="javascript:posnic_suppliers_category_lists()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('back_to_list') ?></a>
                           <button id="update_suppliers_category"  type="submit" name="save" class="btn btn-default"><i class="icon icon-save"> </i> <?php echo $this->lang->line('update') ?></button>
-                          <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-list"> </i> <?php echo $this->lang->line('reload') ?></a>
+                          <a href="javascript:reload_update_user()" name="clear" id="clear_user" class="btn btn-default"><i class="icon icon-refresh"> </i> <?php echo $this->lang->line('reload') ?></a>
                       </div>
                   </div>
                 </div>
@@ -308,7 +311,7 @@ function reload_update_user(){
                         
                           $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('suppliers_category');?>', { type: "warning" });
                       }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
+                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('suppliers_category') ?>", function(result) {
              if(result){
               
              
