@@ -199,8 +199,13 @@
     }
     $(document).ready( function () {
         $('#parsley_reg #search_department').change(function() {
-            var guid = $('#parsley_reg #search_department').select2('data').id;
-            $('#parsley_reg #item_department').val(guid);
+             if($('#parsley_reg #search_department').select2('data').id==101){
+                $('#department_modal').modal('show');
+                $("#parsley_reg #search_department").select2('data', {id:'',text:'' });
+            }else{
+                var guid = $('#parsley_reg #search_department').select2('data').id;
+                $('#parsley_reg #item_department').val(guid);
+            }
        });
         $('#parsley_reg #search_department').select2({
             placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('item_department') ?>",
@@ -221,7 +226,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<?php  echo $this->lang->line('add_new') ?>"}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -235,8 +240,13 @@
             }
         });
         $('#parsley_reg #search_category').change(function() {
-            var guid = $('#parsley_reg #search_category').select2('data').id;
-            $('#parsley_reg #category').val(guid);
+            if($('#parsley_reg #search_category').select2('data').id==101){
+                $('#category_modal').modal('show');
+                $("#parsley_reg #search_category").select2('data', {id:'',text:'' });
+            }else{
+                var guid = $('#parsley_reg #search_category').select2('data').id;
+                $('#parsley_reg #category').val(guid);
+            }
         });
         $('#parsley_reg #search_category').select2({
             placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('category') ?>",
@@ -257,7 +267,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<?php  echo $this->lang->line('add_new') ?>"}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -273,8 +283,13 @@
         
         
         $('#parsley_reg #search_brand').change(function() {
-            var guid = $('#parsley_reg #search_brand').select2('data').id;
-            $('#parsley_reg #brand').val(guid);
+             if($('#parsley_reg #search_brand').select2('data').id==101){
+                $('#brand_modal').modal('show');
+                $("#parsley_reg #search_brand").select2('data', {id:'',text:'' });
+            }else{
+                var guid = $('#parsley_reg #search_brand').select2('data').id;
+                $('#parsley_reg #brand').val(guid);
+            }
         });
         $('#parsley_reg #search_brand').select2({
             placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('brand') ?>",
@@ -295,7 +310,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<?php  echo $this->lang->line('add_new') ?>"}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -311,8 +326,13 @@
         
         
         $('#parsley_reg #search_taxes2').change(function() {
-            var guid = $('#parsley_reg #search_taxes2').select2('data').id;
-            $('#parsley_reg #taxes2').val(guid);
+            if($('#parsley_reg #search_taxes2').select2('data').id==101){
+                $('#tax_modal').modal('show');
+                $("#parsley_reg #search_taxes2").select2('data', {id:'',text:'' });
+            }else{
+                 var guid = $('#parsley_reg #search_taxes2').select2('data').id;
+                $('#parsley_reg #taxes2').val(guid);
+            }
         });
         $('#parsley_reg #search_taxes2').select2({
             formatResult: format_tax,
@@ -337,7 +357,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<?php  echo $this->lang->line('add_new') ?>"}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -354,8 +374,14 @@
         
         
         $('#parsley_reg #search_taxes').change(function() {
-            var guid = $('#parsley_reg #search_taxes').select2('data').id;
-            $('#parsley_reg #taxes').val(guid);
+            
+             if($('#parsley_reg #search_taxes2').select2('data').id==101){
+                $('#tax_modal').modal('show');
+                $("#parsley_reg #search_taxes2").select2('data', {id:'',text:'' });
+            }else{
+                var guid = $('#parsley_reg #search_taxes').select2('data').id;
+                $('#parsley_reg #taxes').val(guid);
+            }
         });
         function format_tax(sup) {
             if(sup.id==101){
@@ -387,7 +413,7 @@
                     };
                 },
                 results: function (data) {
-                    var results = [];
+                    var results = [{"id":101,"text":"<?php  echo $this->lang->line('add_new') ?>"}];
                     $.each(data, function(index, item){
                         results.push({
                             id: item.guid,
@@ -628,8 +654,14 @@
         });
         
         $('#add_item #search_taxes').change(function() {
-            var guid = $('#add_item #search_taxes').select2('data').id;
-            $('#add_item #taxes').val(guid);
+            
+             if($('#add_item #search_taxes').select2('data').id==101){
+                $('#tax_modal').modal('show');
+                $("#add_item #search_taxes").select2('data', {id:'',text:'' });
+            }else{
+                var guid = $('#add_item #search_taxes').select2('data').id;
+                $('#add_item #taxes').val(guid);
+            }
         });
         function format_tax(sup) {
              if(sup.id==101){
