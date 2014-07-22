@@ -118,7 +118,11 @@ class Suppliers extends MX_Controller{
 		
 			if ( $_GET['sSearch'] != "" )
 		{
-		$like =array('first_name'=>  $this->input->get_post('sSearch'));
+		$like =array('first_name'=>  $this->input->get_post('sSearch'),
+                        'last_name'=>  $this->input->get_post('sSearch'),
+                        'company_name'=>  $this->input->get_post('sSearch'),
+                        'phone'=>  $this->input->get_post('sSearch'),
+                        'email'=>  $this->input->get_post('sSearch'));
 				
 			}
                         $this->load->model('supplier')	   ;
@@ -201,9 +205,6 @@ class Suppliers extends MX_Controller{
                                     'website'=>$this->input->post('website'), 
                                     'company_name '=>$this->input->post('company'),
                                     'account_number'=>$this->input->post('account_no'),
-                                    'credit_days '=>$this->input->post('credit_days'),
-                                    'credit_limit '=>$this->input->post('credit_limit'),
-                                    'monthly_credit_bal '=>$this->input->post('balance'),
                                     'bank_name '=>$this->input->post('bank_name'),
                                     'bank_location '=>$this->input->post('bank_location'),
                                     'cst_no '=>$this->input->post('cst'),
@@ -251,9 +252,6 @@ class Suppliers extends MX_Controller{
                                     'website'=>$this->input->post('website'), 
                                     'company_name '=>$this->input->post('company'),
                                     'account_number'=>$this->input->post('account_no'),
-                                    'credit_days '=>$this->input->post('credit_days'),
-                                    'credit_limit '=>$this->input->post('credit_limit'),
-                                    'monthly_credit_bal '=>$this->input->post('balance'),
                                     'bank_name '=>$this->input->post('bank_name'),
                                     'bank_location '=>$this->input->post('bank_location'),
                                     'cst_no '=>$this->input->post('cst'),

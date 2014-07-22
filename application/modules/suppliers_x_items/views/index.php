@@ -166,7 +166,7 @@
         
      });
      function refresh_item_table(){
-     window.setTimeout(100000);
+     window.setTimeout(100);
        $("#selected_item_table").dataTable().fnDraw();
      }
 function posnic_add_new(){
@@ -472,9 +472,13 @@ if(document.getElementById('item_id_'+$('#parsley_reg #item_id').val())){
          $.bootstrapGrowl('<?php echo $this->lang->line('Cost Must Less Than Sell price');?>', { type: "warning" }); 
         $('#parsley_reg #cost').focus();
         }
-        }else{
+        }else if($('#parsley_reg #quantity').val()==""){
+            $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('quantity');?>', { type: "warning" });          
+           $('#parsley_reg #quantity').focus();
+        }else
+        {
          $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" });          
-           $('#parsley_reg #items').focus();
+           $('#parsley_reg #items').selec2('focus');
         }
 }
 function clear_inputs(){
