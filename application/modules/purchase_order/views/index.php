@@ -1795,7 +1795,7 @@ function new_discount_amount(){
 </script>
 
   
-<section id="add_new_order" class="container clearfix main_section">
+<section id="add_new_order" class="container clearfix main_section" style="display: none">
      <?php   $form =array('id'=>'parsley_reg',
                           'runat'=>'server',
                           'name'=>'items_form',
