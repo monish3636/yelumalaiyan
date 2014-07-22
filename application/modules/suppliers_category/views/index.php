@@ -98,7 +98,7 @@ function posnic_suppliers_category_lists(){
       $('#suppliers_category_lists').attr("disabled",'disabled');
 }
 function clear_add_suppliers_category(){
-      $("#posnic_user_2").trigger('reset');
+      $("#add_new_suppliers_category").trigger('reset');
 }
 function reload_update_user(){
     var id=$('#guid').val();
