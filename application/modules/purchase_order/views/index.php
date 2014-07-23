@@ -1980,6 +1980,9 @@ function new_discount_amount(){
                                                     <input type="hidden" name="tax_type" id="tax_type">
                                                     <input type="hidden" name="tax_Inclusive" id="tax_Inclusive">                                                 
                                                     <input type="hidden" name="tax_value" id="tax_value">
+                                                    <input type="hidden" name="tax_type2" id="tax_type">
+                                                    <input type="hidden" name="tax_Inclusive2" id="tax_Inclusive">                                                 
+                                                    <input type="hidden" name="tax_value2" id="tax_value">
                                                     <input type="hidden" name="item_name" id="item_name">
                                                     <input type="hidden" name="sku" id="sku">
                                                     <input type="hidden" name="seleted_row_id" id="seleted_row_id">
@@ -2088,7 +2091,8 @@ function new_discount_amount(){
                                                                                             'id'=>'tax',
                                                                                             'disabled'=>'disabled',
                                                                                             'value'=>set_value('tax'));
-                                                                             echo form_input($tax)?>
+                                                                             //echo form_input($tax)?>
+                                                                <div id="tax_parent"> <input id="tax" class="btn btn-default" data-toggle="popover" data-trigger="hover" data-container="body" data-placement="top" data-content="" title="<?php echo $this->lang->line('item_tax') ?>"></div>
                                                         </div>
                                                     </div>
                                                
