@@ -330,8 +330,10 @@
                 $('#tax_modal').modal('show');
                 $("#parsley_reg #search_taxes2").select2('data', {id:'',text:'' });
             }else{
-                 var guid = $('#parsley_reg #search_taxes2').select2('data').id;
+                var guid = $('#parsley_reg #search_taxes2').select2('data').id;
                 $('#parsley_reg #taxes2').val(guid);
+                $('#parsley_reg #tax_value_2').val($('#parsley_reg #search_taxes2').select2('data').value);
+                $('#parsley_reg #tax_type_2').val($('#parsley_reg #search_taxes2').select2('data').text);
             }
         });
         $('#parsley_reg #search_taxes2').select2({
@@ -375,9 +377,9 @@
         
         $('#parsley_reg #search_taxes').change(function() {
             
-             if($('#parsley_reg #search_taxes2').select2('data').id==101){
+             if($('#parsley_reg #search_taxes').select2('data').id==101){
                 $('#tax_modal').modal('show');
-                $("#parsley_reg #search_taxes2").select2('data', {id:'',text:'' });
+                $("#parsley_reg #search_taxes").select2('data', {id:'',text:'' });
             }else{
                 var guid = $('#parsley_reg #search_taxes').select2('data').id;
                 $('#parsley_reg #taxes').val(guid);
@@ -612,8 +614,10 @@
                 $('#tax_modal').modal('show');
                 $("#add_item #search_taxes2").select2('data', {id:'',text:'' });
             }else{
-                 var guid = $('#add_item #search_taxes2').select2('data').id;
+                var guid = $('#add_item #search_taxes2').select2('data').id;
                 $('#add_item #taxes2').val(guid);
+                $('#add_item #tax_value_2').val($('#add_item #search_taxes2').select2('data').value);
+                $('#add_item #tax_type_2').val($('#add_item #search_taxes2').select2('data').text);
             }
           });
         $('#add_item #search_taxes2').select2({
@@ -2189,6 +2193,8 @@ function items_decomposition(){
                                                                                     'value'=>set_value('search_taxes2'));
                                                            echo form_input($search_taxes2)?> 
                                                          <input type="hidden" name='taxes2' id='taxes2'>
+                                                         <input type="hidden" name='tax_value_2' id='tax_value_2'>
+                                                         <input type="hidden" name='tax_type_2' id='tax_type_2'>
                                                     </div>
                                                    
                                         </div>  
@@ -2684,6 +2690,8 @@ function items_decomposition(){
                                                                                     'value'=>set_value('taxes'));
                                                            echo form_input($taxes)?> 
                                                            <input type="hidden" name='taxes' id='taxes'>
+                                                            <input type="hidden" name='tax_value_2' id='tax_value_2'>
+                                                         <input type="hidden" name='tax_type_2' id='tax_type_2'>
                                                     </div>
                                                   
                                         </div>
