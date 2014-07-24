@@ -485,6 +485,8 @@ function reload_update_user(){
   disacount_and_amount_editable();
           $('#i_discount').val('0');
           $('#i_dis_amt').val('0');
+          $('#i_discount2').val('0');
+          $('#i_dis_amt2').val('0');
           free_and_discount_input();
      });
    function  disacount_and_amount_editable(){
@@ -828,7 +830,7 @@ function reload_update_user(){
         if (isNaN(amount)) {
             amount=0;
         }
-        $('#i_discount').val(0);
+        $('#i_discount2').val(0);
         var quantity=($('#quantity').val());
         var cost=$('#cost').val();
         if(amount!="" && amount!=0){
@@ -895,7 +897,9 @@ function reload_update_user(){
        
         value: {
             i_discount: "", 
-            i_dis_amt: "0"
+            i_dis_amt: "0",
+            i_discount2: "", 
+            i_dis_amt2: "0"
           
         },
 //        validate: function(value) {
@@ -1455,6 +1459,7 @@ function add_new_price(e){
     }
     }
     function net_amount(){
+  
         if(isNaN($('#parsley_reg #cost').val()) || isNaN($('#parsley_reg #quantity').val())){
             if(isNaN($('#parsley_reg #cost').val())){
                 $('#parsley_reg #cost').val(0);
@@ -1511,8 +1516,12 @@ function add_new_price(e){
                     $('#parsley_reg #sub_total').val($('#parsley_reg #cost').val()*$('#parsley_reg #quantity').val());
                     var num = parseFloat($('#sub_total').val());
                     $('#sub_total').val(num.toFixed(point));
-                    var num = parseFloat(discount+discount2);
-                    $('#extra_elements').val(num.toFixed(point));
+                    var num1 = parseFloat(discount+discount2);
+                   
+                    window.setTimeout(function ()
+                    {
+                        $('#extra_elements').val(num1.toFixed(point));
+                    }, 0);
                     $('#tax').val(total_tax);
                     if(total_tax==0){
                         $('#tax_label').text('<?php echo $this->lang->line('tax') ?>(Inc)');
@@ -1723,9 +1732,8 @@ function add_new_price(e){
                         discount=num.toFixed(point);
                         var num = parseFloat(discount2);
                         discount2=num.toFixed(point);
-                        var total_discount=discount+discount2;                        
-                        var num = parseFloat(total_discount);
-                        total_discount=num.toFixed(point);
+                        var total_discount=parseFloat(discount)+parseFloat(discount2);  
+                        total_discount=total_discount.toFixed(point);
                         var num = parseFloat(total);
                         total=num.toFixed(point);
                         var num = parseFloat(sub_total);
@@ -1878,7 +1886,7 @@ function edit_order_item(guid){
           free_and_discount_input();
          $('#dummy_discount_amount').val($('#selected_item_table #new_item_row_id_'+guid+' #items_discount').val());
           $('#dummy_discount').val($('#selected_item_table #new_item_row_id_'+guid+' #items_discount_per').val());
-          $('#extra_elements').val($('#dummy_discount_amount').val());
+          $('#extra_elements').val($('#dummy_discount_amount').val()+$('#dummy_discount_amount2').val());
         
 
 }
@@ -1916,13 +1924,20 @@ function clear_inputs(){
   $('#parsley_reg #tax_value').val('');
   $('#parsley_reg #tax_type').val('');
   $('#parsley_reg #tax_Inclusive').val('');
+  $('#parsley_reg #tax_value2').val('');
+  $('#parsley_reg #tax_type2').val('');
+  $('#parsley_reg #tax_Inclusive2').val('');
   $('#parsley_reg #extra_elements').val('');
   $('#parsley_reg #item_id').val('')
   $('#parsley_reg #dummy_discount_amount').val('')
   $('#parsley_reg #hidden_dis_amt').val('')
   $('#parsley_reg #hidden_dis').val('')
-  $('#parsley_reg #tax_label').text('<?php echo $this->lang->line('tax')?>');
   $('#parsley_reg #dummy_discount').val('')
+  $('#parsley_reg #dummy_discount_amount2').val('')
+  $('#parsley_reg #hidden_dis_amt2').val('')
+  $('#parsley_reg #hidden_dis2').val('')
+  $('#parsley_reg #dummy_discount2').val('')
+  $('#parsley_reg #tax_label').text('<?php echo $this->lang->line('tax')?>');
   $("#parsley_reg #items").select2('data', {id:'',text: 'Search Item'});
   $('#parsley_reg #items').select2('open');
    
@@ -2024,8 +2039,8 @@ function new_discount_amount(){
                      
         <input type="hidden" name="dummy_discount" id="dummy_discount" >
         <input type="hidden" name="dummy_discount_amount" id="dummy_discount_amount" >
-        <input type="text" name="dummy_discount2" id="dummy_discount2" >
-        <input type="text" name="dummy_discount_amount2" id="dummy_discount_amount2" >
+        <input type="hidden" name="dummy_discount2" id="dummy_discount2" >
+        <input type="hidden" name="dummy_discount_amount2" id="dummy_discount_amount2" >
                          <div class="row">
                           <div class="panel panel-default">
                               <div class="panel-heading" >
@@ -2197,12 +2212,12 @@ function new_discount_amount(){
                                          
                                                     <input type="hidden" id='diabled_item' class="form-control">                                                 
                                                     <input type="hidden" name="item_id" id="item_id">
-                                                    <input type="text" name="tax_type" id="tax_type">
-                                                    <input type="text" name="tax_Inclusive" id="tax_Inclusive">                                                 
-                                                    <input type="text" name="tax_value" id="tax_value">
-                                                    <input type="text" name="tax2_type" id="tax2_type">
-                                                    <input type="text" name="tax2_Inclusive" id="tax2_Inclusive">                                                 
-                                                    <input type="text" name="tax2_value" id="tax2_value">
+                                                    <input type="hidden" name="tax_type" id="tax_type">
+                                                    <input type="hidden" name="tax_Inclusive" id="tax_Inclusive">                                                 
+                                                    <input type="hidden" name="tax_value" id="tax_value">
+                                                    <input type="hidden" name="tax2_type" id="tax2_type">
+                                                    <input type="hidden" name="tax2_Inclusive" id="tax2_Inclusive">                                                 
+                                                    <input type="hidden" name="tax2_value" id="tax2_value">
                                                     <input type="hidden" name="item_name" id="item_name">
                                                     <input type="hidden" name="sku" id="sku">
                                                     <input type="hidden" name="seleted_row_id" id="seleted_row_id">
@@ -2362,7 +2377,7 @@ function new_discount_amount(){
                                     <div class="panel-heading">
                                             <h4 class="panel-title"><?php echo $this->lang->line('order_items') ?></h4>                                                                               
                                     </div>
-                                <table id='selected_item_table' class="table table-striped dataTable ">
+                                    <table id='selected_item_table' class="table table-striped dataTable " style="width: 100% !important">
                                     <thead>
                                         <tr>
                                             
