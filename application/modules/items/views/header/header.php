@@ -173,7 +173,8 @@
                                  $('#parsley_reg #starting_date').val(data[0]['start_date']);
                                  $('#parsley_reg #ending_date').val(data[0]['end_date']);
                                  $('#parsley_reg #tax_Inclusive').val(data[0]['tax_Inclusive']);
-                                 $('#parsley_reg #tax_inclusive2').val(data[0]['tax_inclusive2']);
+                                 $('#parsley_reg #tax_2_Inclusive').val(data[0]['tax_inclusive2']);
+                                 console.log(data[0]['tax_inclusive2']);
                                  $('#parsley_reg #location').val(data[0]['location']);
                                  $('#parsley_reg #category').val(data[0]['category_id']);
                                  $('#parsley_reg #unit_of_mes').val(data[0]['uom']);
