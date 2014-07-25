@@ -270,14 +270,14 @@ function purchase_order_approve(guid){
                                     var per=data[i]['dis_per'];
                                     var per2=data[i]['dis_per2'];                                   
                                     var type='Inc';
-                                    if(data[i]['tax_Inclusive']==0){
-                                        var tax=data[i]['order_tax'];                                    
+                                    var tax=data[i]['order_tax'];  
+                                    if(data[i]['tax_Inclusive']==0){                                                                          
                                         var total=(parseFloat(tax)+parseFloat(total));
                                         type='Exc';
                                     }
-                                    var type2='Inc'
-                                    if(data[i]['tax_inclusive2']==0){
-                                        var tax2=data[i]['order_tax2'];                                    
+                                    var type2='Inc';
+                                    var tax2=data[i]['order_tax2'];  
+                                    if(data[i]['tax_inclusive2']==0){                                                                          
                                         var total=(parseFloat(tax2)+parseFloat(total));
                                         type2='Exc';
                                     }
