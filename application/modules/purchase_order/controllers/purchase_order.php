@@ -254,7 +254,7 @@ function save(){
                 $tax2=  $this->input->post('items_tax2');
                 for($i=0;$i<count($item);$i++){
                
-                         $where=array('order_id'=>$guid,'item'=>$item[$i]);
+                        $where=array('order_id'=>$guid,'item'=>$item[$i]);
                         $item_value=array('order_id'=>$guid,'discount_per'=>$per[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'discount_per2'=>$per2[$i],'discount_amount2'=>$dis2[$i],'tax2'=>$tax2[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i]);
                        $this->posnic->posnic_update_record($item_value,$where,'purchase_items');
                 

@@ -162,17 +162,14 @@
                     <?php }?>
     }
     
-     $(document).ready( function () {
-         
-       
-          $('#parsley_reg #items').change(function() {
-              if(document.getElementById('new_item_row_id_'+$('#parsley_reg #items').select2('data').id) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #items').select2('data').id){
-                     $.bootstrapGrowl('<?php echo $this->lang->line('this item already added');?> '+$('#parsley_reg #first_name').val(), { type: "warning" });  
-                       $('#parsley_reg #items').select2('open');
-              }else{
-                   var guid = $('#parsley_reg #items').select2('data').id;
-                
-                       
+    $(document).ready( function () {
+        $('#parsley_reg #items').change(function() {
+            if(document.getElementById('new_item_row_id_'+$('#parsley_reg #items').select2('data').id) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #items').select2('data').id){
+                $.bootstrapGrowl('<?php echo $this->lang->line('this item already added');?> '+$('#parsley_reg #first_name').val(), { type: "warning" });  
+                $('#parsley_reg #items').select2('open');
+            }else{
+                var guid = $('#parsley_reg #items').select2('data').id;
+                                  
                 $('#parsley_reg #item_id').val(guid);
                 $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').value);
                 $('#parsley_reg #item_name').val($('#parsley_reg #items').select2('data').text);
@@ -185,8 +182,7 @@
                 $('#parsley_reg #tax_Inclusive').val($('#parsley_reg #items').select2('data').tax_Inclusive);
                 $('#parsley_reg #tax2_value').val($('#parsley_reg #items').select2('data').tax2_value);
                 $('#parsley_reg #tax2_type').val($('#parsley_reg #items').select2('data').tax2_type);
-                $('#parsley_reg #tax2_Inclusive').val($('#parsley_reg #items').select2('data').tax2_Inclusive);
-                
+                $('#parsley_reg #tax2_Inclusive').val($('#parsley_reg #items').select2('data').tax2_Inclusive);                
                 var tax=$('#parsley_reg #items').select2('data').tax_Inclusive;
                 if(tax==1){
                     $('#tax_label').text('Tax(Exc)');
@@ -194,25 +190,27 @@
                     $('#tax_label').text('Tax(Inc)');   
                 }
                 if(isNaN($('#parsley_reg #tax_value').val())){
-                      $('#parsley_reg #tax_value').val(0);
-                      $('#parsley_reg #tax').val(0);
+                    $('#parsley_reg #tax_value').val(0);
+                    $('#parsley_reg #tax').val(0);
                 }
                 disacount_and_amount_editable();
-                  
-                    $('#i_discount').val('0');
-                    $('#i_dis_amt').val('0');
-                      free_and_discount_input();
-                   
-               net_amount();
-                $('#parsley_reg #extra_elements').click();
+                $('#i_discount').val('0');
+                $('#i_dis_amt').val('0');
+               
+                net_amount();
+                  free_and_discount_input();
+                     $('#parsley_reg #extra_elements').click();
+               
+                
                 $('#parsley_reg #quantity').focus();
-                    window.setTimeout(function ()
-                    {
-                      
-                        $('#parsley_reg #quantity').focus();
-                    }, 0);
-          }
-          });
+                window.setTimeout(function ()
+                {
+
+                    $('#parsley_reg #quantity').focus();
+                }, 100);
+              
+            }
+        });
           function format_item(sup) {
             if (!sup.id) return sup.text;
     return  "<p >"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:59px'></img></p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.value+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.category+"</p> <p style='width:130px;  margin-left: 218px'> "+sup.brand+"</p><p style='width:120px;  margin-left: 380px;margin-top: -28px;'> "+sup.department+"</p>";
@@ -1343,9 +1341,10 @@ function reload_update_user(){
                         
                         if($('#parsley_reg #total_amount').val()==0){
                              $('#parsley_reg #total_amount').val(total);
-                        }else{
+                        }else{                            
                             var total_amount=parseFloat($('#total_amount').val());
-                            total_amount=total_amount-old_total+total;
+                            total_amount=parseFloat(total_amount)-parseFloat(old_total);
+                            total_amount=parseFloat(total_amount)+parseFloat(total);
                             var num = parseFloat(total_amount);
                             total_amount=num.toFixed(point);
                             $('#total_amount').val(total_amount)
@@ -1629,8 +1628,9 @@ function reload_update_user(){
         $('#parsley_reg #items').select2('open');
         window.setTimeout(function ()
         {
+            set_default_amount();
             $('#parsley_reg #extra_elements').val('');
-        }, 0);
+        }, 100);
     }
     function new_grand_total(){
         if(parseFloat($("#parsley_reg #total_amount").val())>0){
