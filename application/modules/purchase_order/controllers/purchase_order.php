@@ -119,8 +119,11 @@ function save(){
         $this->form_validation->set_rules('new_item_price[]', $this->lang->line('new_item_price'), 'required|numeric');                      
         $this->form_validation->set_rules('new_item_discount_per[]', $this->lang->line('new_item_discount_per'), 'numeric');                      
         $this->form_validation->set_rules('new_item_discount[]', $this->lang->line('new_item_discount'), 'numeric');                      
+        $this->form_validation->set_rules('new_item_discount_per2[]', $this->lang->line('new_item_discount_per'), 'numeric');                      
+        $this->form_validation->set_rules('new_item_discount2[]', $this->lang->line('new_item_discount'), 'numeric');                      
         $this->form_validation->set_rules('new_item_total[]', $this->lang->line('new_item_total'), 'numeric');                      
         $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'required|numeric');                      
+        $this->form_validation->set_rules('new_item_tax2[]', $this->lang->line('new_item_tax'), 'numeric');                      
            
             if ( $this->form_validation->run() !== false ) {    
                 $supplier=  $this->input->post('supplier_guid');
@@ -151,10 +154,13 @@ function save(){
                 $per=  $this->input->post('new_item_discount_per');
                 $dis=  $this->input->post('new_item_discount');
                 $tax=  $this->input->post('new_item_tax');
+                $per2=  $this->input->post('new_item_discount_per2');
+                $dis2=  $this->input->post('new_item_discount2');
+                $tax2=  $this->input->post('new_item_tax2');
            
                 for($i=0;$i<count($item);$i++){
               
-                        $item_value=array('order_id'=>$guid,'discount_per'=>$per[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i]);
+                        $item_value=array('order_id'=>$guid,'discount_per'=>$per[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'discount_per2'=>$per2[$i],'discount_amount2'=>$dis2[$i],'tax2'=>$tax2[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i]);
                         $this->posnic->posnic_add_record($item_value,'purchase_items');
                 
                         
