@@ -280,9 +280,6 @@
                                     var  rece_free=data[i]['received_free'];
                                     var  sku=data[i]['i_code'];
                                     var  quty=parseFloat(data[i]['quty']);
-                                    var  tax_type=data[i]['tax_type_name'];
-                                    var  tax_value=data[i]['tax_value'];
-                                    var  tax_Inclusive=data[i]['tax_Inclusive'];
                                   
                                     var  free=parseFloat(data[i]['free']);
                                     var  received_quty=data[i]['received_quty'];
@@ -294,37 +291,11 @@
                                     var  o_i_guid=data[i]['o_i_guid'];
                                     var  date=data[i]['date'];
                                     var  items_id=data[i]['item'];
-                                    if(data[i]['dis_per']!=0){
-                                    var discount=(parseFloat(quty)*parseFloat(cost))*(data[i]['dis_per']/100);
                                     var per=data[i]['dis_per'];
-                                     var num = parseFloat(discount);
-                                      discount=num.toFixed(point);
-                                    }else{
-                                    var discount=data[i]['item_dis_amt'];
-                                     var num = parseFloat(discount);
-                                      discount=num.toFixed(point);
-                                    var per="";
-                                  
-                                    }
-                                    
-                                    if(data[i]['tax_Inclusive']==1){
-                                        var tax=parseFloat(data[i]['tax_value']);                                    
-                                        var tax_amount=(parseFloat(rece_quty)*parseFloat(cost)*tax)/100;
-                                        var type='Exc';
-                                         var total=((parseFloat(rece_quty)*parseFloat(cost)))-parseFloat(discount)+parseFloat(tax_amount);
-                                        var num = parseFloat(total);
-                                        total=num.toFixed(point);
-                                    }else{
-                                        var type="Inc";
-                                        var tax=parseFloat(data[i]['tax_value']);
-                                        var tax_amount=(parseFloat(rece_quty)*parseFloat(cost)*tax)/100;
-                                        var total=(parseFloat(rece_quty)*parseFloat(cost))-discount;
-                                        var num = parseFloat(total);
-                                        total=num.toFixed(point);
-                                  }
-                                 var grn_received_quty=parseFloat(received_quty)-parseFloat(rece_quty);
-                             
-                                 var grn_received_free=parseFloat(received_free)-parseFloat(rece_free);
+                                    var per2=data[i]['dis_per2'];
+                                    var discount;
+                                    var discount2;
+                                   
                                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                                     null,
                                     name,
@@ -334,18 +305,18 @@
                                     received_quty,
                                     free,
                                     received_free,
-                                    "<input type='hidden' id='total_id_"+i+"' value='"+total+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+data[i]['tax_Inclusive']+"' ><input type='hidden' id='discount_amt_"+i+"' value='"+discount+"' ><input type='hidden' id='cost_id_"+i+"' value='"+cost+"' ><input type='hidden' id='grn_old_quantity_"+i+"' value='"+rece_quty+"' ><input type='hidden' name='items[]' value='"+data[i]['item']+"' ><input type='hidden' id='o_quty_id_"+i+"' value='"+parseFloat(quty-grn_received_quty)+"' ><input type='text' id='r_quty_id_"+i+"' name='receive_quty[]' value='"+rece_quty+"' onkeyup='receive_quty_items("+i+")' onKeyPress='receive_quty(event,"+i+");return numbersonly(event)' class='form-control' style='width:100px'>",
-                                    "<input type='hidden' id='tax_value_"+i+"' value='"+data[i]['tax_value']+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' id='grn_old_free_"+i+"' value='"+rece_free+"' ><input type='hidden' name='order_items[]' value='"+data[i]['o_i_guid']+"' ><input type='hidden' id='o_free_id_"+i+"' value='"+parseFloat(free-grn_received_free)+"' ><input type='text' id='r_free_id_"+i+"' name='receive_free[]' value='"+rece_free+"' onkeyup='receive_free_items_update("+i+")' onKeyPress='receive_free(event,"+i+","+data.length+");return numbersonly(event)' class='form-control' style='width:90px'>",
-
-                                type+':'+tax_amount,
-                                  discount,
-                                  total
+                                   "<input type='hidden' id='total_id_"+i+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+data[i]['tax_Inclusive']+"' ><input type='hidden' id='discount_amt_"+i+"' value='"+discount+"' ><input type='hidden' id='tax_inclusive2_"+i+"' value='"+data[i]['tax_inclusive2']+"' ><input type='hidden' id='discount_amt2_"+i+"' value='"+discount2+"' ><input type='hidden' name='items[]' value='"+data[i]['item']+"' ><input type='hidden' id='cost_id_"+i+"' value='"+cost+"' ><input type='hidden' id='o_quty_id_"+i+"' value='"+quty+"' ><input type='text' id='r_quty_id_"+i+"' name='receive_quty[]' onkeyup='receive_quty_items("+i+")' onKeyPress='receive_quty(event,"+i+");return numbersonly(event)' class='form-control' value='"+rece_quty+"' style='width:80px'>",
+                                   "<input type='hidden' id='tax_type_"+i+"' value='"+data[i]['tax_type_name']+"' ><input type='hidden' id='tax_type2_"+i+"' value='"+data[i]['tax2_type']+"' ><input type='hidden' id='tax_value_"+i+"' value='"+data[i]['tax_value']+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' id='tax_value2_"+i+"' value='"+data[i]['tax2_value']+"' ><input type='hidden' id='discount_per2_"+i+"' value='"+per2+"' ><input type='hidden' name='order_items[]' value='"+data[i]['o_i_guid']+"' ><input type='hidden' id='o_free_id_"+i+"' value='"+free+"' ><input type='text' id='r_free_id_"+i+"' name='receive_free[]' onkeyup='receive_free_items("+i+")' onKeyPress='receive_free(event,"+i+","+data.length+");return numbersonly(event)' value='"+rece_free+"' class='form-control' style='width:60px'>",
+                                    '',
+                                    '',
+                                    '',
+                                    0,
                                  
                                  ] );
 
                               var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                               theNode.setAttribute('id','new_item_row_id_'+i)
-                                
+                                 receive_quty_items(i);
                                 }
                                     total_amount();
                              } 
