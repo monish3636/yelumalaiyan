@@ -25,7 +25,7 @@ class Grn extends CI_Model{
         $this->db->select('purchase_order.*,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name');
         $this->db->from('purchase_order')->where('purchase_order.branch_id',$branch)->where('purchase_order.order_status',1)->where('purchase_order.active_status',1)->where('purchase_order.delete_status',0);
         $or_like=array('po_no'=>$like,'suppliers.company_name'=>$like,'suppliers.first_name'=>$like);
-        $this->db->join('suppliers', 'suppliers.guid=purchase_order.supplier_id ','left');
+        $this->db->join('suppliers', 'suppliers.guid=purchase_order.supplier_id AND purchase_order.order_status=1 AND purchase_order.active_status=1 AND purchase_order.delete_status=0 ','left');
         $this->db->or_like($or_like); 
         $this->db->limit($this->session->userdata['data_limit']);
         $sql=$this->db->get();
@@ -48,18 +48,6 @@ class Grn extends CI_Model{
                
         
     }
-    function supplier_vs_items($end,$start,$like,$branch,$suplier){
-        
-                $this->db->select('suppliers_x_items.* ,items.guid as i_guid,items.name as i_name,items.code as i_code')->from('suppliers_x_items')->where('suppliers.branch_id',$branch)->where('suppliers.active_status',1)->where('suppliers.active',0)->where('suppliers.delete_status',1)->where('suppliers_x_items.active_status',1)->where('suppliers_x_items.delete_status',1);
-                $this->db->join('items', 'items.guid=suppliers_x_items.item_id','left');
-                $this->db->join('suppliers', 'suppliers.guid=suppliers_x_items.supplier_id','left');
-                $this->db->where('suppliers_x_items.supplier_id',$suplier);
-               $this->db->limit($end,$start);   
-                $this->db->like($like);     
-                $query=$this->db->get();
-                return $query->result_array(); 
-        
-    }
     
   
     function count($branch){
@@ -79,30 +67,7 @@ class Grn extends CI_Model{
                 $query=$this->db->get();
                 return $query->result();
     }
-    function get_suppliers_x_items($guid){
-        $this->db->select()->from('suppliers_x_items')->where('guid',$guid);
-        $sql=  $this->db->get();
-        $data=array();
-        $item_id;
-        foreach ($sql->result() as $row){
-            $item_id=$row->item_id;
-            $data[]=$row;
-        }
-        $this->db->select()->from('items')->where('guid',$item_id);
-        $item=  $this->db->get();
-        foreach ($item->result() as $row){
-            $data[]=$row;
-        }
-        return $data;
-    }
-    function supplier_like($like,$bid){
-          $this->db->select('suppliers.* ,suppliers_category.guid as c_guid,suppliers_category.category_name')->from('suppliers')->where('suppliers.branch_id',$bid)->where('suppliers.active_status',1)->where('suppliers.active',0)->where('suppliers.delete_status',1);
-          $this->db->join('suppliers_category', 'suppliers_category.guid=suppliers.category','left');
-          $this->db->or_like($like);
-          $sql=  $this->db->get();
-          return $sql->result();
-    }
-    
+   
     function serach_items($search,$bid,$guid){
          $this->db->select('items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,suppliers_x_items.*')->from('suppliers_x_items')->where('suppliers_x_items.delete_status',1)->where('suppliers_x_items.active',0)->where('suppliers_x_items.active_status',1)->where('suppliers_x_items.active',0)->where('suppliers_x_items.deactive_item',0)->where('suppliers_x_items.item_active',0)->where('items.branch_id',$bid)->where('items.active_status',1)->where('items.delete_status',1);
          $this->db->join('items', "items.guid=suppliers_x_items.item_id AND suppliers_x_items.supplier_id='".$guid."' ",'left');
@@ -137,7 +102,7 @@ class Grn extends CI_Model{
         return $data;
      }
     function get_goods_receiving_note($guid){
-        $this->db->select('grn.date as grn_date,grn.note as grn_note,grn.remark as grn_remark,grn.grn_no,items.tax_Inclusive ,grn.po,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,purchase_order.*,purchase_items.discount_per as dis_per ,purchase_items.discount_amount as item_dis_amt ,purchase_items.tax as dis_amt ,purchase_items.tax as order_tax,purchase_items.item ,purchase_items.quty ,purchase_items.free,purchase_items.guid as o_i_guid ,purchase_items.received_quty ,purchase_items.received_free ,purchase_items.cost ,purchase_items.sell ,purchase_items.mrp,purchase_items.guid as o_i_guid ,purchase_items.amount ,purchase_items.date,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('grn')->where('grn.guid',$guid)->where('grn.delete_status',0);
+        $this->db->select('grn.date as grn_date,grn.note as grn_note,grn.remark as grn_remark,grn.grn_no,items.tax_inclusive2,items.tax2_type,items.tax2_value,items.tax_Inclusive ,grn.po,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,purchase_order.*,purchase_items.discount_per as dis_per ,purchase_items.discount_amount as item_dis_amt ,purchase_items.tax as dis_amt ,purchase_items.tax as order_tax,purchase_items.discount_per2 as dis_per2 ,purchase_items.discount_amount2 as item_dis_amt2 ,purchase_items.tax2 as order_tax2,purchase_items.item ,purchase_items.quty ,purchase_items.free,purchase_items.guid as o_i_guid ,purchase_items.received_quty ,purchase_items.received_free ,purchase_items.cost ,purchase_items.sell ,purchase_items.mrp,purchase_items.guid as o_i_guid ,purchase_items.amount ,purchase_items.date,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('grn')->where('grn.guid',$guid)->where('grn.delete_status',0);
         $this->db->join('purchase_order', 'grn.po=purchase_order.guid','left');
         $this->db->join('purchase_items', 'purchase_items.order_id = purchase_order.guid AND purchase_items.delete_status=0','left');
         $this->db->join('items', "items.guid=purchase_items.item  AND purchase_items.order_id=purchase_order.guid AND purchase_items.delete_status=0",'left');

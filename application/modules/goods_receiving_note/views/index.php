@@ -488,116 +488,11 @@
                     <?php }?>
     }
     
-     $(document).ready( function () {
-         
-       
-          $('#parsley_reg #items').change(function() {
-              if(document.getElementById('new_item_row_id_'+$('#parsley_reg #items').select2('data').id) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #items').select2('data').id){
-                     $.bootstrapGrowl('<?php echo $this->lang->line('this item already added');?> '+$('#parsley_reg #demo_order_number').val(), { type: "warning" });  
-                       $('#parsley_reg #items').select2('open');
-              }else{
-                   var guid = $('#parsley_reg #items').select2('data').id;
-                
-                       
-                $('#parsley_reg #item_id').val(guid);
-                $('#parsley_reg #sku').val($('#parsley_reg #items').select2('data').value);
-                $('#parsley_reg #item_name').val($('#parsley_reg #items').select2('data').text);
-                $('#parsley_reg #cost').val($('#parsley_reg #items').select2('data').cost);
-                $('#parsley_reg #price').val($('#parsley_reg #items').select2('data').price);
-                $('#parsley_reg #mrp').val($('#parsley_reg #items').select2('data').mrp);
-                $('#parsley_reg #supplier_quty').val($('#parsley_reg #items').select2('data').quty);
-                $('#parsley_reg #tax_value').val($('#parsley_reg #items').select2('data').tax_value);
-                $('#parsley_reg #tax_type').val($('#parsley_reg #items').select2('data').tax_type);
-                var tax=$('#parsley_reg #items').select2('data').tax_Inclusive;
-                $('#parsley_reg #tax_Inclusive').val(tax);
-                if(tax==1){
-                    $('#tax_label').text('Tax(Exc)');
-                }else{
-                    $('#tax_label').text('Tax(Inc)');   
-                }
-                disacount_and_amount_editable();
-                  
-                    $('#i_discount').val('0');
-                    $('#i_dis_amt').val('0');
-                      free_and_discount_input();
-                   
-               net_amount();
-                $('#parsley_reg #extra_elements').click();
-                $('#parsley_reg #quantity').focus();
-                    window.setTimeout(function ()
-                    {
-                       //$('#parsley_reg #delivery_date').focus();
-                        $('#parsley_reg #quantity').focus();
-                    }, 0);
-          }
-          });
-          function format_item(sup) {
+    $(document).ready( function () {        
+        function format_purchase_order(sup) {
             if (!sup.id) return sup.text;
-    return  "<p >"+sup.text+"<img src='<?php echo base_url() ?>/uploads/items/"+sup.image+"' style='float:right;height:59px'></img></p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.value+"</p><p style='float:left;width:130px;  margin-left: 10px'> "+sup.category+"</p> <p style='width:130px;  margin-left: 218px'> "+sup.brand+"</p><p style='width:120px;  margin-left: 380px;margin-top: -28px;'> "+sup.department+"</p>";
-            }
-          $('#parsley_reg #items').select2({
-             
-              dropdownCssClass : 'item_select',
-                 formatResult: format_item,
-                formatSelection: format_item,
-                
-                escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('items') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/goods_receiving_note/search_items/',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: 2,
-                                term: term,
-                               
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term,
-                                     suppler:$('#parsley_reg #supplier_guid').val()
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      
-                      $.each(data, function(index, item){
-                        results.push({
-                          id: item.i_guid,
-                          text: item.name,
-                          value: item.code,
-                          image: item.image,
-                          brand: item.b_name,
-                          category: item.c_name,
-                          department: item.d_name,
-                          quty: item.quty,
-                          cost: item.cost,
-                          price: item.price,
-                          mrp: item.mrp,
-                          tax_type: item.tax_type_name,
-                          tax_value: item.tax_value,
-                          tax_Inclusive : item.tax_Inclusive ,
-                        });
-                      });   if($('#supplier_guid').val()==""){
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-     $('#parsley_reg #items').select2('close');   
-    $('#parsley_reg #demo_order_number').select2('open');
-        
-                      }
-                      return {
-                       
-                          results: results
-                      };
-                    }
-                }
-            });
-         function format_purchase_order(sup) {
-            if (!sup.id) return sup.text;
-    return  "<p >"+sup.text+"    <br>"+sup.order_date+" "+sup.company+"   "+sup.supplier+"</p> ";
-            }
+            return  "<p >"+sup.text+"    <br>"+sup.order_date+" "+sup.company+"   "+sup.supplier+"</p> ";
+        }
         $('#parsley_reg #demo_order_number').change(function() {
             if($('#parsley_reg #demo_order_number').select2('data').expired==0){
                refresh_items_table();
@@ -688,29 +583,7 @@
                                     var per2=data[i]['dis_per2'];
                                     var discount;
                                     var discount2;
-                                    if(data[i]['dis_per']!=0){
-                                        var per=data[i]['dis_per'];
-                                        discount="0";
-                                    }else{
-                                        var discount=data[i]['item_dis_amt'];
-                                        var num = parseFloat(discount);
-                                        discount=num.toFixed(point);
-                                        var per="";
-                                    }
-                                    
-                                   if(data[i]['tax_Inclusive']==1){
-                                      var tax=data[i]['order_tax'];
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(cost))-discount;
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                      var tax=data[i]['order_tax'];
-                                      var total=(parseFloat(quty)*parseFloat(cost))-discount;
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
+                                   
                                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                                     null,
                                     name,
@@ -724,10 +597,10 @@
                                     received_free,
                                    "<input type='hidden' id='total_id_"+i+"'><input type='hidden' id='tax_inclusive_"+i+"' value='"+data[i]['tax_Inclusive']+"' ><input type='hidden' id='discount_amt_"+i+"' value='"+discount+"' ><input type='hidden' id='tax_inclusive2_"+i+"' value='"+data[i]['tax_inclusive2']+"' ><input type='hidden' id='discount_amt2_"+i+"' value='"+discount2+"' ><input type='hidden' name='items[]' value='"+data[i]['item']+"' ><input type='hidden' id='cost_id_"+i+"' value='"+cost+"' ><input type='hidden' id='o_quty_id_"+i+"' value='"+parseFloat(quty-received_quty)+"' ><input type='text' id='r_quty_id_"+i+"' name='receive_quty[]' onkeyup='receive_quty_items("+i+")' onKeyPress='receive_quty(event,"+i+");return numbersonly(event)' class='form-control' value='"+quty+"' style='width:80px'>",
                                    "<input type='hidden' id='tax_type_"+i+"' value='"+data[i]['tax_type_name']+"' ><input type='hidden' id='tax_type2_"+i+"' value='"+data[i]['tax2_type']+"' ><input type='hidden' id='tax_value_"+i+"' value='"+data[i]['tax_value']+"' ><input type='hidden' id='discount_per_"+i+"' value='"+per+"' ><input type='hidden' id='tax_value2_"+i+"' value='"+data[i]['tax2_value']+"' ><input type='hidden' id='discount_per2_"+i+"' value='"+per2+"' ><input type='hidden' name='order_items[]' value='"+data[i]['o_i_guid']+"' ><input type='hidden' id='o_free_id_"+i+"' value='"+parseFloat(free-received_free)+"' ><input type='text' id='r_free_id_"+i+"' name='receive_free[]' onkeyup='receive_free_items("+i+")' onKeyPress='receive_free(event,"+i+","+data.length+");return numbersonly(event)' value='"+free+"' class='form-control' style='width:60px'>",
-                                 type+':'+0,
-                                 type+':'+0,
-                                  discount,
-                                  0
+                                    '',
+                                    '',
+                                    '',
+                                    0
                                  
                                  ] );
 
