@@ -2276,9 +2276,9 @@
                 }
             }
             if (flag<1) {
-                $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('paruchase_order');?>', { type: "warning" });
+                $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('purchase_order');?>', { type: "warning" });
             }else{
-                bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
+                bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('purchase_order') ?>", function(result) {
                     if(result){
                         var posnic=document.forms.posnic;
                         for (i = 0; i < posnic.length; i++){
