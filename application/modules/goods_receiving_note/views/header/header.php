@@ -239,8 +239,6 @@
                                 $("#parsley_reg #grn_date").val(data[0]['grn_date']);
                                 $("#parsley_reg #note").val(data[0]['grn_note']);
                                 $("#parsley_reg #remark").val(data[0]['grn_remark']);
-                              
-                               // $("#parsley_reg #demo_order_number").select2('data', {id:'',text: data[0]['po_no']});
                                 $(".supplier_select_2").hide();
                                 $(".porchase_order_for_grn").show();
                                 $("#edit_grn_node").val(data[0]['po_no']);
@@ -250,23 +248,6 @@
                                 $("#parsley_reg #discount_amount").val(data[0]['discount_amt']);
                                 $("#parsley_reg #freight").val(data[0]['freight']);
                                 $("#parsley_reg #round_off_amount").val(data[0]['round_amt']);
-//                                $("#parsley_reg #demo_grand_total").val(data[0]['total_amt']);
-//                                $("#parsley_reg #grand_total").val(data[0]['total_amt']);
-//                                
-//                                $("#parsley_reg #demo_total_amount").val(data[0]['total_item_amt']);
-//                                $("#parsley_reg #total_amount").val(data[0]['total_item_amt']);
-//                                
-//                                  var num = parseFloat($('#demo_total_amount').val());
-//                                  $('#demo_total_amount').val(num.toFixed(point));
-//                                  
-//                                  var num = parseFloat($('#total_amount').val());
-//                                  $('#total_amount').val(num.toFixed(point));
-//                                  
-//                                  var num = parseFloat($('#grand_total').val());
-//                                  $('#grand_total').val(num.toFixed(point));
-//                                  
-//                                  var num = parseFloat($('#demo_grand_total').val());
-//                                  $('#demo_grand_total').val(num.toFixed(point));
                                   
                                 $("#parsley_reg #supplier_guid").val(data[0]['s_guid']);
                                 $("#parsley_reg #grn_guid").val(guid);
