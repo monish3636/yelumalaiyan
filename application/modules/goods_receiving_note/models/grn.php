@@ -174,12 +174,16 @@ class Grn extends CI_Model{
     }
     function delete_grn_items($guid){
         $this->db->where('grn_id',$guid);
-        $this->db->delete('purchase_items');
-        
-        
+        $this->db->update('purchase_items',array('received_quty'=>0,'received_free'=>0));
+    }
+    function grn_delete($guid){       
+       $this->db->where('grn_id',$guid);
+       $this->db->update('purchase_order',array('grn_status'=>0)); 
+       $this->db->where('guid',$guid);
+       $this->db->delete('grn');
     }
     function check_approve($guid){
-            $this->db->select()->from('grn')->where('guid',$guid)->where('active',1);
+            $this->db->select()->from('grn')->where('guid',$guid)->where('grn_status',1);
             $sql=  $this->db->get();
             if($sql->num_rows()>0){
                 return FALSE;
@@ -188,9 +192,9 @@ class Grn extends CI_Model{
             }
             
     }
-    function update_grn_status($po){
+    function update_grn_status($po,$guid){
         $this->db->where('guid',$po);
-        $this->db->update('purchase_order',array('grn_status'=>1)); 
+        $this->db->update('purchase_order',array('grn_status'=>1,'grn_id'=>$guid)); 
     }
     
 }
