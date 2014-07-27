@@ -31,17 +31,13 @@ class Grn extends CI_Model{
         $sql=$this->db->get();
         $data=array();
         foreach($sql->result_array() as $row){
-              $row['expired']=0;
+            $row['expired']=0;
             if($row['exp_date'] < strtotime(date("Y/m/d"))){  
                 $row['expired']=1;
             }
             $row['po_date']=date('d-m-Y',$row['po_date']);
-
             $row['exp_date']=date('d-m-Y',$row['exp_date']);
-
-           
-
-             $data[]=$row;
+            $data[]=$row;
 
         }
          return $data;
@@ -55,34 +51,7 @@ class Grn extends CI_Model{
         $sql=  $this->db->get();
         return $sql->num_rows();
     }
-   
-    function search_items($search,$branch){
-          $this->db->select('items.* ,items_category.guid as c_guid,items_category.category_name as c_name,brands.guid as b_guid,brands.name as b_name,items_department.department_name as d_name')->from('items')->where('items.branch_id',$branch)->where('items.active_status',1)->where('items.delete_status',1);
-                $this->db->join('items_category', 'items.category_id=items_category.guid','left');
-                $this->db->join('brands', 'items.brand_id=brands.guid','left');
-                $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-               // $this->db->join('supplier', 'stock.supplier=supplier.id','left');
-                $like=array('items.name'=>$search,'items.code'=>$search,'items.barcode'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
-                $this->db->or_like($like);     
-                $query=$this->db->get();
-                return $query->result();
-    }
-   
-    function serach_items($search,$bid,$guid){
-         $this->db->select('items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,suppliers_x_items.*')->from('suppliers_x_items')->where('suppliers_x_items.delete_status',1)->where('suppliers_x_items.active',0)->where('suppliers_x_items.active_status',1)->where('suppliers_x_items.active',0)->where('suppliers_x_items.deactive_item',0)->where('suppliers_x_items.item_active',0)->where('items.branch_id',$bid)->where('items.active_status',1)->where('items.delete_status',1);
-         $this->db->join('items', "items.guid=suppliers_x_items.item_id AND suppliers_x_items.supplier_id='".$guid."' ",'left');
-         $this->db->join('items_category', 'items.category_id=items_category.guid','left');
-         $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=suppliers_x_items.item_id AND suppliers_x_items.supplier_id='".$guid."'",'left');
-         $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=suppliers_x_items.item_id AND suppliers_x_items.supplier_id='".$guid."'",'left');
-         $this->db->join('brands', 'items.brand_id=brands.guid','left');
-         $this->db->join('items_department', 'items.depart_id=items_department.guid','left');
-          $like=array('items.name'=>$search,'items.code'=>$search,'items_category.category_name'=>$search,'brands.name'=>$search,'items_department.department_name'=>$search);
-                $this->db->or_like($like); 
-               // $this->db->like('suppliers_x_items.supplier_id',$guid); 
-         $sql=  $this->db->get();
-         return $sql->result();
-     
-     }
+ 
     function get_purchase_order($guid){
         $this->db->select('items.tax_inclusive2,items.tax2_type,items.tax2_value,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers_x_items.quty as item_limit,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,purchase_order.*,purchase_items.discount_per as dis_per ,purchase_items.discount_amount as item_dis_amt ,purchase_items.tax as order_tax,purchase_items.discount_per2 as dis_per2 ,purchase_items.discount_amount2 as item_dis_amt2 ,purchase_items.tax2 as order_tax2,purchase_items.item ,purchase_items.quty ,purchase_items.free,purchase_items.guid as o_i_guid ,purchase_items.received_quty ,purchase_items.received_free ,purchase_items.cost ,purchase_items.sell ,purchase_items.mrp,purchase_items.guid as o_i_guid ,purchase_items.amount ,purchase_items.date,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_order')->where('purchase_order.guid',$guid);
         $this->db->join('purchase_items', 'purchase_items.order_id = purchase_order.guid AND purchase_items.delete_status=0','left');
@@ -221,9 +190,7 @@ class Grn extends CI_Model{
     }
     function update_grn_status($po){
         $this->db->where('guid',$po);
-        $this->db->update('purchase_order',array('grn_status'=>1));
-                
-            
+        $this->db->update('purchase_order',array('grn_status'=>1)); 
     }
     
 }
