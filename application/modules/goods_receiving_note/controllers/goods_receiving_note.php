@@ -112,7 +112,7 @@ function save(){
                 $value=array('grn_no'=>$grn_no,'date'=>$grn_date,'po'=>$po,'remark'=>$remark,'note'=>$note,'discount_amt'=>$discount_amount,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
                 $guid=   $this->posnic->posnic_add_record($value,'grn');
                 $this->load->model('grn');
-                $this->grn->update_grn_status($po);
+                $this->grn->update_grn_status($po,$guid);
                 $quty=  $this->input->post('receive_quty');
                 $free=  $this->input->post('receive_free');
                 $items=  $this->input->post('items');
@@ -194,7 +194,7 @@ function delete(){
             $this->load->model('grn');
             $status=$this->grn->check_approve($guid);
            if($status!=FALSE){
-            $this->posnic->posnic_delete($guid,'grn');
+            $this->grn->grn_delete($guid);
             
             $this->grn->delete_grn_items($guid);            
                 echo 'TRUE';
