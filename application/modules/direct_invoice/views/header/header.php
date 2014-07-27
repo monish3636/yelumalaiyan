@@ -74,9 +74,9 @@
                                                                 
                    						"fnRender": function (oObj) {
                    							if(oObj.aData[9]==1){
-                                                                             return '<span  class="text-success " ><?php echo $this->lang->line('approved') ?></span>'
+                                                                             return '<span data-toggle="tooltip" class="text-success" ><?php echo $this->lang->line('approved') ?></span>'
                                                                         }else{
-                                                                            return '<span   class="text-warning"  ><?php echo $this->lang->line('waiting') ?></span>';
+                                                                            return '<span data-toggle="tooltip"  class=" text-warning" ><?php echo $this->lang->line('waiting') ?></span>';
                                                                         }
 								},
 								
@@ -88,9 +88,9 @@
                                                                 
                    						"fnRender": function (oObj) {
                                                                 if(oObj.aData[9]==1){
-                                                                         	 return '<a  ><span data-toggle="tooltip" class="label label-success hint--top hint--success" data-hint="<?php echo $this->lang->line('print') ?>"><i class="icon-print"></i></span></a>&nbsp <a  ><span data-toggle="tooltip" class="label label-success hint--top hint--success"  ><i class="icon-play"></i></span></a>&nbsp<a  ><span data-toggle="tooltip" class="label label-info hint--top hint--info" ><i class="icon-edit"></i></span></a>'+"&nbsp;<a><span data-toggle='tooltip' class='label label-danger hint--top hint--error' ><i class='icon-trash'></i></span> </a>"
+                                                                         	 return '<a  ><span data-toggle="tooltip" class="label label-success hint--top hint--success"  ><i class="icon-play"></i></span></a>&nbsp<a  ><span data-toggle="tooltip" class="label label-info hint--top hint--info" ><i class="icon-edit"></i></span></a>'+"&nbsp;<a><span data-toggle='tooltip' class='label label-danger hint--top hint--error' ><i class='icon-trash'></i></span> </a>"
 								}else{
-                                                                        return '<a  ><span data-toggle="tooltip" class="label label-success hint--top hint--success" data-hint="<?php echo $this->lang->line('print') ?>"><i class="icon-print"></i></span></a>&nbsp <a href=javascript:direct_invoice_approve("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-success hint--top hint--success" data-hint="<?php echo $this->lang->line('approve') ?>"><i class="icon-play"></i></span></a>&nbsp<a href=javascript:edit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="EDIT"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='DELETE'><i class='icon-trash'></i></span> </a>";
+                                                                        return '<a href=javascript:direct_invoice_approve("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-success hint--top hint--success" data-hint="<?php echo $this->lang->line('approve') ?>"><i class="icon-play"></i></span></a>&nbsp<a href=javascript:edit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit') ?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete') ?>'><i class='icon-trash'></i></span> </a>";
                                                                 }
                                                                 },
 								
@@ -133,7 +133,7 @@
                     
                 },
                  complete: function(response) {
-                    if(response['responseText']==1){
+                    if(response['responseText']=='TRUE'){
                            $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('direct_invoice') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
                         $("#dt_table_tools").dataTable().fnDraw();
                     }else{
@@ -162,9 +162,11 @@ function direct_invoice_approve(guid){
                     
                 },
                 complete: function(response) {
-                    if(response['responseText']==1){
+                    if(response['responseText']=='TRUE'){
                            $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('direct_invoice') ?>  <?php echo $this->lang->line('approved');?>', { type: "success" });
                         $("#dt_table_tools").dataTable().fnDraw();
+                    }else if(response['responseText']=='Approved'){
+                         $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>   <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
                     }else{
                           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('direct_invoice');?>', { type: "error" });                              
                     }
@@ -214,7 +216,6 @@ function direct_invoice_approve(guid){
                                 $("#parsley_reg #demo_order_number").val(data[0]['invoice_no']);
                                 $("#parsley_reg #order_number").val(data[0]['invoice_no']);
                                 $("#parsley_reg #order_date").val(data[0]['invoice_date']);
-                        
                                 
                                 $("#parsley_reg #id_discount").val(data[0]['discount']);
                                 $("#parsley_reg #note").val(data[0]['note']);
@@ -243,7 +244,8 @@ function direct_invoice_approve(guid){
                                 $("#parsley_reg #supplier_guid").val(data[0]['s_guid']);
                                 var tax;
                                 for(i=0;i<data.length;i++){
-                                  if(!$('#'+data[i]['o_i_guid']).length){
+                                      if(!$('#'+data[i]['o_i_guid']).length){
+                                  
                                     var  name=data[i]['items_name'];
                                     var  sku=data[i]['i_code'];
                                     var  quty=data[i]['quty'];
@@ -251,46 +253,47 @@ function direct_invoice_approve(guid){
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
-                                  
-                                    var  free=data[i]['free'];
-                                   
+                                    var  tax_type2=data[i]['tax2_type'];
+                                    var  tax_value2=data[i]['tax2_value'];
+                                    var  tax_Inclusive2=data[i]['tax_inclusive2'];                                  
+                                    var  free=data[i]['free'];                                   
                                     var  cost=data[i]['cost'];
                                     var  price=data[i]['sell'];
                                     var  mrp=data[i]['mrp'];
                                     var  o_i_guid=data[i]['o_i_guid'];
-                                  
                                     var  items_id=data[i]['item'];
-                                    if(data[i]['dis_per']!=0){
-                                    var discount=(parseFloat(quty)*parseFloat(cost))*(data[i]['dis_per']/100);
-                                    var per=data[i]['dis_per'];
-                                    }else{
+                                    var total=parseFloat(quty)*parseFloat(cost);
+                                    var subtotal=parseFloat(quty)*parseFloat(cost);
                                     var discount=data[i]['item_dis_amt'];
-                                     var num = parseFloat(discount);
-                                      discount=num.toFixed(point);
-                                    var per="";
-                                  
+                                    var discount2=data[i]['item_dis_amt2'];
+                                    var per=data[i]['dis_per'];
+                                    var per2=data[i]['dis_per2'];                                   
+                                    var type='Inc';
+                                    var tax=data[i]['order_tax'];  
+                                    if(data[i]['tax_Inclusive']==0){                                                                          
+                                        var total=(parseFloat(tax)+parseFloat(total));
+                                        type='Exc';
                                     }
-                                   if(data[i]['tax_Inclusive']==1){
-                                     var tax=data[i]['order_tax'];
-                                    
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(cost))-discount;
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                  
-                                      var tax=data[i]['order_tax'];
-                                      var total=(parseFloat(quty)*parseFloat(cost))-discount;
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
-                                  if(discount==""){
-                                    discount=0;
+                                    var type2='Inc';
+                                    var tax2=data[i]['order_tax2'];  
+                                    if(data[i]['tax_inclusive2']==0){                                                                          
+                                        var total=(parseFloat(tax2)+parseFloat(total));
+                                        type2='Exc';
                                     }
-                                  if(per==""){
-                                    per=0;
+                                    if(per!="" && per!=0){
+                                        discount=parseFloat(total)*parseFloat(per)/100;
                                     }
+                                    if(per2!="" && per2!=0){
+                                        discount2=(parseFloat(total)-parseFloat(discount))*parseFloat(per2)/100;
+                                    }
+                                    var total_discount=parseFloat(discount)+parseFloat(discount2);
+                                    total=parseFloat(total)-parseFloat(total_discount);
+                                    var num = parseFloat(total_discount);
+                                    total_discount=num.toFixed(point);
+                                    var num = parseFloat(total);
+                                    total=num.toFixed(point);
+                                    var num = parseFloat(subtotal);
+                                    subtotal=num.toFixed(point);
                                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                                     null,
                                     name,
@@ -301,9 +304,10 @@ function direct_invoice_approve(guid){
                                     price,
                                     parseFloat(quty)*parseFloat(cost),
                                     tax+' : '+tax_type+'('+type+')',
-                                    discount,
+                                    tax2+' : '+tax_type2+'('+type2+')',
+                                    total_discount,
                                     total,
-                                    '<input type="hidden" name="index" id="index"><input type="hidden" id="'+data[i]['o_i_guid']+'">\n\
+                                    '<input type="hidden" name="index" id="index"><input type="hidden" id="'+o_i_guid+'">\n\
                                 <input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
                                 <input type="hidden" name="item_limit" id="item_limit" value="'+limit+'">\n\
                                 <input type="hidden" name="items_id[]" id="items_id" value="'+items_id+'">\n\
@@ -320,7 +324,13 @@ function direct_invoice_approve(guid){
                                 <input type="hidden" name="items_tax_inclusive[]" value="'+tax_Inclusive+'" id="items_tax_inclusive">\n\
                                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
-                                <input type="hidden" name="items_sub_total[]"  value="'+parseFloat(quty)*parseFloat(cost)+'" id="items_sub_total">\n\
+                                <input type="hidden" name="items_tax2[]" value="'+tax2+'" id="items_tax2">\n\
+                                <input type="hidden" name="items_tax_type2[]" value="'+tax_type2+'" id="items_tax_type2">\n\
+                                <input type="hidden" name="items_tax_value2[]" value="'+tax_value2+'" id="items_tax_value2">\n\
+                                <input type="hidden" name="items_tax_inclusive2[]" value="'+tax_Inclusive2+'" id="items_tax_inclusive2">\n\
+                                <input type="hidden" name="items_discount2[]" value="'+discount2+'" id="items_discount2">\n\
+                                <input type="hidden" name="items_discount_per2[]" value="'+per2+'" id="items_discount_per2">\n\
+                                <input type="hidden" name="items_sub_total[]"  value="'+subtotal+'" id="items_sub_total">\n\
                                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
                                 <a href=javascript:edit_order_item("'+items_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+items_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
 
