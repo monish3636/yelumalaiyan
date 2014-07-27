@@ -244,19 +244,6 @@ function order_number(){
        $data[]= $this->posnic->posnic_master_max('grn')    ;
        echo json_encode($data);
 }
-function search_items(){
-       $search= $this->input->post('term');
-       $guid= $this->input->post('suppler');
-         if($search!=""){
-            $this->load->model('purchase');
-            $data= $this->purchase->serach_items($search,$this->session->userdata['branch_id'],$guid);      
-            echo json_encode($data);
-        }
-        
-}
-    function language($lang){
-       $lang= $this->lang->load($lang);
-       return $lang;
-    }
+
 }
 ?>
