@@ -181,7 +181,6 @@
             $('#parsley_reg #tax_label').text('<?php echo $this->lang->line('tax')?>');
             $("#parsley_reg #items").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('items') ?>'});
             $("#parsley_reg #first_name").val('');
-            $('#parsley_reg #items').select2('open');
             refresh_items_table();
             var guid = $('#parsley_reg #purchase_invoice').select2('data').id;
             $('#parsley_reg #customer').val($('#parsley_reg #purchase_invoice').select2('data').name);
@@ -615,15 +614,20 @@
                 $('#newly_added #new_item_cost_'+items_id).val(cost);
                 $('#newly_added #new_item_tax1_'+items_id).val(tax1);
                 $('#newly_added #new_item_tax2_'+items_id).val(tax2);
+                $('#newly_added #new_item_discount_amount1_'+items_id).val(discount_amount1);
+                $('#newly_added #new_item_discount_amount2_'+items_id).val(discount_amount2);
                 $('#newly_added #new_item_total'+items_id).val(total);
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_id').val(items_id);
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_name').val(name);
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_sku').val(sku);
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_quty').val(quty);
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_cost').val(cost);
-                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_tax1').val(tax1);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_tax').val(tax1);
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_tax2').val(tax2);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_discount_amount1').val(discount_amount1);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_discount_amount2').val(discount_amount2);
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_total').val(total);
+                $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_sub_total').val(sub_total);
                 $.bootstrapGrowl('<?php echo $this->lang->line('item') ?> '+name+' <?php echo $this->lang->line('updated');?> ', { type: "success" });  
                 if (isNaN($("#parsley_reg #total_amount").val())) 
                     $("#parsley_reg #total_amount").val(0)  ;
@@ -696,9 +700,11 @@
                 <input type="hidden" name="new_item_quty[]" value="'+quty+'" id="new_item_quty_'+items_id+'"> \n\
                 <input type="hidden" name="new_item_cost[]" value="'+cost+'" id="new_item_cost_'+items_id+'">\n\
                 <input type="hidden" name="new_item_tax[]" value="'+tax1+'" id="new_item_tax1_'+items_id+'">\n\
-                <input type="hidden" name="new_item_tax2[]" value="'+tax1+'" id="new_item_tax2_'+items_id+'">\n\
+                <input type="hidden" name="new_item_tax2[]" value="'+tax2+'" id="new_item_tax2_'+items_id+'">\n\
                 <input type="hidden" name="new_item_discount1[]" value="'+discount1+'" id="new_item_discount1_'+items_id+'">\n\
                 <input type="hidden" name="new_item_discount2[]" value="'+discount2+'" id="new_item_discount2_'+items_id+'">\n\
+                <input type="hidden" name="new_item_discount_amount1[]" value="'+discount_amount1+'" id="new_item_discount_amount1_'+items_id+'">\n\
+                <input type="hidden" name="new_item_discount_amount2[]" value="'+discount_amount2+'" id="new_item_discount_amount2_'+items_id+'">\n\
                 <input type="hidden" name="new_item_total[]"  value="'+parseFloat(quty)*parseFloat(cost)+'" id="new_item_total_'+items_id+'">\n\
                 </div>');
 
@@ -722,9 +728,11 @@
                     <input type="hidden" name="item_stocks_history[]" id="item_stocks_history" value="'+stocks_history+'">\n\
                     <input type="hidden" name="items_quty[]" value="'+quty+'" id="items_quty">\n\
                     <input type="hidden" name="items_cost[]" value="'+cost+'" id="items_cost">\n\
-                    <input type="hidden" name="items_tax[]" value="'+tax+'" id="items_tax">\n\
+                    <input type="hidden" name="items_tax[]" value="'+tax1+'" id="items_tax">\n\
                     <input type="hidden" name="items_discount1[]" value="'+discount1+'" id="items_discount1">\n\
                     <input type="hidden" name="items_discount2[]" value="'+discount2+'" id="items_discount2">\n\
+                    <input type="hidden" name="items_discount_amount1[]" value="'+discount_amount1+'" id="items_discount1">\n\
+                    <input type="hidden" name="items_discount_amount2[]" value="'+discount_amount1+'" id="items_discount2">\n\
                     <input type="hidden" name="items_tax_type[]" value="'+tax_type+'" id="items_tax_type">\n\
                     <input type="hidden" name="items_tax_value[]" value="'+tax_value+'" id="items_tax_value">\n\
                     <input type="hidden" name="items_tax_inclusive[]" value="'+tax_Inclusive+'" id="items_tax_inclusive">\n\
@@ -765,11 +773,16 @@
                 $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" });          
                 $('#parsley_reg #items').select2('open');
             }
+            
         }
         var num = parseFloat($('#demo_total_amount').val());
         $('#demo_total_amount').val(num.toFixed(point));
         var num = parseFloat($('#total_amount').val());
         $('#total_amount').val(num.toFixed(point));
+        if (isNaN($("#parsley_reg #total_amount").val())) 
+            $("#parsley_reg #total_amount").val(0)    
+        if (isNaN($("#parsley_reg #demo_total_amount").val())) 
+            $("#parsley_reg #demo_total_amount").val(0)
     }
     function edit_order_item(guid){
         $('#parsley_reg #item_name').val($('#selected_item_table #new_item_row_id_'+guid+' #row_item_name').val());
