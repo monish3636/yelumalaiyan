@@ -998,7 +998,8 @@
                     $('#tax').val(num.toFixed(point));
                 }else{
                     $('#tax_label').text('<?php echo $this->lang->line('tax') ?>(Exc)');
-                    $('#tax').val(total_tax);
+                    var tax = parseFloat(total_tax);
+                    $('#tax').val(tax.toFixed(point));
                 }           
             }
         }
