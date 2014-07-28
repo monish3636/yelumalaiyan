@@ -159,68 +159,84 @@
                     <?php }?>
     }
     
-     $(document).ready( function () {
-         
-       $('#parsley_reg #purchase_invoice').change(function() {
-           clear_inputs();
+    $(document).ready( function () {
+        $('#parsley_reg #purchase_invoice').change(function() {
+            $('#parsley_reg #item_name').val('');
+            $('#parsley_reg #sku').val('');
+            $('#parsley_reg #quantity').val('');
+            $('#parsley_reg #total').val('');
+            $('#parsley_reg #cost').val('');
+            $('#parsley_reg #tax').val('');
+            $('#parsley_reg #tax_value').val('');
+            $('#parsley_reg #tax_type').val('');
+            $('#parsley_reg #tax_Inclusive').val('');
+            $('#parsley_reg #tax_value2').val('');
+            $('#parsley_reg #tax_type2').val('');
+            $('#parsley_reg #tax_Inclusive2').val('');
+            $('#parsley_reg #item_id').val('');
+            $('#parsley_reg #delivered_quty').val('');
+            $('#parsley_reg #discount1').val('');
+            $('#parsley_reg #discount_amount').val('');
+            $('#parsley_reg #discount2').val('');
+            $('#parsley_reg #tax_label').text('<?php echo $this->lang->line('tax')?>');
+            $("#parsley_reg #items").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('items') ?>'});
+            $("#parsley_reg #first_name").val('');
+            $('#parsley_reg #items').select2('open');
             refresh_items_table();
-           
-                   var guid = $('#parsley_reg #purchase_invoice').select2('data').id;
-
-                 $('#parsley_reg #customer').val($('#parsley_reg #purchase_invoice').select2('data').name);
-                 $('#parsley_reg #sales_date').val($('#parsley_reg #purchase_invoice').select2('data').date);
-                 $('#parsley_reg #purchase_invoice_id').val(guid);
-                      window.setTimeout(function ()
-                    {
-                      
-                       document.getElementById('order_date').focus();
-                    }, 0);  
+            var guid = $('#parsley_reg #purchase_invoice').select2('data').id;
+            $('#parsley_reg #customer').val($('#parsley_reg #purchase_invoice').select2('data').name);
+            $('#parsley_reg #sales_date').val($('#parsley_reg #purchase_invoice').select2('data').date);
+            $('#parsley_reg #purchase_invoice_id').val(guid);
+            
+            window.setTimeout(function ()
+            { 
+                document.getElementById('order_date').focus();
+            }, 0);  
              
-          });
-           function format_branch(sup) {
+        });
+        function format_branch(sup) {
             if (!sup.id) return sup.text;
-    return  "<p >"+sup.text+"    <br>"+sup.name+"   "+sup.company+"</p> ";
-            }
-          $('#parsley_reg #purchase_invoice').select2({
-              dropdownCssClass : 'customers_select',
-                formatResult: format_branch,
-                formatSelection: format_branch,
-                escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('invoice') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/purchase_return/search_purchase_invoice',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+                return  "<p >"+sup.text+"    <br>"+sup.name+"   "+sup.company+"</p> ";
+        }
+        $('#parsley_reg #purchase_invoice').select2({
+            dropdownCssClass : 'customers_select',
+            formatResult: format_branch,
+            formatSelection: format_branch,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('invoice') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/purchase_return/search_purchase_invoice',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.invoice,
-                          name: item.first_name,
-                          company: item.company_name,
-                          date: item.date,
-                         
+                            id: item.guid,
+                            text: item.invoice,
+                            name: item.first_name,
+                            company: item.company_name,
+                            date: item.date,                         
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
                 }
-            });
+            }
+        });
         $('#parsley_reg #items').change(function() {
             if(document.getElementById('new_item_row_id_'+$('#parsley_reg #items').select2('data').item) && $('#parsley_reg #diabled_item').val()!=$('#parsley_reg #items').select2('data').item){
                 $.bootstrapGrowl('<?php echo $this->lang->line('this item already added').$this->lang->line('purchase_return');?> ', { type: "warning" });  
