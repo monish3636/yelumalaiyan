@@ -232,38 +232,47 @@ function purchase_return_approve(guid){
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
-                                   
-                               
+                                    var  tax_type2=data[i]['tax2_type'];
+                                    var  tax_value2=data[i]['tax2_value'];
+                                    var  tax_Inclusive2=data[i]['tax_inclusive2'];                               
                                     var  cost=data[i]['cost'];
-                                    
-                                    
-                                    
                                     var  o_i_guid=data[i]['o_i_guid'];
                                     var  items_id=data[i]['item'];
-                                  
-                                   if(data[i]['tax_Inclusive']==1){
-                                     var tax=data[i]['order_tax'];
-                                    
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(cost));
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                  
-                                      var tax=data[i]['order_tax'];
-                                      var total=(parseFloat(quty)*parseFloat(cost));
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
+                                    var type='Inc';
+                                    var type2='Inc';
+                                    var tax=data[i]['order_tax']; 
+                                    var tax2=data[i]['order_tax2']; 
+                                    var sub_total=data[i]['amount'];                                    
+                                    var total=sub_total;
+                                    if(tax_Inclusive==0){
+                                        var type='Exc';
+                                        total=parseFloat(total)+parseFloat(tax);
+                                    }
+                                    if(tax_Inclusive2==0){
+                                        var type2='Exc';
+                                        total=parseFloat(total)+parseFloat(tax2);
+                                    }
+                                    var discount1=data[i]['discount_per'];
+                                    var discount2=data[i]['discount_per2'];
+                                    var discount_amount1=data[i]['discount_amount'];
+                                    var discount_amount2=data[i]['discount_amount2'];
+                                    var total_discount=parseFloat(data[i]['discount_amount'])+parseFloat(data[i]['discount_amount2']);
+                                    console.log(total_discount);
+                                    total=parseFloat(total)-parseFloat(total_discount);
+                                    var num = parseFloat(total_discount);
+                                    total_discount=num.toFixed(point);
+                                    var num = parseFloat(total);
+                                    total=num.toFixed(point);
                                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                                     null,
                                     name,
                                     sku,
                                     quty,
                                     cost,
-                                    tax+' : '+tax_type+'('+type+')',
-                                   
+                                    sub_total,
+                                    tax+':'+tax_type+'('+type+')',
+                                    tax2+':'+tax_type2+'('+type2+')',
+                                    total_discount,
                                     total,
                                     '<input type="hidden" name="index" id="index"><input type="hidden" id="'+o_i_guid+'">\n\
                                 <input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
@@ -277,7 +286,16 @@ function purchase_return_approve(guid){
                                 <input type="hidden" name="items_tax_type[]" value="'+tax_type+'" id="items_tax_type">\n\
                                 <input type="hidden" name="items_tax_value[]" value="'+tax_value+'" id="items_tax_value">\n\
                                 <input type="hidden" name="items_tax_inclusive[]" value="'+tax_Inclusive+'" id="items_tax_inclusive">\n\
-                                <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
+                                <input type="hidden" name="items_tax2[]" value="'+tax2+'" id="items_tax2">\n\
+                                <input type="hidden" name="items_tax_type2[]" value="'+tax_type2+'" id="items_tax_type2">\n\
+                                <input type="hidden" name="items_tax_value2[]" value="'+tax_value2+'" id="items_tax_value2">\n\
+                                <input type="hidden" name="items_tax_inclusive2[]" value="'+tax_Inclusive2+'" id="items_tax_inclusive2">\n\
+                                <input type="hidden" name="items_discount1[]" value="'+discount1+'" id="items_discount1">\n\
+                                <input type="hidden" name="items_discount2[]" value="'+discount2+'" id="items_discount2">\n\
+                                <input type="hidden" name="items_discount_amount1[]" value="'+discount_amount1+'" id="items_discount_amount1">\n\
+                                <input type="hidden" name="items_discount_amount2[]" value="'+discount_amount2+'" id="items_discount_amount2">\n\
+                               <input type="hidden" name="items_sub_total[]"  value="'+sub_total+'" id="items_sub_total">\n\
+                               <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
                                 <a href=javascript:edit_order_item("'+items_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+items_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
 
                               var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;

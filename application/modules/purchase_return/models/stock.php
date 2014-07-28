@@ -23,14 +23,14 @@ class Stock extends CI_Model{
         return $sql->num_rows();
     }
 
-    function update_purchase_return($guid,$item,$quty,$cost,$tax,$net){
+    function update_purchase_return($guid,$item,$quty,$tax,$tax2,$dis1,$dis2,$net){
         $this->db->where(array('purchase_return_id'=>$guid,'item'=>$item));
-        $item_value=array('tax'=>$tax,'quty'=>$quty,'cost'=>$cost,'amount'=>$net);
+        $item_value=array('tax'=>$tax,'tax2'=>$tax2,'quty'=>$quty,'discount_amount'=>$dis1,'discount_amount2'=>$dis2,'amount'=>$net);
         $this->db->update('purchase_return_x_items',$item_value);
          
     }
-    function add_purchase_return($guid,$item,$quty,$cost,$tax,$net,$stock_history_id){
-        $item_value=array('purchase_return_id'=>$guid,'tax'=>$tax,'item'=>$item,'quty'=>$quty,'cost'=>$cost,'amount'=>$net,'stocks_history_id'=>$stock_history_id);
+    function add_purchase_return($guid,$item,$quty,$cost,$tax,$tax2,$net,$item_stocks_history,$new_item_discount1,$new_item_discount2,$new_item_discount_amount1,$new_item_discount_amount2){
+        $item_value=array('purchase_return_id'=>$guid,'tax'=>$tax,'tax2'=>$tax2,'item'=>$item,'quty'=>$quty,'cost'=>$cost,'amount'=>$net,'stocks_history_id'=>$item_stocks_history,'discount_per'=>$new_item_discount1,'discount_per2'=>$new_item_discount2,'discount_amount2'=>$new_item_discount_amount2,'discount_amount'=>$new_item_discount_amount1);
         $this->db->insert('purchase_return_x_items',$item_value);
         $os_item=  $this->db->insert_id();
         $this->db->where('id',$os_item);
@@ -65,7 +65,7 @@ class Stock extends CI_Model{
      
      }
      function get_purchase_return($guid){
-        $this->db->select('purchase_items.quty as item_limit,purchase_items.received_quty as received_quty,purchase_items.free as received_free,purchase_invoice.invoice ,suppliers.first_name,purchase_invoice.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,purchase_return.*,purchase_return_x_items.tax as order_tax,purchase_return_x_items.item ,purchase_return_x_items.quty ,purchase_return_x_items.cost ,purchase_return_x_items.sell ,purchase_return_x_items.guid as o_i_guid ,purchase_return_x_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_return')->where('purchase_return.guid',$guid);
+        $this->db->select('items.tax_inclusive2,items.tax2_type,items.tax2_value,purchase_items.quty as item_limit,purchase_items.received_quty as received_quty,purchase_items.free as received_free,purchase_invoice.invoice ,suppliers.first_name,purchase_invoice.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,purchase_return.*,purchase_return_x_items.tax as order_tax,purchase_return_x_items.tax2 as order_tax2,purchase_return_x_items.item ,purchase_return_x_items.quty ,purchase_return_x_items.cost ,purchase_return_x_items.sell ,purchase_return_x_items.guid as o_i_guid ,purchase_return_x_items.amount ,purchase_return_x_items.discount_per ,purchase_return_x_items.discount_per2 ,purchase_return_x_items.discount_amount ,purchase_return_x_items.discount_amount2 ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_return')->where('purchase_return.guid',$guid);
         $this->db->join('purchase_invoice','purchase_invoice.guid=purchase_return.purchase_invoice_id','left');
         $this->db->join('suppliers','suppliers.guid=purchase_invoice.supplier_id','left');
         $this->db->join('purchase_return_x_items', "purchase_return_x_items.purchase_return_id = purchase_return.guid ",'left');

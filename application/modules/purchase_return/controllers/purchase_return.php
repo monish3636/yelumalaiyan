@@ -108,10 +108,15 @@ function save(){
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric'); 
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'), 'required');                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'required|numeric');                    
-        $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'required|numeric');                      
+        $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'required|is_money_multi');                      
         $this->form_validation->set_rules('item_stocks_history[]', $this->lang->line('item_stocks_history'), 'required');
-        $this->form_validation->set_rules('new_item_total[]', $this->lang->line('new_item_total'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'required|numeric');                      
+        $this->form_validation->set_rules('new_item_total[]', $this->lang->line('new_item_total'), 'is_money_multi');                      
+        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'required|is_money_multi');                      
+        $this->form_validation->set_rules('new_item_tax2[]', $this->lang->line('new_item_tax2'), 'is_money_multi');                      
+        $this->form_validation->set_rules('new_item_discount1[]', $this->lang->line('new_item_tax'), 'is_money_multi');                      
+        $this->form_validation->set_rules('new_item_discount2[]', $this->lang->line('new_item_discount2'), 'is_money_multi');    
+        $this->form_validation->set_rules('new_item_discount_amount1[]', $this->lang->line('new_item_discount_amount1'), 'is_money_multi');                      
+        $this->form_validation->set_rules('new_item_discount_amount2[]', $this->lang->line('new_item_discount_amount2'), 'is_money_multi');                      
            
             if ( $this->form_validation->run() !== false ) {    
                 $pono= $this->input->post('order_number');
@@ -120,23 +125,26 @@ function save(){
                 $total_items=$this->input->post('index');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
-                $total_amount=  $this->input->post('total_amount');
-  
-     
-              $value=array('purchase_invoice_id'=>  $this->input->post('purchase_invoice_id'),'code'=>$pono,'date'=>$podate,'note'=>$note,'remark'=>$remark,'no_items'=>$total_items,'total_amount'=>$total_amount);
-              $guid=   $this->posnic->posnic_add_record($value,'purchase_return');
+                $total_amount=  $this->input->post('total_amount'); 
+                $value=array('purchase_invoice_id'=>  $this->input->post('purchase_invoice_id'),'code'=>$pono,'date'=>$podate,'note'=>$note,'remark'=>$remark,'no_items'=>$total_items,'total_amount'=>$total_amount);
+                $guid=   $this->posnic->posnic_add_record($value,'purchase_return');
           
                 $item=  $this->input->post('new_item_id');
                 $quty=  $this->input->post('new_item_quty');
                 $cost=  $this->input->post('new_item_cost');
                 $net=  $this->input->post('new_item_total');
-                $tax=  $this->input->post('new_item_tax');
+                $tax1=  $this->input->post('new_item_tax');
+                $tax2=  $this->input->post('new_item_tax2');
+                $new_item_discount2=  $this->input->post('new_item_discount2');
+                $new_item_discount1=  $this->input->post('new_item_discount1');
                 $item_stocks_history=  $this->input->post('item_stocks_history');
+                $new_item_discount_amount1=  $this->input->post('new_item_discount_amount1');
+                $new_item_discount_amount2=  $this->input->post('new_item_discount_amount2');
            
                 for($i=0;$i<count($item);$i++){
                         $this->load->model('stock');
                        
-                        $this->stock->add_purchase_return($guid,$item[$i],$quty[$i],$cost[$i],$tax[$i],$net[$i],$item_stocks_history[$i]);
+                        $this->stock->add_purchase_return($guid,$item[$i],$quty[$i],$cost[$i],$tax1[$i],$tax2[$i],$net[$i],$item_stocks_history[$i],$new_item_discount1[$i],$new_item_discount2[$i],$new_item_discount_amount1[$i],$new_item_discount_amount2[$i]);
                 
                         
                 }
@@ -157,21 +165,32 @@ function save(){
        
         $this->form_validation->set_rules('order_date', $this->lang->line('order_date'), 'required');                       
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric'); 
-        $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));        
-        $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'numeric'); 
-        $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'numeric');             
-        $this->form_validation->set_rules('new_item_supplier[]', $this->lang->line('new_item_supplier'));  
-        $this->form_validation->set_rules('new_item_stock[]', $this->lang->line('new_item_stock'));                      
-        $this->form_validation->set_rules('new_item_total[]', $this->lang->line('new_item_total'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'numeric');  
-        $this->form_validation->set_rules('items_quty[]', $this->lang->line('items_quty'), 'numeric');                      
-        $this->form_validation->set_rules('items_cost[]', $this->lang->line('items_cost'), 'numeric');                      
-        $this->form_validation->set_rules('items_cost[]', $this->lang->line('items_cost'), 'numeric');                      
-        $this->form_validation->set_rules('items_stock[]', $this->lang->line('items_stock')); 
-        $this->form_validation->set_rules('items_supplier[]', $this->lang->line('items_supplier'));                           
-        $this->form_validation->set_rules('items_total[]', $this->lang->line('items_total'), 'numeric');                      
-        $this->form_validation->set_rules('items_tax[]', $this->lang->line('items_tax'), 'numeric');
+        if($this->input->post('new_item_id')){
+            $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));        
+            $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'is_money_multi');                      
+            $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'is_money_multi'); 
+            $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'is_money_multi');
+            $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'is_money_multi');                      
+            $this->form_validation->set_rules('new_item_tax2[]', $this->lang->line('new_item_tax2'), 'is_money_multi');                      
+            $this->form_validation->set_rules('new_item_discount1[]', $this->lang->line('new_item_tax'), 'is_money_multi');                      
+            $this->form_validation->set_rules('new_item_discount2[]', $this->lang->line('new_item_discount2'), 'is_money_multi');    
+            $this->form_validation->set_rules('new_item_discount_amount1[]', $this->lang->line('new_item_discount_amount1'), 'is_money_multi');                      
+            $this->form_validation->set_rules('new_item_discount_amount2[]', $this->lang->line('new_item_discount_amount2'), 'is_money_multi');                      
+            $this->form_validation->set_rules('new_item_stock[]', $this->lang->line('new_item_stock'));                      
+            $this->form_validation->set_rules('new_item_total[]', $this->lang->line('new_item_total'), 'is_money_multi');                      
+            $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'is_money_multi');
+        } 
+        if($this->input->post('items_id')){
+            $this->form_validation->set_rules('items_id[]', $this->lang->line('items_id'));        
+            $this->form_validation->set_rules('items_sub_total[]', $this->lang->line('items_sub_total'), 'is_money_multi');                          
+            $this->form_validation->set_rules('items_quty[]', $this->lang->line('items_quty'), 'is_money_multi');                          
+            $this->form_validation->set_rules('items_total[]', $this->lang->line('items_total'), 'is_money_multi');                      
+            $this->form_validation->set_rules('items_tax[]', $this->lang->line('items_tax'), 'is_money_multi');
+            $this->form_validation->set_rules('items_tax2[]', $this->lang->line('items_tax2'), 'is_money_multi');
+            $this->form_validation->set_rules('items_discount_amount1[]', $this->lang->line('items_discount_amount'), 'is_money_multi');
+            $this->form_validation->set_rules('items_discount_amount2[]', $this->lang->line('items_discount_amount1'), 'is_money_multi');
+        } 
+        
             if ( $this->form_validation->run() !== false ) {    
                 $guid=  $this->input->post('purchase_return_guid');
                 $podate= strtotime($this->input->post('order_date'));
@@ -189,13 +208,16 @@ function save(){
                 $item=  $this->input->post('items_id');
                 $quty=  $this->input->post('items_quty');
                 $cost=  $this->input->post('items_cost');
-                $net=  $this->input->post('items_total');
+                $net=  $this->input->post('items_sub_total');
                 $tax=  $this->input->post('items_tax');
+                $tax2=  $this->input->post('items_tax2');
+                $dis1=  $this->input->post('items_discount_amount1');
+                $dis2=  $this->input->post('items_discount_amount2');
                 for($i=0;$i<count($item);$i++){
                
                         $where=array('order_id'=>$guid,'item'=>$item[$i]);
                         $this->load->model('stock');
-                        $this->stock->update_purchase_return($guid,$item[$i],$quty[$i],$cost[$i],$tax[$i],$net[$i]);
+                        $this->stock->update_purchase_return($guid,$item[$i],$quty[$i],$tax[$i],$tax2[$i],$dis1[$i],$dis2[$i],$net[$i]);
                   
                 }
                 $delete=  $this->input->post('r_items');
@@ -206,15 +228,17 @@ function save(){
                 $new_item=  $this->input->post('new_item_id');
                 $new_quty=  $this->input->post('new_item_quty');
                 $new_cost=  $this->input->post('new_item_cost');
-                $new_sell=  $this->input->post('new_item_cost');
-                $new_mrp=  $this->input->post('new_item_mrp');
                 $new_net=  $this->input->post('new_item_total');
-                $new_stock=  $this->input->post('new_item_stock');
-                $new_tax=  $this->input->post('new_item_tax');
-                $new_supplier=  $this->input->post('new_item_supplier');
-                for($i=0;$i<count($new_quty);$i++){
+                $new_tax1=  $this->input->post('new_item_tax');
+                $new_tax2=  $this->input->post('new_item_tax2');
+                $new_item_discount2=  $this->input->post('new_item_discount2');
+                $new_item_discount1=  $this->input->post('new_item_discount1');
+                $new_item_stocks_history=  $this->input->post('item_stocks_history');
+                $new_item_discount_amount1=  $this->input->post('new_item_discount_amount1');
+                $new_item_discount_amount2=  $this->input->post('new_item_discount_amount2');
+                for($i=0;$i<count($new_item);$i++){
                     if($new_quty[$i]!=""){          
-                        $this->stock->add_purchase_return($guid,$new_item[$i],$new_quty[$i],$new_cost[$i],$new_sell[$i],$new_tax[$i],$new_net[$i],$new_supplier[$i],$new_stock[$i]);
+                        $this->stock->add_purchase_return($guid,$new_item[$i],$new_quty[$i],$new_cost[$i],$new_tax1[$i],$new_tax2[$i],$new_net[$i],$new_item_stocks_history[$i],$new_item_discount1[$i],$new_item_discount2[$i],$new_item_discount_amount1[$i],$new_item_discount_amount2[$i]);
                     }
                         
                 }                    
