@@ -440,6 +440,7 @@ $lang['credit_days']='Credit Days';
   $lang['short_delivery_date']='Delry Date';
   $lang['not_able_to_order']='Not Able Pick This Much Of Order From';
   $lang['not_able_to_damage']='Not Able Pick This Much Of Quantity In';
+  $lang['not_able_to_return']='Not Able Return This Much Of Quantity Form';
   $lang['for']='For';
   $lang['and']='And';
   $lang['please_enter']='Please Enter';

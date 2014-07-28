@@ -106,15 +106,12 @@ function save(){
         $this->form_validation->set_rules('purchase_invoice_id', $this->lang->line('purchase_invoice_id'), 'required');
         $this->form_validation->set_rules('order_date', $this->lang->line('order_date'), 'required');                      
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric'); 
-
-                       
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'), 'required');                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'required|numeric');                    
         $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'required|numeric');                      
-        $this->form_validation->set_rules('item_stocks_history[]', $this->lang->line('item_stocks_history'), 'required');                      
-                         
+        $this->form_validation->set_rules('item_stocks_history[]', $this->lang->line('item_stocks_history'), 'required');
         $this->form_validation->set_rules('new_item_total[]', $this->lang->line('new_item_total'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'required|numeric');                       
+        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'required|numeric');                      
            
             if ( $this->form_validation->run() !== false ) {    
                 $pono= $this->input->post('order_number');
@@ -160,21 +157,14 @@ function save(){
        
         $this->form_validation->set_rules('order_date', $this->lang->line('order_date'), 'required');                       
         $this->form_validation->set_rules('total_amount', $this->lang->line('total_amount'), 'numeric'); 
-        
-        
-      
-        
-        $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));
-        
+        $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'));        
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'numeric');                      
         $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'numeric'); 
         $this->form_validation->set_rules('new_item_cost[]', $this->lang->line('new_item_cost'), 'numeric');             
         $this->form_validation->set_rules('new_item_supplier[]', $this->lang->line('new_item_supplier'));  
         $this->form_validation->set_rules('new_item_stock[]', $this->lang->line('new_item_stock'));                      
         $this->form_validation->set_rules('new_item_total[]', $this->lang->line('new_item_total'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'numeric'); 
-        
-        
+        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'numeric');  
         $this->form_validation->set_rules('items_quty[]', $this->lang->line('items_quty'), 'numeric');                      
         $this->form_validation->set_rules('items_cost[]', $this->lang->line('items_cost'), 'numeric');                      
         $this->form_validation->set_rules('items_cost[]', $this->lang->line('items_cost'), 'numeric');                      
@@ -182,7 +172,6 @@ function save(){
         $this->form_validation->set_rules('items_supplier[]', $this->lang->line('items_supplier'));                           
         $this->form_validation->set_rules('items_total[]', $this->lang->line('items_total'), 'numeric');                      
         $this->form_validation->set_rules('items_tax[]', $this->lang->line('items_tax'), 'numeric');
-        
             if ( $this->form_validation->run() !== false ) {    
                 $guid=  $this->input->post('purchase_return_guid');
                 $podate= strtotime($this->input->post('order_date'));
@@ -314,19 +303,14 @@ function order_number(){
 /*
  * search items to purchase order with or like 
  *  */
-
-function search_items(){
-    $search= $this->input->post('term');
-    $invoice=  $this->input->post('invoice');
-    $this->load->model('stock');
-    $data= $this->stock->search_items($search,$invoice);      
-    echo json_encode($data);
-       
-        
-}
-function language($lang){
-       $lang= $this->lang->load($lang);
-       return $lang;
+// Function start
+    function search_items(){
+        $search= $this->input->post('term');
+        $invoice=  $this->input->post('invoice');
+        $this->load->model('stock');
+        $data= $this->stock->search_items($search,$invoice);      
+        echo json_encode($data);
     }
+// function end
 }
 ?>

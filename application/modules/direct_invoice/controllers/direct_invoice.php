@@ -157,7 +157,7 @@ class Direct_invoice extends MX_Controller{
                 $dis2=  $this->input->post('new_item_discount2');
                 $tax2=  $this->input->post('new_item_tax2');           
                 for($i=0;$i<count($item);$i++){              
-                    $item_value=array('order_id'=>$guid,'discount_per2'=>$per2[$i],'discount_amount2'=>$dis2[$i],'tax2'=>$tax2[$i],'discount_per'=>$per[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i],'branch_id'=>  $this->session->userdata('branch_id'));
+                    $item_value=array('order_id'=>$guid,'discount_per2'=>$per2[$i],'discount_amount2'=>$dis2[$i],'tax2'=>$tax2[$i],'discount_per'=>$per[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'received_quty'=>$quty[$i],'received_free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i],'branch_id'=>  $this->session->userdata('branch_id'));
                     $this->load->model('purchase');
                     $this->purchase->add_items($item_value);
                 }
@@ -237,7 +237,7 @@ class Direct_invoice extends MX_Controller{
                     $tax2=  $this->input->post('items_tax2');
                     for($i=0;$i<count($item);$i++){               
                         $where=array('order_id'=>$guid,'item'=>$item[$i]);
-                        $item_value=array('order_id'=>$guid,'discount_per'=>$per[$i],'discount_per2'=>$per2[$i],'discount_amount2'=>$dis2[$i],'tax2'=>$tax2[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i]);
+                        $item_value=array('order_id'=>$guid,'discount_per'=>$per[$i],'discount_per2'=>$per2[$i],'discount_amount2'=>$dis2[$i],'tax2'=>$tax2[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'received_quty'=>$quty[$i],'received_free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i]);
                         $this->posnic->posnic_update_record($item_value,$where,'purchase_items'); 
                     }
                     $delete=  $this->input->post('r_items');
@@ -260,7 +260,7 @@ class Direct_invoice extends MX_Controller{
                     $new_tax2=  $this->input->post('new_item_tax2');
                     for($i=0;$i<count($new_quty);$i++){
                         if($new_quty[$i]!=""){
-                            $new_item_value=array('order_id'=>$guid,'discount_per2'=>$new_per2[$i],'discount_amount2'=>$new_dis2[$i],'tax2'=>$new_tax2[$i],'discount_per'=>$new_per[$i],'discount_amount'=>$new_dis[$i],'tax'=>$new_tax[$i],'item'=>$new_item[$i],'quty'=>$new_quty[$i],'free'=>$new_free[$i],'cost'=>$new_cost[$i],'sell'=>$new_sell[$i],'mrp'=>$new_mrp[$i],'amount'=>$new_net[$i]);
+                            $new_item_value=array('order_id'=>$guid,'discount_per2'=>$new_per2[$i],'discount_amount2'=>$new_dis2[$i],'tax2'=>$new_tax2[$i],'discount_per'=>$new_per[$i],'discount_amount'=>$new_dis[$i],'tax'=>$new_tax[$i],'item'=>$new_item[$i],'quty'=>$new_quty[$i],'received_quty'=>$new_quty[$i],'received_free'=>$new_free[$i],'free'=>$new_free[$i],'cost'=>$new_cost[$i],'sell'=>$new_sell[$i],'mrp'=>$new_mrp[$i],'amount'=>$new_net[$i]);
                             $this->load->model('purchase');
                             $this->purchase->add_items($item_value);
                         }                        
