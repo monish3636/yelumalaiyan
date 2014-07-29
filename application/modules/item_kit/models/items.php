@@ -100,7 +100,7 @@ class Items extends CI_Model{
         $this->db->insert('stock',array('item'=>$guid,'item_type'=>'kit','price'=>$selling_price,'branch_id'=>  $this->session->userdata('branch_id')));
         $id=  $this->db->insert_id();
         $this->db->where('id',$id);
-        $this->db->update('stock',array('guid'=>  md5('item_kit',$guid.$id.$this->session->userdata('branch_id'))));
+        $this->db->update('stock',array('guid'=>  md5('item_kit'.$guid.$id.$this->session->userdata('branch_id'))));
     }
     function update_kit_in_stock($guid,$selling_price){
         $this->db->where('item',$guid);

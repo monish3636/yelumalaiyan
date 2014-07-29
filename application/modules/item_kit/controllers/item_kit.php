@@ -100,8 +100,7 @@ function save(){
         $this->form_validation->set_rules('kit_price', $this->lang->line('kit_price'), 'numeric|required');                  
         $this->form_validation->set_rules('selling_kit_price', $this->lang->line('selling_kit_price'), 'numeric|required');  
         $this->form_validation->set_rules('kit_tax_type', $this->lang->line('kit_tax_type'), 'required');  
-        $this->form_validation->set_rules('kit_tax_value', $this->lang->line('kit_tax_value'), 'required');  
-        
+        $this->form_validation->set_rules('kit_tax_value', $this->lang->line('kit_tax_value'), 'required'); 
         $this->form_validation->set_rules('new_item_id[]', $this->lang->line('new_item_id'), 'required');                      
         $this->form_validation->set_rules('new_item_quty[]', $this->lang->line('new_item_quty'), 'required|numeric');                       
         $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id'), 'required');          
@@ -125,7 +124,7 @@ function save(){
                     $value=array('tax_type'=>$kit_tax_type,'tax_value'=>$kit_tax_value,'code'=>$item_kit_number,'name'=>$item_kit_name,'selling_price'=>$selling_price,'tax_id'=>$taxes,'category_id'=>$category_id,'no_of_items'=>$total_types,'item_total'=>$total_amount,'tax_inclusive'=>$tax_inclusive,'tax_amount'=>$seling_tax_amount,'kit_price'=>$kit_price,'remark'=>$remark,'note'=>$note);
                     $guid=   $this->posnic->posnic_add_record($value,'item_kit');
                     $this->load->model('items');
-                    $this->item->add_kit_to_stock($guid,$selling_price);
+                    $this->items->add_kit_to_stock($guid,$selling_price);
 
                     $item=  $this->input->post('new_item_id');
                     $quty=  $this->input->post('new_item_quty');
