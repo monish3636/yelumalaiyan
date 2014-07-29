@@ -231,10 +231,6 @@
             $('#parsley_reg #address').val($('#parsley_reg #purchase_order_number').select2('data').address);
             $('#parsley_reg #order_date').val($('#parsley_reg #purchase_order_number').select2('data').order_date);
             $('#parsley_reg #expiry_date').val($('#parsley_reg #purchase_order_number').select2('data').exp_date);
-            $('#parsley_reg #id_discount').val($('#parsley_reg #purchase_order_number').select2('data').discount);
-            $('#parsley_reg #po_discount_amount').val($('#parsley_reg #purchase_order_number').select2('data').discount_amount);
-            $('#parsley_reg #freight').val($('#parsley_reg #purchase_order_number').select2('data').freight);
-            $('#parsley_reg #round_off_amount').val($('#parsley_reg #purchase_order_number').select2('data').round);
             $('#parsley_reg #note').val($('#parsley_reg #purchase_order_number').select2('data').note);
             $('#parsley_reg #remark').val($('#parsley_reg #purchase_order_number').select2('data').remark);
             $('#parsley_reg #supplier_guid').val(guid);
@@ -786,26 +782,16 @@ function add_new_price(e){
                 $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #item_id').val()+' #items_total').val(total);
                 $.bootstrapGrowl('<?php echo $this->lang->line('item') ?> '+name+' <?php echo $this->lang->line('updated');?> ', { type: "success" });  
                 if (isNaN($("#parsley_reg #total_amount").val())) 
-                    $("#parsley_reg #total_amount").val(0)    
-                if (isNaN($("#parsley_reg #discount_amount").val())) 
-                    $("#parsley_reg #discount_amount").val(0);
-                if (isNaN($("#parsley_reg #round_off_amount").val())) 
-                    $("#parsley_reg #round_off_amount").val(0);
-                if (isNaN($("#parsley_reg #freight").val())) 
-                    $("#parsley_reg #freight").val(0)
+                    $("#parsley_reg #total_amount").val(0);  
                 if (isNaN($("#parsley_reg #demo_total_amount").val())) 
-                    $("#parsley_reg #demo_total_amount").val(0)
-                if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-                    $("#parsley_reg #demo_grand_total").val(0)
-                if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-                    $("#parsley_reg #grand_total").val(0)
+                    $("#parsley_reg #demo_total_amount").val(0);             
                 if($('#parsley_reg #total_amount').val()==0){
                       $('#parsley_reg #total_amount').val(total-parseFloat(old_total));
                 }else{
-                    $('#parsley_reg #total_amount').val(parseFloat($('#parsley_reg #total_amount').val())+(total)-parseFloat(old_total));
+                    $('#parsley_reg #total_amount').val(parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total-old_total));
                 }
+                console.log(parseFloat($('#parsley_reg #total_amount').val())+'/'+(total)+'/'+parseFloat(old_total))
                 $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
-                new_discount_amount();
                 clear_inputs();
             }else{   
                 var po_quty=$('#po_quantity').val()
@@ -944,26 +930,15 @@ function add_new_price(e){
                 theNode.setAttribute('id','new_item_row_id_'+items_id)
                 $.bootstrapGrowl('<?php echo $this->lang->line('new')." ".$this->lang->line('item') ?> '+name+' <?php echo $this->lang->line('added');?> ', { type: "success" });  
                 if (isNaN($("#parsley_reg #total_amount").val())) 
-                    $("#parsley_reg #total_amount").val(0)    
-                if (isNaN($("#parsley_reg #discount_amount").val())) 
-                    $("#parsley_reg #discount_amount").val(0);
-                if (isNaN($("#parsley_reg #round_off_amount").val())) 
-                    $("#parsley_reg #round_off_amount").val(0);
-                if (isNaN($("#parsley_reg #freight").val())) 
-                    $("#parsley_reg #freight").val(0)
+                    $("#parsley_reg #total_amount").val(0) ;
                 if (isNaN($("#parsley_reg #demo_total_amount").val())) 
-                    $("#parsley_reg #demo_total_amount").val(0)
-                if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-                    $("#parsley_reg #demo_grand_total").val(0)
-                if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-                    $("#parsley_reg #grand_total").val(0)
+                    $("#parsley_reg #demo_total_amount").val(0);          
                 if($('#parsley_reg #total_amount').val()==0){
-                      $('#parsley_reg #total_amount').val(total);     
+                    $('#parsley_reg #total_amount').val(total);     
                 }else{
                     $('#parsley_reg #total_amount').val(parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total));
                 }
                 $('#parsley_reg #demo_total_amount').val($('#parsley_reg #total_amount').val());
-                new_discount_amount();  
                 clear_inputs();
             } 
         }else{
@@ -1053,7 +1028,6 @@ function add_new_price(e){
         $('#demo_total_amount').val(num.toFixed(point));
         var num = parseFloat($('#total_amount').val());
         $('#total_amount').val(num.toFixed(point));
-        new_discount_amount();
         $("#parsley_reg #total_amount").val()
         var order=$('#selected_item_table #new_item_row_id_'+guid+' #items_order_guid').val();
         $('#deleted').append('<input type="hidden" id="r_items" name="r_items[]" value="'+order+'">');
@@ -1081,101 +1055,33 @@ function add_new_price(e){
         $('#parsley_reg #tax').val('');
         $('#parsley_reg #item_free').val('');
         $('#parsley_reg #po_quantity').val('');
-        $('#parsley_reg #item_discount_amount').val('');
+        $('#parsley_reg #discount_amount').val('');
         $('#parsley_reg #item_discount_per').val('');
         $('#parsley_reg #tax_value').val('');
         $('#parsley_reg #tax_type').val('');
         $('#parsley_reg #tax_Inclusive').val('');
-        $('#parsley_reg #extra_elements').val('');
+        $('#parsley_reg #discount_amount2').val('');
+        $('#parsley_reg #item_discount_per2').val('');
+        $('#parsley_reg #tax_value2').val('');
+        $('#parsley_reg #tax_type2').val('');
+        $('#parsley_reg #tax_Inclusive2').val('');
         $('#parsley_reg #item_id').val('')
-        $('#parsley_reg #dummy_discount_amount').val('')
-        $('#parsley_reg #hidden_dis_amt').val('')
-        $('#parsley_reg #hidden_dis').val('')
         $('#parsley_reg #tax_label').text('<?php echo $this->lang->line('tax')?>');
         $('#parsley_reg #dummy_discount').val('')
         $("#parsley_reg #items").select2('data', {id:'',text: 'Search Item'});
         $('#parsley_reg #items').select2('open');        
     }
-function new_grand_total(){
-         if(parseFloat($("#parsley_reg #total_amount").val())>0){
-var discount=parseFloat($("#parsley_reg #discount_amount").val());
-var frieight=parseFloat($("#parsley_reg #freight").val());
-var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
-    if (isNaN(discount) || discount=="") {
-    discount=0;}
-        if (isNaN(frieight)|| frieight=="") {
-    frieight=00;}
-        if (isNaN(round_amt)|| round_amt=="") {
-    round_amt=00;}
 
 
-     $("#parsley_reg #demo_grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount+frieight+round_amt);
-     $("#parsley_reg #grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount+frieight+round_amt);
-       
-        var num = parseFloat($('#demo_grand_total').val());
-    $('#demo_grand_total').val(num.toFixed(point));
-    
-    var num = parseFloat($('#grand_total').val());
-    $('#grand_total').val(num.toFixed(point));
+    function items_free_cancel(){
+      if(parseFloat($('#parsley_reg #free').val())>parseFloat($('#parsley_reg #po_free').val()) && $('#parsley_reg #po_free').val()!=0){
+           $('#free').val($('#po_free').val());
         }
-   if (isNaN($("#parsley_reg #total_amount").val())) 
-    $("#parsley_reg #total_amount").val(0)    
-        if (isNaN($("#parsley_reg #discount_amount").val())) 
-    $("#parsley_reg #discount_amount").val(0);
-        if (isNaN($("#parsley_reg #round_off_amount").val())) 
-    $("#parsley_reg #round_off_amount").val(0);
-        if (isNaN($("#parsley_reg #freight").val())) 
-    $("#parsley_reg #freight").val(0)
-        if (isNaN($("#parsley_reg #demo_total_amount").val())) 
-    $("#parsley_reg #demo_total_amount").val(0)
-    
-        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #demo_grand_total").val(0)
-    
-        if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #grand_total").val(0)
-    
-}
-function new_discount_amount(){
- if(parseFloat($("#parsley_reg #total_amount").val())>0){
-    var total=parseFloat($("#parsley_reg #total_amount").val());
-    if($("#parsley_reg #id_discount").val()!="" && $("#parsley_reg #id_discount").val()!=0){
-            var discount=(total*parseFloat($("#parsley_reg #id_discount").val()))/100;
-              $("#parsley_reg #discount_amount").val(discount);
-    }else{
-        var  discount=$('discount_amount').val();
-       
+        if($('#parsley_reg #po_free').val()==0){
+            $('#free').val(0);
+        }
+
     }
-    $("#parsley_reg #demo_grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount);
-    $("#parsley_reg #grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount);
-  
-    var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
-    var freight=parseFloat($("#parsley_reg #freight").val())
-    if(freight==""){freight=0;}
-    if(round_amt==""){round_amt=0;}
-         
-    if (isNaN($("#parsley_reg #total_amount").val())) 
-        $("#parsley_reg #total_amount").val(0)    
-    if (isNaN($("#parsley_reg #discount_amount").val())) 
-        $("#parsley_reg #discount_amount").val(0);
-    if (isNaN($("#parsley_reg #round_off_amount").val())) 
-        $("#parsley_reg #round_off_amount").val(0);
-    if (isNaN($("#parsley_reg #freight").val())) 
-        $("#parsley_reg #freight").val()
-    }
-    
-    new_grand_total();
-    total=parseFloat($("#parsley_reg #total_amount").val());
-    if(total=="" || total==0 || isNaN(total)){
-      $("#parsley_reg #total_amount").val(0);
-    }
-}
-function items_free_cancel(){
-  if(parseFloat($('#parsley_reg #free').val())>parseFloat($('#parsley_reg #item_free').val()-1) && $('#parsley_reg #item_free').val()!=0){
-       $('#free').val($('#item_free').val());
-    }
-  
-}
 </script>
 
   
@@ -1282,55 +1188,7 @@ function items_free_cancel(){
                                               
                                               
                                                </div>
-                                           <div class="row">
-                                                <div class="col col-sm-2" >
-                                                   <div class="form_sep">
-                                                            <label for="discount" ><?php echo $this->lang->line('discount') ?>%</label>													
-                                                                     <?php $discount=array('name'=>'discount',
-                                                                                        'class'=>'  form-control',
-                                                                                        'id'=>'id_discount',
-                                                                                         'maxlength'=>3,
-                                                                                         'disabled'=>'disabled',
-                                                                                        'value'=>set_value('discount'));
-                                                                         echo form_input($discount)?>
-                                                       </div>
-                                                    </div>
-                                          
-                                                
-                                                <div class="col col-sm-2" >
-                                                   <div class="form_sep">
-                                                            <label for="po_discount_amount" ><?php echo $this->lang->line('discount_amount') ?></label>													
-                                                                     <?php $po_discount_amount=array('name'=>'po_discount_amount',
-                                                                                        'class'=>'  form-control',
-                                                                                        'id'=>'po_discount_amount',
-                                                                                        'disabled'=>'disabled',
-                                                                                        'value'=>set_value('po_discount_amount'));
-                                                                         echo form_input($po_discount_amount)?>
-                                                       </div>
-                                                    </div>
-                                                <div class="col col-sm-2" >
-                                                   <div class="form_sep">
-                                                            <label for="freight" ><?php echo $this->lang->line('freight') ?></label>													
-                                                                     <?php $freight=array('name'=>'freight',
-                                                                                        'class'=>'  form-control',
-                                                                                        'id'=>'freight',
-                                                                                        'disabled'=>'disabled',
-                                                                                        'value'=>set_value('freight'));
-                                                                         echo form_input($freight)?>
-                                                       </div>
-                                                    </div>
-                                                <div class="col col-sm-2" >
-                                                   <div class="form_sep">
-                                                            <label for="round_off_amount" ><?php echo $this->lang->line('round_off_amount') ?></label>													
-                                                                     <?php $round_off_amount=array('name'=>'round_off_amount',
-                                                                                        'class'=>'  form-control',
-                                                                                        'id'=>'round_off_amount',
-                                                                                        'disabled'=>'disabled',
-                                                                                        'value'=>set_value('round_off_amount'));
-                                                                         echo form_input($round_off_amount)?>
-                                                       </div>
-                                                    </div>
-                                           </div>
+                                           
                                      <br>
                                         </div>                              
                              
@@ -1652,17 +1510,7 @@ function items_free_cancel(){
                                                         <input type="hidden" name="total_amount" id="total_amount">
                                                         
                                                   </div>
-                                                         <div class="form_sep " style="padding: 0 25px">
-                                                        <label for="grand_total" ><?php echo $this->lang->line('grand_total') ?></label>													
-                                                                  <?php $grand_total=array('name'=>'demo_grand_total',
-                                                                                    'class'=>'required  form-control',
-                                                                                    'id'=>'demo_grand_total',
-                                                                                    'disabled'=>'disabled',
-                                                                                    'value'=>set_value('grand_total'));
-                                                                     echo form_input($grand_total)?>
-                                                        <input type="hidden" name="grand_total" id="grand_total">
-                                                        
-                                                  </div><br>
+                                                      <br>
                                                   </div>
                                                </div>
                                       </div>
