@@ -542,8 +542,8 @@ $lang['credit_days']='Credit Days';
   $lang['po_quantity']='PO Quantity';
   $lang['po_free']='PO Free';
   $lang['direct_sales_delivery']='Direct Delivery Note';
-  $lang['cancel_quty']='Cancled Qty';
-  $lang['cancel_free']='Cancled Free';
+  $lang['cancel_quty']='Canceled Qty';
+  $lang['cancel_free']='Canceled Free';
   $lang['sales_delivery_note']='Delivery Note';
   // customer payment
   $lang['customer_payment']='Customer Payment';
