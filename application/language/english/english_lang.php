@@ -809,5 +809,6 @@ $lang['credit_days']='Credit Days';
     $lang['please_enter_cost_and_profit']='Please Enter Cost And Profit';
     $lang['add_new']='Add New';
     $lang['item_tax']='Item Tax';
+    $lang['search_items']='Search Items';
    
 ?>
