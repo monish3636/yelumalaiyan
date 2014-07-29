@@ -57,23 +57,9 @@ class Purchase extends CI_Model{
      }
  
  
-    function purchase_order_cancel($po,$items_order_guid,$items_old_quty,$items_old_free,$items_free,$items_quty){
-        $this->db->select()->from('purchase_items')->where('guid',$items_order_guid);
-        $sql=$this->db->get();
-        $quty;
-        $free;
-        foreach ($sql->result() as $row){
-            $quty=$row->quty;
-            $free=$row->free;
-        }
-        if($items_quty>$quty){
-            return FALSE;
-        }
-        if($items_free>$free){
-            return FALSE;
-        }
+    function purchase_order_cancel($po,$items_order_guid,$po_quty,$po_free,$items_free,$items_quty){        
         $this->db->where('guid',$items_order_guid);
-        $this->db->update('purchase_items',array('quty'=>$quty-$items_quty,'free'=>$free-$items_free)); 
+        $this->db->update('purchase_items',array('quty'=>$po_quty-$items_quty,'free'=>$po_free-$items_free)); 
     }
     
 }
