@@ -223,7 +223,7 @@
                                 $("#parsley_reg #delivery_date").val(data[0]['sales_delivery_note_date']);
                                 $("#parsley_reg #note").val(data[0]['grn_note']);
                                 $("#parsley_reg #remark").val(data[0]['grn_remark']);
-                                   $("#parsley_reg #demo_customer_discount").val(data[0]['sdn_customer_discount']);
+                                $("#parsley_reg #demo_customer_discount").val(data[0]['sdn_customer_discount']);
                                 $("#parsley_reg #customer_discount").val(data[0]['sdn_customer_discount']);
                                 $("#parsley_reg #demo_customer_discount_amount").val(data[0]['sdn_customer_discount_amount']);
                                 $("#parsley_reg #customer_discount_amount").val(data[0]['sdn_customer_discount_amount']);
