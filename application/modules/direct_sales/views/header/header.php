@@ -265,114 +265,140 @@ function direct_sales_approve(guid){
                                 var tax;
                                 for(i=0;i<data.length;i++){
                                       if(!$('#'+data[i]['i_guid']).length){
-                                      var  stock_id=data[i]['stock_id'];
-                                    var  name=data[i]['items_name'];
-                                    if(data[i]['kit_name']){
-                                        name=data[i]['kit_name'];
-                                    }
-                                    var  sku=data[i]['i_code'];
-                                    if(data[i]['kit_code']){
-                                        sku=data[i]['kit_code'];
-                                    }
-                                    if(data[i]['deco_code']){
-                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
-                                    }
-                                    var  quty=data[i]['quty'];
-                                   
-                                    var  tax_type=data[i]['tax_type_name'];
-                                    var  tax_value=data[i]['tax_value'];
-                                    var  tax_Inclusive=data[i]['tax_Inclusive'];
-                                    if(data[i]['kit_code']){
-                                        tax_type=data[i]['kit_tax_type'];
-                                        tax_value=data[i]['kit_tax_value'];
-                                        tax_Inclusive=data[i]['kit_tax_Inclusive'];
-                                        price=data[i]['kit_price'];
-                                        var  items_id=data[i]['kit_guid'];
-                                    }
-                                    var  price=data[i]['price'];
-                                    //var uom=data[i]['uom']
-                                    
-                                    var  items_id=data[i]['ds_item'];
-                                    var per =data[i]['item_discount'];
-                                    if(per==""){
-                                        per=0;
-                                    }
-                                    
-                                    
-                                    if(data[i]['item_discount']!=0){
-                                    var discount=(parseFloat(quty)*parseFloat(price))*(per/100);
-                                    
-                                    }else{
-                                    
-                                      discount=0;
-                                    var per=0
-                                    if(discount==""){
-                                        discount=0;
-                                    }
-                                  
-                                    }
-                                    
-                                   if(tax_Inclusive==1){
-                                     var tax=(parseFloat(quty)*parseFloat(price))*tax_value/100;
-                                    
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(price))-discount;
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                  
-                                      var tax=(parseFloat(quty)*parseFloat(price))*tax_value/100;
-                                      var total=(parseFloat(quty)*parseFloat(price))-discount;
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
-                                  if(data[i]['tax_Inclusive']==1){
-                                    if($('#parsley_reg #total_tax').val()==0){
-                                          $('#parsley_reg #total_tax').val(tax);
-
-                                    }else{
-                                        $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())+parseFloat(tax));
-                                    }
-                                    }
-                                    if($('#parsley_reg #total_item_discount_amount').val()==0){
-                                            $('#parsley_reg #total_item_discount_amount').val(discount);
-
-                                      }else{
-                                          $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())+parseFloat(discount));
-                                      }
-                                      var num = parseFloat(tax);
-                                      tax=num.toFixed(point);
-                                    var addId = $('#selected_item_table').dataTable().fnAddData( [
-                                    null,
-                                    name,
-                                    sku,
-                                    quty,
-                                    price,
-                                      tax+' : '+tax_type+'-'+tax_value+'%('+type+')',
-                                    discount,
-                                    total,
-                                    '<input type="hidden" name="index" id="index">\n\
-                                <input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
-                                <input type="hidden" name="items_id[]" id="items_id" value="'+items_id+'">\n\
-                                <input type="hidden" name="sq_items[]" id="sq_items" value="'+data[i]['o_i_guid']+'">\n\
-                                <input type="hidden" name="items_sku[]" value="'+sku+'" id="items_sku">\n\
-                                <input type="hidden" name="items_quty[]" value="'+quty+'" id="items_quty"> \n\
-                                <input type="hidden" name="items_price[]" value="'+price+'" id="items_price">\n\
-                                <input type="hidden" name="items_tax_value[]" value="'+tax_value+'" id="items_tax_value">\n\
-                                <input type="hidden" name="items_tax_type[]" value="'+type+'" id="items_tax_type">\n\
-                                <input type="hidden" name="items_tax_inclusive[]" value="'+tax_Inclusive+'" id="items_tax_inclusive">\n\
-                                <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
-                                <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
-                                <input type="hidden" name="items_stock[]" value="'+data[i]['stock_id']+'" id="items_stock">\n\
-                                <input type="hidden" name="items_stock_quty[]" id="items_stock_quty" value="'+data[i]['stock_quty']+'">\n\
-                                <input type="hidden" name="items_order_guid[]" value="'+data[i]['o_i_guid']+'" id="items_order_guid">\n\
-                                <input type="hidden" name="items_sub_total[]"  value="'+parseFloat(quty)*parseFloat(price)+'" id="items_sub_total">\n\
-                                <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
-                                <a href=javascript:edit_order_item("'+stock_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+stock_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
-
-                              var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                              theNode.setAttribute('id','new_item_row_id_'+stock_id)
+                                  var  name=data[i]['items_name'];
+                            if(data[i]['kit_name']){
+                                name=data[i]['kit_name'];
+                            }
+                            var  sku=data[i]['i_code'];
+                            if(data[i]['kit_code']){
+                                sku=data[i]['kit_code'];
+                            }
+                            if(data[i]['deco_code']){
+                                sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                            }
+                            var  quty=data[i]['quty'];
+                            var  tax_type=data[i]['tax_type_name'];
+                            var  tax_value=data[i]['tax_value'];
+                            var  tax_inclusive=data[i]['tax_Inclusive'];
+                            var  tax_type2=data[i]['tax2_type'];
+                            var  tax_value2=data[i]['tax2_value'];
+                            var  tax_inclusive2=data[i]['tax_inclusive2'];
+                            var  price=data[i]['price'];
+                            if(data[i]['kit_code']){
+                                tax_type=data[i]['kit_tax_type'];
+                                tax_value=data[i]['kit_tax_value'];
+                                tax_inclusive=data[i]['kit_tax_Inclusive'];
+                                tax_type2=0;
+                                tax_value2=0;
+                                tax_inclusive2=0;
+                                price=data[i]['kit_price'];
+                                items_id=data[i]['kit_guid'];
+                            }else  if(data[i]['deco_code']){
+                                price=data[i]['price'];
+                                items_id=data[i]['deco_guid'];
+                            }
+                            else{
+                                var  items_id=data[i]['i_guid'];
+                                var uom=data[i]['uom']                                    
+                                if(uom==1){
+                                    var no_of_unit=data[i]['no_of_unit'];
+                                    price=price/no_of_unit;
+                                }
+                            }               
+                            var subtotal=parseFloat(quty)*parseFloat(price);
+                            var total=subtotal;
+                            var discount_per=data[i]['item_discount'];
+                            var type;
+                            var tax1=0;
+                            var tax2=0;
+                            var type1='Inc';
+                            var type2='Inc';
+                            var total_tax=0;
+                            tax1=parseFloat(subtotal)*parseFloat(tax_value)/100;
+                            if(tax_inclusive==0 && tax_value!=""){
+                                type1='Exc';
+                                total=parseFloat(total)+parseFloat(tax1);
+                                total_tax=parseFloat(total_tax)+parseFloat(tax1);
+                            }
+                            tax2=parseFloat(subtotal)*parseFloat(tax_value2)/100; 
+                            if(tax_inclusive2==0 && tax_value2!=""){
+                                total=parseFloat(total)+parseFloat(tax2);
+                                total_tax=parseFloat(total_tax)+parseFloat(tax2);
+                                type2='Exc';
+                            }
+                            if(isNaN(parseFloat(discount_per))){
+                                discount_per=0;
+                            }
+                            var discount=parseFloat(total)*parseFloat(discount_per)/100;
+                            var num = parseFloat(tax1);
+                            tax1=num.toFixed(point);
+                            var num = parseFloat(tax2);
+                            tax2=num.toFixed(point);
+                            var num = parseFloat(total-discount);
+                            total=num.toFixed(point);
+                            var num = parseFloat(discount);
+                            discount=num.toFixed(point);
+                            if(isNaN(tax1)){
+                                tax1=0;
+                            }
+                            if(isNaN(tax2)){
+                                tax2=0;
+                            } 
+                            var tax_text2=0;
+                            var tax_text1=0;
+                            if(tax2!=0){
+                                tax_text2=tax2+':'+tax_type2+'('+type2+')';
+                            }
+                            if(tax1!=0){
+                                tax_text1=tax1+':'+tax_type+'('+type1+')';
+                            }
+                            if(total_tax!=0){
+                                if($('#parsley_reg #total_tax').val()==0){
+                                    $('#parsley_reg #total_tax').val(total_tax);
+                                }else{
+                                    $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())+parseFloat(total_tax));
+                                }
+                            }
+                            if($('#parsley_reg #total_item_discount_amount').val()==0){
+                                $('#parsley_reg #total_item_discount_amount').val(discount);
+                            }else{
+                                $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())+parseFloat(discount));
+                            }
+                            var addId = $('#selected_item_table').dataTable().fnAddData( [
+                            null,
+                            name,
+                            sku,
+                            quty,
+                            price,
+                            tax_text1,
+                            tax_text2,
+                            discount,
+                            total,
+                            '<input type="hidden" name="index[]" id="index">\n\
+                            <input type="hidden" name="item_name" id="row_item_name" value="'+name+'">\n\
+                            <input type="hidden" name="items_id[]" id="items_id" value="'+items_id+'">\n\
+                            <input type="hidden" name="sq_items[]" id="sq_items" value="'+data[i]['o_i_guid']+'">\n\
+                            <input type="hidden" name="items_sku[]" value="'+sku+'" id="items_sku">\n\
+                            <input type="hidden" name="items_quty[]" value="'+quty+'" id="items_quty"> \n\
+                            <input type="hidden" name="items_price[]" value="'+price+'" id="items_price">\n\
+                            <input type="hidden" name="items_tax[]" value="'+tax1+'" id="items_tax">\n\
+                            <input type="hidden" name="items_tax2[]" value="'+tax2+'" id="items_tax">\n\
+                            <input type="hidden" name="items_tax_value[]" value="'+tax_value+'" id="items_tax_value">\n\
+                            <input type="hidden" name="items_tax_type[]" value="'+tax_type+'" id="items_tax_type">\n\
+                            <input type="hidden" name="items_tax_inclusive[]" value="'+tax_inclusive+'" id="items_tax_inclusive">\n\
+                            <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
+                            <input type="hidden" name="items_tax_value2[]" value="'+tax_value2+'" id="items_tax_value2">\n\
+                            <input type="hidden" name="items_tax_type2[]" value="'+tax_type2+'" id="items_tax_type2">\n\
+                            <input type="hidden" name="items_tax_inclusive2[]" value="'+tax_inclusive2+'" id="items_tax_inclusive2">\n\
+                            <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
+                            <input type="hidden" name="items_discount_per[]" value="'+discount_per+'" id="items_discount_per">\n\
+                            <input type="hidden" name="items_stock[]" value="'+data[i]['stock_id']+'" id="items_stock">\n\
+                            <input type="hidden" name="items_order_guid[]" value="'+data[i]['o_i_guid']+'" id="items_order_guid">\n\
+                            <input type="hidden" name="items_sub_total[]"  value="'+parseFloat(quty)*parseFloat(price)+'" id="items_sub_total">\n\
+                            <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
+                            <a href=javascript:edit_order_item("'+data[i]['stock_id']+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+data[i]['stock_id']+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
+                            var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
+                            theNode.setAttribute('id','new_item_row_id_'+data[i]['stock_id'])
                                 }
                                 }
                              } 

@@ -116,7 +116,7 @@ function save(){
         $this->form_validation->set_rules('new_item_discount[]', $this->lang->line('new_item_discount'), 'required|numeric');                      
         $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'numeric');                      
         $this->form_validation->set_rules('new_item_stock_id[]', $this->lang->line('new_item_stock_id'), 'required');                      
-           
+        
             if ( $this->form_validation->run() !== false ) {    
                 $customer=  $this->input->post('customers_guid');
                 $order_number=  $this->input->post('order_number');
@@ -126,7 +126,7 @@ function save(){
                 $discount_amount=  $this->input->post('discount_amount');
                 $freight=  $this->input->post('freight');
                 $round_amt=  $this->input->post('round_off_amount');
-                $total_items=$this->input->post('index');
+                $total_items=$this->input->post('no_of_item');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');
@@ -141,14 +141,16 @@ function save(){
           
                 $item=  $this->input->post('new_item_id');
                 $quty=  $this->input->post('new_item_quty');
+                $price=  $this->input->post('new_item_price');
                 $stock=  $this->input->post('new_item_stock_id');
                 $item_discount=  $this->input->post('new_item_discount');
                 $item_tax=  $this->input->post('new_item_tax');
+                $item_tax2=  $this->input->post('new_item_tax2');
            
                 for($i=0;$i<count($item);$i++){
               
                     $this->load->model('sales');
-                    $this->sales->add_direct_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$item_tax[$i],$i);
+                    $this->sales->add_direct_sales($guid,$item[$i],$quty[$i],$price[$i],$stock[$i],$item_discount[$i],$item_tax[$i],$item_tax2[$i],$i);
                 
                         
                 }
@@ -195,7 +197,7 @@ function save(){
                 $discount_amount=  $this->input->post('discount_amount');
                 $freight=  $this->input->post('freight');
                 $round_amt=  $this->input->post('round_off_amount');
-                $total_items=$this->input->post('index');
+                $total_items=$this->input->post('no_of_item');
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $total_amount=  $this->input->post('total_amount');
@@ -209,36 +211,37 @@ function save(){
               $update_where=array('guid'=>$guid);
              $this->posnic->posnic_update_record($value,$update_where,'direct_sales');
           
-                $sq=  $this->input->post('sq_items');
+                $this->load->model('sales');
+                $items=  $this->input->post('sq_items');
                 $quty=  $this->input->post('items_quty');
-                for($i=0;$i<count($sq);$i++){
-                    $this->load->model('sales');
-                    $this->sales->update_direct_sales($sq[$i],$quty[$i]);
-                
-                        
+                $price=  $this->input->post('items_price');
+                $tax=  $this->input->post('items_tax');
+                $tax2=  $this->input->post('items_tax2');         
+                $item_discount=  $this->input->post('items_discount');
+                for($i=0;$i<count($items);$i++){
+                    $this->sales->update_direct_sales($items[$i],$quty[$i],$price[$i],$tax[$i],$tax2[$i],$item_discount[$i]);
                 }
                 $delete=  $this->input->post('r_items');
-                    for($j=0;$j<count($delete);$j++){
-                        $this->load->model('sales');
-                        
-                         $this->sales->delete_order_item($delete[$j]);
-                    }
-                    
-                 $item=  $this->input->post('new_item_id');
-                $quty=  $this->input->post('new_item_quty');
-                $stock=  $this->input->post('new_item_stock_id');
-                $item_tax=  $this->input->post('new_item_tax');
-               
-                $item_discount=  $this->input->post('new_item_discount');
-           if(count($stock)>0){
-                for($i=0;$i<count($stock);$i++){
-                    if($item[$i]!="" || $item[$i]!=0){
-                    $this->sales->add_direct_sales($guid,$item[$i],$quty[$i],$stock[$i],$item_discount[$i],$item_tax[$i],$i);
-                    }
-                        
+                for($j=0;$j<count($delete);$j++){                                             
+                     $this->sales->delete_order_item($delete[$j]);
                 }
-                    
-           }
+                $new_item=  $this->input->post('new_item_id');
+                $new_quty=  $this->input->post('new_item_quty');
+                $new_price=  $this->input->post('new_item_price');
+                $new_stock=  $this->input->post('new_item_stock_id');
+                $new_item_tax=  $this->input->post('new_item_tax');
+                $new_item_tax2=  $this->input->post('new_item_tax2');               
+                $new_item_discount=  $this->input->post('new_item_discount');
+                if(count($new_stock)>0){
+                     for($i=0;$i<count($new_stock);$i++){
+                         if($new_item[$i]!="" || $new_item[$i]!=0){
+                          $this->sales->add_direct_sales($guid,$new_item[$i],$new_quty[$i],$new_price[$i],$new_stock[$i],$new_item_discount[$i],$new_item_tax[$i],$new_item_tax2[$i],$i);
+
+                         }
+
+                     }
+
+                }
                     
                  echo 'TRUE';
     

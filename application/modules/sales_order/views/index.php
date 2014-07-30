@@ -845,35 +845,35 @@
 <script type="text/javascript">
  
     function discounte_amount(){
-    if(parseFloat($('#parsley_reg #hidden_total_price').val())>0){
+        if(parseFloat($('#parsley_reg #hidden_total_price').val())>0){
+            total=parseFloat($('#parsley_reg #hidden_total_price').val());
+            discount=(total*parseFloat($('#parsley_reg #discount').val()))/100;
+            $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())-discount);
+
+            round_amt=parseFloat($('#parsley_reg #round_amt').val());
+            freight=parseFloat($('#parsley_reg #freight').val())
+            if(freight==""){freight=0;}
+            if(round_amt==""){round_amt=0;}
+             $('#parsley_reg #discount_amt').val(discount);
+            if (isNaN($('#parsley_reg #total_price').val())) 
+        $('#parsley_reg #total_price').val('00');
+
+            if (isNaN($('#parsley_reg #discount_amt').val())) 
+        $('#parsley_reg #discount_amt').val('0');
+            if (isNaN($('#parsley_reg #round_amt').val())) 
+        $('#parsley_reg #round_amt').val('00');
+            if (isNaN($('#parsley_reg #freight').val())) 
+        $('#parsley_reg #dfreight').val('00');;
+        }
+        if($('#parsley_reg #discount').val()==0 || isNaN($('#parsley_reg #discount').val())){
+            $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())+round_amt+freight);
+        }
+        new_grand_total();
         total=parseFloat($('#parsley_reg #hidden_total_price').val());
-        discount=(total*parseFloat($('#parsley_reg #discount').val()))/100;
-        $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())-discount);
-       
-        round_amt=parseFloat($('#parsley_reg #round_amt').val());
-        freight=parseFloat($('#parsley_reg #freight').val())
-        if(freight==""){freight=0;}
-        if(round_amt==""){round_amt=0;}
-         $('#parsley_reg #discount_amt').val(discount);
-        if (isNaN($('#parsley_reg #total_price').val())) 
-    $('#parsley_reg #total_price').val('00');
-    
-        if (isNaN($('#parsley_reg #discount_amt').val())) 
-    $('#parsley_reg #discount_amt').val('0');
-        if (isNaN($('#parsley_reg #round_amt').val())) 
-    $('#parsley_reg #round_amt').val('00');
-        if (isNaN($('#parsley_reg #freight').val())) 
-    $('#parsley_reg #dfreight').val('00');;
+        if(total=="" || total==0 || isNaN(total)){
+            $('#parsley_reg #total_price').val("0");
+        }
     }
-    if($('#parsley_reg #discount').val()==0 || isNaN($('#parsley_reg #discount').val())){
-        $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())+round_amt+freight);
-    }
-    new_grand_total();
-    total=parseFloat($('#parsley_reg #hidden_total_price').val());
-    if(total=="" || total==0 || isNaN(total)){
-        $('#parsley_reg #total_price').val("0");
-    }
-}
 
     function add_new_quty(e){
         if($('#parsley_reg #item_id').val()!=""){
