@@ -1501,12 +1501,12 @@
                                                             
                                                                 <label for="tax" class="text-center" id="tax_label"  ><?php echo $this->lang->line('tax') ?>1</label>
 
-                                                                 <?php $tax_type=array('name'=>'tax_type',
+                                                                 <?php $tax1=array('name'=>'tax_type',
                                                                                             'class'=>' form-control text-right',
                                                                                             'id'=>'tax1',
                                                                                             'disabled'=>'disabled',
                                                                                             'value'=>set_value('tax_type'));
-                                                                             echo form_input($tax_type)?>
+                                                                             echo form_input($tax1)?>
                                                         </div>
                                                     </div>
                                                           <div class="col col-lg-1" style="padding:1px;width:120px">
@@ -1514,12 +1514,12 @@
                                                             
                                                                 <label for="tax" class="text-center" id="tax_label2"  ><?php echo $this->lang->line('tax') ?>2</label>
 
-                                                                 <?php $tax=array('name'=>'tax',
+                                                                 <?php $tax2=array('name'=>'tax',
                                                                                             'class'=>' form-control text-right',
                                                                                             'id'=>'tax2',
                                                                                             'disabled'=>'disabled',
                                                                                             'value'=>set_value('tax'));
-                                                                             echo form_input($tax)?>
+                                                                             echo form_input($tax2)?>
                                                         </div>
                                                     </div>
                                                
@@ -1841,9 +1841,7 @@
         }
         ?>
     }
-    
-                
-                </script>
+</script>
         
 
       
