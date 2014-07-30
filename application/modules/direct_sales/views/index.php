@@ -73,7 +73,7 @@
 <script type="text/javascript">
     function numbersonly(e){
         var unicode=e.charCode? e.charCode : e.keyCode
-        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40){ //if the key isn't the backspace key (which we should allow)
+        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40 && unicode!=9){ //if the key isn't the backspace key (which we should allow)
         if (unicode<48||unicode>57)
         return false
           }
@@ -1370,7 +1370,7 @@ function reload_update_user(){
                                                                            <?php $order_date=array('name'=>'order_date',
                                                                                             'class'=>'required form-control',
                                                                                             'id'=>'order_date',
-                                                                                          'onKeyPress'=>"new_order_date(event)", 
+                                                                                          
                                                                                             'value'=>set_value('order_date'));
                                                                              echo form_input($order_date)?>
                                                                 <span class="input-group-addon"><i class="icon-calendar"></i></span>
@@ -1397,7 +1397,7 @@ function reload_update_user(){
                                                                                         'id'=>'id_discount',
                                                                                          
                                                                                          'onkeyup'=>'new_discount_amount()',
-                                                                                        'onKeyPress'=>"new_discount(event);return numbersonly(event)",
+                                                                                        'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('discount'));
                                                                          echo form_input($discount)?>
                                                        </div>
@@ -1416,7 +1416,7 @@ function reload_update_user(){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'discount_amount',
                                                                                        'onkeyup'=>"new_grand_total()",
-                                                                                        'onKeyPress'=>"new_discount_amount_press(event);return numbersonly(event)", 
+                                                                                        'onKeyPress'=>"return numbersonly(event)", 
                                                                                         'value'=>set_value('discount_amount'));
                                                                          echo form_input($discount_amount)?>
                                                        </div>
@@ -1428,7 +1428,7 @@ function reload_update_user(){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'freight',
                                                                                         'onkeyup'=>"new_grand_total()",
-                                                                                       'onKeyPress'=>"new_freight(event);return numbersonly(event)",
+                                                                                       'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('freight'));
                                                                          echo form_input($freight)?>
                                                        </div>
@@ -1440,7 +1440,7 @@ function reload_update_user(){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'round_off_amount',
                                                                                         'onkeyup'=>"new_grand_total()",    
-                                                                                        'onKeyPress'=>"new_round_off_amount(event);return numbersonly(event)",
+                                                                                        'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('round_off_amount'));
                                                                          echo form_input($round_off_amount)?>
                                                        </div>
