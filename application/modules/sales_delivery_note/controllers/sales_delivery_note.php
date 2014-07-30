@@ -151,52 +151,40 @@ function save(){
                 $guid=  $this->input->post('guid');
                 $delivery_date=strtotime($this->input->post('delivery_date'));
                 $total_amount=  $this->input->post('total_amount');
-                $grand_total=  $this->input->post('grand_total');
-               
+                $grand_total=  $this->input->post('grand_total');               
                 $remark=  $this->input->post('remark');
                 $note=  $this->input->post('note');
                 $customer_discount=  $this->input->post('customer_discount');
                 $customer_discount_amount=  $this->input->post('customer_discount_amount');
                 $total_discount=$this->input->post('total_item_discount_amount');
-                $total_tax=$this->input->post('total_tax');
-               
+                $total_tax=$this->input->post('total_tax');               
                 $value=array('customer_discount_amount'=>$customer_discount_amount,'total_tax'=>$total_tax,'total_discount'=>$total_discount,'customer_discount'=>$customer_discount,'date'=>$delivery_date,'so'=>$so,'remark'=>$remark,'note'=>$note,'total_amt'=>$grand_total,'total_item_amt'=>$total_amount);
                 $guid=  $this->input->post('guid');
                 $update_where=array('guid'=>$guid);
-                $this->posnic->posnic_update_record($value,$update_where,'sales_delivery_note');          
-               
+                $this->posnic->posnic_update_record($value,$update_where,'sales_delivery_note');
                 $quty=  $this->input->post('delivered_quty');
-                $items=  $this->input->post('items');
-           
+                $items=  $this->input->post('items');           
+                $this->load->model('sales');
                 for($i=0;$i<count($items);$i++){
-                        $this->load->model('sales');
-                        $this->sales->update_item_receving($items[$i],$quty[$i],$so);
-                       
-                }
-                    
-                    
-                    
-                 echo 'TRUE';
-    
+                        $this->sales->update_item_receving($items[$i],$quty[$i],$so,$guid);                       
+                }   
+                    echo 'TRUE';    
                 }else{
-                   echo 'FALSE';
+                    echo 'FALSE';
                 }
         }else{
-                   echo 'Noop';
-                }
+            echo 'Noop';
+        }
           
 }
         
 
-function search_sales_order(){
+    function search_sales_order(){
         $search= $this->input->post('term');
         $this->load->model('sales');
         $data= $this->sales->search_sales_order($search,$this->session->userdata['branch_id'])    ;
         echo json_encode($data);
-         
-       
-        
-}
+    }
 function delete(){
    if($this->session->userdata['sales_delivery_note_per']['delete']==1){
         if($this->input->post('guid')){
