@@ -43,32 +43,32 @@
       line-height: 1.7;
     }
     #dt_table_tools tr td + td + td + td + td + td + td + td + td {
-  width: 120px !important;
-}
-.editable-address {
-    display: block;
-    margin-bottom: 5px;  
-}
+    width: 120px !important;
+    }
+    .editable-address {
+        display: block;
+        margin-bottom: 5px;  
+    }
 
-.editable-address span {
-    width: 70px;  
-    display: inline-block;
-}
-.editable-buttons {
-    text-align: center;
-}
-.popover-title {
-    
-    text-align: center;
-}
-.popover-content {
-    padding: 6px 24px !important;
-    width: 277px!important;
-}
-.small_inputs input{
-    font-size: 11px;
-    padding: 0 1px !important;
-}
+    .editable-address span {
+        width: 70px;  
+        display: inline-block;
+    }
+    .editable-buttons {
+        text-align: center;
+    }
+    .popover-title {
+
+        text-align: center;
+    }
+    .popover-content {
+        padding: 6px 24px !important;
+        width: 277px!important;
+    }
+    .small_inputs input{
+        font-size: 11px;
+        padding: 0 1px !important;
+    }
 </style>	
 <script type="text/javascript">
     function data_table_duplicate(row){
@@ -90,7 +90,7 @@
     }
     function numbersonly(e){
         var unicode=e.charCode? e.charCode : e.keyCode
-        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40){ //if the key isn't the backspace key (which we should allow)
+        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40 && unicode!=9){ //if the key isn't the backspace key (which we should allow)
         if (unicode<48||unicode>57)
         return false
           }
@@ -189,17 +189,10 @@
                     $('#parsley_reg #stock_quty').val($('#parsley_reg #items').select2('data').quty);
                     $('#parsley_reg #tax_value').val($('#parsley_reg #items').select2('data').tax_value);
                     $('#parsley_reg #tax_type').val($('#parsley_reg #items').select2('data').tax_type);
-                    var tax=$('#parsley_reg #items').select2('data').deco_tax;
-                    $('#parsley_reg #tax_Inclusive').val(tax);
-                    if(tax==1){
-                        $('#tax_label').text('Tax(Exc)');
-                    }else{
-                        $('#tax_label').text('Tax(Inc)');   
-                    }
-                    if(isNaN($('#parsley_reg #tax_value').val())){
-                        $('#parsley_reg #tax_value').val(0);
-                        $('#parsley_reg #tax').val(0);
-                    }
+                    $('#parsley_reg #tax_Inclusive').val($('#parsley_reg #items').select2('data').tax_Inclusive);
+                    $('#parsley_reg #tax_value2').val($('#parsley_reg #items').select2('data').tax_value2);
+                    $('#parsley_reg #tax_type2').val($('#parsley_reg #items').select2('data').tax_type2);
+                    $('#parsley_reg #tax_Inclusive2').val($('#parsley_reg #items').select2('data').tax_Inclusive2);                    
                     net_amount();
                     $('#parsley_reg #quantity').focus();
                     window.setTimeout(function ()
@@ -426,79 +419,75 @@
         });
     });
     
-function posnic_add_new(){
-refresh_items_table();
+    function posnic_add_new(){
+        refresh_items_table();
+        $('#first_name').select2('enable');
+        $('#update_button').hide();
+        $('#save_button').show();
+        $('#update_clear').hide();
+        $('#save_clear').show();
+        $('#total_amount').val('');
+        $('#items_id').val('');
+        $('#customers_guid').val('');
+        $("#parsley_reg").trigger('reset');
+        $('#deleted').remove();
+        $('#parent_items').append('<div id="deleted"></div>');
+        $('#newly_added').remove();
+        $('#parent_items').append('<div id="newly_added"></div>');
+        $("#parsley_reg #first_name").select2('data', {id:'',text: '<?php echo $this->lang->line('search').' '.$this->lang->line('customer') ?>'});
+        <?php
+        if($this->session->userdata['sales_quotation_per']['add']==1){ ?>
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/sales_quotation/order_number/",                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                {    
+                    $('#parsley_reg #order_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                    $('#parsley_reg #demo_order_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                }
+            });
 
-$('#first_name').select2('enable');
-$('#update_button').hide();
-$('#save_button').show();
-$('#update_clear').hide();
-$('#save_clear').show();
-$('#total_amount').val('');
-$('#items_id').val('');
-$('#customers_guid').val('');
-$("#parsley_reg").trigger('reset');
-$('#deleted').remove();
-$('#parent_items').append('<div id="deleted"></div>');
-$('#newly_added').remove();
-$('#parent_items').append('<div id="newly_added"></div>');
-$("#parsley_reg #first_name").select2('data', {id:'',text: '<?php echo $this->lang->line('search').' '.$this->lang->line('customer') ?>'});
-    <?php if($this->session->userdata['sales_quotation_per']['add']==1){ ?>
-             $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/sales_quotation/order_number/",                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             {    
-                                 
-                                
-                                 $('#parsley_reg #order_number').val(data[0][0]['prefix']+data[0][0]['max']);
-                                 $('#parsley_reg #demo_order_number').val(data[0][0]['prefix']+data[0][0]['max']);
-                             }
-                             });
-            
-            
-            
-      $("#user_list").hide();
-    $('#add_new_order').show('slow');
-      $('#delete').attr("disabled", "disabled");
-      $('#posnic_add_sales_quotation').attr("disabled", "disabled");
-      $('#active').attr("disabled", "disabled");
-      $('#deactive').attr("disabled", "disabled");
-      $('#sales_quotation_lists').removeAttr("disabled");
-     
-         window.setTimeout(function ()
-    {
-       
-        $('#parsley_reg #first_name').select2('open');
-    }, 500);
-      <?php }else{ ?>
-                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                         
-                    <?php }?>
-}
-function posnic_sales_quotation_lists(){
-      $('#edit_sales_quotation_form').hide('hide');
-      $('#add_new_order').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#active').removeAttr("disabled");
-      $('#deactive').removeAttr("disabled");
-      $('#posnic_add_sales_quotation').removeAttr("disabled");
-      $('#sales_quotation_lists').attr("disabled",'disabled');
-}
-function clear_add_sales_quotation(){
-      $("#parsley_reg").trigger('reset');
-      refresh_items_table();
-}
-function clear_update_sales_quotation(){
-      $("#parsley_reg").trigger('reset');
-      refresh_items_table();
-      edit_function($('#sales_quotation_guid').val());
-}
-function reload_update_user(){
-    var id=$('#guid').val();
-    customers_function(id);
-}
+            $("#user_list").hide();
+            $('#add_new_order').show('slow');
+            $('#delete').attr("disabled", "disabled");
+            $('#posnic_add_sales_quotation').attr("disabled", "disabled");
+            $('#active').attr("disabled", "disabled");
+            $('#deactive').attr("disabled", "disabled");
+            $('#sales_quotation_lists').removeAttr("disabled"); 
+            window.setTimeout(function ()
+            {
+                $('#parsley_reg #first_name').select2('open');
+            }, 500);
+        <?php
+        }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                         
+            <?php
+        }?>
+    }
+    function posnic_sales_quotation_lists(){
+        $('#edit_sales_quotation_form').hide('hide');
+        $('#add_new_order').hide('hide');      
+        $("#user_list").show('slow');
+        $('#delete').removeAttr("disabled");
+        $('#active').removeAttr("disabled");
+        $('#deactive').removeAttr("disabled");
+        $('#posnic_add_sales_quotation').removeAttr("disabled");
+        $('#sales_quotation_lists').attr("disabled",'disabled');
+    }
+    function clear_add_sales_quotation(){
+        $("#parsley_reg").trigger('reset');
+        refresh_items_table();
+    }
+    function clear_update_sales_quotation(){
+        $("#parsley_reg").trigger('reset');
+        refresh_items_table();
+        edit_function($('#sales_quotation_guid').val());
+    }
+    function reload_update_user(){
+        var id=$('#guid').val();
+        customers_function(id);
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
@@ -566,229 +555,59 @@ function reload_update_user(){
 <script type="text/javascript">
  
     function discounte_amount(){
-    if(parseFloat($('#parsley_reg #hidden_total_price').val())>0){
+        if(parseFloat($('#parsley_reg #hidden_total_price').val())>0){
+            total=parseFloat($('#parsley_reg #hidden_total_price').val());
+            discount=(total*parseFloat($('#parsley_reg #discount').val()))/100;
+            $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())-discount);
+
+            round_amt=parseFloat($('#parsley_reg #round_amt').val());
+            freight=parseFloat($('#parsley_reg #freight').val())
+            if(freight==""){freight=0;}
+            if(round_amt==""){round_amt=0;}
+             $('#parsley_reg #discount_amt').val(discount);
+            if (isNaN($('#parsley_reg #total_price').val())) 
+        $('#parsley_reg #total_price').val('00');
+
+            if (isNaN($('#parsley_reg #discount_amt').val())) 
+        $('#parsley_reg #discount_amt').val('0');
+            if (isNaN($('#parsley_reg #round_amt').val())) 
+        $('#parsley_reg #round_amt').val('00');
+            if (isNaN($('#parsley_reg #freight').val())) 
+        $('#parsley_reg #dfreight').val('00');;
+        }
+        var customer_dis=0;
+
+
+        if($('#parsley_reg #discount').val()==0 || isNaN($('#parsley_reg #discount').val())){
+            $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())+round_amt+freight);
+        }
+        new_grand_total();
         total=parseFloat($('#parsley_reg #hidden_total_price').val());
-        discount=(total*parseFloat($('#parsley_reg #discount').val()))/100;
-        $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())-discount);
-       
-        round_amt=parseFloat($('#parsley_reg #round_amt').val());
-        freight=parseFloat($('#parsley_reg #freight').val())
-        if(freight==""){freight=0;}
-        if(round_amt==""){round_amt=0;}
-         $('#parsley_reg #discount_amt').val(discount);
-        if (isNaN($('#parsley_reg #total_price').val())) 
-    $('#parsley_reg #total_price').val('00');
-    
-        if (isNaN($('#parsley_reg #discount_amt').val())) 
-    $('#parsley_reg #discount_amt').val('0');
-        if (isNaN($('#parsley_reg #round_amt').val())) 
-    $('#parsley_reg #round_amt').val('00');
-        if (isNaN($('#parsley_reg #freight').val())) 
-    $('#parsley_reg #dfreight').val('00');;
+        if(total=="" || total==0 || isNaN(total)){
+            $('#parsley_reg #total_price').val("0");
+        }
     }
-    var customer_dis=0;
-  
-   
-    if($('#parsley_reg #discount').val()==0 || isNaN($('#parsley_reg #discount').val())){
-        $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())+round_amt+freight);
-    }
-    new_grand_total();
-    total=parseFloat($('#parsley_reg #hidden_total_price').val());
-    if(total=="" || total==0 || isNaN(total)){
-        $('#parsley_reg #total_price').val("0");
-    }
-}
-function new_quotation_date(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
 
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #quotation_date').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #expiry_date').focus();
-            
-        }
-         if (unicode!=27){
-        }
-       else{
-        
-           $('#parsley_reg #first_name').select2('open');
-        }
-        }
+    function add_new_quty(e){
+        if($('#parsley_reg #item_id').val()!=""){
+            var unicode=e.charCode? e.charCode : e.keyCode
+            if($('#parsley_reg #quantity').value!=""){
+                if (unicode!=13 && unicode!=9){
+                }
+                else{
+                  copy_items();
+
+                }
+                if (unicode!=27){
+                }
+                else{
+                    $('#parsley_reg #items').select2('open');
+                }
+            }
         }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
+            $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
+            $('#parsley_reg #items').select2('open');
         }
-
-    }
-function new_expiry_date(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #expiry_date').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-                  window.setTimeout(function ()
-    {
-           $('#parsley_reg #id_discount').focus();
-            }, 0);
-           
-           
-        }
-         if (unicode!=27){
-        }
-       else{
-          
-           $('#parsley_reg #quotation_date').focus();
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function new_discount(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #discount_amount').focus();
-             
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-          document.getElementById("expiry_date").focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-
-
-
-function new_discount_amount_press(e){
-
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          
-         
-           $('#parsley_reg #freight').focus();
-          
-           
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #id_discount').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function new_freight(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #round_off_amount').focus();
-          
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #discount_amount').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function new_round_off_amount(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          $('#parsley_reg #items').select2('open');
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #freight').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function add_new_quty(e){
-    if($('#parsley_reg #item_id').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #quantity').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          copy_items();
-         
-        }
-         if (unicode!=27){
-        }
-       else{
-           
-           $('#parsley_reg #items').select2('open');
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
-         $('#parsley_reg #items').select2('open');
-
-        }
-
     }
 
     function net_amount(){
@@ -971,6 +790,15 @@ function add_new_quty(e){
                     if(isNaN(tax2)){
                         tax2=0;
                     } 
+                    var tax_text2=0;
+                    var tax_text1=0;
+                    if(tax2!=0){
+                        tax_text2=tax2+':'+tax_type2+'('+type2+')';
+                    }
+                    if(tax1!=0){
+                        tax_text1=tax1+':'+tax_type+'('+type1+')';
+                    }
+                    
                     var old_total= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #items_total').val();
                     var old_tax1= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #items_tax').val();
                     var old_tax2= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #items_tax2').val();
@@ -979,8 +807,8 @@ function add_new_quty(e){
                     $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(3)').html(sku);
                     $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(4)').html(quty);
                     $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(5)').html(price);
-                    $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(6)').html(tax1+':'+tax_type+'('+type1+')');
-                    $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(7)').html(tax2+':'+tax_type2+'('+type2+')');
+                    $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(6)').html(tax_text1);
+                    $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(7)').html(tax_text2);
                     $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(8)').html(discount);
                     $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' td:nth-child(9)').html(total);
                     $('#newly_added #new_item_id_'+stock).val(items_id);
@@ -1119,14 +947,22 @@ function add_new_quty(e){
                 <input type="hidden" name="new_item_price[]" value="'+price+'" id="new_item_price_'+stock+'">\n\
                 <input type="hidden" name="new_item_total[]"  value="'+subtotal+'" id="new_item_total_'+stock+'">\n\
                 </div>');
+                    var tax_text2=0;
+                    var tax_text1=0;
+                    if(tax2!=0){
+                        tax_text2=tax2+':'+tax_type2+'('+type2+')';
+                    }
+                    if(tax1!=0){
+                        tax_text1=tax1+':'+tax_type+'('+type1+')';
+                    }
                 var addId = $('#selected_item_table').dataTable().fnAddData( [
                     null,
                     name,
                     sku,
                     quty,
                     price,
-                    tax1+':'+tax_type+'('+type1+')',
-                    tax2+':'+tax_type2+'('+type2+')',
+                    tax_text1,
+                    tax_text2,
                     discount,
                     total,
                     '<input type="hidden" name="index[]" id="index">\n\
@@ -1319,93 +1155,85 @@ function add_new_quty(e){
             $('#parsley_reg #item_discount').val(0);
         }, 0);
     }
-function new_grand_total(){
-         if(parseFloat($("#parsley_reg #total_amount").val())>0){
-var discount=parseFloat($("#parsley_reg #discount_amount").val());
-var frieight=parseFloat($("#parsley_reg #freight").val());
-var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
-    if (isNaN(discount) || discount=="") {
-    discount=0;}
-        if (isNaN(frieight)|| frieight=="") {
-    frieight=00;}
-        if (isNaN(round_amt)|| round_amt=="") {
-    round_amt=00;}
-    if($('#parsley_reg #customer_discount').val()==0 || isNaN($('#parsley_reg #customer_discount').val())){
-       var customer_dis=0;
-    }else{
-        customer_dis=parseFloat($('#parsley_reg #total_amount').val())*parseFloat($('#parsley_reg #customer_discount').val())/100;
-         var customer_dis = parseFloat(customer_dis);
-        $('#demo_customer_discount_amount').val(customer_dis.toFixed(point));
-        $('#customer_discount_amount').val(customer_dis.toFixed(point));
-    }
-
-     $("#parsley_reg #demo_grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount+frieight+round_amt-customer_dis);
-     $("#parsley_reg #grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount+frieight+round_amt-customer_dis);
-       
-        var num = parseFloat($('#demo_grand_total').val());
-    $('#demo_grand_total').val(num.toFixed(point));
-    
-    var num = parseFloat($('#grand_total').val());
-    $('#grand_total').val(num.toFixed(point));
-    var num = parseFloat($('#demo_total_amount').val());
-    $('#demo_total_amount').val(num.toFixed(point));
-    var num = parseFloat($('#total_amount').val());
-    $('#total_amount').val(num.toFixed(point));
+    function new_grand_total(){
+        if(parseFloat($("#parsley_reg #total_amount").val())>0){
+            var discount=parseFloat($("#parsley_reg #discount_amount").val());
+            var frieight=parseFloat($("#parsley_reg #freight").val());
+            var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
+            if (isNaN(discount) || discount=="") {
+                discount=0;
+            }
+            if (isNaN(frieight)|| frieight=="") {
+                frieight=00;
+            }
+            if (isNaN(round_amt)|| round_amt=="") {
+                round_amt=00;
+            }
+            if($('#parsley_reg #customer_discount').val()==0 || isNaN($('#parsley_reg #customer_discount').val())){
+                var customer_dis=0;
+            }else{
+                customer_dis=parseFloat($('#parsley_reg #total_amount').val())*parseFloat($('#parsley_reg #customer_discount').val())/100;
+                var customer_dis = parseFloat(customer_dis);
+                $('#demo_customer_discount_amount').val(customer_dis.toFixed(point));
+                $('#customer_discount_amount').val(customer_dis.toFixed(point));
+            }
+            $("#parsley_reg #demo_grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount+frieight+round_amt-customer_dis);
+            $("#parsley_reg #grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount+frieight+round_amt-customer_dis);
+            var num = parseFloat($('#demo_grand_total').val());
+            $('#demo_grand_total').val(num.toFixed(point));
+            var num = parseFloat($('#grand_total').val());
+            $('#grand_total').val(num.toFixed(point));
+            var num = parseFloat($('#demo_total_amount').val());
+            $('#demo_total_amount').val(num.toFixed(point));
+            var num = parseFloat($('#total_amount').val());
+            $('#total_amount').val(num.toFixed(point));
         }
-   if (isNaN($("#parsley_reg #total_amount").val())) 
-    $("#parsley_reg #total_amount").val(0)    
+        if (isNaN($("#parsley_reg #total_amount").val())) 
+            $("#parsley_reg #total_amount").val(0) ;   
         if (isNaN($("#parsley_reg #discount_amount").val())) 
-    $("#parsley_reg #discount_amount").val(0);
+            $("#parsley_reg #discount_amount").val(0);
         if (isNaN($("#parsley_reg #round_off_amount").val())) 
-    $("#parsley_reg #round_off_amount").val(0);
+            $("#parsley_reg #round_off_amount").val(0);
         if (isNaN($("#parsley_reg #freight").val())) 
-    $("#parsley_reg #freight").val(0)
+            $("#parsley_reg #freight").val(0);
         if (isNaN($("#parsley_reg #demo_total_amount").val())) 
-    $("#parsley_reg #demo_total_amount").val(0)
-    
+            $("#parsley_reg #demo_total_amount").val(0);
         if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #demo_grand_total").val(0)
-    
+            $("#parsley_reg #demo_grand_total").val(0);
         if (isNaN($("#parsley_reg #demo_grand_total").val())) 
-    $("#parsley_reg #grand_total").val(0)
-    
-}
-function new_discount_amount(){
- if(parseFloat($("#parsley_reg #total_amount").val())>0){
-    var total=parseFloat($("#parsley_reg #total_amount").val());
-    if($("#parsley_reg #id_discount").val()!="" && $("#parsley_reg #id_discount").val()!=0){
-            var discount=(total*parseFloat($("#parsley_reg #id_discount").val()))/100;
-            discount=discount.toFixed(point);
-              $("#parsley_reg #discount_amount").val(discount);
-    }else{
-        var  discount=$('discount_amount').val();
-       
+             $("#parsley_reg #grand_total").val(0);
     }
-    $("#parsley_reg #demo_grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount);
-    $("#parsley_reg #grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount);
-  
-    var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
-    var freight=parseFloat($("#parsley_reg #freight").val())
-    if(freight==""){freight=0;}
-    if(round_amt==""){round_amt=0;}
-         
-    if (isNaN($("#parsley_reg #total_amount").val())) 
-        $("#parsley_reg #total_amount").val(0)    
-    if (isNaN($("#parsley_reg #discount_amount").val())) 
-        $("#parsley_reg #discount_amount").val(0);
-    if (isNaN($("#parsley_reg #round_off_amount").val())) 
-        $("#parsley_reg #round_off_amount").val(0);
-    if (isNaN($("#parsley_reg #freight").val())) 
-        $("#parsley_reg #freight").val()
-    
+    function new_discount_amount(){
+        if(parseFloat($("#parsley_reg #total_amount").val())>0){
+            var total=parseFloat($("#parsley_reg #total_amount").val());
+            if($("#parsley_reg #id_discount").val()!="" && $("#parsley_reg #id_discount").val()!=0){
+                var discount=(total*parseFloat($("#parsley_reg #id_discount").val()))/100;
+                discount=discount.toFixed(point);
+                $("#parsley_reg #discount_amount").val(discount);
+            }else{
+                var  discount=$('discount_amount').val();
+            }
+            $("#parsley_reg #demo_grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount);
+            $("#parsley_reg #grand_total").val(parseFloat($("#parsley_reg #total_amount").val())-discount);
+            var round_amt=parseFloat($("#parsley_reg #round_off_amount").val());
+            var freight=parseFloat($("#parsley_reg #freight").val())
+            if(freight==""){freight=0;}
+            if(round_amt==""){round_amt=0;}
+            if (isNaN($("#parsley_reg #total_amount").val())) 
+                $("#parsley_reg #total_amount").val(0)    
+            if (isNaN($("#parsley_reg #discount_amount").val())) 
+                $("#parsley_reg #discount_amount").val(0);
+            if (isNaN($("#parsley_reg #round_off_amount").val())) 
+                $("#parsley_reg #round_off_amount").val(0);
+            if (isNaN($("#parsley_reg #freight").val())) 
+                $("#parsley_reg #freight").val()
+        }
+        new_grand_total();
+        total=parseFloat($("#parsley_reg #total_amount").val());
+        if(total=="" || total==0 || isNaN(total)){
+            $("#parsley_reg #total_amount").val(0);
+        }
     }
-    
-    new_grand_total();
-    total=parseFloat($("#parsley_reg #total_amount").val());
-    if(total=="" || total==0 || isNaN(total)){
-      $("#parsley_reg #total_amount").val(0);
-    }
-}
 </script>
 
   
@@ -1483,7 +1311,7 @@ function new_discount_amount(){
                                                                            <?php $quotation_date=array('name'=>'quotation_date',
                                                                                             'class'=>'required form-control',
                                                                                             'id'=>'quotation_date',
-                                                                                          'onKeyPress'=>"new_quotation_date(event)", 
+                                                                                         
                                                                                             'value'=>set_value('quotation_date'));
                                                                              echo form_input($quotation_date)?>
                                                                 <span class="input-group-addon"><i class="icon-calendar"></i></span>
@@ -1497,7 +1325,7 @@ function new_discount_amount(){
                                                                            <?php $expiry_date=array('name'=>'expiry_date',
                                                                                             'class'=>'required form-control',
                                                                                             'id'=>'expiry_date',
-                                                                                            'onKeyPress'=>"new_expiry_date(event)", 
+                                                                                          
                                                                                             'value'=>set_value('expiry_date'));
                                                                              echo form_input($expiry_date)?>
                                                                 <span class="input-group-addon"><i class="icon-calendar"></i></span>
@@ -1516,7 +1344,7 @@ function new_discount_amount(){
                                                                                         'id'=>'id_discount',
                                                                                          
                                                                                          'onkeyup'=>'new_discount_amount()',
-                                                                                        'onKeyPress'=>"new_discount(event);return numbersonly(event)",
+                                                                                        'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('discount'));
                                                                          echo form_input($discount)?>
                                                        </div>
@@ -1530,7 +1358,7 @@ function new_discount_amount(){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'discount_amount',
                                                                                        'onkeyup'=>"new_grand_total()",
-                                                                                        'onKeyPress'=>"new_discount_amount_press(event);return numbersonly(event)", 
+                                                                                        'onKeyPress'=>"return numbersonly(event)", 
                                                                                         'value'=>set_value('discount_amount'));
                                                                          echo form_input($discount_amount)?>
                                                        </div>
@@ -1542,7 +1370,7 @@ function new_discount_amount(){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'freight',
                                                                                         'onkeyup'=>"new_grand_total()",
-                                                                                       'onKeyPress'=>"new_freight(event);return numbersonly(event)",
+                                                                                       'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('freight'));
                                                                          echo form_input($freight)?>
                                                        </div>
@@ -1554,7 +1382,7 @@ function new_discount_amount(){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'round_off_amount',
                                                                                         'onkeyup'=>"new_grand_total()",    
-                                                                                        'onKeyPress'=>"new_round_off_amount(event);return numbersonly(event)",
+                                                                                        'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('round_off_amount'));
                                                                          echo form_input($round_off_amount)?>
                                                        </div>
@@ -1917,241 +1745,104 @@ function new_discount_amount(){
 		</div>
 	
                 <script type="text/javascript">
-                    function sales_quotation_group_approve(){
-              <?php if($this->session->userdata['sales_quotation_per']['approve']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                              $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_quotation');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/sales_quotation/sales_quotation_approve',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value
-
-                                },
-                                complete: function(response) {
-                                    if(response['responseText']=='TRUE'){
-                                           $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('sales_quotation') ?>  <?php echo $this->lang->line('approved');?>', { type: "success" });
-                                        $("#dt_table_tools").dataTable().fnDraw();
-                                    }else if(response['responseText']=='Approved'){
-                                         $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>   <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
-                                    }else{
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                              
-                                    }
-                                    }
-                            });
-
-                          }
-
-                      }
-                  
-
-                      }   
-                       <?php }else{?>
-                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                       
-                            <?php }
-                         ?>
-                      }
-                    function posnic_group_item_active(){
-                     var flag=0;
-                     var field=document.forms.items_form;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                              $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_quotation');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.items_form;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
-                                url: '<?php echo base_url() ?>index.php/sales_quotation/item_active',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value
-
-                                },
-                                success: function(response)
-                                {
-                                    if(response){
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('activated');?>', { type: "success" });
-                                        $("#selected_item_table").dataTable().fnDraw();
-                                    }
-                                }
-                            });
-
-                          }
-
-                      }
-                  
-
-                      }    
-                      }
-     function posnic_delete(){
-            <?php if($this->session->userdata['sales_quotation_per']['delete']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                        
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('paruchase_order');?>', { type: "warning" });
-                      }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('Are you Sure To Delete') ?>", function(result) {
-             if(result){
-              
-             
-                        var posnic=document.forms.posnic;
-                        for (i = 0; i < posnic.length; i++){
-                           
-                          if(posnic[i].checked==true){ 
-                              var guid=posnic[i].value;
-                              $.ajax({
+        
+    function posnic_delete(){
+        <?php
+        if($this->session->userdata['sales_quotation_per']['delete']==1){ ?>
+            var flag=0;
+            var field=document.forms.posnic;
+            for (i = 0; i < field.length; i++){
+                if(field[i].checked==true){
+                    flag=flag+1;
+                }
+            }
+            if (flag<1) {
+                $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_quotation');?>', { type: "warning" });
+            }else{
+                bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('sales_quotation') ?>", function(result) {
+                if(result){
+                    var posnic=document.forms.posnic;
+                    for (i = 0; i < posnic.length; i++){
+                        if(posnic[i].checked==true){ 
+                            var guid=posnic[i].value;
+                            $.ajax({
                                 url: '<?php echo base_url() ?>/index.php/sales_quotation/delete',
                                 type: "POST",
                                 data: {
                                     guid:posnic[i].value
-
                                 },
-                                  complete: function(response) {
+                                complete: function(response) {
                                     if(response['responseText']=='TRUE'){
-                                           $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('goods_receiving_note') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
+                                        $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('goods_receiving_note') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
                                         $("#dt_table_tools").dataTable().fnDraw();
                                     }else if(response['responseText']=='Approved'){
-                                         $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>  <?php echo $this->lang->line('is');?> <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
+                                        $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>  <?php echo $this->lang->line('is');?> <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
                                     }else{
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('goods_receiving_note');?>', { type: "error" });                       
+                                        $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('goods_receiving_note');?>', { type: "error" });                       
+                                        }
                                     }
-                                    }
-                            });
-
-                          }
-
-                      }    
-                      }
-                      });
-                      }    
-                      <?php }else{?>
-                                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                       
-                           <?php }
-                        ?>
-                      }
-                    
-                    
+                                });
+                            }
+                        }    
+                    }
+                });
+            }    
+            <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                       
+            <?php
+        }
+        ?>
+    }              
                     
     function sales_quotation_group_approve(){
-         <?php if($this->session->userdata['sales_quotation_per']['approve']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                                               $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_quotation');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                           var guid=posnic[i].value;
-                          if(posnic[i].checked==true){                             
-                                 $.ajax({
-                                    url: '<?php echo base_url() ?>/index.php/sales_quotation/sales_quotation_approve',
-                                    type: "POST",
-                                    data: {
-                                        guid: posnic[i].value
-
-                                    },
-                                     complete: function(response) {
-                                        if(response['responseText']=='TRUE'){
-                                               $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('sales_quotation') ?>  <?php echo $this->lang->line('approved');?>', { type: "success" });
-                                            $("#dt_table_tools").dataTable().fnDraw();
-                                        }else if(response['responseText']=='Approved'){
-                                             $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>   <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
-                                        }else{
-                                              $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                        
-                                        }
-                                        }
-                                });
-
-                          }
-
-                      }
-                  
-
-                      }   
-                        <?php }else{?>
-                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                       
-                            <?php }
-                         ?>
-                      }
-                    function posnic_group_item_deactive(){
-                     var flag=0;
-                     var field=document.forms.items_form;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                                               $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_quotation');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.items_form;
-                      for (i = 0; i < posnic.length-1; i++){
-                          if(posnic[i].checked==true){                             
-                                 $.ajax({
-                                    url: '<?php echo base_url() ?>index.php/sales_quotation/item_deactive',
-                                    type: "POST",
-                                    data: {
-                                        guid: posnic[i].value
-
-                                    },
-                                    success: function(response)
-                                    {
-                                        if(response){
-                                             $.bootstrapGrowl('<?php echo $this->lang->line('deactivated');?>', { type: "danger" });
-                                            $("#selected_item_table").dataTable().fnDraw();
-                                        }
-                                    }
-                                });
-
-                          }
-
-                      }
-                  
-
-                      }    
-                      }
-                    
+        <?php
+        if($this->session->userdata['sales_quotation_per']['approve']==1){ ?>
+            var flag=0;
+            var field=document.forms.posnic;
+            for (i = 0; i < field.length; i++){
+                if(field[i].checked==true){
+                    flag=flag+1;
+                }
+            }
+            if (flag<1) 
+            {
+                $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_quotation');?>', { type: "warning" });
+            }else
+            {
+                var posnic=document.forms.posnic;
+                for (i = 0; i < posnic.length-1; i++){
+                    var guid=posnic[i].value;
+                    if(posnic[i].checked==true){                             
+                        $.ajax({
+                            url: '<?php echo base_url() ?>/index.php/sales_quotation/sales_quotation_approve',
+                            type: "POST",
+                            data: {
+                                guid: posnic[i].value
+                            },
+                            complete: function(response) {
+                                if(response['responseText']=='TRUE'){
+                                    $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('sales_quotation') ?>  <?php echo $this->lang->line('approved');?>', { type: "success" });
+                                    $("#dt_table_tools").dataTable().fnDraw();
+                                }else if(response['responseText']=='Approved'){
+                                    $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>   <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
+                                }else{
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                        
+                                }
+                            }
+                        });
+                    }
+                }
+            }   
+            <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                       
+            <?php
+        }
+        ?>
+    }
+    
+                
                 </script>
         
 
