@@ -1393,7 +1393,8 @@
                 $('#parsley_reg #total_tax').val(num.toFixed(point));
             }
         }
-        $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val())-parseFloat(dis));
+        var total_discount=parseFloat($('#parsley_reg #total_item_discount_amount').val())-parseFloat(dis);
+        $('#parsley_reg #total_item_discount_amount').val(total_discount);
         var total=$("#parsley_reg #total_amount").val();
         $("#parsley_reg #total_amount").val(parseFloat(total)-parseFloat(net));
         $("#parsley_reg #demo_total_amount").val(parseFloat(total)-parseFloat(net));
@@ -1401,6 +1402,8 @@
         $('#demo_total_amount').val(num.toFixed(point));
         var num = parseFloat($('#total_amount').val());
         $('#total_amount').val(num.toFixed(point));
+        var num = parseFloat($('#total_item_discount_amount').val());
+        $('#total_item_discount_amount').val(num.toFixed(point));
         new_discount_amount();
         $("#parsley_reg #total_amount").val()
         var order=$('#selected_item_table #new_item_row_id_'+guid+' #items_order_guid').val();
@@ -1414,12 +1417,16 @@
         if($("#parsley_reg #total_amount").val()==0 || $("#parsley_reg #total_amount").val()==""){
             $("#parsley_reg #demo_grand_total").val(0)
             $("#parsley_reg #grand_total").val(0)
+            $('#customer_discount_amount').val(0);
+            $('#demo_customer_discount_amount').val(0);
         }
+       
     }
     function clear_inputs(){
         $('#parsley_reg #item_name').val('');
         $('#parsley_reg #sku').val('');
         $('#parsley_reg #quantity').val('');
+        $('#parsley_reg #discount').val('');
         $('#parsley_reg #free').val('');
         $('#parsley_reg #total').val('');
         $('#parsley_reg #sub_total').val('');
