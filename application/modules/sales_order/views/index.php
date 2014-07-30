@@ -90,7 +90,7 @@
     }
     function numbersonly(e){
         var unicode=e.charCode? e.charCode : e.keyCode
-        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40){ //if the key isn't the backspace key (which we should allow)
+        if (unicode!=8 && unicode!=46 && unicode!=37 && unicode!=38 && unicode!=39 && unicode!=40 && unicode!=9){ //if the key isn't the backspace key (which we should allow)
         if (unicode<48||unicode>57)
         return false
           }
@@ -443,25 +443,20 @@
 
                     $("#parsley_reg #demo_grand_total").val(data[0]['total_amt']);
                     $("#parsley_reg #grand_total").val(data[0]['total_amt']);
-
                     $("#parsley_reg #demo_total_amount").val(data[0]['total_item_amt']);
                     $("#parsley_reg #total_amount").val(data[0]['total_item_amt']);
                     var num = parseFloat($('#demo_total_amount').val());
                     $('#demo_total_amount').val(num.toFixed(point));
-
                     var num = parseFloat($('#total_amount').val());
                     $('#total_amount').val(num.toFixed(point));
-
                     var num = parseFloat($('#grand_total').val());
                     $('#grand_total').val(num.toFixed(point));
-
                     var num = parseFloat($('#demo_grand_total').val());
                     $('#demo_grand_total').val(num.toFixed(point));
                     $("#parsley_reg #customers_guid").val(data[0]['c_guid']);
                     var tax;
                     for(i=0;i<data.length;i++){
-                        if(!$('#'+data[i]['i_guid']).length){
-                                  
+                        if(!$('#'+data[i]['i_guid']).length){                                  
                             var  name=data[i]['items_name'];
                             if(data[i]['kit_name']){
                                 name=data[i]['kit_name'];
@@ -502,7 +497,6 @@
                                     var no_of_unit=data[i]['no_of_unit'];
                                     price=price/no_of_unit;
                                 }
-
                             }               
                             var subtotal=parseFloat(quty)*parseFloat(price);
                             var total=subtotal;
@@ -617,187 +611,172 @@
             }, 0);  
              
         });
-          $('#parsley_reg #sales_quotation').select2({
-              dropdownCssClass : 'customers_select',
-               formatResult: format_sales_quotation,
-                formatSelection: format_sales_quotation,
-                
-                escapeMarkup: function(m) { return m; },
-                placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('sales_quotation') ?>",
-                ajax: {
-                     url: '<?php echo base_url() ?>index.php/sales_order/search_sales_quotation',
-                     data: function(term, page) {
-                            return {types: ["exercise"],
-                                limit: -1,
-                                term: term
-                            };
-                     },
-                    type:'POST',
-                    dataType: 'json',
-                    quietMillis: 100,
-                    data: function (term) {
-                        return {
-                            term: term
-                        };
-                    },
-                    results: function (data) {
-                      var results = [];
-                      $.each(data, function(index, item){
+        $('#parsley_reg #sales_quotation').select2({
+            dropdownCssClass : 'customers_select',
+            formatResult: format_sales_quotation,
+            formatSelection: format_sales_quotation,
+            escapeMarkup: function(m) { return m; },
+            placeholder: "<?php echo $this->lang->line('search').' '.$this->lang->line('sales_quotation') ?>",
+            ajax: {
+                url: '<?php echo base_url() ?>index.php/sales_order/search_sales_quotation',
+                data: function(term, page) {
+                    return {types: ["exercise"],
+                        limit: -1,
+                        term: term
+                    };
+                },
+                type:'POST',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data) {
+                    var results = [];
+                    $.each(data, function(index, item){
                         results.push({
-                          id: item.guid,
-                          text: item.code,
-                          name: item.first_name,
-                          company: item.company_name,
-                          address1: item.address,
-                          id_discount: item.discount,
-                          discount_amt: item.discount_amt,
-                          customer_discount: item.customer_discount,
-                          customer_discount_amount: item.customer_discount_amount,
-                          freight: item.freight,
-                          round_amt: item.round_amt,
-                          total_amt: item.total_amt,
-                          total_item_amt: item.total_item_amt,
+                            id: item.guid,
+                            text: item.code,
+                            name: item.first_name,
+                            company: item.company_name,
+                            address1: item.address,
+                            id_discount: item.discount,
+                            discount_amt: item.discount_amt,
+                            customer_discount: item.customer_discount,
+                            customer_discount_amount: item.customer_discount_amount,
+                            freight: item.freight,
+                            round_amt: item.round_amt,
+                            total_amt: item.total_amt,
+                            total_item_amt: item.total_item_amt,
                         });
-                      });
-                      return {
-                          results: results
-                      };
-                    }
+                    });
+                    return {
+                        results: results
+                    };
+                }
+            }
+        });        
+    });
+    
+    function posnic_add_new(){
+        refresh_items_table();
+        $('#sales_quotation_select').hide();
+        $('#customer_select').show();
+        $("#parsley_reg #first_name").select2('enable');
+        $('#update_button').hide();
+        $('#save_button').show();
+        $('#update_clear').hide();
+        $('#save_clear').show();
+        $('#total_amount').val('');
+        $('#items_id').val('');
+        $('#customers_guid').val('');
+        $("#parsley_reg").trigger('reset');
+        $('#deleted').remove();
+        $('#parent_items').append('<div id="deleted"></div>');
+        $('#newly_added').remove();
+        $('#parent_items').append('<div id="newly_added"></div>');
+        $("#parsley_reg #first_name").select2('data', {id:'',text: '<?php echo $this->lang->line('search').' '.$this->lang->line('customer') ?>'});
+        <?php
+        if($this->session->userdata['sales_order_per']['add']==1){ ?>
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/sales_order/order_number/",                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                    {           
+                    $('#parsley_reg #order_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                    $('#parsley_reg #demo_order_number').val(data[0][0]['prefix']+data[0][0]['max']);
                 }
             });
-        
-        
-        
-        
-  
-        
-     });
-    
-function posnic_add_new(){
-refresh_items_table();
-$('#sales_quotation_select').hide();
-$('#customer_select').show();
-  $("#parsley_reg #first_name").select2('enable');
-$('#update_button').hide();
-$('#save_button').show();
-$('#update_clear').hide();
-$('#save_clear').show();
-$('#total_amount').val('');
-$('#items_id').val('');
-$('#customers_guid').val('');
-$("#parsley_reg").trigger('reset');
-$('#deleted').remove();
-$('#parent_items').append('<div id="deleted"></div>');
-$('#newly_added').remove();
-$('#parent_items').append('<div id="newly_added"></div>');
-$("#parsley_reg #first_name").select2('data', {id:'',text: '<?php echo $this->lang->line('search').' '.$this->lang->line('customer') ?>'});
-    <?php if($this->session->userdata['sales_order_per']['add']==1){ ?>
-             $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/sales_order/order_number/",                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             {    
-                                 
-                                
-                                 $('#parsley_reg #order_number').val(data[0][0]['prefix']+data[0][0]['max']);
-                                 $('#parsley_reg #demo_order_number').val(data[0][0]['prefix']+data[0][0]['max']);
-                             }
-                             });
-            
-            
-            
-      $("#user_list").hide();
-    $('#add_new_order').show('slow');
-      $('#delete').attr("disabled", "disabled");
-      $('#posnic_add_sales_order').attr("disabled", "disabled");
-      $('#active').attr("disabled", "disabled");
-      $('#deactive').attr("disabled", "disabled");
-      $('#sales_order_lists').removeAttr("disabled");
-     
-         window.setTimeout(function ()
-    {
-       
-        $('#parsley_reg #first_name').select2('open');
-    }, 500);
-      <?php }else{ ?>
-                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_order');?>', { type: "error" });                         
-                    <?php }?>
-}
-function posnic_add_quotation_order(){
-refresh_items_table();
-$('#update_button').hide();
-$('#save_button').show();
-$('#sales_quotation_select').show();
-$('#customer_select').hide();
-$('#update_clear').hide();
-$('#save_clear').show();
-$('#total_amount').val('');
-$('#items_id').val('');
-$('#customers_guid').val('');
-$("#parsley_reg").trigger('reset');
-$('#deleted').remove();
-$('#parent_items').append('<div id="deleted"></div>');
-$('#newly_added').remove();
-$('#parent_items').append('<div id="newly_added"></div>');
-$("#parsley_reg #sales_quotation").select2('data', {id:'',text: '<?php echo $this->lang->line('search').' '.$this->lang->line('sales_quotation') ?>'});
-    <?php if($this->session->userdata['sales_order_per']['add']==1){ ?>
-             $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/sales_order/order_number/",                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             {    
-                                 
-                                
-                                 $('#parsley_reg #order_number').val(data[0][0]['prefix']+data[0][0]['max']);
-                                 $('#parsley_reg #demo_order_number').val(data[0][0]['prefix']+data[0][0]['max']);
-                             }
-                             });
-            
-            
-            
-      $("#user_list").hide();
-    $('#add_new_order').show('slow');
-      $('#delete').attr("disabled", "disabled");
-      $('#posnic_add_sales_order').attr("disabled", "enable");
-      $('#posnic_add_sales_quotation').attr("disabled", "disabled");
-      $('#active').attr("disabled", "disabled");
-      $('#deactive').attr("disabled", "disabled");
-      $('#sales_order_lists').removeAttr("disabled");
-     
-         window.setTimeout(function ()
-    {
-       
-        $('#parsley_reg #sales_quotation').select2('open');
-    }, 500);
-      <?php }else{ ?>
-                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_order');?>', { type: "error" });                         
-                    <?php }?>
-}
-function posnic_sales_order_lists(){
-      $('#edit_sales_order_form').hide('hide');
-      $('#add_new_order').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#deactive').removeAttr("disabled");
-      $('#posnic_add_sales_order').removeAttr("disabled");
-      $('#posnic_add_sales_quotation').removeAttr("disabled");
-      $('#sales_order_lists').attr("disabled",'disabled');
-}
-function clear_add_sales_order(){
-      $("#parsley_reg").trigger('reset');
-      refresh_items_table();
-}
-function clear_update_sales_order(){
-      $("#parsley_reg").trigger('reset');
-      refresh_items_table();
-      edit_function($('#sales_order_guid').val());
-}
-function reload_update_user(){
-    var id=$('#guid').val();
-    customers_function(id);
-}
+            $("#user_list").hide();
+            $('#add_new_order').show('slow');
+            $('#delete').attr("disabled", "disabled");
+            $('#posnic_add_sales_order').attr("disabled", "disabled");
+            $('#active').attr("disabled", "disabled");
+            $('#deactive').attr("disabled", "disabled");
+            $('#sales_order_lists').removeAttr("disabled");
+            window.setTimeout(function ()
+            {
+                $('#parsley_reg #first_name').select2('open');
+            }, 500);
+            <?php       
+        }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_order');?>', { type: "error" });                         
+            <?php
+        }?>
+    }
+    function posnic_add_quotation_order(){
+        refresh_items_table();
+        $('#update_button').hide();
+        $('#save_button').show();
+        $('#sales_quotation_select').show();
+        $('#customer_select').hide();
+        $('#update_clear').hide();
+        $('#save_clear').show();
+        $('#total_amount').val('');
+        $('#items_id').val('');
+        $('#customers_guid').val('');
+        $("#parsley_reg").trigger('reset');
+        $('#deleted').remove();
+        $('#parent_items').append('<div id="deleted"></div>');
+        $('#newly_added').remove();
+        $('#parent_items').append('<div id="newly_added"></div>');
+        $("#parsley_reg #sales_quotation").select2('data', {id:'',text: '<?php echo $this->lang->line('search').' '.$this->lang->line('sales_quotation') ?>'});
+        <?php
+        if($this->session->userdata['sales_order_per']['add']==1){ ?>
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/sales_order/order_number/",                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                {    
+                    $('#parsley_reg #order_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                    $('#parsley_reg #demo_order_number').val(data[0][0]['prefix']+data[0][0]['max']);
+                }
+            });
+            $("#user_list").hide();
+            $('#add_new_order').show('slow');
+            $('#delete').attr("disabled", "disabled");
+            $('#posnic_add_sales_order').attr("disabled", "enable");
+            $('#posnic_add_sales_quotation').attr("disabled", "disabled");
+            $('#active').attr("disabled", "disabled");
+            $('#deactive').attr("disabled", "disabled");
+            $('#sales_order_lists').removeAttr("disabled");
+            window.setTimeout(function ()
+            {
+               $('#parsley_reg #sales_quotation').select2('open');
+            }, 500);
+            <?php
+        }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_order');?>', { type: "error" });                         
+            <?php
+        }?>
+    }
+    function posnic_sales_order_lists(){
+        $('#edit_sales_order_form').hide('hide');
+        $('#add_new_order').hide('hide');      
+        $("#user_list").show('slow');
+        $('#delete').removeAttr("disabled");
+        $('#deactive').removeAttr("disabled");
+        $('#posnic_add_sales_order').removeAttr("disabled");
+        $('#posnic_add_sales_quotation').removeAttr("disabled");
+        $('#sales_order_lists').attr("disabled",'disabled');
+    }
+    function clear_add_sales_order(){
+        $("#parsley_reg").trigger('reset');
+        refresh_items_table();
+    }
+    function clear_update_sales_order(){
+        $("#parsley_reg").trigger('reset');
+        refresh_items_table();
+        edit_function($('#sales_order_guid').val());
+    }
+    function reload_update_user(){
+        var id=$('#guid').val();
+        customers_function(id);
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
@@ -895,197 +874,26 @@ function reload_update_user(){
         $('#parsley_reg #total_price').val("0");
     }
 }
-function new_order_date(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
 
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #order_date').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #expiry_date').focus();
-            
-        }
-         if (unicode!=27){
-        }
-       else{
-        
-           $('#parsley_reg #first_name').select2('open');
-        }
-        }
+    function add_new_quty(e){
+        if($('#parsley_reg #item_id').val()!=""){
+            var unicode=e.charCode? e.charCode : e.keyCode
+            if($('#parsley_reg #quantity').value!=""){        
+                if (unicode!=13 && unicode!=9){
+                }
+                else{
+                    copy_items();
+                }
+                if (unicode!=27){
+                }
+                else{           
+                    $('#parsley_reg #items').select2('open');
+                }
+            }
         }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
+            $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
+            $('#parsley_reg #items').select2('open');
         }
-
-    }
-function new_expiry_date(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #expiry_date').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-                  window.setTimeout(function ()
-    {
-           $('#parsley_reg #id_discount').focus();
-            }, 0);
-           
-           
-        }
-         if (unicode!=27){
-        }
-       else{
-          
-           $('#parsley_reg #order_date').focus();
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function new_discount(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #discount_amount').focus();
-             
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-          document.getElementById("expiry_date").focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-
-
-
-function new_discount_amount_press(e){
-
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          
-         
-           $('#parsley_reg #freight').focus();
-          
-           
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #id_discount').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function new_freight(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #round_off_amount').focus();
-          
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #discount_amount').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function new_round_off_amount(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          $('#parsley_reg #items').select2('open');
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #freight').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function add_new_quty(e){
-    if($('#parsley_reg #item_id').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #quantity').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          copy_items();
-         
-        }
-         if (unicode!=27){
-        }
-       else{
-           
-           $('#parsley_reg #items').select2('open');
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
-         $('#parsley_reg #items').select2('open');
-
-        }
-
     }
 
 
@@ -1807,7 +1615,6 @@ function add_new_quty(e){
                                                                            <?php $order_date=array('name'=>'order_date',
                                                                                             'class'=>'required form-control',
                                                                                             'id'=>'order_date',
-                                                                                          'onKeyPress'=>"new_order_date(event)", 
                                                                                             'value'=>set_value('order_date'));
                                                                              echo form_input($order_date)?>
                                                                 <span class="input-group-addon"><i class="icon-calendar"></i></span>
@@ -1821,7 +1628,6 @@ function add_new_quty(e){
                                                                            <?php $expiry_date=array('name'=>'expiry_date',
                                                                                             'class'=>'required form-control',
                                                                                             'id'=>'expiry_date',
-                                                                                            'onKeyPress'=>"new_expiry_date(event)", 
                                                                                             'value'=>set_value('expiry_date'));
                                                                              echo form_input($expiry_date)?>
                                                                 <span class="input-group-addon"><i class="icon-calendar"></i></span>
@@ -1837,10 +1643,9 @@ function add_new_quty(e){
                                                             <label for="discount" ><?php echo $this->lang->line('discount') ?>%</label>													
                                                                      <?php $discount=array('name'=>'discount_percentage',
                                                                                         'class'=>'  form-control',
-                                                                                        'id'=>'id_discount',
-                                                                                         
+                                                                                        'id'=>'id_discount',                                                                                         
                                                                                          'onkeyup'=>'new_discount_amount()',
-                                                                                        'onKeyPress'=>"new_discount(event);return numbersonly(event)",
+                                                                                        'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('discount'));
                                                                          echo form_input($discount)?>
                                                        </div>
@@ -1854,7 +1659,7 @@ function add_new_quty(e){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'discount_amount',
                                                                                        'onkeyup'=>"new_grand_total()",
-                                                                                        'onKeyPress'=>"new_discount_amount_press(event);return numbersonly(event)", 
+                                                                                        'onKeyPress'=>"return numbersonly(event)", 
                                                                                         'value'=>set_value('discount_amount'));
                                                                          echo form_input($discount_amount)?>
                                                        </div>
@@ -1866,7 +1671,7 @@ function add_new_quty(e){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'freight',
                                                                                         'onkeyup'=>"new_grand_total()",
-                                                                                       'onKeyPress'=>"new_freight(event);return numbersonly(event)",
+                                                                                       'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('freight'));
                                                                          echo form_input($freight)?>
                                                        </div>
@@ -1878,7 +1683,7 @@ function add_new_quty(e){
                                                                                         'class'=>'  form-control',
                                                                                         'id'=>'round_off_amount',
                                                                                         'onkeyup'=>"new_grand_total()",    
-                                                                                        'onKeyPress'=>"new_round_off_amount(event);return numbersonly(event)",
+                                                                                        'onKeyPress'=>"return numbersonly(event)",
                                                                                         'value'=>set_value('round_off_amount'));
                                                                          echo form_input($round_off_amount)?>
                                                        </div>
