@@ -681,6 +681,7 @@
                         results.push({
                             id: item.guid,
                             text: item.code,
+                            date: item.date,
                             company: item.c_name,
                             customer: item.s_name,
                             order_date: item.po_date,
