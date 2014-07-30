@@ -209,8 +209,8 @@
                     <?php }?>
     }
     
-     $(document).ready( function () {
-  $('#parsley_reg #items').change(function() {
+    $(document).ready( function () {
+        $('#parsley_reg #items').change(function() {
             if(data_table_duplicate('new_item_row_id_'+$('#parsley_reg #items').select2('data').sid)){
                 $.bootstrapGrowl('<?php echo $this->lang->line('this item already added');?> '+$('#parsley_reg #first_name').val(), { type: "warning" });  
                 $('#parsley_reg #items').select2('open');
@@ -604,231 +604,55 @@ function reload_update_user(){
 <script type="text/javascript">
  
     function discounte_amount(){
-    if(parseFloat($('#parsley_reg #hidden_total_price').val())>0){
+        if(parseFloat($('#parsley_reg #hidden_total_price').val())>0){
+            var total=parseFloat($('#parsley_reg #hidden_total_price').val());
+            var discount=(total*parseFloat($('#parsley_reg #discount').val()))/100;
+            $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())-discount);
+
+            var round_amt=parseFloat($('#parsley_reg #round_amt').val());
+            var freight=parseFloat($('#parsley_reg #freight').val())
+            if(freight==""){freight=0;}
+            if(round_amt==""){round_amt=0;}
+             $('#parsley_reg #discount_amt').val(discount);
+            if (isNaN($('#parsley_reg #total_price').val())) 
+        $('#parsley_reg #total_price').val('00');
+
+            if (isNaN($('#parsley_reg #discount_amt').val())) 
+        $('#parsley_reg #discount_amt').val('0');
+            if (isNaN($('#parsley_reg #round_amt').val())) 
+        $('#parsley_reg #round_amt').val('00');
+            if (isNaN($('#parsley_reg #freight').val())) 
+        $('#parsley_reg #dfreight').val('00');;
+        }
+        if($('#parsley_reg #discount').val()==0 || isNaN($('#parsley_reg #discount').val())){
+            $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())+round_amt+freight);
+        }
+        new_grand_total();
         total=parseFloat($('#parsley_reg #hidden_total_price').val());
-        discount=(total*parseFloat($('#parsley_reg #discount').val()))/100;
-        $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())-discount);
-       
-        round_amt=parseFloat($('#parsley_reg #round_amt').val());
-        freight=parseFloat($('#parsley_reg #freight').val())
-        if(freight==""){freight=0;}
-        if(round_amt==""){round_amt=0;}
-         $('#parsley_reg #discount_amt').val(discount);
-        if (isNaN($('#parsley_reg #total_price').val())) 
-    $('#parsley_reg #total_price').val('00');
-    
-        if (isNaN($('#parsley_reg #discount_amt').val())) 
-    $('#parsley_reg #discount_amt').val('0');
-        if (isNaN($('#parsley_reg #round_amt').val())) 
-    $('#parsley_reg #round_amt').val('00');
-        if (isNaN($('#parsley_reg #freight').val())) 
-    $('#parsley_reg #dfreight').val('00');;
+        if(total=="" || total==0 || isNaN(total)){
+            $('#parsley_reg #total_price').val("0");
+        }
     }
-    if($('#parsley_reg #discount').val()==0 || isNaN($('#parsley_reg #discount').val())){
-        $('#parsley_reg #total_price').val(parseFloat($('#parsley_reg #hidden_total_price').val())+round_amt+freight);
-    }
-    new_grand_total();
-    total=parseFloat($('#parsley_reg #hidden_total_price').val());
-    if(total=="" || total==0 || isNaN(total)){
-        $('#parsley_reg #total_price').val("0");
-    }
-}
-function new_order_date(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
 
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #order_date').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-         
-               window.setTimeout(function ()
-    {
-        $('#parsley_reg #id_discount').focus();
-    }, 10);
-            
-        }
-         if (unicode!=27){
-        }
-       else{
-        
-           $('#parsley_reg #first_name').select2('open');
-        }
-        }
+    function add_new_quty(e){
+        if($('#parsley_reg #item_id').val()!=""){
+            var unicode=e.charCode? e.charCode : e.keyCode
+            if($('#parsley_reg #quantity').value!=""){
+                if (unicode!=13 && unicode!=9){
+                }
+                else{
+                   copy_items();
+                }
+                if (unicode!=27){
+                }
+                else{
+                    $('#parsley_reg #items').select2('open');
+                }
+            }
         }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
+            $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
+            $('#parsley_reg #items').select2('open');
         }
-
-    }
-function new_sales_bill_date(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #sales_bill_date').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-         
-               window.setTimeout(function ()
-    {
-        $('#parsley_reg #note').focus();
-    }, 10);
-            
-        }
-         if (unicode!=27){
-        }
-       else{
-        
-           $('#parsley_reg #first_name').select2('open');
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Customer');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-
-function new_discount(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #discount_amount').focus();
-             
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-          document.getElementById("order_date").focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-
-
-
-function new_discount_amount_press(e){
-
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          
-         
-           $('#parsley_reg #freight').focus();
-          
-           
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #id_discount').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function new_freight(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-           $('#parsley_reg #round_off_amount').focus();
-          
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #discount_amount').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function new_round_off_amount(e){
-    if($('#parsley_reg #customers_guid').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          $('#parsley_reg #items').select2('open');
-        }
-         if (unicode!=27){
-        }
-       else{
-            
-            $('#parsley_reg #freight').focus();
-        }
-        
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_A_Supplier');?>', { type: "warning" }); 
-         $('#parsley_reg #first_name').select2('open');
-
-        }
-
-    }
-function add_new_quty(e){
-    if($('#parsley_reg #item_id').val()!=""){
-
-     var unicode=e.charCode? e.charCode : e.keyCode
-   if($('#parsley_reg #quantity').value!=""){
-        
-                  if (unicode!=13 && unicode!=9){
-        }
-       else{
-          copy_items();
-         
-        }
-         if (unicode!=27){
-        }
-       else{
-           
-           $('#parsley_reg #items').select2('open');
-        }
-        }
-        }else{
- $.bootstrapGrowl('<?php echo $this->lang->line('Please_Select_An_Item');?>', { type: "warning" }); 
-         $('#parsley_reg #items').select2('open');
-
-        }
-
     }
 
     function net_amount(){
@@ -1018,8 +842,7 @@ function add_new_quty(e){
                     }
                     if(tax1!=0){
                         tax_text1=tax1+':'+tax_type+'('+type1+')';
-                    }
-                    
+                    }                    
                     var old_total= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #items_total').val();
                     var old_tax1= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #items_tax').val();
                     var old_tax2= $('#selected_item_table #new_item_row_id_'+$('#parsley_reg #stock_id').val()+' #items_tax2').val();
@@ -1090,13 +913,11 @@ function add_new_quty(e){
                     }else{
                         var old_tax=parseFloat(old_tax1)+parseFloat(old_tax2);
                         $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val()-old_tax)+parseFloat(total_tax));
-                    }
-                   
+                    }                   
                     var num = parseFloat($('#parsley_reg #total_tax').val());
                     $('#parsley_reg #total_tax').val(num.toFixed(point));
                     if($('#parsley_reg #total_item_discount_amount').val()==0){
-                        $('#parsley_reg #total_item_discount_amount').val(discount);
-     
+                        $('#parsley_reg #total_item_discount_amount').val(discount);     
                     }else{
                         $('#parsley_reg #total_item_discount_amount').val(parseFloat($('#parsley_reg #total_item_discount_amount').val()-old_discount)+parseFloat(discount));
                     }
@@ -2112,8 +1933,7 @@ function add_new_quty(e){
         ?>
     }
                  
-                    
-                </script>
+</script>
         
 
       
