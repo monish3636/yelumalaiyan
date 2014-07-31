@@ -337,7 +337,7 @@
                         item_total_tax=total_tax;
                     }
 
-                     total_amount=parseFloat(total_amount)+parseFloat(total)
+                    total_amount=parseFloat(total_amount)+parseFloat(total);
                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                         null,
                         name,

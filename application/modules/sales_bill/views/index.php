@@ -199,335 +199,405 @@
                     <?php }?>
     }
     
-     $(document).ready( function () {
-         
-         function format_sales_order(sup) {
+    $(document).ready( function () {         
+        function format_sales_order(sup) {
             if (!sup.id) return sup.text;
-    return  "<p >"+sup.text+"    <br>"+sup.date+" "+sup.company+"   "+sup.customer+"</p> ";
-            }
+            return  "<p >"+sup.text+"    <br>"+sup.date+" "+sup.company+"   "+sup.customer+"</p> ";
+        }
         $('#parsley_reg #demo_order_number').change(function() {
-               refresh_items_table();
-             $('#loading').modal('show');
-             if($('#parsley_reg #demo_order_number').select2('data').type==1){
-                   var sdn = $('#parsley_reg #demo_order_number').select2('data').id;
-                   var guid = $('#parsley_reg #demo_order_number').select2('data').sales_order;
-
-               
-                            $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/sales_bill/get_sales_order/",                      
-                             data: {
-                                guid:guid,
-                                sdn:sdn
-                             },
-                                type:'POST',
-                             dataType: 'json',               
-                             success: function(data)        
-                             { 
+            refresh_items_table();
+            $('#grand_total').val(0);
+            $('#demo_grand_total').val(0);
+            $('#total_tax').val(0);
+            $('#demo_total_amount').val(0);
+            $('#total_amount').val(0);
+            $('#total_item_discount_amount').val(0);
+            $('#loading').modal('show');
+            if($('#parsley_reg #demo_order_number').select2('data').type==1){
+                var sdn = $('#parsley_reg #demo_order_number').select2('data').id;
+                var guid = $('#parsley_reg #demo_order_number').select2('data').sales_order;
+                $.ajax({                                      
+                    url: "<?php echo base_url() ?>index.php/sales_bill/get_sales_order/",                      
+                    data: {
+                        guid:guid,
+                        sdn:sdn
+                    },
+                    type:'POST',
+                    dataType: 'json',               
+                    success: function(data)        
+                    { 
+                        $("#user_list").hide();
+                        $('#add_new_order').show('slow');
+                        $('#delete').attr("disabled", "disabled");
+                        $('#posnic_add_sales_bill').attr("disabled", "disabled");
+                        $('#active').attr("disabled", "disabled");
+                        $('#deactive').attr("disabled", "disabled");
+                        $('#sales_bill_lists').removeAttr("disabled");
+                        $("#parsley_reg #demo_dn_no").val( $('#parsley_reg #demo_order_number').select2('data').text);
+                        $("#parsley_reg #sdn_guid").val(sdn);
+                        $("#parsley_reg #sales_order_id").val(guid);
+                        $("#parsley_reg #first_name").val(data[0]['s_name']);
+                        $("#parsley_reg #company").val(data[0]['c_name']);
+                        $("#parsley_reg #address").val(data[0]['address']);
+                        $("#parsley_reg #customer_id").val(data[0]['s_guid']);
+                        $("#parsley_reg #demo_order_number").val(data[0]['po_no']);
+                        $("#parsley_reg #order_number").val(data[0]['po_no']);
+                        $("#parsley_reg #order_date").val(data[0]['sd_date']);
+                        $("#parsley_reg #id_discount").val(data[0]['discount']);
+                        $("#parsley_reg #freight").val(data[0]['freight']);
+                        $("#parsley_reg #round_off_amount").val(data[0]['round_amt']);
+                        $("#parsley_reg #demo_customer_discount").val(data[0]['customer_discount']);
+                        $("#parsley_reg #customer_discount").val(data[0]['customer_discount']);
+                        $("#parsley_reg #demo_customer_discount_amount").val(data[0]['customer_discount_amount']);
+                        $("#parsley_reg #customer_discount_amount").val(data[0]['customer_discount_amount']);
+                        var tax;
+                        var receive=0;
+                        var total_discount=0;
+                        var total_tax=0;
+                        var total_amount=0;
+                        for(i=0;i<data.length;i++){
+                            receive=1;
+                            var  name=data[i]['items_name'];
+                            if(data[i]['kit_name']){
+                                name=data[i]['kit_name'];
+                            }
+                            var  sku=data[i]['i_code'];
+                            if(data[i]['kit_code']){
+                                sku=data[i]['kit_code'];
+                            }
+                            if(data[i]['deco_code']){
+                                sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                            }
+                            var  quty=data[i]['quty'];
+                            var  tax_type=data[i]['tax_type_name'];
+                            var  tax_value=data[i]['tax_value'];
+                            var  tax_inclusive=data[i]['tax_Inclusive'];
+                            var  tax_type2=data[i]['tax2_type'];
+                            var  tax_value2=data[i]['tax2_value'];
+                            var  tax_inclusive2=data[i]['tax_inclusive2'];
+                            if(data[i]['kit_code']){
+                                tax_type=data[i]['kit_tax_type'];
+                                tax_value=data[i]['kit_tax_value'];
+                                tax_inclusive=data[i]['kit_tax_Inclusive'];  
+                                tax_type2=0;
+                                tax_value2=0;
+                                tax_inclusive2=0;                                          
+                            }    
+                            var  price=data[i]['price'];
+                            var uom=data[i]['uom']
+                            if(uom==1){
+                                var no_of_unit=data[i]['no_of_unit'];
+                                price=price/no_of_unit;
+                            }
+                            var  o_i_guid=data[i]['o_i_guid'];
+                            var  items_id=data[i]['item'];
+                            var discount_per=0;
+                            var discount_per=data[i]['dis_per'];
+                            var subtotal=parseFloat(quty)*parseFloat(price);
+                            var total=parseFloat(quty)*parseFloat(price); 
+                            total_discount=parseFloat(total_discount)+parseFloat(discount);
+                            var tax1=0;
+                            var tax2=0;
+                            var type1='Inc';
+                            var type2='Inc';
+                            var total_tax=0;
+                            tax1=parseFloat(subtotal)*parseFloat(tax_value)/100;
+                            if(tax_inclusive==0 && tax_value!=""){
+                                type1='Exc';
+                                total=parseFloat(total)+parseFloat(tax1);
+                                total_tax=parseFloat(total_tax)+parseFloat(tax1);
+                            }
+                            tax2=parseFloat(subtotal)*parseFloat(tax_value2)/100; 
+                            if(tax_inclusive2==0 && tax_value2!=""){
+                                total=parseFloat(total)+parseFloat(tax2);
+                                total_tax=parseFloat(total_tax)+parseFloat(tax2);
+                                type2='Exc';
+                            }
+                            if(isNaN(parseFloat(discount_per))){
+                                discount_per=0;
+                            }
+                            var discount=parseFloat(total)*parseFloat(discount_per)/100;
+                            var num = parseFloat(tax1);
+                            tax1=num.toFixed(point);
+                            var num = parseFloat(tax2);
+                            tax2=num.toFixed(point);
+                            var num = parseFloat(total-discount);
+                            total=num.toFixed(point);
+                            var num = parseFloat(discount);
+                            discount=num.toFixed(point);
+                            if(isNaN(tax1)){
+                                tax1=0;
+                            }
+                            if(isNaN(tax2)){
+                                tax2=0;
+                            } 
+                            var tax_text2=0;
+                            var tax_text1=0;
+                            if(tax2!=0){
+                                tax_text2=tax2+':'+tax_type2+'('+type2+')';
+                            }
+                            if(tax1!=0){
+                                tax_text1=tax1+':'+tax_type+'('+type1+')';
+                            };
+                            var item_total_tax=0;
+                            if(total_tax!=0){
+                                item_total_tax=total_tax;
+                            }
+                            total_amount=parseFloat(total_amount)+parseFloat(total)
+                            var addId = $('#selected_item_table').dataTable().fnAddData( [
+                                null,
+                                name,
+                                sku,
+                                quty,
+                                price,
+                                tax_text1,
+                                tax_text2,
+                                discount,
+                                quty,
+                                total
+                            ] );
+                            if(total_tax!=0){
+                                var total_items_tax=$('#total_tax').val();
+                                if(total_items_tax==""){
+                                    total_items_tax=0
+                                }
+                                $('#total_tax').val(parseFloat(total_items_tax)+parseFloat(total_tax));
+                            }
+                            if($('#total_item_discount_amount').val()=="" && $('#total_item_discount_amount').val()==0){
+                                $('#total_item_discount_amount').val(discount);
+                            }else{
+                                $('#total_item_discount_amount').val(parseFloat($('#total_item_discount_amount').val())+parseFloat(discount));
+                            }
                            
-                                $("#user_list").hide();
-                                $('#add_new_order').show('slow');
-                                $('#delete').attr("disabled", "disabled");
-                                $('#posnic_add_sales_bill').attr("disabled", "disabled");
-                                $('#active').attr("disabled", "disabled");
-                                $('#deactive').attr("disabled", "disabled");
-                                $('#sales_bill_lists').removeAttr("disabled");
-                                $("#parsley_reg #demo_dn_no").val( $('#parsley_reg #demo_order_number').select2('data').text);
-                                $("#parsley_reg #sdn_guid").val(sdn);
-                                $("#parsley_reg #sales_order_id").val(guid);
-                                $("#parsley_reg #first_name").val(data[0]['s_name']);
-                                $("#parsley_reg #company").val(data[0]['c_name']);
-                                $("#parsley_reg #address").val(data[0]['address']);
-                                $("#parsley_reg #customer_id").val(data[0]['s_guid']);
-                                $("#parsley_reg #demo_order_number").val(data[0]['po_no']);
-                                $("#parsley_reg #order_number").val(data[0]['po_no']);
-                                $("#parsley_reg #order_date").val(data[0]['sd_date']);
+                            if(data[0]['discount']==0){
+                                var so_discount=0;
+                                $("#parsley_reg #discount_amount").val(data[0]['discount_amt']);
+                                so_discount=data[0]['discount_amt'];
+                            }else{
+                                var so_discount=parseFloat(total_amount)*parseFloat(data[0]['discount'])/100;
+                                $("#parsley_reg #discount_amount").val(so_discount);
                                 $("#parsley_reg #id_discount").val(data[0]['discount']);
-                                $("#parsley_reg #freight").val(data[0]['freight']);
-                                $("#parsley_reg #round_off_amount").val(data[0]['round_amt']);
-                                 $("#parsley_reg #demo_customer_discount").val(data[0]['customer_discount']);
-                                $("#parsley_reg #customer_discount").val(data[0]['customer_discount']);
-                                $("#parsley_reg #demo_customer_discount_amount").val(data[0]['customer_discount_amount']);
-                                $("#parsley_reg #customer_discount_amount").val(data[0]['customer_discount_amount']);
-                                var tax;
-                                var receive=0;
-                                var total_discount=0;
-                                var total_tax=0;
-                                var total_amount=0;
-                                for(i=0;i<data.length;i++){
-                                      receive=1;
-                                    var  name=data[i]['items_name'];
-                                     if(data[i]['kit_name']){
-                                        name=data[i]['kit_name'];
-                                    }
-                                    var  sku=data[i]['i_code'];
-                                    if(data[i]['kit_code']){
-                                        sku=data[i]['kit_code'];
-                                    }
-                                    if(data[i]['deco_code']){
-                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
-                                    }
-                                    var  quty=data[i]['quty'];
-                                    var  tax_type=data[i]['tax_type_name'];
-                                    var  tax_value=data[i]['tax_value'];
-                                    var  tax_Inclusive=data[i]['tax_Inclusive'];
-                                  
-                                    var  price=data[i]['price'];
-                                    var uom=data[i]['uom']
-                                    
-                                    if(uom==1){
-                                        var no_of_unit=data[i]['no_of_unit'];
-                                        price=price/no_of_unit;
-                                    }
-                                    var  o_i_guid=data[i]['o_i_guid'];
-                                    var  items_id=data[i]['item'];
-                                    var discount=0;
-                                     var per=0;
-                                    if(data[i]['dis_per']!=0){
-                                         per=data[i]['dis_per'];
-                                        discount=(parseFloat(quty)*parseFloat(price))*per/100;
-                                         
-                                    }
-                                    
-                                     
-                                    total_discount=parseFloat(total_discount)+parseFloat(discount);
-                                   if(data[i]['tax_Inclusive']==1){
-                                      var tax_val=data[i]['tax_value'];
-                                      var tax=(parseFloat(quty)*parseFloat(price))*tax_val/100;
-                                      total_tax=parseFloat(total_tax)+parseFloat(tax);
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(price))-discount;
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                      var tax_val=data[i]['tax_value'];
-                                      var tax=(parseFloat(quty)*parseFloat(price))*tax_val/100;
-                                  
-                                      var total=(parseFloat(quty)*parseFloat(price))-discount;
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
-                                  var num = parseFloat(tax);
-                                      tax=num.toFixed(point);
-                                  total_amount=parseFloat(total_amount)+parseFloat(total)
-                                    var addId = $('#selected_item_table').dataTable().fnAddData( [
-                                    null,
-                                    name,
-                                    sku,
-                                    quty,
-                                  price,
-                                 
-                                 type+':'+tax,
-                                  discount,
-                                   quty,
-                                 total
-                                 ] );
-                                 if(data[0]['discount']==0){
-                                      var so_discount=0;
-                                   $("#parsley_reg #discount_amount").val(data[0]['discount_amt']);
-                                   so_discount=data[0]['discount_amt'];
-                                 }else{
-                                    var so_discount=parseFloat(total_amount)*parseFloat(data[0]['discount'])/100;
-                                    $("#parsley_reg #discount_amount").val(so_discount);
-                                    $("#parsley_reg #id_discount").val(data[0]['discount']);
-                                 }
-                                 var freight=data[0]['freight']
-                                 if(isNaN(freight) || freight==""){freight=0;}
-                                 var round_amt=data[0]['round_amt']
-                                 if(isNaN(round_amt) || round_amt==""){round_amt=0;}
-                                 
-                                 var grand=parseFloat(data[0]['total_amt']);
-                                   var num = parseFloat(total_amount);
-                                    total_amount=num.toFixed(point);
-                                    $('#demo_total_amount').val(total_amount);
-                                    $('#total_amount').val(total_amount);
-                                    var num = parseFloat(grand);
-                                    grand=num.toFixed(point);
-                                    $('#grand_total').val(grand);
-                                    $('#demo_grand_total').val(grand);
-                                    $('#grand_total').val(grand);
-                                    var num = parseFloat(total_discount);
-                                    total_discount=num.toFixed(point);
-                                    $('#total_item_discount_amount').val(total_discount);
-                                    var num = parseFloat(total_tax);
-                                    total_tax=num.toFixed(point);
-                                   $('#total_tax').val(total_tax);
-                              var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                              theNode.setAttribute('id','new_item_row_id_'+i)
-                                
-                                }if(receive==0){
-                                  $.bootstrapGrowl('<?php echo $this->lang->line('sales_order')?> '+$('#parsley_reg #demo_order_number').select2('data').text+' <?php echo $this->lang->line('all_items_was_received') ?>', { type: "success" });                         
-                                  $('#selected_item_table .dataTables_empty').html('<?php echo $this->lang->line('sales_order')?> '+$('#parsley_reg #demo_order_number').select2('data').text+' <?php echo $this->lang->line('all_items_was_received') ?>');
-                                  }
-                             
-                             }
-                           });
-                           }else{
+                            }
+                            var freight=data[0]['freight']
+                            if(isNaN(freight) || freight==""){freight=0;}
+                            var round_amt=data[0]['round_amt']
+                            if(isNaN(round_amt) || round_amt==""){round_amt=0;}
+                            var grand=parseFloat(data[0]['total_amt']);
+                            var num = parseFloat(total_amount);
+                            total_amount=num.toFixed(point);
+                            $('#demo_total_amount').val(total_amount);
+                            $('#total_amount').val(total_amount);
+                            var num = parseFloat(grand);
+                            grand=num.toFixed(point);
+                            $('#grand_total').val(grand);
+                            $('#demo_grand_total').val(grand);
+                            $('#grand_total').val(grand);
+                            var num = parseFloat(total_discount);
+                            total_discount=num.toFixed(point);
+                        
+                            var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
+                            theNode.setAttribute('id','new_item_row_id_'+i);
+                        }
+                        if(receive==0){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('sales_order')?> '+$('#parsley_reg #demo_order_number').select2('data').text+' <?php echo $this->lang->line('all_items_was_received') ?>', { type: "success" });                         
+                            $('#selected_item_table .dataTables_empty').html('<?php echo $this->lang->line('sales_order')?> '+$('#parsley_reg #demo_order_number').select2('data').text+' <?php echo $this->lang->line('all_items_was_received') ?>');
+                        }
+                    }
+                });
+            }else{
+                var guid = $('#parsley_reg #demo_order_number').select2('data').id;
+                $.ajax({                                      
+                    url: "<?php echo base_url() ?>index.php/sales_bill/get_direct_delivery_note/",                      
+                    data: {
+                        guid:guid
+                    },
+                    type:'POST',
+                    dataType: 'json',               
+                    success: function(data)        
+                    { 
+                        $("#user_list").hide();
+                        $('#add_new_order').show('slow');
+                        $('#delete').attr("disabled", "disabled");
+                        $('#posnic_add_sales_bill').attr("disabled", "disabled");
+                        $('#active').attr("disabled", "disabled");
+                        $('#deactive').attr("disabled", "disabled");
+                        $('#sales_bill_lists').removeAttr("disabled");
+                        $("#parsley_reg #demo_dn_no").val( $('#parsley_reg #demo_order_number').select2('data').text);
+                        $("#parsley_reg #sdn_guid").val(guid);
+                        $("#parsley_reg #sales_order_id").val('');
+                        $("#parsley_reg #first_name").val(data[0]['s_name']);
+                        $("#parsley_reg #company").val(data[0]['c_name']);
+                        $("#parsley_reg #address").val(data[0]['address']);
+                        $("#parsley_reg #customer_id").val(data[0]['c_guid']);
+                        $("#parsley_reg #demo_order_number").val(data[0]['po_no']);
+                        $("#parsley_reg #order_number").val(data[0]['po_no']);
+                        $("#parsley_reg #order_date").val(data[0]['date']);
+                        $("#parsley_reg #id_discount").val(data[0]['discount']);
+                        $("#parsley_reg #freight").val(data[0]['freight']);
+                        $("#parsley_reg #round_off_amount").val(data[0]['round_amt']);
+                        $("#parsley_reg #demo_customer_discount").val(data[0]['customer_discount']);
+                        $("#parsley_reg #customer_discount").val(data[0]['customer_discount']);
+                        $("#parsley_reg #demo_customer_discount_amount").val(data[0]['customer_discount_amount']);
+                        $("#parsley_reg #customer_discount_amount").val(data[0]['customer_discount_amount']);
+                        var tax;
+                        var receive=0;
+                        var total_discount=0;
+                        var total_tax=0;
+                        var total_amount=0;
+                        for(i=0;i<data.length;i++){
+                            receive=1;
+                            var  name=data[i]['items_name'];
+                            if(data[i]['kit_name']){
+                                name=data[i]['kit_name'];
+                            }
+                            var  sku=data[i]['i_code'];
+                            if(data[i]['kit_code']){
+                                sku=data[i]['kit_code'];
+                            }
+                            if(data[i]['deco_code']){
+                                sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
+                            }
+                            var  quty=data[i]['quty'];
+                            var  tax_type=data[i]['tax_type_name'];
+                            var  tax_value=data[i]['tax_value'];
+                            var  tax_inclusive=data[i]['tax_Inclusive'];
+                            var  tax_type2=data[i]['tax2_type'];
+                            var  tax_value2=data[i]['tax2_value'];
+                            var  tax_inclusive2=data[i]['tax_inclusive2'];
+                            if(data[i]['kit_code']){
+                                tax_type=data[i]['kit_tax_type'];
+                                tax_value=data[i]['kit_tax_value'];
+                                tax_inclusive=data[i]['kit_tax_Inclusive'];  
+                                tax_type2=0;
+                                tax_value2=0;
+                                tax_inclusive2=0;                                          
+                            }  
+                            var  price=data[i]['price'];
+                            var uom=data[i]['uom']
+                            if(uom==1){
+                                var no_of_unit=data[i]['no_of_unit'];
+                                price=price/no_of_unit;
+                            }
+                            var discount_per=data[i]['item_discount'];
+                            var subtotal=parseFloat(quty)*parseFloat(price);
+                            var total=parseFloat(quty)*parseFloat(price); 
+                            total_discount=parseFloat(total_discount)+parseFloat(discount);
+                            var tax1=0;
+                            var tax2=0;
+                            var type1='Inc';
+                            var type2='Inc';
+                            var total_tax=0;
+                            tax1=parseFloat(subtotal)*parseFloat(tax_value)/100;
+                            if(tax_inclusive==0 && tax_value!=""){
+                                type1='Exc';
+                                total=parseFloat(total)+parseFloat(tax1);
+                                total_tax=parseFloat(total_tax)+parseFloat(tax1);
+                            }
+                            tax2=parseFloat(subtotal)*parseFloat(tax_value2)/100; 
+                            if(tax_inclusive2==0 && tax_value2!=""){
+                                total=parseFloat(total)+parseFloat(tax2);
+                                total_tax=parseFloat(total_tax)+parseFloat(tax2);
+                                type2='Exc';
+                            }
+                            if(isNaN(parseFloat(discount_per))){
+                                discount_per=0;
+                            }
+                            var discount=parseFloat(total)*parseFloat(discount_per)/100;
+                            var num = parseFloat(tax1);
+                            tax1=num.toFixed(point);
+                            var num = parseFloat(tax2);
+                            tax2=num.toFixed(point);
+                            var num = parseFloat(total-discount);
+                            total=num.toFixed(point);
+                            var num = parseFloat(discount);
+                            discount=num.toFixed(point);
+                            if(isNaN(tax1)){
+                                tax1=0;
+                            }
+                            if(isNaN(tax2)){
+                                tax2=0;
+                            } 
+                            var tax_text2=0;
+                            var tax_text1=0;
+                            if(tax2!=0){
+                                tax_text2=tax2+':'+tax_type2+'('+type2+')';
+                            }
+                            if(tax1!=0){
+                                tax_text1=tax1+':'+tax_type+'('+type1+')';
+                            };
+                            var item_total_tax=0;
+                            if(total_tax!=0){
+                                item_total_tax=total_tax;
+                            }
+                            total_amount=parseFloat(total_amount)+parseFloat(total)
+                            var addId = $('#selected_item_table').dataTable().fnAddData( [
+                                null,
+                                name,
+                                sku,
+                                quty,
+                                price,
+                                tax_text1,
+                                tax_text2,
+                                discount,
+                                quty,
+                                total
+                            ] );
+                            if(total_tax!=0){
+                                var total_items_tax=$('#total_tax').val();
+                                if(total_items_tax==""){
+                                    total_items_tax=0
+                                }
+                                $('#total_tax').val(parseFloat(total_items_tax)+parseFloat(total_tax));
+                            }
+                            if($('#total_item_discount_amount').val()=="" && $('#total_item_discount_amount').val()==0){
+                                $('#total_item_discount_amount').val(discount);
+                            }else{
+                                $('#total_item_discount_amount').val(parseFloat($('#total_item_discount_amount').val())+parseFloat(discount));
+                            }
                            
-                          
-                   var guid = $('#parsley_reg #demo_order_number').select2('data').id;
-
-               
-                            $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/sales_bill/get_direct_delivery_note/",                      
-                             data: {
-                                guid:guid
-                             },
-                                type:'POST',
-                             dataType: 'json',               
-                             success: function(data)        
-                             { 
-                           
-                                $("#user_list").hide();
-                                $('#add_new_order').show('slow');
-                                $('#delete').attr("disabled", "disabled");
-                                $('#posnic_add_sales_bill').attr("disabled", "disabled");
-                                $('#active').attr("disabled", "disabled");
-                                $('#deactive').attr("disabled", "disabled");
-                                $('#sales_bill_lists').removeAttr("disabled");
-                                $("#parsley_reg #demo_dn_no").val( $('#parsley_reg #demo_order_number').select2('data').text);
-                                $("#parsley_reg #sdn_guid").val(guid);
-                                $("#parsley_reg #sales_order_id").val('');
-                                $("#parsley_reg #first_name").val(data[0]['s_name']);
-                                $("#parsley_reg #company").val(data[0]['c_name']);
-                                $("#parsley_reg #address").val(data[0]['address']);
-                                $("#parsley_reg #customer_id").val(data[0]['c_guid']);
-                                $("#parsley_reg #demo_order_number").val(data[0]['po_no']);
-                                $("#parsley_reg #order_number").val(data[0]['po_no']);
-                                $("#parsley_reg #order_date").val(data[0]['date']);
+                            if(data[0]['discount']==0){
+                                var so_discount=0;
+                                $("#parsley_reg #discount_amount").val(data[0]['discount_amt']);
+                                so_discount=data[0]['discount_amt'];
+                            }else{
+                                var so_discount=parseFloat(total_amount)*parseFloat(data[0]['discount'])/100;
+                                $("#parsley_reg #discount_amount").val(so_discount);
                                 $("#parsley_reg #id_discount").val(data[0]['discount']);
-                                $("#parsley_reg #freight").val(data[0]['freight']);
-                                $("#parsley_reg #round_off_amount").val(data[0]['round_amt']);
-                                 $("#parsley_reg #demo_customer_discount").val(data[0]['customer_discount']);
-                                $("#parsley_reg #customer_discount").val(data[0]['customer_discount']);
-                                $("#parsley_reg #demo_customer_discount_amount").val(data[0]['customer_discount_amount']);
-                                $("#parsley_reg #customer_discount_amount").val(data[0]['customer_discount_amount']);
-                                var tax;
-                                var receive=0;
-                                var total_discount=0;
-                                var total_tax=0;
-                                var total_amount=0;
-                                for(i=0;i<data.length;i++){
-                                      receive=1;
-                                     var  name=data[i]['items_name'];
-                                     if(data[i]['kit_name']){
-                                        name=data[i]['kit_name'];
-                                    }
-                                    var  sku=data[i]['i_code'];
-                                    if(data[i]['kit_code']){
-                                        sku=data[i]['kit_code'];
-                                    }
-                                    if(data[i]['deco_code']){
-                                        sku=data[i]['deco_code']+'-'+data[i]['deco_value'];
-                                    }
-                                    var  quty=data[i]['quty'];
-                                    var  tax_type=data[i]['tax_type_name'];
-                                    var  tax_value=data[i]['tax_value'];
-                                    var  tax_Inclusive=data[i]['tax_Inclusive'];
-                                   var  price=data[i]['price'];
-                                    var uom=data[i]['uom']
-                                    
-                                    if(uom==1){
-                                        var no_of_unit=data[i]['no_of_unit'];
-                                        price=price/no_of_unit;
-                                    }
-                                    var  o_i_guid=data[i]['o_i_guid'];
-                                    var  items_id=data[i]['item'];
-                                    var discount=0;
-                                     var per=0;
-                                    if(data[i]['item_discount']!=0){
-                                         per=data[i]['item_discount'];
-                                        discount=(parseFloat(quty)*parseFloat(price))*per/100;
-                                         
-                                    }
-                                    
-                                     
-                                    total_discount=parseFloat(total_discount)+parseFloat(discount);
-                                   if(data[i]['tax_Inclusive']==1){
-                                      var tax_val=data[i]['tax_value'];
-                                      var tax=(parseFloat(quty)*parseFloat(price))*tax_val/100;
-                                      total_tax=parseFloat(total_tax)+parseFloat(tax);
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(price))-discount;
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                      var tax_val=data[i]['tax_value'];
-                                      var tax=(parseFloat(quty)*parseFloat(price))*tax_val/100;
-                                  
-                                      var total=(parseFloat(quty)*parseFloat(price))-discount;
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
-                                   var num = parseFloat(tax);
-                                      tax=num.toFixed(point);
-                                  total_amount=parseFloat(total_amount)+parseFloat(total)
-                                    var addId = $('#selected_item_table').dataTable().fnAddData( [
-                                    null,
-                                    name,
-                                    sku,
-                                    quty,
-                                  price,
-                                 
-                                 type+':'+tax,
-                                  discount,
-                                   quty,
-                                 total
-                                 ] );
-                                 if(data[0]['discount']==0){
-                                      var so_discount=0;
-                                   $("#parsley_reg #discount_amount").val(data[0]['discount_amt']);
-                                   so_discount=data[0]['discount_amt'];
-                                 }else{
-                                    var so_discount=parseFloat(total_amount)*parseFloat(data[0]['discount'])/100;
-                                    $("#parsley_reg #discount_amount").val(so_discount);
-                                    $("#parsley_reg #id_discount").val(data[0]['discount']);
-                                 }
-                                 var freight=data[0]['freight']
-                                 if(isNaN(freight) || freight==""){freight=0;}
-                                 var round_amt=data[0]['round_amt']
-                                 if(isNaN(round_amt) || round_amt==""){round_amt=0;}
-                                 
-                                 var grand=parseFloat(total_amount)-parseFloat(so_discount)+parseFloat(freight)+parseFloat(round_amt);
-                                    var num = parseFloat(total_amount);
-                                    total_amount=num.toFixed(point);
-                                    $('#demo_total_amount').val(total_amount);
-                                    $('#total_amount').val(total_amount);
-                                    var num = parseFloat(grand);
-                                    grand=num.toFixed(point);
-                                    $('#grand_total').val(grand);
-                                    $('#demo_grand_total').val(grand);
-                                    $('#grand_total').val(grand);
-                                    var num = parseFloat(total_discount);
-                                    total_discount=num.toFixed(point);
-                                    $('#total_item_discount_amount').val(total_discount);
-                                    var num = parseFloat(total_tax);
-                                    total_tax=num.toFixed(point);
-                                   $('#total_tax').val(total_tax);
-                              var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                              theNode.setAttribute('id','new_item_row_id_'+i)
-                                
-                                }if(receive==0){
-                                  $.bootstrapGrowl('<?php echo $this->lang->line('sales_order')?> '+$('#parsley_reg #demo_order_number').select2('data').text+' <?php echo $this->lang->line('all_items_was_received') ?>', { type: "success" });                         
-                                  $('#selected_item_table .dataTables_empty').html('<?php echo $this->lang->line('sales_order')?> '+$('#parsley_reg #demo_order_number').select2('data').text+' <?php echo $this->lang->line('all_items_was_received') ?>');
-                                  }
-                             
-                             }
-                           });
-                           
-                           
-                           
-                           
-                           }
-                      window.setTimeout(function ()
-                    {
-                       //$('#parsley_reg #delivery_date').focus();
-                       document.getElementById('order_date').focus();
-                       $('#loading').modal('hide');
-                    }, 0);  
-                   
-          });
+                            }
+                            var freight=data[0]['freight']
+                            if(isNaN(freight) || freight==""){freight=0;}
+                            var round_amt=data[0]['round_amt']
+                            if(isNaN(round_amt) || round_amt==""){round_amt=0;}
+                            var grand=parseFloat(data[0]['total_amt']);
+                            var num = parseFloat(total_amount);
+                            total_amount=num.toFixed(point);
+                            $('#demo_total_amount').val(total_amount);
+                            $('#total_amount').val(total_amount);
+                            var num = parseFloat(grand);
+                            grand=num.toFixed(point);
+                            $('#grand_total').val(grand);
+                            $('#demo_grand_total').val(grand);
+                            $('#grand_total').val(grand);
+                            var num = parseFloat(total_discount);
+                            total_discount=num.toFixed(point);
+                        
+                            var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
+                            theNode.setAttribute('id','new_item_row_id_'+i);
+                        }
+                        if(receive==0){
+                            $.bootstrapGrowl('<?php echo $this->lang->line('sales_order')?> '+$('#parsley_reg #demo_order_number').select2('data').text+' <?php echo $this->lang->line('all_items_was_received') ?>', { type: "success" });                         
+                            $('#selected_item_table .dataTables_empty').html('<?php echo $this->lang->line('sales_order')?> '+$('#parsley_reg #demo_order_number').select2('data').text+' <?php echo $this->lang->line('all_items_was_received') ?>');
+                        }
+                    }
+                });
+            }
+            window.setTimeout(function ()
+            {
+                document.getElementById('order_date').focus();
+                $('#loading').modal('hide');
+            }, 0);  
+
+        });
           $('#parsley_reg #demo_order_number').select2({
               dropdownCssClass : 'supplier_select',
                formatResult: format_sales_order,
@@ -574,10 +644,11 @@
       
     });
     
-function posnic_add_new(){
-refresh_items_table();
-   $("#parsley_reg").trigger('reset');
-    <?php if($this->session->userdata['sales_bill_per']['add']==1){ ?>
+    function posnic_add_new(){
+        refresh_items_table();
+        $("#parsley_reg").trigger('reset');
+        <?php
+        if($this->session->userdata['sales_bill_per']['add']==1){ ?>
             $('#update_button').hide();
             $(".supplier_select_2").show();
             $(".porchase_order_for_grn").hide();
@@ -593,61 +664,57 @@ refresh_items_table();
             $('#newly_added').remove();
             $('#parent_items').append('<div id="newly_added"></div>');
             $("#parsley_reg #demo_order_number").select2('data', {id:'',text: '<?php  echo $this->lang->line('search').' '.$this->lang->line('delivery_note')?>'});
-             $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/sales_bill/order_number/",                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             {    
-                                 
-                                
-                                 $('#parsley_reg #demo_bill_no').val(data[0][0]['prefix']+data[0][0]['max']);
-                                 $('#parsley_reg #bill_no').val(data[0][0]['prefix']+data[0][0]['max']);
-                                 grn_number=data[0][0]['prefix']+data[0][0]['max'];
-                             }
-                             });
-            
-            
-            
-                  $("#user_list").hide();
-                  $('#add_new_order').show('slow');
-                  $('#delete').attr("disabled", "disabled");
-                  $('#posnic_add_sales_bill').attr("disabled", "disabled");
-                  $('#active').attr("disabled", "disabled");
-                  $('#deactive').attr("disabled", "disabled");
-                  $('#sales_bill_lists').removeAttr("disabled");
-       
-                     window.setTimeout(function ()
-                    {
-                       $('#parsley_reg #demo_order_number').select2('open');
-                    }, 1000);
-      <?php }else{ ?>
-                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                         
-                    <?php }?>
-}
-function posnic_sales_bill_lists(){
-      $('#edit_brand_form').hide('hide');
-      $('#add_new_order').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#active').removeAttr("disabled");
-      $('#deactive').removeAttr("disabled");
-      $('#posnic_add_sales_bill').removeAttr("disabled");
-      $('#sales_bill_lists').attr("disabled",'disabled');
-}
-function clear_add_sales_bill(){
-      $("#parsley_reg").trigger('reset');
-      refresh_items_table();
-}
-function clear_update_sales_bill(){
-      $("#parsley_reg").trigger('reset');
-      refresh_items_table();
-      edit_function($('#sales_bill_guid').val());
-}
-function reload_update_user(){
-    var id=$('#guid').val();
-    supplier_function(id);
-}
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/sales_bill/order_number/",                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                {    
+                    $('#parsley_reg #demo_bill_no').val(data[0][0]['prefix']+data[0][0]['max']);
+                    $('#parsley_reg #bill_no').val(data[0][0]['prefix']+data[0][0]['max']);
+                    grn_number=data[0][0]['prefix']+data[0][0]['max'];
+                }
+            });
+            $("#user_list").hide();
+            $('#add_new_order').show('slow');
+            $('#delete').attr("disabled", "disabled");
+            $('#posnic_add_sales_bill').attr("disabled", "disabled");
+            $('#active').attr("disabled", "disabled");
+            $('#deactive').attr("disabled", "disabled");
+            $('#sales_bill_lists').removeAttr("disabled");
+            window.setTimeout(function ()
+            {
+                $('#parsley_reg #demo_order_number').select2('open');
+            }, 1000);
+            <?php
+        }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_quotation');?>', { type: "error" });                         
+            <?php
+        }?>
+    }
+    function posnic_sales_bill_lists(){
+        $('#edit_brand_form').hide('hide');
+        $('#add_new_order').hide('hide');      
+        $("#user_list").show('slow');
+        $('#delete').removeAttr("disabled");
+        $('#active').removeAttr("disabled");
+        $('#deactive').removeAttr("disabled");
+        $('#posnic_add_sales_bill').removeAttr("disabled");
+        $('#sales_bill_lists').attr("disabled",'disabled');
+    }
+    function clear_add_sales_bill(){
+        $("#parsley_reg").trigger('reset');
+        refresh_items_table();
+    }
+    function clear_update_sales_bill(){
+        $("#parsley_reg").trigger('reset');
+        refresh_items_table();
+        edit_function($('#sales_bill_guid').val());
+    }
+    function reload_update_user(){
+        var id=$('#guid').val();
+        supplier_function(id);
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
@@ -950,7 +1017,8 @@ function reload_update_user(){
                                         <th><?php echo $this->lang->line('sku') ?></th>
                                     <th><?php echo $this->lang->line('quantity') ?></th>                                  
                                     <th><?php echo $this->lang->line('price') ?></th>
-                                    <th><?php echo $this->lang->line('tax') ?></th>
+                                    <th><?php echo $this->lang->line('tax') ?> 1</th>
+                                    <th><?php echo $this->lang->line('tax') ?> 2</th>
                                     <th><?php echo $this->lang->line('discount') ?></th>
                                     <th><?php echo $this->lang->line('delivered_quty') ?></th>
                                     <th><?php echo $this->lang->line('total') ?></th>
@@ -1103,118 +1171,7 @@ function reload_update_user(){
               
            </div>
 		</div>
-	
-    <script type="text/javascript">
-        function posnic_group_approve(){
-              <?php if($this->session->userdata['sales_bill_per']['approve']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
 
-                          }
-
-                      }
-                      if (flag<1) {
-                              $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_quotation');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                          var guid=posnic[i].value;
-                          if(posnic[i].checked==true){                             
-                              $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/sales_bill/good_receiving_note_approve',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value,
-                                    po:$('#sales_order__number_'+guid).val()
-
-                                },
-                                 complete: function(response) {
-                                    if(response['responseText']=='TRUE'){
-                                        $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('approved');?>', { type: "success" });
-                                       $("#dt_table_tools").dataTable().fnDraw();
-                                   }else if(response['responseText']=='approve'){
-                                        $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is')." ".$this->lang->line('already')." ".$this->lang->line('approved');?>', { type: "warning" });
-                                   }else if(response['responseText']=='Noop'){
-                                          $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_bill');?>', { type: "error" });                       
-                                   }
-                               }
-                            });
-
-                          }
-
-                      }
-                  
-
-                      }  
-               <?php }else{?>
-                         $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_bill');?>', { type: "error" });                       
-                <?php }?>
-               }
-                      
-                   
-    function grn_group_delete(){
-                     <?php if($this->session->userdata['sales_bill_per']['delete']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                        
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_bill');?>', { type: "warning" });
-                      }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('sales_bill') ?>", function(result) {
-             if(result){
-              
-             
-                        var posnic=document.forms.posnic;
-                        for (i = 0; i < posnic.length; i++){
-                          if(posnic[i].checked==true){   
-                              var guid=posnic[i].value;
-                              $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/sales_bill/delete',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value
-
-                                },
-                                 complete: function(response) {
-                                    if(response['responseText']=='TRUE'){
-                                           $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('sales_bill') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
-                                        $("#dt_table_tools").dataTable().fnDraw();
-                                    }else if(response['responseText']=='Approved'){
-                                         $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>  <?php echo $this->lang->line('is');?> <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
-                                    }else{
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_bill');?>', { type: "error" });                       
-                                    }
-                                    }
-                            });
-
-                          }
-
-                      }    
-                      }
-                      });
-                      }  
-                      <?php }else{?>
-                               $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_bill');?>', { type: "error" });                       
-                       <?php }
-                    ?>
-                      }
-                    
-                    
-                    
-                 
-                    
-                </script>
               
 
       
