@@ -264,7 +264,7 @@
                     $('#parsley_reg #item_discount').val($('#parsley_reg #items').select2('data').item_discount);
                    
                 }
-               // net_amount();
+                net_amount();
                 $('#parsley_reg #quantity').focus();
                 window.setTimeout(function ()
                 {
@@ -535,75 +535,69 @@ function add_new_quty(e){
 
 
 
-    function net_amount(){
-        if(isNaN($('#parsley_reg #price').val()) || isNaN($('#parsley_reg #quantity').val())){
-            if(isNaN($('#parsley_reg #price').val())){
-                $('#parsley_reg #price').val(0);
-            }else{
-                $('#parsley_reg #quantity').val(0);
-            }
-            alert('jibi');
-            $('#tax').val(0);
-            $('#discount_amount').val(0);
-            $('#total').val(0); 
-        }else{
+    function net_amount(){      
             
-            if(parseFloat($('#parsley_reg #quantity').val())>parseFloat($('#parsley_reg #delivered_quty').val()) && $('#parsley_reg #delivered_quty').val()!=0){
-                $('#parsley_reg #quantity').val($('#parsley_reg #delivered_quty').val()); 
-                $.bootstrapGrowl('<?php echo $this->lang->line('not_able_to_return');?> '+' '+$('#parsley_reg #item_name').val(), { type: "warning" }); 
-            }    
-            var price=parseFloat($('#parsley_reg #price').val());
-            var quantity=parseFloat($('#parsley_reg #quantity').val());
-            var tax_value1=parseFloat($('#parsley_reg #tax_value').val());
-            var tax_value2=parseFloat($('#parsley_reg #tax_value2').val());
-            var tax_inclusive1=parseFloat($('#parsley_reg #tax_Inclusive').val());
-            var tax_inclusive2=parseFloat($('#parsley_reg #tax_Inclusive2').val());
-            var discount=parseFloat($('#parsley_reg #item_discount').val());
-            if(isNaN(parseFloat($('#parsley_reg #quantity').val()))){
-                quantity=0;
-            }
-            var total=parseFloat(quantity)*parseFloat(price);
-            var sub_total=parseFloat(quantity)*parseFloat(price);
-            var total_tax=0;
-            var tax1=0;
-            if(tax_inclusive1==0){
-                tax1=sub_total*parseFloat(tax_value1)/100;
-                total=parseFloat(tax1)+parseFloat(sub_total);
-                total_tax=parseFloat(total_tax)+parseFloat(tax1);
-            }
-            var tax2=0;
-            if(tax_inclusive2==0){
-                tax2=sub_total*parseFloat(tax_value2)/100;
-                total=parseFloat(tax2)+parseFloat(total);
-                total_tax=parseFloat(total_tax)+parseFloat(tax2);
-            }
-            var discount_amount=0;
-            
-            if(discount!=0 && discount!=""){
-                discount_amount=total*parseFloat(discount)/100;
-            }
-            total=parseFloat(total)-parseFloat(discount_amount);
-           
-            var type='Inc';
-            if(total_tax!=0){
-                var num = parseFloat(total_tax);
-                total_tax=num.toFixed(point);
-                type='Exc';
-            }else{
-                total_tax=parseFloat(tax1)+parseFloat(tax2);
-                var num = parseFloat(total_tax);
-                total_tax=num.toFixed(point);
-            }
-            var num = parseFloat(discount_amount);
-            discount_amount=num.toFixed(point);
-            var num = parseFloat(total);
-            total=num.toFixed(point);
-            $('#tax_label').text('<?php  echo $this->lang->line('tax') ?>('+type+')');
-            $('#tax').val(total_tax);
-            $('#discount_amount').val(discount_amount);
-            var num = parseFloat(total);
-            $('#total').val(num.toFixed(point)); 
+        if(parseFloat($('#parsley_reg #quantity').val())>parseFloat($('#parsley_reg #delivered_quty').val()) && $('#parsley_reg #delivered_quty').val()!=0){
+            $('#parsley_reg #quantity').val($('#parsley_reg #delivered_quty').val()); 
+            $.bootstrapGrowl('<?php echo $this->lang->line('not_able_to_return');?> '+' '+$('#parsley_reg #item_name').val(), { type: "warning" }); 
+        }    
+        var price=parseFloat($('#parsley_reg #price').val());
+        var quantity=parseFloat($('#parsley_reg #quantity').val());
+        var tax_value1=parseFloat($('#parsley_reg #tax_value').val());
+        var tax_value2=parseFloat($('#parsley_reg #tax_value2').val());
+        var tax_inclusive1=parseFloat($('#parsley_reg #tax_Inclusive').val());
+        var tax_inclusive2=parseFloat($('#parsley_reg #tax_Inclusive2').val());
+        var discount=parseFloat($('#parsley_reg #item_discount').val());
+        if(isNaN(parseFloat($('#parsley_reg #quantity').val()))){
+            quantity=0;
         }
+        var total=parseFloat(quantity)*parseFloat(price);
+        var sub_total=parseFloat(quantity)*parseFloat(price);
+        var total_tax=0;
+        var tax1=0;
+        if(tax_inclusive1==0){
+            tax1=sub_total*parseFloat(tax_value1)/100;
+            total=parseFloat(tax1)+parseFloat(sub_total);
+            total_tax=parseFloat(total_tax)+parseFloat(tax1);
+        }
+        var tax2=0;
+        if(tax_inclusive2==0){
+            tax2=sub_total*parseFloat(tax_value2)/100;
+            total=parseFloat(tax2)+parseFloat(total);
+            total_tax=parseFloat(total_tax)+parseFloat(tax2);
+        }
+        var discount_amount=0;
+
+        if(discount!=0 && discount!=""){
+            discount_amount=total*parseFloat(discount)/100;
+        }
+        total=parseFloat(total)-parseFloat(discount_amount);
+
+        var type='Inc';
+        if(total_tax!=0){
+            var num = parseFloat(total_tax);
+            total_tax=num.toFixed(point);
+            type='Exc';
+        }else{
+            total_tax=parseFloat(tax1)+parseFloat(tax2);
+            var num = parseFloat(total_tax);
+            total_tax=num.toFixed(point);
+        }
+        var num = parseFloat(discount_amount);
+        discount_amount=num.toFixed(point);
+        var num = parseFloat(total);
+        total=num.toFixed(point);
+        $('#tax_label').text('<?php  echo $this->lang->line('tax') ?>('+type+')');
+        $('#tax').val(total_tax);
+        $('#discount_amount').val(discount_amount);
+        var num = parseFloat(total);
+        $('#total').val(num.toFixed(point)); 
+        if(isNaN(parseFloat($('#parsley_reg #total').val()))){
+           $('#parsley_reg #quantity').val('');                    
+           $('#tax').val(0);
+           $('#discount_amount').val(0);
+           $('#total').val(0); 
+       }
     }
     function copy_items(){
         if($('#parsley_reg #item_id').val()!=""  && $('#parsley_reg #price').val()!=""  && $('#parsley_reg #quantity').val()!=""){
@@ -873,20 +867,14 @@ function delete_order_item(guid){
         $('#parsley_reg #delivered_quty').val('');
         $('#parsley_reg #tax_Inclusive2').val('');
         $('#parsley_reg #item_id').val('');
-
         $('#parsley_reg #tax_label').text('<?php echo $this->lang->line('tax')?>');
-
         $("#parsley_reg #items").select2('data', {id:'',text: '<?php echo $this->lang->line('search')." ".$this->lang->line('items') ?>'});
         $("#parsley_reg #first_name").val('');
+        $('#parsley_reg #items').select2('open');    
+        $('#tax').val(0);
+        $('#discount_amount').val(0);
+        $('#total').val(0); 
 
-        $('#parsley_reg #items').select2('open');
-    
-        window.setTimeout(function ()
-        {
-            $('#tax').val(0);
-            $('#discount_amount').val(0);
-            $('#total').val(0); 
-        }, 100); 
     
     }
 function new_order_date(e){

@@ -117,7 +117,7 @@ function save(){
         $this->form_validation->set_rules('new_item_price[]', $this->lang->line('new_item_price'), 'required|numeric');                      
                          
         $this->form_validation->set_rules('new_item_total[]', $this->lang->line('new_item_total'), 'numeric');                      
-        $this->form_validation->set_rules('new_item_tax[]', $this->lang->line('new_item_tax'), 'required|numeric');                       
+        //$this->form_validation->set_rules('new_item_tax2[]', $this->lang->line('new_item_tax'), 'required|numeric');                       
            
             if ( $this->form_validation->run() !== false ) {    
                 $pono= $this->input->post('order_number');
