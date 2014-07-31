@@ -513,7 +513,7 @@
                 total_tax=parseFloat(total_tax)+parseFloat(tax1);
             }
             var tax2=0;
-            if(tax_inclusive1==0){
+            if(tax_inclusive2==0){
                 tax2=sub_total*parseFloat(tax_value2)/100;
                 total=parseFloat(tax2)+parseFloat(total);
                 total_tax=parseFloat(total_tax)+parseFloat(tax2);
