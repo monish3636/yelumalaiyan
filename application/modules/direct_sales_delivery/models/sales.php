@@ -39,7 +39,7 @@ class Sales extends CI_Model{
      }
     
     function search_items($search){
-        $this->db->select('item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax,item_kit.tax_amount as kit_tax_amount,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata('branch_id'));
+        $this->db->select('items.tax_inclusive2,items.tax2_type,items.tax2_value,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax,item_kit.tax_amount as kit_tax_amount,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,items.uom,items.no_of_unit,items.start_date,items.end_date,items.discount,items_setting.sales,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,items.name,items.guid as i_guid,items.code,items.image,items.tax_Inclusive,items.tax_id,stock.*')->from('stock')->where('stock.branch_id',  $this->session->userdata('branch_id'));
         $this->db->join('item_kit','item_kit.guid=stock.item','left');
         $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
         $this->db->join('decomposition_items','decomposition_items.guid=stock.item','left');
@@ -75,7 +75,7 @@ class Sales extends CI_Model{
      
      }
      function get_direct_sales_delivery($guid){
-        $this->db->select('decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,direct_sales_delivery.*,sales_items.quty ,sales_items.stock_id ,sales_items.discount as item_discount,sales_items.price,sales_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_sales_delivery')->where('direct_sales_delivery.guid',$guid);
+ $this->db->select('items.tax_inclusive2,items.tax2_type,items.tax2_value,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,direct_sales_delivery.*,sales_items.quty ,sales_items.stock_id ,sales_items.discount as item_discount,sales_items.price,sales_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_sales_delivery')->where('direct_sales_delivery.guid',$guid);
          
         $this->db->join('sales_items', "sales_items.direct_sales_delivery_id = direct_sales_delivery.guid  ",'left');
         $this->db->join('item_kit','item_kit.guid=sales_items.item','left');
@@ -100,14 +100,12 @@ class Sales extends CI_Model{
           $this->db->where('guid',$guid);
           $this->db->delete('sales_items');
      }
-     function approve_order($guid){
-         $this->db->where('guid',$guid);
-         $this->db->update('direct_sales_delivery',array('order_status'=>1));
-         $this->db->select()->from('sales_items')->where('direct_sales_delivery_id',$guid);
-         $sql=  $this->db->get();
-         foreach ($sql->result() as $row){
-         
-            
+    function approve_order($guid){
+        $this->db->where('guid',$guid);
+        $this->db->update('direct_sales_delivery',array('order_status'=>1));
+        $this->db->select()->from('sales_items')->where('direct_sales_delivery_id',$guid);
+        $sql=  $this->db->get();
+        foreach ($sql->result() as $row){ 
             $item=$row->item;
             $quty=$row->quty;
             $price=$row->price;           
@@ -143,33 +141,24 @@ class Sales extends CI_Model{
                  
         
      }
-     function  check_approve($guid){
-          $this->db->select()->from('direct_sales_delivery')->where('guid',$guid)->where('order_status',1);
-            $sql=  $this->db->get();
-            if($sql->num_rows()>0){
-               return FALSE;
-            }else{
-                return TRUE;
-            }
+    function  check_approve($guid){
+        $this->db->select()->from('direct_sales_delivery')->where('guid',$guid)->where('order_status',1);
+        $sql=  $this->db->get();
+        if($sql->num_rows()>0){
+            return FALSE;
+        }else{
+            return TRUE;
+        }
             
      }
-     function add_direct_sales_delivery($guid,$item,$quty,$stock,$discount,$tax,$i){
-         
-         $this->db->select()->from('stock')->where('guid',$stock);
-         $sql=  $this->db->get();
-         $price;
-         foreach ($sql->result() as $row)
-         {
-             $price=$row->price;
-         }
-         $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'tax'=>$tax,'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_delivery_id'=>$guid));
-         
-               
-     }
-     function update_direct_sales_delivery($guid,$quty){
-         $this->db->where('guid',$guid);
-         $this->db->update('sales_items',array('quty'=>$quty));
-     }
+    function add_direct_sales_delivery($guid,$item,$quty,$price,$stock,$discount,$tax,$tax2,$i){  
+        $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item),'tax'=>$tax,'tax2'=>$tax2,'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_delivery_id'=>$guid));
+                
+    }
+    function update_direct_sales_delivery($guid,$quty,$price,$tax,$tax2){
+        $this->db->where('guid',$guid);
+        $this->db->update('sales_items',array('quty'=>$quty,'tax'=>$tax,'tax2'=>$tax2,'price'=>$price));
+    }
     
 }
 ?>

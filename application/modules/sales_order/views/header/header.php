@@ -358,7 +358,7 @@
                             <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
                             <a href=javascript:edit_order_item("'+data[i]['stock_id']+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+data[i]['stock_id']+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
                             var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                            theNode.setAttribute('id','new_item_row_id_'+data[i]['stock_id'])
+                            theNode.setAttribute('id','new_item_row_id_'+data[i]['stock_id']);
                         }
                     }
                 } 
