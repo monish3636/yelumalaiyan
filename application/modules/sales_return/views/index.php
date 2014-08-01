@@ -741,8 +741,8 @@ function add_new_quty(e){
                 <input type="hidden" name="new_item_id[]" value="'+items_id+'"  id="new_item_id_'+items_id+'">\n\
                 <input type="hidden" name="new_item_quty[]" value="'+quantity+'" id="new_item_quty_'+items_id+'"> \n\
                 <input type="hidden" name="new_item_price[]" value="'+price+'" id="new_item_price_'+items_id+'">\n\
-                <input type="hidden" name="new_item_tax[]" value="'+tax+'" id="new_item_tax_'+items_id+'">\n\
-                <input type="hidden" name="new_item_tax[]" value="'+tax+'" id="new_item_tax_'+items_id+'">\n\
+                <input type="hidden" name="new_item_tax[]" value="'+tax1+'" id="new_item_tax_'+items_id+'">\n\
+                <input type="hidden" name="new_item_tax2[]" value="'+tax2+'" id="new_item_tax_'+items_id+'">\n\
                 <input type="hidden" name="new_item_total[]"  value="'+parseFloat(quantity)*parseFloat(price)+'" id="new_item_total_'+items_id+'">\n\
                 </div>'); 
                 var addId = $('#selected_item_table').dataTable().fnAddData( [
@@ -776,7 +776,7 @@ function add_new_quty(e){
                     <a href=javascript:edit_order_item("'+items_id+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit')?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:delete_order_item('"+items_id+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete')?>'><i class='icon-trash'></i></span> </a>" ] );
 
                 var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
-                theNode.setAttribute('id','new_item_row_id_'+items_id)
+                theNode.setAttribute('id','new_item_row_id_'+items_id);
                 $.bootstrapGrowl('<?php echo $this->lang->line('new')." ".$this->lang->line('item') ?> '+name+' <?php echo $this->lang->line('added');?> ', { type: "success" });  
                 if (isNaN($("#parsley_reg #total_amount").val())) 
                     $("#parsley_reg #total_amount").val(0)  ;    
@@ -1278,112 +1278,103 @@ function new_order_date(e){
                 <script type="text/javascript">
                
               
-     function posnic_delete(){
-            <?php if($this->session->userdata['sales_return_per']['delete']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                        
-                          $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_return');?>', { type: "warning" });
-                      }else{
-                            bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('sales_return') ?>", function(result) {
-             if(result){
-              
-             
+    function posnic_delete(){
+        <?php
+        if($this->session->userdata['sales_return_per']['delete']==1){ ?>
+            var flag=0;
+            var field=document.forms.posnic;
+            for (i = 0; i < field.length; i++){
+                if(field[i].checked==true){
+                    flag=flag+1;
+                }
+            }
+            if (flag<1) {
+                $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_return');?>', { type: "warning" });
+            }else{
+                bootbox.confirm("<?php echo $this->lang->line('Are you Sure To Delete')."".$this->lang->line('sales_return') ?>", function(result) {
+                    if(result){
                         var posnic=document.forms.posnic;
                         for (i = 0; i < posnic.length; i++){
-                           
-                          if(posnic[i].checked==true){ 
-                              var guid=posnic[i].value;
-                              $.ajax({
-                                url: '<?php echo base_url() ?>/index.php/sales_return/delete',
-                                type: "POST",
-                                data: {
-                                    guid:posnic[i].value
+                            if(posnic[i].checked==true){ 
+                                var guid=posnic[i].value;
+                                $.ajax({
+                                    url: '<?php echo base_url() ?>/index.php/sales_return/delete',
+                                    type: "POST",
+                                    data: {
+                                        guid:posnic[i].value
 
-                                },
-                                  complete: function(response) {
-                                    if(response['responseText']=='TRUE'){
-                                           $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('sales_return') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
-                                        $("#dt_table_tools").dataTable().fnDraw();
-                                    }else if(response['responseText']=='Approved'){
-                                         $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>  <?php echo $this->lang->line('is');?> <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
-                                    }else{
-                                         $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_return');?>', { type: "error" });                       
+                                    },
+                                    complete: function(response) {
+                                        if(response['responseText']=='TRUE'){
+                                            $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('sales_return') ?>  <?php echo $this->lang->line('deleted');?>', { type: "error" });
+                                            $("#dt_table_tools").dataTable().fnDraw();
+                                        }else if(response['responseText']=='Approved'){
+                                            $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>  <?php echo $this->lang->line('is');?> <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
+                                        }else{
+                                            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_return');?>', { type: "error" });                       
+                                        }
                                     }
-                                    }
-                            });
+                                });
 
-                          }
-
-                      }    
-                      }
-                      });
-                      }    
-                      <?php }else{?>
-                                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_return');?>', { type: "error" });                       
-                           <?php }
-                        ?>
-                      }
+                            }
+                        }    
+                    }
+                });
+            }    
+        <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_return');?>', { type: "error" });                       
+            <?php
+        }
+        ?>
+    }
                     
                     
                     
     function sales_return_group_approve(){
-         <?php if($this->session->userdata['sales_return_per']['approve']==1){ ?>
-                     var flag=0;
-                     var field=document.forms.posnic;
-                      for (i = 0; i < field.length; i++){
-                          if(field[i].checked==true){
-                              flag=flag+1;
-
-                          }
-
-                      }
-                      if (flag<1) {
-                                               $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_return');?>', { type: "warning" });
-                      
-                      }else{
-                            var posnic=document.forms.posnic;
-                      for (i = 0; i < posnic.length-1; i++){
-                           var guid=posnic[i].value;
-                          if(posnic[i].checked==true){                             
-                                 $.ajax({
-                                    url: '<?php echo base_url() ?>/index.php/sales_return/sales_return_approve',
-                                    type: "POST",
-                                    data: {
-                                        guid: posnic[i].value
-
-                                    },
-                                     complete: function(response) {
-                                        if(response['responseText']=='TRUE'){
-                                               $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('sales_return') ?>  <?php echo $this->lang->line('approved');?>', { type: "success" });
-                                            $("#dt_table_tools").dataTable().fnDraw();
-                                        }else if(response['responseText']=='Approved'){
-                                             $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>   <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
-                                        }else{
-                                              $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_return');?>', { type: "error" });                        
-                                        }
-                                        }
-                                });
-
-                          }
-
-                      }
-                  
-
-                      }   
-                        <?php }else{?>
-                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_return');?>', { type: "error" });                       
-                            <?php }
-                         ?>
-                      }
+        <?php
+        if($this->session->userdata['sales_return_per']['approve']==1){ ?>
+            var flag=0;
+            var field=document.forms.posnic;
+            for (i = 0; i < field.length; i++){
+                if(field[i].checked==true){
+                    flag=flag+1;
+                }
+            }
+            if (flag<1) {
+                $.bootstrapGrowl('<?php echo $this->lang->line('Select Atleast One')."".$this->lang->line('sales_return');?>', { type: "warning" });
+            }else{
+                var posnic=document.forms.posnic;
+                for (i = 0; i < posnic.length-1; i++){
+                    var guid=posnic[i].value;
+                    if(posnic[i].checked==true){                             
+                        $.ajax({
+                            url: '<?php echo base_url() ?>/index.php/sales_return/sales_return_approve',
+                            type: "POST",
+                            data: {
+                                guid: posnic[i].value
+                            },
+                            complete: function(response) {
+                                if(response['responseText']=='TRUE'){
+                                    $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('sales_return') ?>  <?php echo $this->lang->line('approved');?>', { type: "success" });
+                                    $("#dt_table_tools").dataTable().fnDraw();
+                                }else if(response['responseText']=='Approved'){
+                                    $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is') ?>   <?php echo $this->lang->line('already');?> <?php echo $this->lang->line('approved');?>', { type: "warning" });
+                                }else{
+                                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Delete')." ".$this->lang->line('sales_return');?>', { type: "error" });                        
+                                }
+                            }
+                        });
+                    }
+                }
+            }   
+            <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('sales_return');?>', { type: "error" });                       
+            <?php
+        }
+        ?>
+    }
                    
                     
                 </script>
