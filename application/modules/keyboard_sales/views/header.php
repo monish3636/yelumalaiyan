@@ -415,6 +415,9 @@
             discount=num.toFixed(point);
             var num = parseFloat(total);
             total=num.toFixed(point);
+            var old_discount=$('#new_item_row_id_'+item_data[value]['guid']+' #items_discount').val();
+            var old_tax1=$('#new_item_row_id_'+item_data[value]['guid']+' #items_tax_amount').val();
+            var old_tax2=$('#new_item_row_id_'+item_data[value]['guid']+' #items_tax_amount2').val();
             $('#selected_item_table #new_item_row_id_'+item_data[value]['guid']+' td:nth-child(6)').html(tax_text1);
             $('#selected_item_table #new_item_row_id_'+item_data[value]['guid']+' td:nth-child(7)').html(tax_text2);
             $('#selected_item_table #new_item_row_id_'+item_data[value]['guid']+' td:nth-child(8)').html(discount);
@@ -422,12 +425,14 @@
             $('#new_item_row_id_'+item_data[value]['guid']+' #quty_'+item_data[value]['guid']).val(parseFloat(quty));
             $('#new_item_row_id_'+item_data[value]['guid']+' #items_total').val(total);
             $('#new_item_row_id_'+item_data[value]['guid']+' #items_tax_amount').val(tax1);
+            $('#new_item_row_id_'+item_data[value]['guid']+' #items_discount').val(discount);
             $('#new_item_row_id_'+item_data[value]['guid']+' #items_tax_amount2').val(tax2);
             var amount=parseFloat($('#parsley_reg #total_amount').val())+parseFloat(total)-parseFloat(old_total)
             amount=amount.toFixed(point);
             $('#parsley_reg #total_amount').val(amount);
             $('#parsley_reg #demo_total_amount').val(amount);
              if(tax_Inclusive==0){
+                tax1=parseFloat(tax1)-parseFloat(old_tax1);
                 if($('#parsley_reg #total_tax').val()==0){
                     $('#parsley_reg #total_tax').val(tax1);
                 }else{
@@ -435,11 +440,15 @@
                 }
             }
             if(tax_Inclusive2==0){
+                tax2=parseFloat(tax2)-parseFloat(old_tax2);
                 if($('#parsley_reg #total_tax').val()==0){
                     $('#parsley_reg #total_tax').val(tax2);
                 }else{
                     $('#parsley_reg #total_tax').val(parseFloat($('#parsley_reg #total_tax').val())+parseFloat(tax2));
                 }
+            }
+            if(discount!="" && !isNaN(parseFloat(discount)) && discount!=0){
+                discount=parseFloat(discount)-parseFloat(old_discount);
             }
             if($('#parsley_reg #total_item_discount_amount').val()==0){
                 $('#parsley_reg #total_item_discount_amount').val(discount);
@@ -463,7 +472,8 @@
                 var tax_Inclusive=item_data[value]['tax_Inclusive'];                                
                 var tax_value2=item_data[value]['tax_value2'];
                 var tax_type2=item_data[value]['tax2_type']+"-"+tax_value2+"%"; 
-                var tax_Inclusive2=item_data[value]['tax_inclusive2'];                               
+                var tax_Inclusive2=item_data[value]['tax_inclusive2'];
+                var per=0;
 
             }else if(item_data[value]['kit_guid']){
                 var guid = item_data[value]['kit_guid'];
@@ -479,6 +489,7 @@
                 var tax_value2=0;
                 var tax_type2=0; 
                 var tax_Inclusive2=0;  
+                var per=0;
             }else{
                 var  items_id=item_data[value]['i_guid'];
                 var  name=item_data[value]['name'];
@@ -494,36 +505,36 @@
                 var  tax_value=item_data[value]['tax_value'];
                 var  tax_type=item_data[value]['tax_type_name']+"-"+tax_value+"%"; 
                 var  tax_Inclusive=item_data[value]['tax_Inclusive'];
-                var  tax_value2=item_data[value]['tax_value2'];
+                var  tax_value2=item_data[value]['tax2_value'];
                 var  tax_type2=item_data[value]['tax2_type']+"-"+tax_value2+"%"; 
                 var  tax_Inclusive2=item_data[value]['tax_inclusive2'];
+                var per=0;
+                per=item_data[value]['discount'];
             }
             var discount=0;
             var total=parseFloat(quty)*parseFloat(price);
             var subtotal=parseFloat(quty)*parseFloat(price);
             var tax1=parseFloat(subtotal)*tax_value/100;                    
             var type1='Inc';
-            if(tax_Inclusive==0){
+            if(tax_Inclusive==0 && !isNaN(parseFloat(tax1))){
                 total= parseFloat(total)+parseFloat(tax1);
                 type1='Exc';
             }
+         
             var tax2=parseFloat(subtotal)*tax_value2/100;                    
             var type2='Inc';
-            if(tax_Inclusive2==0){
+            if(tax_Inclusive2==0 && !isNaN(parseFloat(tax2))){
                 total= parseFloat(total)+parseFloat(tax2);
                 type2='Exc';
             }
-            var per=0;
-            if(item_data[value]['end_date']!=0 && item_data[value]['end_date']!=""){
-                discount=parseFloat(total)*parseFloat(item_data[value]['discount'])/100;
-                per=item_data[value]['discount'];
-            }
+            
             if(discount==""){
                 discount=0;
             }
-            if(per==""){
+            if(isNaN(parseFloat(per))){
                 per=0;
             }
+            discount=parseFloat(total)*parseFloat(per)/100;
             var num = parseFloat(tax1);
             tax1=num.toFixed(point);
             var num = parseFloat(tax2);
@@ -578,8 +589,8 @@
                 <input type="hidden" name="items_tax_type2[]" value="'+tax_type2+'" id="items_tax_type2">\n\
                 <input type="hidden" name="items_tax_value2[]" value="'+tax_value2+'" id="items_tax_value2">\n\
                 <input type="hidden" name="items_tax_inclusive2[]" value="'+tax_Inclusive2+'" id="items_tax_inclusive2">\n\
-                <input type="hidden" name="items_tax_amount[]" value="'+tax1+'" id="items_tax_amount">\n\
-                <input type="hidden" name="items_tax_amount2[]" value="'+tax2+'" id="items_tax_amount2">\n\
+                <input type="text" name="items_tax_amount[]" value="'+tax1+'" id="items_tax_amount">\n\
+                <input type="text" name="items_tax_amount2[]" value="'+tax2+'" id="items_tax_amount2">\n\
                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
