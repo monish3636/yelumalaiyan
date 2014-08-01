@@ -4,7 +4,8 @@ class Sales extends CI_Model{
     function __construct() {
         parent::__construct();
     }
-    
+    /** search customer details*/
+    // function start
     function search_customers($search){
           $like=array('first_name'=>$search,'email'=>$search,'company_name'=>$search,'phone'=>$search,'email'=>$search);       
           $this->db->select('customer_category.discount,customers.*')->from('customers')->where('customers.branch_id',  $this->session->userdata('branch_id'))->where('customers.active_status',1)->where('customers.delete_status',0);
@@ -18,19 +19,27 @@ class Sales extends CI_Model{
               }
           }
           return $data;
-          
-          
     }
+    // function end
+    /* save key board sales
+    ** function start     */
     function add_keyboard_sales($guid,$item,$quty,$stock,$discount,$tax,$i,$price,$invoice){         
          $this->db->insert('sales_items',array('stock_id'=>$stock,'guid'=>  md5($i.$guid.$item.uniqid()),'tax'=>$tax,'discount'=>$discount,'price'=>$price,'item'=>$item,'quty'=>$quty,'direct_sales_id'=>$guid,'invoice_id'=>$invoice,'time'=>strtotime(date('H:i:s')),'branch_id'=>$this->session->userdata('branch_id')));
     }
+    // function end
    
+    /* save customer payable amount 
+     function start*/
     function payable_amount($customer_id,$guid,$amount){        
         $this->db->insert('customer_payable',array('customer_id'=>$customer_id,'invoice_id'=>$guid,'amount'=>$amount,'branch_id'=>  $this->session->userdata['branch_id']));
         $id=  $this->db->insert_id();
         $this->db->where('id',$id);
         $this->db->update('customer_payable',array('guid'=>  md5($customer_id.$guid.$id."customer_payable")));
     }
+    /* function end*/
+    
+    /* save card payment 
+     function start     */
     function card_payment($customer_id,$guid,$amount,$date){        
         $this->db->insert('customer_payable',array('customer_id'=>$customer_id,'invoice_id'=>$guid,'amount'=>$amount,'payment_status'=>1,'paid_amount'=>$amount,'branch_id'=>  $this->session->userdata['branch_id']));
         $id=  $this->db->insert_id();
@@ -50,6 +59,9 @@ class Sales extends CI_Model{
         $this->db->where('id',$id);
         $this->db->update('payment',array('guid'=>md5($id.$customer_id.$payable_id)));
     }
+    
+    /* function end*/
+    
     function cash_payment($customer_id,$guid,$amount,$date,$paid){        
         $this->db->insert('customer_payable',array('customer_id'=>$customer_id,'invoice_id'=>$guid,'amount'=>$amount,'payment_status'=>0,'paid_amount'=>$paid,'branch_id'=>  $this->session->userdata['branch_id']));
         $id=  $this->db->insert_id();

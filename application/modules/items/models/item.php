@@ -146,6 +146,10 @@ class Item extends CI_Model{
         $sql=  $this->db->get();
         return $sql->result_array();
     }
+    function update_item($data,$guid){
+        $this->db->where('guid',$guid);
+        $this->db->update('items',$data);
+    }
         
     
 }
