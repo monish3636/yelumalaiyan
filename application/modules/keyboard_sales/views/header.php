@@ -589,8 +589,8 @@
                 <input type="hidden" name="items_tax_type2[]" value="'+tax_type2+'" id="items_tax_type2">\n\
                 <input type="hidden" name="items_tax_value2[]" value="'+tax_value2+'" id="items_tax_value2">\n\
                 <input type="hidden" name="items_tax_inclusive2[]" value="'+tax_Inclusive2+'" id="items_tax_inclusive2">\n\
-                <input type="text" name="items_tax_amount[]" value="'+tax1+'" id="items_tax_amount">\n\
-                <input type="text" name="items_tax_amount2[]" value="'+tax2+'" id="items_tax_amount2">\n\
+                <input type="hidden" name="items_tax_amount[]" value="'+tax1+'" id="items_tax_amount">\n\
+                <input type="hidden" name="items_tax_amount2[]" value="'+tax2+'" id="items_tax_amount2">\n\
                 <input type="hidden" name="items_discount[]" value="'+discount+'" id="items_discount">\n\
                 <input type="hidden" name="items_discount_per[]" value="'+per+'" id="items_discount_per">\n\
                 <input type="hidden" name="items_total[]"  value="'+total+'" id="items_total">\n\
