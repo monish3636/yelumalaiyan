@@ -47,7 +47,8 @@ class Stock extends CI_Model{
             if($row['sales']==1 OR $row['kit_code']!="" OR $row['deco_code']!=""){
                 if($row['end_date'] <  strtotime(date("Y/m/d"))){
                     $row['start_date']=0;
-                    $row['end_date']=0;                             
+                    $row['end_date']=0;
+                    $row['discount']=0;                           
                 }else{
                     $row['start_date']=date('d-m-Y',$row['start_date']);
                     $row['end_date']=date('d-m-Y',$row['end_date']);
