@@ -1815,12 +1815,14 @@
             <div class="form_sep " style="padding: 0px;">
                 <label for="sales_bill_date" ><?php echo $this->lang->line('sales_bill_date') ?></label>													
                          <div class="input-group date ebro_datepicker" data-date-format="dd.mm.yyyy" data-date-autoclose="true" data-date-start-view="2">
-                               <?php $sales_bill_date=array('name'=>'sales_bill_date',
+                               <?php $sales_bill_date=array('name'=>'demosales_bill_date',
                                                 'class'=>'required form-control',
                                                 'id'=>'sales_bill_date',
+                                                'disabled'=>'disabled',
                                               'onKeyPress'=>"new_sales_bill_date(event)", 
                                                 'value'=>date("d/m/Y"));
                                  echo form_input($sales_bill_date)?>
+                             <input type="hidden" name="sales_bill_date" value="<?php echo date("d/m/Y") ?>">
                     <span class="input-group-addon"><i class="icon-calendar"></i></span>
                     </div>
            </div>
