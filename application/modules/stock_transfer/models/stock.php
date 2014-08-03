@@ -134,9 +134,9 @@ class Stock extends CI_Model{
                     }
            
                     $this->db->where('guid',$stock_id);
-                    $this->db->update('stock',array('quty'=>$stock_quty+$quty));
+                    $this->db->update('stock',array('date'=>strtotime(date('d-m-Y')),'quty'=>$stock_quty+$quty));
                 }else{
-                    $this->db->insert('stock',array('item'=>$item,'quty'=>$quty,'price'=>$price,'branch_id'=>$destination));
+                    $this->db->insert('stock',array('date'=>strtotime(date('d-m-Y')),'item'=>$item,'quty'=>$quty,'price'=>$price,'branch_id'=>$destination));
                     $id=  $this->db->insert_id();
                     $this->db->where('id',$id);
                     $this->db->update('stock',array('guid'=>  md5('stock'.$item.$id)));

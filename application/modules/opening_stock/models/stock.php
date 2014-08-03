@@ -100,7 +100,7 @@ class Stock extends CI_Model{
                $this->db->select('quty,guid')->from('stock')->where('branch_id',$this->session->userdata('branch_id'))->where('item',$item)->where('price',$price);
                $sql_order=  $this->db->get();
             if($sql_order->num_rows()==0){
-                 $this->db->insert('stock',array('item'=>$item,'quty'=>$quty,'price'=>$price,'branch_id'=>$this->session->userdata('branch_id')));
+                 $this->db->insert('stock',array('date'=>strtotime(date('d-m-Y')),'item'=>$item,'quty'=>$quty,'price'=>$price,'branch_id'=>$this->session->userdata('branch_id')));
                 $id=  $this->db->insert_id();
                 $this->db->where('id',$id);
                 $stock_id= md5('stock'.$item.$id);
@@ -120,7 +120,7 @@ class Stock extends CI_Model{
                 }
            
                 $this->db->where('branch_id',$this->session->userdata('branch_id'))->where('item',$item);
-                $this->db->update('stock',array('quty'=>$quty+$stock_quty));
+                $this->db->update('stock',array('date'=>strtotime(date('d-m-Y')),'quty'=>$quty+$stock_quty));
                 $this->db->insert('stocks_history',array('cost'=>$cost,'stock_id'=>$stock_id,'branch_id'=>$this->session->userdata('branch_id'),'item_id'=>$item,'supplier_id'=>$supplier,'added_by'=>  $this->session->userdata('guid'),'quty'=>$quty,'price'=>$price));
                 $id=  $this->db->insert_id();
                 $this->db->where('id',$id);
