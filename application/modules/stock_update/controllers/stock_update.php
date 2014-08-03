@@ -1,5 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Stock_level extends MX_Controller{
+class Stock_update extends MX_Controller{
    function __construct() {
                 parent::__construct();
                 $this->load->library('posnic');               
@@ -8,7 +8,7 @@ class Stock_level extends MX_Controller{
         $this->load->view('template/app/header'); 
         $this->load->view('header/header');         
         $this->load->view('template/branch',$this->posnic->branches());
-        $data['active']='stock_level';
+        $data['active']='stock_update';
         $this->load->view('index',$data);
         $this->load->view('template/app/navigation',$this->posnic->modules());
         $this->load->view('template/app/footer');
@@ -111,20 +111,20 @@ class Stock_level extends MX_Controller{
 // function end
 
     function  get_stock($guid){
-        if($this->session->userdata['stock_level_per']['view']==1){
+        if($this->session->userdata['stock_update_per']['update']==1){
         $this->load->model('stock');
         $data=  $this->stock->get_stock($guid);
         echo json_encode($data);
         }
     }
     function update(){
-        if($this->session->userdata['stock_level_per']['view']==1){
+        if($this->session->userdata['stock_update_per']['update']==1){
             $this->form_validation->set_rules('stock_id', $this->lang->line('stock_id'), 'required');                      
-            $this->form_validation->set_rules('price', $this->lang->line('price'), 'numeric|required');        
+            $this->form_validation->set_rules('quantity', $this->lang->line('quantity'), 'numeric|required');        
             if ( $this->form_validation->run() !== false ) {    
                 $guid=  $this->input->post('stock_id');
-                $price= $this->input->post('price');
-                $this->load->model('stock')->update($guid,$price);
+                $quantity= $this->input->post('quantity');
+                $this->load->model('stock')->update($guid,$quantity);
                 echo 'TRUE';
             }else{
                 echo 'FALSE';

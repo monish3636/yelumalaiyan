@@ -2,7 +2,7 @@
 <script type="text/javascript" charset="utf-8">
     var point=3; 
           $(document).ready( function () {
-                 $('#selected_item_table .dataTables_empty').html('<?php echo $this->lang->line('please_select').' '.$this->lang->line('items')." ".$this->lang->line('for')." ".$this->lang->line('stock_level') ?>');
+                 $('#selected_item_table .dataTables_empty').html('<?php echo $this->lang->line('please_select').' '.$this->lang->line('items')." ".$this->lang->line('for')." ".$this->lang->line('stock_update') ?>');
                      $('#update_stock_section').hide();
                               posnic_table();
                                 
@@ -23,7 +23,7 @@
                                 $("#index", nRow).val(iDisplayIndex +1);
                                return nRow;
                             },
-                                      "sAjaxSource": "<?php echo base_url() ?>index.php/stock_level/data_table",
+                                      "sAjaxSource": "<?php echo base_url() ?>index.php/stock_update/data_table",
                                        aoColumns: [  
                                     
          { "bVisible": false} , 
@@ -77,20 +77,20 @@
            function get_stock(guid){
            
         
-                        <?php if($this->session->userdata['stock_level_per']['view']==1){ ?>
+                        <?php if($this->session->userdata['stock_update_per']['read']==1){ ?>
                                 
                            
                             
                             $('#loading').modal('show');
                             $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/stock_level/get_stock/"+guid,                      
+                             url: "<?php echo base_url() ?>index.php/stock_update/get_stock/"+guid,                      
                              data: "", 
                              dataType: 'json',               
                              success: function(data)        
                              { 
                                 $("#user_list").hide();
                                 $('#update_stock_section').show('slow');                                
-                                $('#stock_level_lists').removeAttr("disabled");                               
+                                $('#stock_update_lists').removeAttr("disabled");                               
                                 $("#parsley_reg").trigger('reset');                           
                                 $("#parsley_reg #stock_id").val(data[0]['guid']);
                                 $("#parsley_reg #item_name").val(data[0]['name']);
@@ -110,7 +110,7 @@
                         
                          
                         <?php }else{?>
-                                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('stock_level');?>', { type: "error" });                       
+                                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('stock_update');?>', { type: "error" });                       
                         <?php }?>
                        }
 		</script>

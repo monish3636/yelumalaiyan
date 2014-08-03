@@ -810,5 +810,6 @@ $lang['credit_days']='Credit Days';
     $lang['add_new']='Add New';
     $lang['item_tax']='Item Tax';
     $lang['search_items']='Search Items';
+    $lang['stock_update']='Stock Update';
    
 ?>
