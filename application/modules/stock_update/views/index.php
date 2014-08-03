@@ -81,20 +81,52 @@
 </style>	
 <script type="text/javascript">
    
-    function posnic_stock_level_lists(){
+    function posnic_stock_update_lists(){
         $("#user_list").show('slow');
         $('#update_stock_section').hide();
-        $('#stock_level_lists').attr("disabled",'disabled');
+        $('#stock_update_lists').attr("disabled",'disabled');
     }
-   
-
+    function update_stock(){
+        <?php if($this->session->userdata['stock_update_per']['update']==1){ ?>
+            if($('#parsley_reg').valid()){
+                var inputs = $('#parsley_reg').serialize();
+                $.ajax ({
+                    url: "<?php echo base_url('index.php/stock_update/update')?>",
+                    data: inputs,
+                    type:'POST',
+                    complete: function(response) {
+                        if(response['responseText']=='TRUE'){
+                              $.bootstrapGrowl('<?php echo $this->lang->line('stock_update').' '.$this->lang->line('updated');?>', { type: "success" });                                                                                  
+                               $("#dt_table_tools").dataTable().fnDraw();
+                               $("#parsley_reg").trigger('reset');
+                               posnic_stock_update_lists();
+                        }else  if(response['responseText']=='ALREADY'){
+                               $.bootstrapGrowl($('#parsley_reg #order_number').val()+' <?php echo $this->lang->line('customers').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                        }else  if(response['responseText']=='FALSE'){
+                               $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
+                        }else{
+                              $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('stock_update');?>', { type: "error" });                           
+                        }
+                    }
+                });
+            }else{
+                $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('all_require_elements');?>', { type: "error" });                        
+            }<?php 
+            
+        }else{ ?>
+           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('stock');?>', { type: "error" });                       
+        <?php }?>                  
+    }
+    function refresh_stock(){
+        get_stock($('#stock_id').val());
+    }
 </script>
 <nav id="top_navigation">
     <div class="container">
             <div class="row">
                 <div class="col col-lg-7">
                         
-                        <a href="javascript:posnic_stock_level_lists()" class="btn btn-default" id="stock_level_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('stock_level') ?></a>
+                        <a href="javascript:posnic_stock_update_lists()" class="btn btn-default" id="stock_update_lists"><i class="icon icon-list"></i> <?php echo $this->lang->line('stock_update') ?></a>
                         
                 </div>
             </div>
@@ -106,12 +138,12 @@
         <div id="main_content_outer" class="clearfix">
             <div id="main_content">
                         <?php $form =array('name'=>'posnic'); 
-                    echo form_open('stock_level/stock_level_manage',$form) ?>
+                    echo form_open('stock_update/stock_update_manage',$form) ?>
                         <div class="row">
                             <div class="col-sm-12" id="user_list"><br>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                            <h4 class="panel-title"><?php echo $this->lang->line('stock_level') ?></h4>                                                                               
+                                            <h4 class="panel-title"><?php echo $this->lang->line('stock_update') ?></h4>                                                                               
                                     </div>
                                     <table id="dt_table_tools" class="table-striped table-condensed" style="width: 100%"><thead>
                                         <tr>
@@ -161,7 +193,7 @@
                           'runat'=>'server',
                           'name'=>'items_form',
                           'class'=>'form-horizontal');
-       echo form_open_multipart('stock_level/upadate_pos_stock_level_details/',$form);?>
+       echo form_open_multipart('stock_update/upadate_pos_stock_update_details/',$form);?>
         
     <div id="main_content" style="padding: 0 14px !important;">
                      
@@ -174,7 +206,7 @@
                       <div class="col col-lg-6">
                           <div class="panel panel-default">
                               <div class="panel-heading" >
-                                     <h4 class="panel-title"><?php echo $this->lang->line('stock_level')." ".$this->lang->line('details') ?></h4>                                                                               
+                                     <h4 class="panel-title"><?php echo $this->lang->line('stock_update')." ".$this->lang->line('details') ?></h4>                                                                               
                                </div>
                             
                                  
@@ -249,17 +281,16 @@
                                                        </div>
                                                </div>
                                                <div class="col col-sm-6" >
-                                                  
-                                                   <div class="form_sep" >
-                                                            <label for="quantity" ><?php echo $this->lang->line('stock')." ".$this->lang->line('quantity') ?></label>													
-                                                                     <?php $quantity=array('name'=>'department',
+                                                  <div class="form_sep" >
+                                                            <label for="price" ><?php echo $this->lang->line('price') ?></label>													
+                                                                     <?php $price=array('name'=>'price',
                                                                                         'class'=>'required  form-control',
-                                                                                        'id'=>'quantity',
-                                                                           'disabled'=>'disabled',
-                                                                                        'value'=>set_value('quantity'));
-                                                                         echo form_input($quantity)?>
-                                                           
+                                                                                        'id'=>'price',
+                                                                                       'disabled'=>'disabled',
+                                                                                        'value'=>set_value('price'));
+                                                                         echo form_input($price)?>
                                                        </div>
+                                                   
                                                </div>
                                                
                                               
@@ -280,16 +311,17 @@
                                                        </div>
                                                </div>
                                                <div class="col col-sm-6" >
-                                                   
-                                                    <div class="form_sep" >
-                                                            <label for="price" ><?php echo $this->lang->line('price') ?></label>													
-                                                                     <?php $price=array('name'=>'price',
+                                                   <div class="form_sep" >
+                                                            <label for="quantity" ><?php echo $this->lang->line('stock')." ".$this->lang->line('quantity') ?></label>													
+                                                                     <?php $quantity=array('name'=>'quantity',
                                                                                         'class'=>'required  form-control',
-                                                                                        'id'=>'price',
-                                                                                       'disabled'=>'disabled',
-                                                                                        'value'=>set_value('price'));
-                                                                         echo form_input($price)?>
+                                                                                        'id'=>'quantity',
+                                                                          
+                                                                                        'value'=>set_value('quantity'));
+                                                                         echo form_input($quantity)?>
+                                                           
                                                        </div>
+                                                    
                                                </div>
                                               
                                                
@@ -298,13 +330,14 @@
                                                </div>
                                            <div class="row">
                                                 <div class="col col-sm-4" >
-                                                   
-                                               </div>
-                                                <div class="col col-sm-4" >
                                                     <a class="btn btn-default" href="javascript:posnic_stock_level_lists()"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('stock') ; ?></a>
                                                </div>
-                                               
-                                              
+                                                <div class="col col-sm-4" >
+                                                    <a class="btn btn-default" href="javascript:update_stock()"><i class="icon icon-save"></i> <?php echo $this->lang->line('update'); ?></a>
+                                               </div>
+                                                <div class="col col-sm-4" >
+                                                    <a class="btn btn-default" href="javascript:refresh_stock()"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('refresh')." ".$this->lang->line('stock') ; ?></a>
+                                               </div>
                                               
                                                
                                               
