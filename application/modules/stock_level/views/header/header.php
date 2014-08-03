@@ -100,6 +100,7 @@
                                 $("#parsley_reg #department").val(data[0]['d_name']);
                                 $("#parsley_reg #price").val(data[0]['price']);
                                 $("#parsley_reg #quantity").val(data[0]['quty']);
+                                $("#parsley_reg #stock_date").val(data[0]['date']);
                                 $('#loading').modal('hide');
                                
                                 

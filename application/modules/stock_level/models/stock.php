@@ -45,7 +45,7 @@ class Stock extends CI_Model{
     }
 
     function get_stock($guid){
-        $this->db->select('kit_category.category_name as kit_cat_name,stock.guid,decomposition_items.code as deco_code,items.code,items.name,item_kit.code as kit_code,item_kit.name as kit_name,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,stock.quty,stock.price')->from('stock')->where('stock.guid',$guid);
+        $this->db->select('kit_category.category_name as kit_cat_name,stock.guid,decomposition_items.code as deco_code,items.code,items.name,item_kit.code as kit_code,item_kit.name as kit_name,brands.name as b_name,items_department.department_name as d_name,items_category.category_name as c_name,stock.quty,stock.price,stock.date')->from('stock')->where('stock.guid',$guid);
         $this->db->join('item_kit','item_kit.guid=stock.item','left');
         $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
         $this->db->join('decomposition_items','decomposition_items.guid=stock.item','left');
@@ -68,6 +68,7 @@ class Stock extends CI_Model{
                 $row['code']=$row['code'];
                 $row['name']=$row['name'];
             }
+            $row['date']=date('d-m-Y',$row['date']);
             $data[]=$row;
         }
         return $data;

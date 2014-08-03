@@ -281,7 +281,7 @@
                                                <div class="col col-sm-6" >
                                                   
                                                    <div class="form_sep" >
-                                                            <label for="quantity" ><?php echo $this->lang->line('quantity') ?></label>													
+                                                            <label for="quantity" ><?php echo $this->lang->line('stock')." ".$this->lang->line('quantity') ?></label>													
                                                                      <?php $quantity=array('name'=>'department',
                                                                                         'class'=>'required  form-control',
                                                                                         'id'=>'quantity',
@@ -296,8 +296,18 @@
                                               
                                                </div>
                                            <div class="row">
-                                                <div class="col col-sm-3" >
+                                                
+                                               <div class="col col-sm-6" >
                                                    
+                                                    <div class="form_sep" >
+                                                            <label for="price" ><?php echo $this->lang->line('date') ?></label>													
+                                                                     <?php $stock_date=array('name'=>'stock_date',
+                                                                                        'class'=>'required  form-control',
+                                                                                        'id'=>'stock_date',
+                                                                                       'disabled'=>'disabled',
+                                                                                        'value'=>set_value('price'));
+                                                                         echo form_input($stock_date)?>
+                                                       </div>
                                                </div>
                                                <div class="col col-sm-6" >
                                                    
@@ -306,7 +316,7 @@
                                                                      <?php $price=array('name'=>'price',
                                                                                         'class'=>'required  form-control',
                                                                                         'id'=>'price',
-                                                                                      
+                                                                                       'disabled'=>'disabled',
                                                                                         'value'=>set_value('price'));
                                                                          echo form_input($price)?>
                                                        </div>
@@ -318,14 +328,12 @@
                                                </div>
                                            <div class="row">
                                                 <div class="col col-sm-4" >
+                                                   
+                                               </div>
+                                                <div class="col col-sm-4" >
                                                     <a class="btn btn-default" href="javascript:posnic_stock_level_lists()"><i class="icon icon-backward"></i> <?php echo $this->lang->line('back_to')." ".$this->lang->line('stock') ; ?></a>
                                                </div>
-                                                <div class="col col-sm-4" >
-                                                    <a class="btn btn-default" href="javascript:update_stock()"><i class="icon icon-save"></i> <?php echo $this->lang->line('update'); ?></a>
-                                               </div>
-                                                <div class="col col-sm-4" >
-                                                    <a class="btn btn-default" href="javascript:refresh_stock()"><i class="icon icon-refresh"></i> <?php echo $this->lang->line('refresh')." ".$this->lang->line('stock') ; ?></a>
-                                               </div>
+                                               
                                               
                                               
                                                
