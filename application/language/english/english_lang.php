@@ -811,5 +811,7 @@ $lang['credit_days']='Credit Days';
     $lang['item_tax']='Item Tax';
     $lang['search_items']='Search Items';
     $lang['stock_update']='Stock Update';
+    $lang['price_change']='price Change';
+    $lang['stock_price_changer']='Stock Price Changer';
    
 ?>
