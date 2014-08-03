@@ -135,7 +135,7 @@ class Grn extends CI_Model{
             if($selling==$price){
                 $quty=$row->received_quty+$row->received_free;
                 $this->db->where('branch_id',$Bid)->where('item',$row->item);
-                $this->db->update('stock',array('quty'=>$quty+$stock_quty,'price'=>$price));
+                $this->db->update('stock',array('date'=>strtotime(date('d-m-Y')),'quty'=>$quty+$stock_quty,'price'=>$price));
                 $this->db->insert('stocks_history',array('stock_id'=>$stock_guid,'po_id'=>$po,'grn_id'=>$guid,'supplier_id'=>$supplier,'branch_id'=>  $this->session->userdata('branch_id'),'added_by'=>  $this->session->userdata('guid'),'item_id'=>$row->item,'quty'=>$quty,'price'=>$price,'cost'=>$cost,'date'=>strtotime(date("Y/m/d"))));
                 $id=  $this->db->insert_id();
                 $this->db->where('id',$id);
@@ -143,7 +143,7 @@ class Grn extends CI_Model{
             
             }else{
                 $quty=$row->received_quty+$row->received_free;
-                $this->db->insert('stock',array('item'=>$row->item,'quty'=>$quty,'price'=>$price,'branch_id'=>$Bid));
+                $this->db->insert('stock',array('date'=>strtotime(date('d-m-Y')),'item'=>$row->item,'quty'=>$quty,'price'=>$price,'branch_id'=>$Bid));
                 $id=  $this->db->insert_id();
                 $this->db->where('id',$id);
 
@@ -155,7 +155,7 @@ class Grn extends CI_Model{
             }
         }else{
             $quty=$row->received_quty+$row->received_free;
-            $this->db->insert('stock',array('item'=>$row->item,'quty'=>$quty,'price'=>$price,'branch_id'=>$Bid));
+            $this->db->insert('stock',array('date'=>strtotime(date('d-m-Y')),'item'=>$row->item,'quty'=>$quty,'price'=>$price,'branch_id'=>$Bid));
             $id=  $this->db->insert_id();
             $this->db->where('id',$id);             
             $this->db->update('stock',array('guid'=>  md5('stock'.$row->item.$id)));
