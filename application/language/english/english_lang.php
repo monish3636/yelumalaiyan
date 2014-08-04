@@ -578,7 +578,7 @@ $lang['credit_days']='Credit Days';
     $lang['sales_date']='Sales Date';
     $lang['Please_Select_A_Customer']='Please Select A Customer';
     $lang['order_date']='Order Date';
-    $lang['total_item_discount_amount']='Item Disc Amount';
+    $lang['item_discount']='Item Discount';
     $lang['total_tax']='Total  Exclusive Tax';
     $lang['tax_type']='Tax Type';
     $lang['sddn_date']='S D D N Date';
@@ -813,5 +813,13 @@ $lang['credit_days']='Credit Days';
     $lang['stock_update']='Stock Update';
     $lang['price_change']='price Change';
     $lang['stock_price_changer']='Stock Price Changer';
+    $lang['invoice_settings']='Invoice Settings';
+    $lang['print_invoice']='Print invoice';
+    $lang['you_have_no_permission_to_update']='You Have NO Permission To Update';
+    $lang['purchase_order_id']='Purchase Order Id';
+    $lang['purchase_order_number']='Purchase Order Number';
+    $lang['pin']='Pin';
+    $lang['inclusive_tax']='Inclusive Tax';
+    $lang['exclusive_tax']='Exclusive Tax';
    
 ?>

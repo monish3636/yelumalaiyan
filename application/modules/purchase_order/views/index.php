@@ -1,4 +1,5 @@
 <style type="text/css">
+   .modal-backdrop {background: none;}
     .my_select{
         -moz-border-bottom-colors: none;
         -moz-border-left-colors: none;
@@ -40,8 +41,8 @@
         height: 24px;
         line-height: 1.7;
     }
-     #dt_table_tools tr td + td + td + td + td + td + td + td + td {
-      width: 120px !important;
+     #dt_table_tools  tr th:nth-child(9),#dt_table_tools tr td:nth-child(9){
+      width: 170px;
     }
     .editable-address {
         display: block;
@@ -333,6 +334,10 @@
     
     function posnic_add_new(){
         refresh_items_table();
+        $('#first_name').select2('enable');
+        $('#sacn_items').show();
+        $('#parsley_reg input').prop('disabled',false);
+        $('#parsley_reg textarea').prop('disabled',false);
         $('#update_button').hide();
         $('#save_button').show();
         $('#update_clear').hide();
@@ -376,6 +381,11 @@
         }?>
     }
     function posnic_purchase_order_lists(){
+        $('#sacn_items').show();
+        invoice_enable();
+        $('#parsley_reg input').prop('disabled',false);
+        $('#parsley_reg textarea').prop('disabled',false);
+        $('#first_name').select2('enable');
         $('#edit_brand_form').hide('hide');
         $('#add_new_order').hide('hide');      
         $("#user_list").show('slow');
@@ -833,7 +843,7 @@
 </script>
 
   
-<div class="modal fade" id="loading">
+<div class="modal fade" id="loading" style="background:none">
     <div class="modal-dialog" style="width: 146px;margin-top: 20%">
                 
         <img src="<?php echo base_url('loader.gif') ?>" style="margin: auto">
@@ -1670,12 +1680,12 @@
                          
                          
          
-                    <div class="row small_inputs" >
+                    <div class="row small_inputs">
                     <div class="col col-lg-12">
                       
                          
                              
-                              <div class="row" style="padding-top: 1px;">
+                              <div class="row" style="padding-top: 1px;"  id="sacn_items">
                                  
                                   
                                                 <div class="col col-sm-1" style="padding:1px; width: 160px;">
@@ -1997,7 +2007,579 @@
                     
           </div>  </div>  </div>
     <?php echo form_close();?>
-</section>    
+</section> 
+<section class="container clearfix main_section" id="invoice_div" style="display: none">
+            <div id="main_content_outer" class="clearfix">
+                    <div id="main_content">
+
+                            <!-- main content -->
+                            <div class="row">
+                                    <div class="col-sm-4">
+                                            <a href="javascript:invoice_settings()" class="btn btn-default  btn-lg"><span class="icon icon-cogs sepV_b"></span><?php echo $this->lang->line('invoice_settings') ?></a>
+                                   
+                                            <a href="javascript:void(0)" class="btn btn-default btn-lg" id="invoice_print"><span class="glyphicon glyphicon-print sepV_b"></span><?php  echo $this->lang->line('print_invoice') ?></a>
+                                    </div>
+                            </div>
+                            <div class="row invoice_top">
+                                    <div class="col-sm-10">
+                                            <h2 class="heading_lg" id="invoice_posnic_id">Invoice #12023/12/R1</h2>
+                                            <h2 class="heading_lg_sub" id="invoice_posnic_order">Order  #16328</h2>
+                                            <p id="invoice_posnic_date">Date: <span class="text-muted">12/11/2013</span></p>
+                                            <p id="invoice_posnic_exiry_date">Due By: <span class="text-danger">26/11/2013</span></p>
+                                    </div>
+                                    <div class="col-sm-2">
+                                            <div id="invoice_posnic_qrcode"></div>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-sm-6">
+                                            <h3 class="heading_a"><?php echo $this->lang->line('from'); ?></h3>
+                                            <address>
+                                                    <p class="addres_name" id="invoice_posnic_branch">Ebro Admin HQ</p>
+                                                    <p id="invoice_posnic_address1">Av Almozara, 79</p>
+                                                    <p id="invoice_posnic_address2">50003 Zaragoza</p>
+                                                    <p class="sepH_b"  id="invoice_pos_state">Spain</p>
+                                                    <p  id="invoice_posnic_phone"><small><span class="text-muted">Phone:</span> (+321) 123 456 789</small></p>
+                                                    <p  id="invoice_posnic_email"><small><span class="text-muted">E-mail:</span> <a href="mailto:example.com">ebro@example.com</a></small></p>
+                                            </address>
+                                    </div>
+                                    <div class="col-sm-6">
+                                            <h3 class="heading_a">To</h3>
+                                            <address>
+                                                    <p class="addres_name" id="invoice_posnic_supplier">Conn and Sons</p>
+                                                    <p  id="invoice_posnic_company">Raegan Springs 414</p>
+                                                    <p  id="invoice_posnic_address">55666 Tierratown</p>
+                                                    <p  id="invoice_posnic_country">Heaneymouth</p>
+                                            </address>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-sm-12">
+                                            <table class="table table-striped" id="invoice_posnic_table">
+                                                    <thead>
+                                                            <tr>
+                                                                    <th>Product</th>
+                                                                    <th>Sku</th>
+                                                                    <th>Price</th>
+                                                                    <th>Qty</th>
+                                                                    <th>Tax</th>
+                                                                    <th class="text-right">Subtotal</th>
+                                                            </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            <tr>
+                                                                    <td>Digital Camera</td>
+                                                                    <td>dc_1</td>
+                                                                    <td>$641.27</td>
+                                                                    <td>1</td>
+                                                                    <td>$26.00</td>
+                                                                    <td class="text-right">$641.27</td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td>Android Phone</td>
+                                                                    <td>jb_4</td>
+                                                                    <td>$320.00</td>
+                                                                    <td>1</td>
+                                                                    <td>$12.00</td>
+                                                                    <td class="text-right">$320.00</td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td>Home Theater System</td>
+                                                                    <td>ht_sys</td>
+                                                                    <td>$1247.00</td>
+                                                                    <td>1</td>
+                                                                    <td>$62.00</td>
+                                                                    <td class="text-right">$1247.00</td>
+                                                            </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                            <tr>
+                                                                    <td colspan="4"></td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_sub_total">Subtotal</td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_sub_total_value"><strong>$2394.27</strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td colspan="4"></td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_tax">Tax</td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_tax_value"><strong>$126.00</strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td colspan="4"></td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_item_discount">Discount</td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_item_discount_amount"><strong>$126.00</strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td colspan="4"></td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_freight">Shipping</td>
+                                                                    <td class="col_total text-right"  id="invoice_posnic_freight_amount"><strong>$21.49</strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td colspan="4"></td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_round_off_amount">Shipping</td>
+                                                                    <td class="col_total text-right"  id="invoice_posnic_round_off_amount_amount"><strong>$21.49</strong></td>
+                                                            </tr>
+                                                            <tr>
+                                                                    <td colspan="4"></td>
+                                                                    <td class="col_total text-right" id="invoice_posnic_order_discount">Shipping</td>
+                                                                    <td class="col_total text-right"  id="invoice_posnic_order_discount_amount"><strong>$21.49</strong></td>
+                                                            </tr>
+                                                            <tr class="grand_total">
+                                                                    <td colspan="4"></td>
+                                                                    <td class="col_total text-right"  id="invoice_posnic_order_grand">Grand Total</td>
+                                                                    <td class="col_total text-right"  id="invoice_posnic_order_grand_amount"><strong>$2639.99</strong></td>
+                                                            </tr>
+                                                    </tfoot>
+                                            </table>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-sm-12">
+                                            <div class="invoice_info" id="invoice_posnic_order_grand_amount_text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt ducimus ex quam fuga dolor. Deleniti sapiente ipsam mollitia blanditiis dolorem saepe amet fugit. Nostrum incidunt impedit officia illum ipsa eius?</div>
+                                    </div>
+                            </div>
+
+                    </div>
+            </div>
+    </section>
+<section class="container clearfix main_section" id="invoice_settings" style="display: none">
+   
+    <div id="main_content_outer" class="clearfix">
+        <div id="main_content">
+
+                <!-- main content -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <form class="form_settings">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title pull-left">Site settings</h4>
+                                <a href="#" class="btn btn-primary btn-sm pull-right">Save settings</a>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#st_purchase"><?php echo $this->lang->line('purchase_order')." ".$this->lang->line('details') ?></a></li>
+                                    <li><a data-toggle="tab" href="#st_branch"><?php echo $this->lang->line('branch')." ".$this->lang->line('details') ?></a></li>
+                                    <li><a data-toggle="tab" href="#st_supplier"><?php echo $this->lang->line('supplier')." ".$this->lang->line('details') ?></a></li>
+                                    <li><a data-toggle="tab" href="#st_items"><?php echo $this->lang->line('items')." ".$this->lang->line('details') ?></a></li>
+                                    <li><a data-toggle="tab" href="#st_invoice"><?php echo $this->lang->line('invoice')." ".$this->lang->line('details') ?></a></li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other <b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a data-toggle="tab" href="#st_lang">Languages</a></li>
+                                            <li><a data-toggle="tab" href="#st_mail">Mail</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="st_purchase" class="tab-pane active">
+                                        <div class="col-sm-3">
+                                            <div class="form-group ">
+                                                    <label for="posnic_order_id" ><?php echo $this->lang->line('purchase_order_id') ?></label>													
+                                                    <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                         <?php $posnic_order_id=array('name'=>'posnic_order_id',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_order_id');
+                                                                echo form_checkbox($posnic_order_id)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group ">
+                                                    <label for="posnic_number" ><?php echo $this->lang->line('purchase_order_number') ?></label>													
+                                                    <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                         <?php $posnic_number=array('name'=>'posnic_number',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_number');
+                                                                echo form_checkbox($posnic_number)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_date" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('date') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_date=array('name'=>'posnic_date',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_date');
+                                                        echo form_checkbox($posnic_date)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_expiry" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('expiry_date') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_expiry=array('name'=>'posnic_expiry',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_expiry');
+                                                        echo form_checkbox($posnic_expiry)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_barcode" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('barcode') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_barcode=array('name'=>'posnic_barcode',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_barcode');
+                                                        echo form_checkbox($posnic_barcode)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div id="st_branch" class="tab-pane">
+                                           <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_name" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('branch') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_branch_name=array('name'=>'posnic_branch_name',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_branch_name');
+                                                        echo form_checkbox($posnic_branch_name)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_address" ><?php echo $this->lang->line('branch')." ". $this->lang->line('address') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_branch_address=array('name'=>'posnic_branch_address',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_branch_address');
+                                                        echo form_checkbox($posnic_branch_address)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_city" ><?php echo $this->lang->line('branch')." ". $this->lang->line('city') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_branch_city=array('name'=>'posnic_branch_city',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_branch_city');
+                                                        echo form_checkbox($posnic_branch_city)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_state" ><?php echo $this->lang->line('branch')." ". $this->lang->line('state') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_branch_state=array('name'=>'posnic_branch_state',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_branch_state');
+                                                        echo form_checkbox($posnic_branch_state)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        
+                                         
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_country" ><?php echo $this->lang->line('branch')." ". $this->lang->line('country') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_branch_country=array('name'=>'posnic_branch_country',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_branch_country');
+                                                        echo form_checkbox($posnic_branch_country)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_pin" ><?php echo $this->lang->line('branch')." ". $this->lang->line('pin') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_branch_pin=array('name'=>'posnic_branch_pin',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_branch_pin');
+                                                        echo form_checkbox($posnic_branch_pin)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_posnic_branch_email" ><?php echo $this->lang->line('branch')." ". $this->lang->line('email') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_posnic_branch_email=array('name'=>'posnic_posnic_branch_email',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_posnic_branch_email');
+                                                        echo form_checkbox($posnic_posnic_branch_email)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_phone" ><?php echo $this->lang->line('branch')." ". $this->lang->line('phone') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_branch_phone=array('name'=>'posnic_branch_phone',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_branch_phone');
+                                                        echo form_checkbox($posnic_branch_phone)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div id="st_supplier" class="tab-pane">
+      <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_name" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('name') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_branch_name=array('name'=>'posnic_branch_name',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_branch_name');
+                                                        echo form_checkbox($posnic_branch_name)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_supplier_company" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('comapany') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_supplier_company=array('name'=>'posnic_supplier_company',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_supplier_company');
+                                                        echo form_checkbox($posnic_supplier_company)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_supplier_address" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('address') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_supplier_address=array('name'=>'posnic_supplier_address',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_supplier_address');
+                                                        echo form_checkbox($posnic_branch_city)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_supplier_city" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('city') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_supplier_city=array('name'=>'posnic_supplier_city',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_supplier_city');
+                                                        echo form_checkbox($posnic_supplier_city)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_supplier_state" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('state') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_supplier_state=array('name'=>'posnic_supplier_state',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_supplier_state');
+                                                        echo form_checkbox($posnic_supplier_state)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        
+                                         
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_supplier_country" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('country') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_supplier_country=array('name'=>'posnic_supplier_country',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_supplier_country');
+                                                        echo form_checkbox($posnic_supplier_country)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_supplier_pin" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('pin') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_supplier_pin=array('name'=>'posnic_supplier_pin',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_supplier_pin');
+                                                        echo form_checkbox($posnic_supplier_pin)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_supplier_email" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('email') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_supplier_email=array('name'=>'posnic_supplier_email',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_supplier_email');
+                                                        echo form_checkbox($posnic_supplier_email)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_supplier_phone" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('phone') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_supplier_phone=array('name'=>'posnic_supplier_phone',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_supplier_phone');
+                                                        echo form_checkbox($posnic_supplier_phone)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div id="st_items" class="tab-pane">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_name" ><?php echo $this->lang->line('item')." ". $this->lang->line('name') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_item_name=array('name'=>'posnic_item_name',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_item_name');
+                                                        echo form_checkbox($posnic_item_name)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_sku" ><?php echo $this->lang->line('item')." ". $this->lang->line('sku') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_item_sku=array('name'=>'posnic_item_sku',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_item_sku');
+                                                        echo form_checkbox($posnic_item_sku)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_price" ><?php echo $this->lang->line('item')." ". $this->lang->line('price') ?></label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_item_price=array('name'=>'posnic_item_price',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_item_sku');
+                                                        echo form_checkbox($posnic_item_price)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_tax1" ><?php echo $this->lang->line('item')." ". $this->lang->line('price') ?> 1</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_item_tax1=array('name'=>'posnic_item_tax1',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_item_tax1');
+                                                        echo form_checkbox($posnic_item_tax1)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_tax2" ><?php echo $this->lang->line('item')." ". $this->lang->line('price') ?> 2</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_item_tax2=array('name'=>'posnic_item_tax2',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_item_tax2');
+                                                        echo form_checkbox($posnic_item_tax2)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_discount1" ><?php echo $this->lang->line('item')." ". $this->lang->line('discount') ?> 1</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_item_discount1=array('name'=>'posnic_item_discount1',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_item_discount1');
+                                                        echo form_checkbox($posnic_item_discount1)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_discount2" ><?php echo $this->lang->line('item')." ". $this->lang->line('discount') ?> 2</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_item_discount2=array('name'=>'posnic_item_discount2',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_item_discount2');
+                                                        echo form_checkbox($posnic_item_discount2)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_subtotal" ><?php echo $this->lang->line('item')." ". $this->lang->line('subtotal') ?> 2</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_item_subtotal=array('name'=>'posnic_item_subtotal',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_item_subtotal');
+                                                        echo form_checkbox($posnic_item_subtotal)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div id="st_mail" class="tab-pane">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_purchase_order_subtotal" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('subtotal') ?> 2</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_purchase_order_subtotal=array('name'=>'posnic_purchase_order_subtotal',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_purchase_order_subtotal');
+                                                        echo form_checkbox($posnic_purchase_order_subtotal)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_inclusive_total_tax" ><?php echo $this->lang->line('total')." ". $this->lang->line('inclusive_tax') ?> 2</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_inclusive_total_tax=array('name'=>'posnic_inclusive_total_tax',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_inclusive_total_tax');
+                                                        echo form_checkbox($posnic_inclusive_total_tax)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_exclusive_total_tax" ><?php echo $this->lang->line('total')." ". $this->lang->line('exclusive_tax') ?> 2</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_exclusive_total_tax=array('name'=>'posnic_exclusive_total_tax',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_exclusive_total_tax');
+                                                        echo form_checkbox($posnic_exclusive_total_tax)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_total_item_discount" ><?php echo $this->lang->line('total')." ". $this->lang->line('item_discount') ?> 2</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_total_item_discount=array('name'=>'posnic_total_item_discount',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_total_item_discount');
+                                                        echo form_checkbox($posnic_total_item_discount)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_discount" ><?php echo $this->lang->line('total')." ". $this->lang->line('item_discount') ?> 2</label>													
+                                                   <div class="make-switch switch-small switch-theme" data-on-label="<?php echo $this->lang->line('yes') ?>" data-off-label="<?php echo $this->lang->line('no') ?>">    
+                                                        <?php $posnic_discount=array('name'=>'posnic_discount',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_discount');
+                                                        echo form_checkbox($posnic_discount)?>
+                                                   </div>
+                                             </div>
+                                        </div>
+                                    </div>
+                                            </div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+                    </div>
+                </div>
+</section>
            <div id="footer_space">
               
            </div>

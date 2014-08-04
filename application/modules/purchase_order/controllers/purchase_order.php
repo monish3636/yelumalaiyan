@@ -339,14 +339,27 @@ function delete(){
     
 }
 // function end
-
-function  get_purchase_order($guid){
-    if($this->session->userdata['purchase_order_per']['edit']==1){
-    $this->load->model('purchase');
-    $data=  $this->purchase->get_purchase_order($guid);
-    echo json_encode($data);
+   /* get purchase order 
+     function start     */
+    function  get_purchase_order($guid){
+        if($this->session->userdata['purchase_order_per']['edit']==1){
+        $this->load->model('purchase');
+        $data=  $this->purchase->get_purchase_order($guid);
+        echo json_encode($data);
+        }
     }
-}
+    /* function end*/
+    
+    /* get purchase order 
+     function start     */
+    function  view_purchase_order($guid){
+        if($this->session->userdata['purchase_order_per']['view']==1){
+        $this->load->model('purchase');
+        $data=  $this->purchase->get_purchase_order($guid);
+        echo json_encode($data);
+        }
+    }
+    /* function end*/
 
 function purchase_order_approve(){
      if($this->session->userdata['purchase_order_per']['approve']==1){
@@ -374,10 +387,11 @@ function search_items(){
     echo json_encode($data);
        
         
-}   
-    function language($lang){
-       $lang= $this->lang->load($lang);
-       return $lang;
+}   /* get purchase order invoice getting details*/
+    function get_invoice_settings(){
+        $this->config->load("settings"); // read setting config file
+        $settings =$this->config->item('invoice'); // get invoice array
+        echo json_encode($settings);
     }
 }
 ?>
