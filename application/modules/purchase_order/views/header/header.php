@@ -566,6 +566,31 @@ function purchase_order_approve(guid){
             <?php
         }?>
     }
+    function save_invoice_settings(){
+        <?php
+        if($this->session->userdata['purchase_order_per']['invoice_setting']==1){ ?>
+            
+                    var inputs = $('#settings_form').serialize();
+                    $.ajax ({
+                        url: "<?php echo base_url('index.php/purchase_order/save_invoice_settings')?>",
+                        data: inputs,
+                        type:'POST',
+                        complete: function(response) {
+                            if(response['responseText']=='TRUE'){
+                                $.bootstrapGrowl('<?php echo $this->lang->line('invoice_setting').' '.$this->lang->line('saved');?>', { type: "success" });                                                                                  
+                              
+                            }else{
+                                $.bootstrapGrowl('<?php echo $this->lang->line('you_have_no_permission_to_update')." ".$this->lang->line('invoice_settings'); ?>', { type: "error" });          
+                            }
+                        }
+                    });
+                <?php 
+            
+        }else{ ?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('supplier');?>', { type: "error" });                       
+        <?php
+        }?>
+    }
     $(function() {
         posnic_invoice.init();
     })

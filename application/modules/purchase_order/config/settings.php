@@ -39,6 +39,8 @@ $config['invoice']	=array(
                         'posnic_frieght'=>1,
                         'posnic_round_off_amount'=>1,
                         'posnic_grand_total'=>1,
+                        'posnic_supplier_mail'=>1,
+                        'posnic_message'=>1,
                     );
 ?>
 
