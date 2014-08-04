@@ -85,6 +85,7 @@
                         <script src="<?php echo base_url() ?>template/app/validate/js/jquery.bootstrap-growl.js"></script>
                        
                       
+        <script src="<?php echo base_url() ?>template/app/js/lib/qrcode/jquery.qrcode-0.7.0.min.js"></script>
         <!--[if lte IE 9]>
                 <script src="<?php echo base_url() ?>template/app/js/ie/jquery.placeholder.js"></script>
                 <script>

@@ -15,9 +15,10 @@ class Userlogin extends CI_Controller
         $this->poslanguage->set_language();     
     }
     function index(){  
+	$data['jibi']='jiuoiu';
         if(!isset($this->session->userdata['guid'])){
             $this->load->view('template/login/header');
-            $this->load->view('login');
+            $this->load->view('login',$data);
             $this->load->view('template/login/footer');
         }else{
             $this->load->model('setting');
