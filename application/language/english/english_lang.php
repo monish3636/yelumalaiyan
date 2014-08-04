@@ -821,5 +821,8 @@ $lang['credit_days']='Credit Days';
     $lang['pin']='Pin';
     $lang['inclusive_tax']='Inclusive Tax';
     $lang['exclusive_tax']='Exclusive Tax';
+    $lang['send_invoice_to_suppplier']='Send Invoice To supplier(Email)';
+    $lang['message']='Message';
+    $lang['saved']='Saved';
    
 ?>
