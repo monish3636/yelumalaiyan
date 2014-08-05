@@ -1,8 +1,16 @@
 <script type="text/javascript" charset="utf-8" language="javascript" src="http://ivaynberg.github.io/select2/select2-master/select2.js"></script>
+
 <script type="text/javascript" charset="utf-8">
     var point=3;
           $(document).ready( function () {
-                 
+                  //  $('#parru').wrap('<div class="make-switch" />').parent().bootstrapSwitch();
+                       //  $('#posnic_number').bootstrapSwitch('status');
+                        
+                  $('#toggle-state-switch-button-on').on('click', function () {
+            $('#parru').bootstrapSwitch('setState', true);
+            alert('jibi')
+        });
+        
    
 
         	 refresh_items_table();
@@ -554,9 +562,54 @@ function purchase_order_approve(guid){
                 success: function(data)        
                 { 
                     
-                    for(var i=0;i,data.length;i++){
-                       
-                    }
+              $('#posnic_number').bootstrapSwitch('status'); // true || false
+
+                          //  $('#posnic_order_id < div').addClass('switch-off');
+                         //   $('#posnic_number').attr('checked','checked');
+                   
+                        if(data['posnic_order_id']==1){
+                        }
+//                        $('#posnic_order_id').val(), 
+//                        $('#posnic_number').val(), 
+//                        $('#posnic_date').val(),
+//                        $('#posnic_expiry').val(),
+//                        $('#posnic_barcode').val(),
+//                        $('#posnic_branch_name').val(),
+//                        $('#posnic_branch_address').val(),
+//                        $('#posnic_branch_city').val(),
+//                        $('#posnic_branch_state').val(),
+//                        $('#posnic_branch_country').val(),
+//                        $('#posnic_branch_pin').val(),
+//                        $('#posnic_posnic_branch_email').val(),
+//                        $('#posnic_branch_phone').val(),
+//                        $('#posnic_supplier_name').val(),
+//                        $('#posnic_supplier_company').val(),
+//                        $('#posnic_supplier_address').val(),
+//                        $('#posnic_supplier_city').val(),
+//                        $('#posnic_supplier_state').val(),
+//                        $('#posnic_supplier_country').val(),
+//                        $('#posnic_supplier_pin').val(),
+//                        $('#posnic_supplier_email').val(),
+//                        $('#posnic_supplier_phone').val(),
+//                        $('#posnic_item_name').val(),
+//                        $('#posnic_item_sku').val(),
+//                        $('#posnic_item_price').val(),
+//                        $('#posnic_item_tax1').val(),
+//                        $('#posnic_item_tax2').val(),
+//                        $('#posnic_item_discount1').val(),
+//                        $('#posnic_item_discount2').val(),
+//                        $('#posnic_item_subtotal').val(),
+//                        $('#posnic_purchase_order_subtotal').val(),
+//                        $('#posnic_inclusive_total_tax').val(),
+//                        $('#posnic_exclusive_total_tax').val(),
+//                        $('#posnic_total_item_discount').val(),
+//                        $('#posnic_discount').val(),
+//                        $('#posnic_frieght').val(),
+//                        $('#posnic_round_off_amount').val(),
+//                        $('#posnic_grand_total').val(),
+//                        $('#posnic_supplier_mail').val(),
+//                        $('#posnic_message').val(),
+                    
                 }
                 
             });
