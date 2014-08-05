@@ -360,6 +360,19 @@ function delete(){
         }
     }
     /* function end*/
+    /* get purchase order and invoice settings
+     function start     */
+    function  get_invoice_settings_and_purchase_order($guid){
+        if($this->session->userdata['purchase_order_per']['print_invoice']==1){
+        $this->load->model('purchase');
+        $data[0]=  $this->purchase->purchase_order_invoice($guid); // get purchas eorder details
+        $this->config->load("settings"); // read setting config file
+        $data[1]=$this->config->item('invoice'); // get invoice array
+           
+        echo json_encode($data);
+        }
+    }
+    /* function end*/
 
 function purchase_order_approve(){
      if($this->session->userdata['purchase_order_per']['approve']==1){
@@ -396,8 +409,8 @@ function search_items(){
         }
     }
     function save_invoice_settings(){
-                  //  if($this->input->get('posnic_order_id')) { echo 1 ;
-                   $con="<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');"."\n".' $config["invoice"]=array(';
+                
+                $con="<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');"."\n".' $config["invoice"]=array(';
           
                 $posnic_order_id=$this->input->post('posnic_order_id')==1? 1 : 0;
                 $data=$con.'"posnic_order_id"=>'.$posnic_order_id.','."\n";
@@ -409,6 +422,8 @@ function search_items(){
                 $data=$data.'"posnic_expiry"=>'.$posnic_expiry.','."\n";
                 $posnic_barcode=$this->input->post('posnic_barcode')==1?1:0;
                 $data=$data.'"posnic_barcode"=>'.$posnic_barcode.','."\n";
+                $posnic_branch_code=$this->input->post('posnic_branch_code')==1?1:0;
+                $data=$data.'"posnic_branch_code"=>'.$posnic_branch_code.','."\n";
                 $posnic_branch_name=$this->input->post('posnic_branch_name')==1?1:0;
                 $data=$data.'"posnic_branch_name"=>'.$posnic_branch_name.','."\n";
                 $posnic_branch_address=$this->input->post('posnic_branch_address')==1?1:0;
@@ -420,9 +435,9 @@ function search_items(){
                 $posnic_branch_country=$this->input->post('posnic_branch_country')==1?1:0;
                 $data=$data.'"posnic_branch_country"=>'.$posnic_branch_country.','."\n";
                 $posnic_branch_pin=$this->input->post('posnic_branch_pin')==1?1:0;
-                $data=$data.'"posnic_branch_pin"=>'.$posnic_branch_pin.','."\n";
-                $posnic_posnic_branch_email=$this->input->post('posnic_posnic_branch_email')==1?1:0;
-                $data=$data.'"posnic_posnic_branch_email"=>'.$posnic_posnic_branch_email.','."\n";
+                $data=$data.'"posnic_branch_zip"=>'.$posnic_branch_pin.','."\n";
+                $posnic_branch_email=$this->input->post('posnic_branch_email')==1?1:0;
+                $data=$data.'"posnic_branch_email"=>'.$posnic_branch_email.','."\n";
                 $posnic_branch_phone=$this->input->post('posnic_branch_phone')==1?1:0;
                 $data=$data.'"posnic_branch_phone"=>'.$posnic_branch_phone.','."\n";
                 $posnic_supplier_name=$this->input->post('posnic_supplier_name')==1?1:0;
@@ -437,8 +452,8 @@ function search_items(){
                 $data=$data.'"posnic_supplier_state"=>'.$posnic_supplier_state.','."\n";
                 $posnic_supplier_country=$this->input->post('posnic_supplier_country')==1?1:0;
                 $data=$data.'"posnic_supplier_country"=>'.$posnic_supplier_country.','."\n";
-                $posnic_supplier_pin=$this->input->post('posnic_supplier_pin')==1?1:0;
-                $data=$data.'"posnic_supplier_pin"=>'.$posnic_supplier_pin.','."\n";
+                $posnic_supplier_zip=$this->input->post('posnic_supplier_zip')==1?1:0;
+                $data=$data.'"posnic_supplier_zip"=>'.$posnic_supplier_zip.','."\n";
                 $posnic_supplier_email=$this->input->post('posnic_supplier_email')==1?1:0;
                 $data=$data.'"posnic_supplier_email"=>'.$posnic_supplier_email.','."\n";
                 $posnic_supplier_phone=$this->input->post('posnic_supplier_phone')==1?1:0;

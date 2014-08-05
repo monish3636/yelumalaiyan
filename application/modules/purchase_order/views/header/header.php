@@ -511,16 +511,102 @@ function purchase_order_approve(guid){
             <?php
         }?>
     }
-    function purchase_order_invoice(){
-        $("#user_list").hide();
-        $('#add_new_order').hide();
-        $('#invoice_settings').hide();
-        $('#delete').attr("disabled", "disabled");
-        $('#posnic_add_purchase_order').attr("disabled", "disabled");
-        $('#active').attr("disabled", "disabled");
-        $('#deactive').attr("disabled", "disabled");
-        $('#purchase_order_lists').removeAttr("disabled");
-        $('#invoice_div').show();
+    function purchase_order_invoice(guid){
+        <?php
+        if($this->session->userdata['purchase_order_per']['print_invoice']==1){ ?>
+            $('#loading').modal('show');
+            $("#user_list").hide();
+            $('#add_new_order').hide();
+            $('#invoice_settings').hide();
+            $('#delete').attr("disabled", "disabled");
+            $('#posnic_add_purchase_order').attr("disabled", "disabled");
+            $('#active').attr("disabled", "disabled");
+            $('#deactive').attr("disabled", "disabled");
+            $('#purchase_order_lists').removeAttr("disabled");
+            $('#invoice_div').show();
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/purchase_order/get_invoice_settings_and_purchase_order/"+guid,                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                        if(data[1]['posnic_order_id']==1){
+                              $('#invoice_posnic_id').text('<?php echo $this->lang->line('invoice') ?> #'+data[0][0]['po_no'])
+                        }
+                        if(data[1]['posnic_number']==1){
+                              $('#invoice_posnic_number').text('<?php echo $this->lang->line('order') ?> '+data[0][0]['id'])
+                        }
+                        if(data[1]['posnic_date']==1){
+                              $('#invoice_posnic_date').html('<?php echo $this->lang->line('date') ?> : <span class="text-muted">'+data[0][0]['po_date']+'</span>');
+                        }
+                        if(data[1]['posnic_expiry']==1){
+                              $('#invoice_posnic_expiry_date').html('<?php echo $this->lang->line('expiry_date') ?> : <span class="text-muted">'+data[0][0]['exp_date']+'</span>')
+                        }
+                        if(data[1]['posnic_branch_code']==1){
+                              $('#invoice_posnic_branch_code').html(data[0][0]['branch_code'])
+                        }
+                        if(data[1]['posnic_branch_name']==1){
+                              $('#invoice_posnic_branch_name').html(data[0][0]['branch_name'])
+                        }
+                        if(data[1]['posnic_branch_name']==1){
+                              $('#invoice_posnic_branch_address').html(data[0][0]['branch_address'])
+                        }
+                        if(data[1]['posnic_branch_city']==1){
+                              $('#invoice_posnic_branch_city').html(data[0][0]['branch_city'])
+                        }
+                        if(data[1]['posnic_branch_state']==1){
+                              $('#invoice_posnic_branch_state').html(data[0][0]['branch_state'])
+                        }
+                        if(data[1]['posnic_branch_zip']==1){
+                              $('#invoice_posnic_branch_zip').html(data[0][0]['branch_zip'])
+                        }
+                        if(data[1]['posnic_branch_country']==1){
+                              $('#invoice_posnic_branch_country').html(data[0][0]['branch_country'])
+                        }
+                        if(data[1]['posnic_branch_phone']==1){
+                              $('#invoice_posnic_branch_phone').html(data[0][0]['branch_phone'])
+                        }
+                        if(data[1]['posnic_branch_email']==1){
+                              $('#invoice_posnic_branch_email').html(data[0][0]['branch_mail'])
+                        }
+                        
+                        
+                        if(data[1]['posnic_supplier_name']==1){
+                              $('#invoice_posnic_supplier_name').html(data[0][0]['s_name'])
+                        }
+                        if(data[1]['posnic_supplier_company']==1){
+                              $('#invoice_posnic_supplier_company').html(data[0][0]['c_name'])
+                        }
+                        if(data[1]['posnic_supplier_address']==1){
+                              $('#invoice_posnic_supplier_address').html(data[0][0]['address'])
+                        }
+                        if(data[1]['posnic_supplier_city']==1){
+                              $('#invoice_posnic_supplier_city').html(data[0][0]['supplier_city'])
+                        }
+                        if(data[1]['posnic_supplier_state']==1){
+                              $('#invoice_posnic_supplier_state').html(data[0][0]['supplier_state'])
+                        }
+                        if(data[1]['posnic_supplier_zip']==1){
+                              $('#invoice_posnic_supplier_zip').html(data[0][0]['supplier_zip'])
+                        }
+                        if(data[1]['posnic_supplier_state']==1){
+                              $('#invoice_posnic_supplier_country').html(data[0][0]['supplier_country'])
+                        }
+                        if(data[1]['posnic_supplier_email']==1){
+                              $('#invoice_posnic_supplier_email').html(data[0][0]['supplier_email'])
+                        }
+                        if(data[1]['posnic_supplier_phone']==1){
+                              $('#invoice_posnic_supplier_phone').html(data[0][0]['supplier_phone'])
+                        }
+                      
+                        $('#loading').modal('hide');
+                }
+            });
+            <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To_Print')." ".$this->lang->line('invoice');?>', { type: "error" });                       
+            <?php
+        }?>
     }
     function invoice_disable(){
         $('#first_name').select2('disable');

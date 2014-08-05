@@ -2022,10 +2022,10 @@
                             </div>
                             <div class="row invoice_top">
                                     <div class="col-sm-10">
-                                            <h2 class="heading_lg" id="invoice_posnic_id">Invoice #12023/12/R1</h2>
-                                            <h2 class="heading_lg_sub" id="invoice_posnic_order">Order  #16328</h2>
-                                            <p id="invoice_posnic_date">Date: <span class="text-muted">12/11/2013</span></p>
-                                            <p id="invoice_posnic_exiry_date">Due By: <span class="text-danger">26/11/2013</span></p>
+                                            <h3 class="heading_lg_sub" id="invoice_posnic_id"></h3>
+                                            <h3 class="heading_lg_sub" id="invoice_posnic_number"></h3>
+                                            <p id="invoice_posnic_date"></p>
+                                            <p id="invoice_posnic_expiry_date"></p>
                                     </div>
                                     <div class="col-sm-2">
                                             <div id="invoice_posnic_qrcode"></div>
@@ -2035,21 +2035,29 @@
                                     <div class="col-sm-6">
                                             <h3 class="heading_a"><?php echo $this->lang->line('from'); ?></h3>
                                             <address>
-                                                    <p class="addres_name" id="invoice_posnic_branch">Ebro Admin HQ</p>
-                                                    <p id="invoice_posnic_address1">Av Almozara, 79</p>
-                                                    <p id="invoice_posnic_address2">50003 Zaragoza</p>
-                                                    <p class="sepH_b"  id="invoice_pos_state">Spain</p>
-                                                    <p  id="invoice_posnic_phone"><small><span class="text-muted">Phone:</span> (+321) 123 456 789</small></p>
-                                                    <p  id="invoice_posnic_email"><small><span class="text-muted">E-mail:</span> <a href="mailto:example.com">ebro@example.com</a></small></p>
+                                                    <p  id="invoice_posnic_branch_code"></p>
+                                                    <p  ><small id="invoice_posnic_branch_name" class="text-muted "> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_address" class="text-muted"> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_city" class="text-muted "> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_state" class="text-muted"> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_zip" class="text-muted "> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_country" class="text-muted"> </small></p>
+                                                    <p  ><?php echo $this->lang->line('phone') ?>   :<small id="invoice_posnic_branch_phone" class="text-muted "> </small></p>
+                                                    <p  ><?php echo $this->lang->line('email') ?>   :<small id="invoice_posnic_branch_email" class="text-muted"> </small></p>
                                             </address>
                                     </div>
                                     <div class="col-sm-6">
-                                            <h3 class="heading_a">To</h3>
+                                            <h3 class="heading_a"><?php echo $this->lang->line('to'); ?></h3>
                                             <address>
-                                                    <p class="addres_name" id="invoice_posnic_supplier">Conn and Sons</p>
-                                                    <p  id="invoice_posnic_company">Raegan Springs 414</p>
-                                                    <p  id="invoice_posnic_address">55666 Tierratown</p>
-                                                    <p  id="invoice_posnic_country">Heaneymouth</p>
+                                                    <p  id="invoice_posnic_supplier_name" ></p>
+                                                    <p><small  id="invoice_posnic_supplier_company" class="text-muted "></small></p>
+                                                    <p><small   id="invoice_posnic_supplier_address" class="text-muted "></small></p>
+                                                    <p><small  id="invoice_posnic_supplier_city" class="text-muted "></small></p>
+                                                    <p><small  id="invoice_posnic_supplier_state" class="text-muted "></small></p>
+                                                    <p><small  id="invoice_posnic_supplier_zip" class="text-muted "></small></p>
+                                                    <p><small id="invoice_posnic_supplier_country" class="text-muted "></small></p>
+                                                    <p><?php echo $this->lang->line('phone') ?> :<small  id="invoice_posnic_supplier_phone" class="text-muted "></small></p>
+                                                    <p><?php echo $this->lang->line('email') ?> :<small  id="invoice_posnic_supplier_email" class="text-muted "></small></p>
                                             </address>
                                     </div>
                             </div>
@@ -2231,6 +2239,18 @@
                                     <div id="st_branch" class="tab-pane">
                                            <div class="col-sm-3">
                                             <div class="form-group">
+                                                <label for="posnic_branch_code" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('branch') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_code=array('name'=>'posnic_branch_code',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_code');
+                                                        echo form_checkbox($posnic_branch_code)?>
+                                                   
+                                             </div>
+                                        </div>
+                                           <div class="col-sm-3">
+                                            <div class="form-group">
                                                 <label for="posnic_branch_name" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('branch') ?></label>													
                                                      
                                                         <?php $posnic_branch_name=array('name'=>'posnic_branch_name',
@@ -2293,13 +2313,13 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_branch_pin" ><?php echo $this->lang->line('branch')." ". $this->lang->line('pin') ?></label>													
+                                                <label for="posnic_branch_zip" ><?php echo $this->lang->line('branch')." ". $this->lang->line('zip') ?></label>													
                                                      
-                                                        <?php $posnic_branch_pin=array('name'=>'posnic_branch_pin',
+                                                        <?php $posnic_branch_zip=array('name'=>'posnic_branch_zip',
                                                                                'class'=>' form-control ',
                                                                                 'value'=>1,
-                                                                               'id'=>'posnic_branch_pin');
-                                                        echo form_checkbox($posnic_branch_pin)?>
+                                                                               'id'=>'posnic_branch_zip');
+                                                        echo form_checkbox($posnic_branch_zip)?>
                                                  
                                              </div>
                                         </div>
@@ -2405,13 +2425,13 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_supplier_pin" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('pin') ?></label>													
+                                                <label for="posnic_supplier_zip" ><?php echo $this->lang->line('supplier')." ". $this->lang->line('pin') ?></label>													
                                                      
-                                                        <?php $posnic_supplier_pin=array('name'=>'posnic_supplier_pin',
+                                                        <?php $posnic_supplier_zip=array('name'=>'posnic_supplier_zip',
                                                                                'class'=>' form-control ',
                                                                                 'value'=>1,
-                                                                               'id'=>'posnic_supplier_pin');
-                                                        echo form_checkbox($posnic_supplier_pin)?>
+                                                                               'id'=>'posnic_supplier_zip');
+                                                        echo form_checkbox($posnic_supplier_zip)?>
                                                  
                                              </div>
                                         </div>
