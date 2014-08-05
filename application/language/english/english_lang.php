@@ -740,6 +740,7 @@ $lang['credit_days']='Credit Days';
     $lang['scan-items']='Scan Items';
     $lang['close']='Close';
     $lang['to']='To';
+    $lang['from']='From';
     $lang['net_total']='Net Total';
     $lang['total_tax']='Total Tax';
     $lang['scan']='Scan';
@@ -824,5 +825,6 @@ $lang['credit_days']='Credit Days';
     $lang['send_invoice_to_suppplier']='Send Invoice To supplier(Email)';
     $lang['message']='Message';
     $lang['saved']='Saved';
+    $lang['You_Have_NO_Permission_To_Print']='You Have NO Permission To Print';
    
 ?>
