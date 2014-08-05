@@ -35,9 +35,7 @@
         <script src="<?php echo base_url() ?>template/app/js/lib/typeahead.js/hogan-2.0.0.js"></script>
         <script src="<?php echo base_url() ?>template/app/js/tinynav.js"></script>
         <script src="<?php echo base_url() ?>template/app/js/lib/jQuery-slimScroll/jquery.slimscroll.min.js"></script>
-<script src="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.js"></script>
-<script src="http://localhost/posnic/template/app/js/lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<!--      //  <script src="<?php echo base_url() ?>template/app/js/lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>-->
+        <script src="<?php echo base_url() ?>template/app/js/lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>
         <script src="<?php echo base_url() ?>template/app/js/lib/navgoco/jquery.navgoco.min.js"></script>
         <script src="<?php echo base_url() ?>template/app/js/ebro_common.js"></script>
         <script src="<?php echo base_url() ?>template/app/js/lib/peity/jquery.peity.min.js"></script>
