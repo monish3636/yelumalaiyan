@@ -1,15 +1,8 @@
-<script type="text/javascript" charset="utf-8" language="javascript" src="http://ivaynberg.github.io/select2/select2-master/select2.js"></script>
 
 <script type="text/javascript" charset="utf-8">
     var point=3;
           $(document).ready( function () {
-                  //  $('#parru').wrap('<div class="make-switch" />').parent().bootstrapSwitch();
-                       //  $('#posnic_number').bootstrapSwitch('status');
-                        
-                  $('#toggle-state-switch-button-on').on('click', function () {
-            $('#parru').bootstrapSwitch('setState', true);
-            alert('jibi')
-        });
+                
         
    
 
@@ -521,6 +514,7 @@ function purchase_order_approve(guid){
     function purchase_order_invoice(){
         $("#user_list").hide();
         $('#add_new_order').hide();
+        $('#invoice_settings').hide();
         $('#delete').attr("disabled", "disabled");
         $('#posnic_add_purchase_order').attr("disabled", "disabled");
         $('#active').attr("disabled", "disabled");
@@ -532,6 +526,7 @@ function purchase_order_approve(guid){
         $('#first_name').select2('disable');
         $('#sacn_items').hide();
         $('#invoice_div').hide();
+        $('#invoice_settings').hide();
         $('#parsley_reg input').prop('disabled',true);
         $('#parsley_reg textarea').prop('disabled',true);
     }
@@ -546,6 +541,7 @@ function purchase_order_approve(guid){
         $('#first_name').select2('enable');
         $('#sacn_items').show();
         $('#invoice_div').hide();
+        $('#invoice_settings').hide();
         $('#parsley_reg input').prop('disabled',false);
         $('#parsley_reg textarea').prop('disabled',false);
     }
@@ -559,57 +555,48 @@ function purchase_order_approve(guid){
                 url: "<?php echo base_url('purchase_order/get_invoice_settings') ?>",                      
                 data: "", 
                 dataType: 'json',               
-                success: function(data)        
-                { 
-                    
-              $('#posnic_number').bootstrapSwitch('status'); // true || false
-
-                          //  $('#posnic_order_id < div').addClass('switch-off');
-                         //   $('#posnic_number').attr('checked','checked');
-                   
-                        if(data['posnic_order_id']==1){
-                        }
-//                        $('#posnic_order_id').val(), 
-//                        $('#posnic_number').val(), 
-//                        $('#posnic_date').val(),
-//                        $('#posnic_expiry').val(),
-//                        $('#posnic_barcode').val(),
-//                        $('#posnic_branch_name').val(),
-//                        $('#posnic_branch_address').val(),
-//                        $('#posnic_branch_city').val(),
-//                        $('#posnic_branch_state').val(),
-//                        $('#posnic_branch_country').val(),
-//                        $('#posnic_branch_pin').val(),
-//                        $('#posnic_posnic_branch_email').val(),
-//                        $('#posnic_branch_phone').val(),
-//                        $('#posnic_supplier_name').val(),
-//                        $('#posnic_supplier_company').val(),
-//                        $('#posnic_supplier_address').val(),
-//                        $('#posnic_supplier_city').val(),
-//                        $('#posnic_supplier_state').val(),
-//                        $('#posnic_supplier_country').val(),
-//                        $('#posnic_supplier_pin').val(),
-//                        $('#posnic_supplier_email').val(),
-//                        $('#posnic_supplier_phone').val(),
-//                        $('#posnic_item_name').val(),
-//                        $('#posnic_item_sku').val(),
-//                        $('#posnic_item_price').val(),
-//                        $('#posnic_item_tax1').val(),
-//                        $('#posnic_item_tax2').val(),
-//                        $('#posnic_item_discount1').val(),
-//                        $('#posnic_item_discount2').val(),
-//                        $('#posnic_item_subtotal').val(),
-//                        $('#posnic_purchase_order_subtotal').val(),
-//                        $('#posnic_inclusive_total_tax').val(),
-//                        $('#posnic_exclusive_total_tax').val(),
-//                        $('#posnic_total_item_discount').val(),
-//                        $('#posnic_discount').val(),
-//                        $('#posnic_frieght').val(),
-//                        $('#posnic_round_off_amount').val(),
-//                        $('#posnic_grand_total').val(),
-//                        $('#posnic_supplier_mail').val(),
-//                        $('#posnic_message').val(),
-                    
+                success: function(data) {
+                    data['posnic_order_id']==1?$('#posnic_order_id').attr('checked','checked'):$('#posnic_order_id').removeAttr('checked'); 
+                    data['posnic_number']==1?$('#posnic_number').attr('checked','checked'):$('#posnic_number').removeAttr('checked'); 
+                    data['posnic_date']==1?$('#posnic_date').attr('checked','checked'):$('#posnic_date').removeAttr('checked');
+                    data['posnic_expiry']==1?$('#posnic_expiry').attr('checked','checked'):$('#posnic_expiry').removeAttr('checked');
+                    data['posnic_barcode']==1?$('#posnic_barcode').attr('checked','checked'):$('#posnic_barcode').removeAttr('checked');
+                    data['posnic_branch_name']==1?$('#posnic_branch_name').attr('checked','checked'):$('#posnic_branch_name').removeAttr('checked');
+                    data['posnic_branch_address']==1?$('#posnic_branch_address').attr('checked','checked'):$('#posnic_branch_address').removeAttr('checked');
+                    data['posnic_branch_city']==1?$('#posnic_branch_city').attr('checked','checked'):$('#posnic_branch_city').removeAttr('checked');
+                    data['posnic_branch_state']==1?$('#posnic_branch_state').attr('checked','checked'):$('#posnic_branch_state').removeAttr('checked');
+                    data['posnic_branch_country']==1?$('#posnic_branch_country').attr('checked','checked'):$('#posnic_branch_country').removeAttr('checked');
+                    data['posnic_branch_pin']==1?$('#posnic_branch_pin').attr('checked','checked'):$('#posnic_branch_pin').removeAttr('checked');
+                    data['posnic_posnic_branch_email']==1?$('#posnic_posnic_branch_email').attr('checked','checked'):$('#posnic_posnic_branch_email').removeAttr('checked');
+                    data['posnic_branch_phone']==1?$('#posnic_branch_phone').attr('checked','checked'):$('#posnic_branch_phone').removeAttr('checked');
+                    data['posnic_supplier_name']==1?$('#posnic_supplier_name').attr('checked','checked'):$('#posnic_supplier_name').removeAttr('checked');
+                    data['posnic_supplier_company']==1?$('#posnic_supplier_company').attr('checked','checked'):$('#posnic_supplier_company').removeAttr('checked');
+                    data['posnic_supplier_address']==1?$('#posnic_supplier_address').attr('checked','checked'):$('#posnic_supplier_address').removeAttr('checked');
+                    data['posnic_supplier_city']==1?$('#posnic_supplier_city').attr('checked','checked'):$('#posnic_supplier_city').removeAttr('checked');
+                    data['posnic_supplier_state']==1?$('#posnic_supplier_state').attr('checked','checked'):$('#posnic_supplier_state').removeAttr('checked');
+                    data['posnic_supplier_country']==1?$('#posnic_supplier_country').attr('checked','checked'):$('#posnic_supplier_country').removeAttr('checked');
+                    data['posnic_supplier_pin']==1?$('#posnic_supplier_pin').attr('checked','checked'):$('#posnic_supplier_pin').removeAttr('checked');
+                    data['posnic_supplier_email']==1?$('#posnic_supplier_email').attr('checked','checked'):$('#posnic_supplier_email').removeAttr('checked');
+                    data['posnic_supplier_phone']==1?$('#posnic_supplier_phone').attr('checked','checked'):$('#posnic_supplier_phone').removeAttr('checked');
+                    data['posnic_item_name']==1?$('#posnic_item_name').attr('checked','checked'):$('#posnic_item_name').removeAttr('checked');
+                    data['posnic_item_sku']==1?$('#posnic_item_sku').attr('checked','checked'):$('#posnic_item_sku').removeAttr('checked');
+                    data['posnic_item_price']==1?$('#posnic_item_price').attr('checked','checked'):$('#posnic_item_price').removeAttr('checked');
+                    data['posnic_item_tax1']==1?$('#posnic_item_tax1').attr('checked','checked'):$('#posnic_item_tax1').removeAttr('checked');
+                    data['posnic_item_tax2']==1?$('#posnic_item_tax2').attr('checked','checked'):$('#posnic_item_tax2').removeAttr('checked');
+                    data['posnic_item_discount1']==1?$('#posnic_item_discount1').attr('checked','checked'):$('#posnic_item_discount1').removeAttr('checked');
+                    data['posnic_item_discount2']==1?$('#posnic_item_discount2').attr('checked','checked'):$('#posnic_item_discount2').removeAttr('checked');
+                    data['posnic_item_subtotal']==1?$('#posnic_item_subtotal').attr('checked','checked'):$('#posnic_item_subtotal').removeAttr('checked');
+                    data['posnic_purchase_order_subtotal']==1?$('#posnic_purchase_order_subtotal').attr('checked','checked'):$('#posnic_purchase_order_subtotal').removeAttr('checked');
+                    data['posnic_inclusive_total_tax']==1?$('#posnic_inclusive_total_tax').attr('checked','checked'):$('#posnic_inclusive_total_tax').removeAttr('checked');
+                    data['posnic_exclusive_total_tax']==1?$('#posnic_exclusive_total_tax').attr('checked','checked'):$('#posnic_exclusive_total_tax').removeAttr('checked');
+                    data['posnic_total_item_discount']==1?$('#posnic_total_item_discount').attr('checked','checked'):$('#posnic_total_item_discount').removeAttr('checked');
+                    data['posnic_discount']==1?$('#posnic_discount').attr('checked','checked'):$('#posnic_discount').removeAttr('checked');
+                    data['posnic_frieght']==1?$('#posnic_frieght').attr('checked','checked'):$('#posnic_frieght').removeAttr('checked');
+                    data['posnic_round_off_amount']==1?$('#posnic_round_off_amount').attr('checked','checked'):$('#posnic_round_off_amount').removeAttr('checked');
+                    data['posnic_grand_total']==1?$('#posnic_grand_total').attr('checked','checked'):$('#posnic_grand_total').removeAttr('checked');
+                    data['posnic_supplier_mail']==1?$('#posnic_supplier_mail').attr('checked','checked'):$('#posnic_supplier_mail').removeAttr('checked');
+                    $('#posnic_message').val(data['posnic_message']);
+                      $('#loading').modal('hide');
                 }
                 
             });
@@ -622,7 +609,7 @@ function purchase_order_approve(guid){
     function save_invoice_settings(){
         <?php
         if($this->session->userdata['purchase_order_per']['invoice_setting']==1){ ?>
-            
+              $('#loading').modal('show');
                     var inputs = $('#settings_form').serialize();
                     $.ajax ({
                         url: "<?php echo base_url('index.php/purchase_order/save_invoice_settings')?>",
@@ -630,8 +617,10 @@ function purchase_order_approve(guid){
                         type:'POST',
                         complete: function(response) {
                             if(response['responseText']=='TRUE'){
-                                $.bootstrapGrowl('<?php echo $this->lang->line('invoice_setting').' '.$this->lang->line('saved');?>', { type: "success" });                                                                                  
-                              
+                                $.bootstrapGrowl('<?php echo $this->lang->line('invoice_settings').' '.$this->lang->line('saved');?>', { type: "success" });                                                                                  
+                                $('#invoice_settings').hide();
+                                $('#loading').modal('hide');
+                                $('#invoice_div').show('slow');
                             }else{
                                 $.bootstrapGrowl('<?php echo $this->lang->line('you_have_no_permission_to_update')." ".$this->lang->line('invoice_settings'); ?>', { type: "error" });          
                             }
