@@ -424,7 +424,10 @@
     </div>
 </nav>
 <nav id="mobile_navigation"></nav>
-              
+               <div id="toggle-state-switch" class="make-switch">
+<input type="checkbox" >
+</div>
+                                            <div id="toggle-state-switch-button-on" class="btn btn-success">ON!</div>
 <section class="container clearfix main_section">
         <div id="main_content_outer" class="clearfix">
             <div id="main_content">
@@ -2173,10 +2176,12 @@
                                                          <?php $posnic_order_id=array('name'=>'posnic_order_id',
                                                                                'class'=>' form-control ',
                                                                                 'value'=>1,
+                                                             
                                                                                'id'=>'posnic_order_id');
                                                                 echo form_checkbox($posnic_order_id)?>
                                                    </div>
                                              </div>
+                                           
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group ">
@@ -2185,6 +2190,7 @@
                                                          <?php $posnic_number=array('name'=>'posnic_number',
                                                                                'class'=>' form-control ',
                                                                'value'=>1,
+                                                             'checked'=>'',
                                                                                'id'=>'posnic_number');
                                                                 echo form_checkbox($posnic_number)?>
                                                    </div>
