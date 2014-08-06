@@ -22,6 +22,7 @@ class Posnic{
           if(!isset($this->CI->session->userdata['guid'])){
              redirect('home');
         }
+        $this->CI->session->set_flashdata('barcode_type','Code39');
     }
    
     function posnic_result_array($value){

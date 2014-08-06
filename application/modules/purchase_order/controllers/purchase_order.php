@@ -12,7 +12,7 @@ class Purchase_order extends CI_Controller{
         $this->load->view('index',$data);
         $this->load->view('template/app/navigation',$this->posnic->modules());
         $this->load->view('template/app/footer');
-        
+       // $this->create_barocde('jibi1',1542)     ;
     }
     // purchase order data table
     function data_table(){
@@ -157,14 +157,10 @@ function save(){
                 $tax=  $this->input->post('new_item_tax');
                 $per2=  $this->input->post('new_item_discount_per2');
                 $dis2=  $this->input->post('new_item_discount2');
-                $tax2=  $this->input->post('new_item_tax2');
-           
-                for($i=0;$i<count($item);$i++){
-              
+                $tax2=  $this->input->post('new_item_tax2');           
+                for($i=0;$i<count($item);$i++){              
                         $item_value=array('order_id'=>$guid,'discount_per'=>$per[$i],'discount_amount'=>$dis[$i],'tax'=>$tax[$i],'discount_per2'=>$per2[$i],'discount_amount2'=>$dis2[$i],'tax2'=>$tax2[$i],'item'=>$item[$i],'quty'=>$quty[$i],'free'=>$free[$i],'cost'=>$cost[$i],'sell'=>$sell[$i],'mrp'=>$mrp[$i],'amount'=>$net[$i]);
                         $this->posnic->posnic_add_record($item_value,'purchase_items');
-                
-                        
                 }
                 $this->posnic->posnic_master_increment_max('purchase_order')  ;
                  echo 'TRUE';
@@ -516,6 +512,14 @@ function search_items(){
                 $this->config->load("settings");
                 $this->session->set_flashdata('purchase_order_invoice', $this->config->item('invoice'));
                 echo 'TRUE';
+    }
+    function create_barocde($name,$val){
+        $this->load->library('zend');
+        $this->zend->load('Zend/Barcode');
+        $type= $this->session->flashdata('barcode_type');
+        $test = Zend_Barcode::draw($type, 'image', array('text' => "$val"), array());        
+        var_dump($test);
+        imagejpeg($test, 'uploads/barcode/purchase_order/'.$name.".jpg", 100);
     }
 }
 ?>
