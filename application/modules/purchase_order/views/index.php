@@ -2086,7 +2086,7 @@
                             </div>
                             <div class="row">
                                     <div class="col-sm-12">
-                                            <div class="invoice_info" id="invoice_posnic_order_text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt ducimus ex quam fuga dolor. Deleniti sapiente ipsam mollitia blanditiis dolorem saepe amet fugit. Nostrum incidunt impedit officia illum ipsa eius?</div>
+                                            <div class="invoice_info" id="invoice_posnic_order_text"></div>
                                     </div>
                             </div>
 </div>
@@ -2183,7 +2183,7 @@
                                     <div id="st_branch" class="tab-pane">
                                            <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_branch_code" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('branch') ?></label>													
+                                                <label for="posnic_branch_code" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('branch')." ". $this->lang->line('code') ?></label>													
                                                      
                                                         <?php $posnic_branch_code=array('name'=>'posnic_branch_code',
                                                                                'class'=>' form-control ',
@@ -2195,7 +2195,7 @@
                                         </div>
                                            <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_branch_name" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('branch') ?></label>													
+                                                <label for="posnic_branch_name" ><?php echo $this->lang->line('purchase_order')." ". $this->lang->line('branch')." ". $this->lang->line('name') ?></label>													
                                                      
                                                         <?php $posnic_branch_name=array('name'=>'posnic_branch_name',
                                                                                'class'=>' form-control ',

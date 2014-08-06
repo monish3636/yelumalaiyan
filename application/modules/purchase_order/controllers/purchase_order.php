@@ -442,7 +442,7 @@ function search_items(){
                 $data=$data.'"posnic_branch_state"=>'.$posnic_branch_state.','."\n";
                 $posnic_branch_country=$this->input->post('posnic_branch_country')==1?1:0;
                 $data=$data.'"posnic_branch_country"=>'.$posnic_branch_country.','."\n";
-                $posnic_branch_pin=$this->input->post('posnic_branch_pin')==1?1:0;
+                $posnic_branch_pin=$this->input->post('posnic_branch_zip')==1?1:0;
                 $data=$data.'"posnic_branch_zip"=>'.$posnic_branch_pin.','."\n";
                 $posnic_branch_email=$this->input->post('posnic_branch_email')==1?1:0;
                 $data=$data.'"posnic_branch_email"=>'.$posnic_branch_email.','."\n";
@@ -474,8 +474,8 @@ function search_items(){
                 $data=$data.'"posnic_item_price"=>'.$posnic_item_price.','."\n";
                 $posnic_item_selling_price=$this->input->post('posnic_item_selling_price')==1?1:0;
                 $data=$data.'"posnic_item_selling_price"=>'.$posnic_item_selling_price.','."\n";
-                $posnic_item_rmp=$this->input->post('posnic_item_rmp')==1?1:0;
-                $data=$data.'"posnic_item_rmp"=>'.$posnic_item_rmp.','."\n";
+                $posnic_item_mrp=$this->input->post('posnic_item_mrp')==1?1:0;
+                $data=$data.'"posnic_item_mrp"=>'.$posnic_item_mrp.','."\n";
                 $posnic_item_quantity=$this->input->post('posnic_item_quantity')==1?1:0;
                 $data=$data.'"posnic_item_quantity"=>'.$posnic_item_quantity.','."\n";
                 $posnic_item_free_quantity=$this->input->post('posnic_item_free_quantity')==1?1:0;

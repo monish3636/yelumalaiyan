@@ -524,6 +524,7 @@ function purchase_order_approve(guid){
             $('#deactive').attr("disabled", "disabled");
             $('#purchase_order_lists').removeAttr("disabled");
             $('#invoice_div').show();
+            $('#purchase_order_guid').val(guid);
             $.ajax({                                      
                 url: "<?php echo base_url() ?>index.php/purchase_order/get_invoice_settings_and_purchase_order/"+guid,                      
                 data: "", 
@@ -600,8 +601,9 @@ function purchase_order_approve(guid){
                         }
                        $('#invoice_posnic_table thead').remove();
                        $('#invoice_posnic_table tbody').remove();
+                       $('#invoice_posnic_table tfoot').remove();
                         
-                     $('#invoice_posnic_table').append('<thead/><tbody/>');
+                     $('#invoice_posnic_table').append('<thead/><tbody/><tfoot/>');
                         $('#invoice_posnic_table thead').append('<tr id="posnic_table_head"><td><?php echo $this->lang->line('no') ?></td></tr>');
                         if(data[1]['posnic_item_name']==1){
                             $('#posnic_table_head').append('<td id="posnic_table_head_td2"><?php echo $this->lang->line('name') ?></td>');
@@ -637,11 +639,18 @@ function purchase_order_approve(guid){
                             $('#posnic_table_head').append('<td id="posnic_table_head_td9"><?php echo $this->lang->line('discount') ?> 2</td>');
                         }
                         if(data[1]['posnic_item_subtotal']==1){
-                            $('#posnic_table_head').append('<td id="posnic_table_head_td10"><?php echo $this->lang->line('sub_total') ?> </td>');
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td10" class="text-right"><?php echo $this->lang->line('sub_total') ?> </td>');
                         }
                         
                         $('#invoice_posnic_order_text').html(data[1]['posnic_message']);
-                        
+                        var total_inclusive_tax=0;
+                        var total_exclusive_tax=0;
+                        var total_item_discount=0;
+                        var purchase_order_discount=0;                        
+                        var purchase_order_frieght=0;                        
+                        var purchase_order_round_off_amount=0;                        
+                        var purchase_order_sub_total=0;                        
+                        var purchase_order_grand=0;                        
                         for(var i=0;i<data[0].length;i++){
                             var  quty=data[0][i]['quty'];
                             var  free=data[0][i]['free'];                                   
@@ -656,21 +665,28 @@ function purchase_order_approve(guid){
                             var per2=data[0][i]['dis_per2'];                                   
                            
                             var tax=data[0][i]['order_tax'];  
+                          
                             if(data[0][i]['tax_Inclusive']==0){                                                                          
-                                 total=(parseFloat(tax)+parseFloat(total));
-                              
+                                total=(parseFloat(tax)+parseFloat(total));
+                                total_exclusive_tax=parseFloat(total_exclusive_tax)+parseFloat(tax);
+                            }else{
+                                total_inclusive_tax=parseFloat(total_inclusive_tax)+parseFloat(tax);
                             }
                           
                             var tax2=data[0][i]['order_tax2'];  
                             if(data[0][i]['tax_inclusive2']==0){                                                                          
-                                 total=(parseFloat(tax2)+parseFloat(total));
-                              
+                                total=(parseFloat(tax2)+parseFloat(total));
+                                total_exclusive_tax=parseFloat(total_exclusive_tax)+parseFloat(tax2);
+                            }else{
+                                total_inclusive_tax=parseFloat(total_inclusive_tax)+parseFloat(tax2);
                             }
                             if(per!="" && per!=0){
                                 discount=parseFloat(total)*parseFloat(per)/100;
+                                total_item_discount=parseFloat(total_item_discount)+parseFloat(discount);
                             }
                             if(per2!="" && per2!=0){
                                 discount2=(parseFloat(total)-parseFloat(discount))*parseFloat(per2)/100;
+                                total_item_discount=parseFloat(total_item_discount)+parseFloat(discount2);
                             }
                             var total_discount=parseFloat(discount)+parseFloat(discount2);
                             total=parseFloat(total)-parseFloat(total_discount);
@@ -680,6 +696,7 @@ function purchase_order_approve(guid){
                             total=num.toFixed(point);
                             var num = parseFloat(subtotal);
                             subtotal=num.toFixed(point);
+                            purchase_order_sub_total=parseFloat(purchase_order_sub_total)+parseFloat(total);
                              $('#invoice_posnic_table tbody').append('<tr id="posnic_table_body'+i+'"><td>'+parseInt(i+1)+'</td></tr>');
                             if(data[1]['posnic_item_name']==1){
                                 $('#posnic_table_body'+i).append('<td id="posnic_table_head_td2">'+data[0][i]['items_name']+'</td>');
@@ -715,13 +732,74 @@ function purchase_order_approve(guid){
                                 $('#posnic_table_body'+i).append('<td id="posnic_table_head_td9">'+discount2+'</td>');
                             }
                             if(data[1]['posnic_item_subtotal']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td10">'+total+' </td>');
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td10" class="text-right">'+total+' </td>');
                             }
                         }
                         
+                        if(data[1]['posnic_purchase_order_subtotal']==1){
+                            var num = parseFloat(purchase_order_sub_total);
+                            purchase_order_sub_total=num.toFixed(point);
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot1" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot1').append('<td ><?php echo $this->lang->line('sub_total') ?> </td>');
+                            $('#posnic_table_tfoot1').append('<td class="text-right">'+purchase_order_sub_total+' </td>');                            
+                        }
+                        if(data[1]['posnic_inclusive_total_tax']==1){
+                            var num = parseFloat(total_inclusive_tax);
+                            total_inclusive_tax=num.toFixed(point);
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot2" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot2').append('<td ><?php echo $this->lang->line('total')." ".$this->lang->line('inclusive_tax') ?> </td>');
+                            $('#posnic_table_tfoot2').append('<td class="text-right">'+total_inclusive_tax+' </td>');                            
+                        }
+                        if(data[1]['posnic_exclusive_total_tax']==1){
+                            var num = parseFloat(total_exclusive_tax);
+                            total_exclusive_tax=num.toFixed(point);
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot3" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot3').append('<td ><?php echo $this->lang->line('total')." ".$this->lang->line('inclusive_tax') ?> </td>');
+                            $('#posnic_table_tfoot3').append('<td class="text-right">'+total_exclusive_tax+' </td>');                            
+                        }
+                        if(data[1]['posnic_total_item_discount']==1){
+                            var num = parseFloat(total_item_discount);
+                            total_item_discount=num.toFixed(point);
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot4" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot4').append('<td ><?php echo $this->lang->line('total')." ".$this->lang->line('item_discount') ?> </td>');
+                            $('#posnic_table_tfoot4').append('<td class="text-right">'+total_item_discount+' </td>');                            
+                        }
+                        if(data[1]['posnic_discount']==1){
+                            var value=data[0][0]['discount_amt'];
+                            var num = parseFloat(value);
+                            value=num.toFixed(point);
+                            if(isNaN(parseFloat(value))) value=0;
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot5" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot5').append('<td ><?php echo $this->lang->line('order')." ".$this->lang->line('discount') ?> </td>');
+                            $('#posnic_table_tfoot5').append('<td class="text-right">'+value+' </td>');                            
+                        }
+                        if(data[1]['posnic_frieght']==1){                            
+                            var value=data[0][0]['freight'];
+                            var num = parseFloat(value);
+                            value=num.toFixed(point);
+                            if(isNaN(parseFloat(value))) value=0;
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot6" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot6').append('<td ><?php echo $this->lang->line('freight')." ".$this->lang->line('amount') ?> </td>');
+                            $('#posnic_table_tfoot6').append('<td class="text-right">'+value+' </td>');                            
+                        }
+                        if(data[1]['posnic_round_off_amount']==1){
+                                                       
+                            var value=data[0][0]['round_amt'];
+                            var num = parseFloat(value);
+                            value=num.toFixed(point);
+                            if(isNaN(parseFloat(value))) value=0;
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot7" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot7').append('<td ><?php echo $this->lang->line('round_off_amount') ?> </td>');
+                            $('#posnic_table_tfoot7').append('<td class="text-right">'+value+' </td>');                            
+                        }
+                        if(data[1]['posnic_grand_total']==1){
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot8" ><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot8').append('<td ><?php echo $this->lang->line('grand_total') ?> </td>');
+                            $('#posnic_table_tfoot8').append('<td class="text-right">'+data[0][0]['total_amt']+' </td>');                            
+                        }
                         
-                        $('#my_love').append('<td>gopi</td>');
-                      
+                        
+                        
                         $('#loading').modal('hide');
                 }
             });
@@ -770,6 +848,7 @@ function purchase_order_approve(guid){
                     data['posnic_date']==1?$('#posnic_date').attr('checked','checked'):$('#posnic_date').removeAttr('checked');
                     data['posnic_expiry']==1?$('#posnic_expiry').attr('checked','checked'):$('#posnic_expiry').removeAttr('checked');
                     data['posnic_barcode']==1?$('#posnic_barcode').attr('checked','checked'):$('#posnic_barcode').removeAttr('checked');
+                    data['posnic_branch_code']==1?$('#posnic_branch_code').attr('checked','checked'):$('#posnic_branch_code').removeAttr('checked');
                     data['posnic_branch_name']==1?$('#posnic_branch_name').attr('checked','checked'):$('#posnic_branch_name').removeAttr('checked');
                     data['posnic_branch_address']==1?$('#posnic_branch_address').attr('checked','checked'):$('#posnic_branch_address').removeAttr('checked');
                     data['posnic_branch_city']==1?$('#posnic_branch_city').attr('checked','checked'):$('#posnic_branch_city').removeAttr('checked');
@@ -831,9 +910,12 @@ function purchase_order_approve(guid){
                         complete: function(response) {
                             if(response['responseText']=='TRUE'){
                                 $.bootstrapGrowl('<?php echo $this->lang->line('invoice_settings').' '.$this->lang->line('saved');?>', { type: "success" });                                                                                  
+                               
                                 $('#invoice_settings').hide();
-                                $('#loading').modal('hide');
+                               
                                 $('#invoice_div').show('slow');
+                                purchase_order_invoice($('#purchase_order_guid').val());
+                                $('#loading').hide();
                             }else{
                                 $.bootstrapGrowl('<?php echo $this->lang->line('you_have_no_permission_to_update')." ".$this->lang->line('invoice_settings'); ?>', { type: "error" });          
                             }
