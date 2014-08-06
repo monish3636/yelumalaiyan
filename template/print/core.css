@@ -30,6 +30,10 @@ p{
 .text-muted {
     color: #999;
 }
+.item-row td{
+    font-size: 10px;
+    
+}
 
 h1 {
 	font-size: 28px;
