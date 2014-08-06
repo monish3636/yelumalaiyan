@@ -43,8 +43,15 @@ h2 {
 	font-size: 21px;
 	font-style: italic;
 }
+.table tfoot > tr > td {
+    border-top: none;
+}
+.grand-total {
+    border-top:2px solid #666666 !important
+}
 table thead{
     font-size:12px;
+     border-bottom: 2px solid #666666;
 }
 table tbody{
     font-size:10px;

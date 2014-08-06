@@ -365,6 +365,8 @@ function purchase_order_approve(guid){
                 success: function(data)        
                 { 
                     invoice_disable();
+                    $("#update_button").hide();
+                    $("#update_clear").hide();
                     $("#user_list").hide();
                     $('#add_new_order').show('slow');
                     $('#delete').attr("disabled", "disabled");
@@ -544,7 +546,7 @@ function purchase_order_approve(guid){
                               $('#invoice_posnic_expiry_date').html('<?php echo $this->lang->line('expiry_date') ?> : <span class="text-muted">'+data[0][0]['exp_date']+'</span>')
                         }
                         if(data[1]['posnic_branch_code']==1){
-                              $('#invoice_posnic_branch_code').html(data[0][0]['branch_code']);
+                           //   $('#invoice_posnic_branch_code').html(data[0][0]['branch_code']);
                         }
                         if(data[1]['posnic_branch_name']==1){
                               $('#invoice_posnic_branch_name').html(data[0][0]['branch_name']);
@@ -794,8 +796,8 @@ function purchase_order_approve(guid){
                         }
                         if(data[1]['posnic_grand_total']==1){
                             $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot8" ><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
-                            $('#posnic_table_tfoot8').append('<td ><?php echo $this->lang->line('grand_total') ?> </td>');
-                            $('#posnic_table_tfoot8').append('<td class="text-right">'+data[0][0]['total_amt']+' </td>');                            
+                            $('#posnic_table_tfoot8').append('<td class="grand-total" ><?php echo $this->lang->line('grand_total') ?> </td>');
+                            $('#posnic_table_tfoot8').append('<td class="text-right grand-total">'+data[0][0]['total_amt']+' </td>');                            
                         }
                         
                         
@@ -950,11 +952,11 @@ function purchase_order_approve(guid){
 //                                    e.preventDefault();
 //                                    $('body').addClass('printable');
 //                                    setTimeout(function() {
-//                                            $("#invoice_div").printElement()
+//                                           window.print();
 //                                    },1000)
-//                                    	var container = $(this).attr('rel');
-                                         
-                                    //});
+                                    	
+                                        
+                                // });
                                      var divContents = $("#invoice_content").html();
                                 var printWindow = window.open('', '', 'height=auto,width=auto');
                                 printWindow.document.write('<html><head><title>POSNIC</title>');
@@ -966,7 +968,7 @@ function purchase_order_approve(guid){
                                 printWindow.document.write('</body></html>');
                                 printWindow.document.close();
                                 printWindow.print();
-                               // printWindow.close();
+                                printWindow.close();
                             })
                     }
             }
