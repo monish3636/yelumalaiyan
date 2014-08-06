@@ -484,7 +484,8 @@ $lang['credit_days']='Credit Days';
   $lang['waiting']='Waiting';
   // Goods_receiving_note
   $lang['goods_receiving_note']='G R N';
-  $lang['grn_no']='G R N No';
+  $lang['grn_no']='GRN No';
+  $lang['grn_id']='GRN ID';
   $lang['grn_date']='G R N Date';
   $lang['received_quty']='Rec Quty';
   $lang['ordered_quty']='Ord Quty';
@@ -825,6 +826,13 @@ $lang['credit_days']='Credit Days';
     $lang['send_invoice_to_suppplier']='Send Invoice To supplier(Email)';
     $lang['message']='Message';
     $lang['saved']='Saved';
+    $lang['received_quantity']='Received Quantity';
+    $lang['received_free']='Received Free';
+    $lang['ordered_quantity']='Ordered Quantity';
+    $lang['ordered_free']='Ordered Free';
+    $lang['grn-order']='GRN No';
+    $lang['grn-date']='GRN Date';
+    $lang['po-date']='PO Date';
     $lang['You_Have_NO_Permission_To_Print']='You Have NO Permission To Print';
    
 ?>
