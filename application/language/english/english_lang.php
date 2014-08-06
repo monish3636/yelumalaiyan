@@ -833,6 +833,8 @@ $lang['credit_days']='Credit Days';
     $lang['grn-order']='GRN No';
     $lang['grn-date']='GRN Date';
     $lang['po-date']='PO Date';
+    $lang['direct_grn_number']='Direct GRN No';
+    $lang['direct_grn_id']='Direct GRN Id';
     $lang['You_Have_NO_Permission_To_Print']='You Have NO Permission To Print';
    
 ?>
