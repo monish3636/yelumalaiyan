@@ -2038,7 +2038,7 @@
                                     <div class="col-sm-3">
                                          <br>
                                          <br>
-                                        <div id="invoice_posnic_qrcode"></div>
+                                        <div id="invoice_posnic_qrcode1"></div>
                                     </div>
                                     <div class="col-sm-3">
                                             <h3 class="heading_a"><?php echo $this->lang->line('branch'); ?></h3>
