@@ -2009,7 +2009,7 @@
     <?php echo form_close();?>
 </section> 
 <section class="container clearfix main_section" id="invoice_div" style="display: none">
-            <div id="main_content_outer" class="clearfix">
+            <div id="main_content_outer " class="clearfix">
                     <div id="main_content">
 
                             <!-- main content -->
@@ -2020,20 +2020,28 @@
                                             <a href="javascript:void(0)" class="btn btn-default btn-lg" id="invoice_print"><span class="glyphicon glyphicon-print sepV_b"></span><?php  echo $this->lang->line('print_invoice') ?></a>
                                     </div>
                             </div>
-                            <div class="row invoice_top">
-                                    <div class="col-sm-10">
-                                            <h3 class="heading_lg_sub" id="invoice_posnic_id"></h3>
-                                            <h3 class="heading_lg_sub" id="invoice_posnic_number"></h3>
-                                            <p id="invoice_posnic_date"></p>
-                                            <p id="invoice_posnic_expiry_date"></p>
-                                    </div>
-                                    <div class="col-sm-2">
-                                            <div id="invoice_posnic_qrcode"></div>
-                                    </div>
-                            </div>
+                            <div id="invoice_content">
+                           
                             <div class="row">
-                                    <div class="col-sm-6">
-                                            <h3 class="heading_a"><?php echo $this->lang->line('from'); ?></h3>
+                                    <div class="col-sm-3">
+                                            <h3 class="heading_a"><?php echo $this->lang->line('invoice'); ?></h3>
+                                            <address>
+                                                   
+                                                    <p id="invoice_posnic_id"></p>
+                                                    <p  id="invoice_posnic_number"></p>
+                                                    <p id="invoice_posnic_date"></p>
+                                                    <p id="invoice_posnic_expiry_date"></p>
+                                                   
+                                                     
+                                            </address>
+                                    </div>
+                                    <div class="col-sm-3">
+                                         <br>
+                                         <br>
+                                        <div id="invoice_posnic_qrcode"></div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                            <h3 class="heading_a"><?php echo $this->lang->line('branch'); ?></h3>
                                             <address>
                                                     <p  id="invoice_posnic_branch_code"></p>
                                                     <p  ><small id="invoice_posnic_branch_name" class="text-muted "> </small></p>
@@ -2046,8 +2054,8 @@
                                                     <p  ><?php echo $this->lang->line('email') ?>   :<small id="invoice_posnic_branch_email" class="text-muted"> </small></p>
                                             </address>
                                     </div>
-                                    <div class="col-sm-6">
-                                            <h3 class="heading_a"><?php echo $this->lang->line('to'); ?></h3>
+                                    <div class="col-sm-3">
+                                            <h3 class="heading_a"><?php echo $this->lang->line('supplier'); ?></h3>
                                             <address>
                                                     <p  id="invoice_posnic_supplier_name" ></p>
                                                     <p><small  id="invoice_posnic_supplier_company" class="text-muted "></small></p>
@@ -2065,87 +2073,23 @@
                                     <div class="col-sm-12">
                                             <table class="table table-striped" id="invoice_posnic_table">
                                                     <thead>
-                                                            <tr>
-                                                                    <th>Product</th>
-                                                                    <th>Sku</th>
-                                                                    <th>Price</th>
-                                                                    <th>Qty</th>
-                                                                    <th>Tax</th>
-                                                                    <th class="text-right">Subtotal</th>
-                                                            </tr>
+                                                            
                                                     </thead>
                                                     <tbody>
-                                                            <tr>
-                                                                    <td>Digital Camera</td>
-                                                                    <td>dc_1</td>
-                                                                    <td>$641.27</td>
-                                                                    <td>1</td>
-                                                                    <td>$26.00</td>
-                                                                    <td class="text-right">$641.27</td>
-                                                            </tr>
-                                                            <tr>
-                                                                    <td>Android Phone</td>
-                                                                    <td>jb_4</td>
-                                                                    <td>$320.00</td>
-                                                                    <td>1</td>
-                                                                    <td>$12.00</td>
-                                                                    <td class="text-right">$320.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                    <td>Home Theater System</td>
-                                                                    <td>ht_sys</td>
-                                                                    <td>$1247.00</td>
-                                                                    <td>1</td>
-                                                                    <td>$62.00</td>
-                                                                    <td class="text-right">$1247.00</td>
-                                                            </tr>
+                                                          
                                                     </tbody>
                                                     <tfoot>
-                                                            <tr>
-                                                                    <td colspan="4"></td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_sub_total">Subtotal</td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_sub_total_value"><strong>$2394.27</strong></td>
-                                                            </tr>
-                                                            <tr>
-                                                                    <td colspan="4"></td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_tax">Tax</td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_tax_value"><strong>$126.00</strong></td>
-                                                            </tr>
-                                                            <tr>
-                                                                    <td colspan="4"></td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_item_discount">Discount</td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_item_discount_amount"><strong>$126.00</strong></td>
-                                                            </tr>
-                                                            <tr>
-                                                                    <td colspan="4"></td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_freight">Shipping</td>
-                                                                    <td class="col_total text-right"  id="invoice_posnic_freight_amount"><strong>$21.49</strong></td>
-                                                            </tr>
-                                                            <tr>
-                                                                    <td colspan="4"></td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_round_off_amount">Shipping</td>
-                                                                    <td class="col_total text-right"  id="invoice_posnic_round_off_amount_amount"><strong>$21.49</strong></td>
-                                                            </tr>
-                                                            <tr>
-                                                                    <td colspan="4"></td>
-                                                                    <td class="col_total text-right" id="invoice_posnic_order_discount">Shipping</td>
-                                                                    <td class="col_total text-right"  id="invoice_posnic_order_discount_amount"><strong>$21.49</strong></td>
-                                                            </tr>
-                                                            <tr class="grand_total">
-                                                                    <td colspan="4"></td>
-                                                                    <td class="col_total text-right"  id="invoice_posnic_order_grand">Grand Total</td>
-                                                                    <td class="col_total text-right"  id="invoice_posnic_order_grand_amount"><strong>$2639.99</strong></td>
-                                                            </tr>
+                                                     
                                                     </tfoot>
                                             </table>
                                     </div>
                             </div>
                             <div class="row">
                                     <div class="col-sm-12">
-                                            <div class="invoice_info" id="invoice_posnic_order_grand_amount_text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt ducimus ex quam fuga dolor. Deleniti sapiente ipsam mollitia blanditiis dolorem saepe amet fugit. Nostrum incidunt impedit officia illum ipsa eius?</div>
+                                            <div class="invoice_info" id="invoice_posnic_order_text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt ducimus ex quam fuga dolor. Deleniti sapiente ipsam mollitia blanditiis dolorem saepe amet fugit. Nostrum incidunt impedit officia illum ipsa eius?</div>
                                     </div>
                             </div>
-
+</div>
                     </div>
             </div>
     </section>
@@ -2325,13 +2269,13 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_posnic_branch_email" ><?php echo $this->lang->line('branch')." ". $this->lang->line('email') ?></label>													
+                                                <label for="posnic_branch_email" ><?php echo $this->lang->line('branch')." ". $this->lang->line('email') ?></label>													
                                                      
-                                                        <?php $posnic_posnic_branch_email=array('name'=>'posnic_posnic_branch_email',
+                                                        <?php $posnic_branch_email=array('name'=>'posnic_branch_email',
                                                                                'class'=>' form-control ',
                                                                                 'value'=>1,
-                                                                               'id'=>'posnic_posnic_branch_email');
-                                                        echo form_checkbox($posnic_posnic_branch_email)?>
+                                                                               'id'=>'posnic_branch_email');
+                                                        echo form_checkbox($posnic_branch_email)?>
                                                   
                                              </div>
                                         </div>
@@ -2487,13 +2431,61 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_item_price" ><?php echo $this->lang->line('item')." ". $this->lang->line('price') ?></label>													
+                                                <label for="posnic_item_selling_price" ><?php echo $this->lang->line('item')." ". $this->lang->line('selling_price') ?></label>													
+                                                     
+                                                        <?php $posnic_item_selling_price=array('name'=>'posnic_item_selling_price',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_selling_price');
+                                                        echo form_checkbox($posnic_item_selling_price)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_mrp" ><?php echo $this->lang->line('item')." ". $this->lang->line('mrp') ?></label>													
+                                                     
+                                                        <?php $posnic_item_mrp=array('name'=>'posnic_item_mrp',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_mrp');
+                                                        echo form_checkbox($posnic_item_mrp)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_price" ><?php echo $this->lang->line('item')." ". $this->lang->line('cost') ?></label>													
                                                      
                                                         <?php $posnic_item_price=array('name'=>'posnic_item_price',
                                                                                'class'=>' form-control ',
                                                                                 'value'=>1,
                                                                                'id'=>'posnic_item_price');
                                                         echo form_checkbox($posnic_item_price)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_quantity" ><?php echo $this->lang->line('item')." ". $this->lang->line('quantity') ?></label>													
+                                                     
+                                                        <?php $posnic_item_quantity=array('name'=>'posnic_item_quantity',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_quantity');
+                                                        echo form_checkbox($posnic_item_quantity)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_free_quantity" ><?php echo $this->lang->line('item')." ". $this->lang->line('free') ?></label>													
+                                                     
+                                                        <?php $posnic_item_free_quantity=array('name'=>'posnic_item_free_quantity',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_free_quantity');
+                                                        echo form_checkbox($posnic_item_free_quantity)?>
                                                    
                                              </div>
                                         </div>
