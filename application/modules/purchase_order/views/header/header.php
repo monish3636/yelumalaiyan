@@ -531,10 +531,10 @@ function purchase_order_approve(guid){
                 success: function(data)        
                 { 
                         if(data[1]['posnic_order_id']==1){
-                              $('#invoice_posnic_id').text('<?php echo $this->lang->line('invoice') ?> #'+data[0][0]['po_no'])
+                              $('#invoice_posnic_id').html(data[0][0]['po_no'])
                         }
                         if(data[1]['posnic_number']==1){
-                              $('#invoice_posnic_number').text('<?php echo $this->lang->line('order') ?> '+data[0][0]['id'])
+                              $('#invoice_posnic_number').html('<?php echo $this->lang->line('order') ?> <span class="text-muted "> #'+data[0][0]['id']+'</span>')
                         }
                         if(data[1]['posnic_date']==1){
                               $('#invoice_posnic_date').html('<?php echo $this->lang->line('date') ?> : <span class="text-muted">'+data[0][0]['po_date']+'</span>');
@@ -543,61 +543,184 @@ function purchase_order_approve(guid){
                               $('#invoice_posnic_expiry_date').html('<?php echo $this->lang->line('expiry_date') ?> : <span class="text-muted">'+data[0][0]['exp_date']+'</span>')
                         }
                         if(data[1]['posnic_branch_code']==1){
-                              $('#invoice_posnic_branch_code').html(data[0][0]['branch_code'])
+                              $('#invoice_posnic_branch_code').html(data[0][0]['branch_code']);
                         }
                         if(data[1]['posnic_branch_name']==1){
-                              $('#invoice_posnic_branch_name').html(data[0][0]['branch_name'])
+                              $('#invoice_posnic_branch_name').html(data[0][0]['branch_name']);
                         }
                         if(data[1]['posnic_branch_name']==1){
-                              $('#invoice_posnic_branch_address').html(data[0][0]['branch_address'])
+                              $('#invoice_posnic_branch_address').html(data[0][0]['branch_address']);
                         }
                         if(data[1]['posnic_branch_city']==1){
-                              $('#invoice_posnic_branch_city').html(data[0][0]['branch_city'])
+                              $('#invoice_posnic_branch_city').html(data[0][0]['branch_city']);
                         }
                         if(data[1]['posnic_branch_state']==1){
-                              $('#invoice_posnic_branch_state').html(data[0][0]['branch_state'])
+                              $('#invoice_posnic_branch_state').html(data[0][0]['branch_state']);
                         }
                         if(data[1]['posnic_branch_zip']==1){
-                              $('#invoice_posnic_branch_zip').html(data[0][0]['branch_zip'])
+                              $('#invoice_posnic_branch_zip').html(data[0][0]['branch_zip']);
                         }
                         if(data[1]['posnic_branch_country']==1){
-                              $('#invoice_posnic_branch_country').html(data[0][0]['branch_country'])
+                              $('#invoice_posnic_branch_country').html(data[0][0]['branch_country']);
                         }
                         if(data[1]['posnic_branch_phone']==1){
-                              $('#invoice_posnic_branch_phone').html(data[0][0]['branch_phone'])
+                              $('#invoice_posnic_branch_phone').html(data[0][0]['branch_phone']);
                         }
                         if(data[1]['posnic_branch_email']==1){
-                              $('#invoice_posnic_branch_email').html(data[0][0]['branch_mail'])
+                              $('#invoice_posnic_branch_email').html(data[0][0]['branch_mail']);
                         }
                         
                         
                         if(data[1]['posnic_supplier_name']==1){
-                              $('#invoice_posnic_supplier_name').html(data[0][0]['s_name'])
+                              $('#invoice_posnic_supplier_name').html(data[0][0]['s_name']);
                         }
                         if(data[1]['posnic_supplier_company']==1){
-                              $('#invoice_posnic_supplier_company').html(data[0][0]['c_name'])
+                              $('#invoice_posnic_supplier_company').html(data[0][0]['c_name']);
                         }
                         if(data[1]['posnic_supplier_address']==1){
-                              $('#invoice_posnic_supplier_address').html(data[0][0]['address'])
+                              $('#invoice_posnic_supplier_address').html(data[0][0]['address']);
                         }
                         if(data[1]['posnic_supplier_city']==1){
-                              $('#invoice_posnic_supplier_city').html(data[0][0]['supplier_city'])
+                              $('#invoice_posnic_supplier_city').html(data[0][0]['supplier_city']);
                         }
                         if(data[1]['posnic_supplier_state']==1){
-                              $('#invoice_posnic_supplier_state').html(data[0][0]['supplier_state'])
+                              $('#invoice_posnic_supplier_state').html(data[0][0]['supplier_state']);
                         }
                         if(data[1]['posnic_supplier_zip']==1){
-                              $('#invoice_posnic_supplier_zip').html(data[0][0]['supplier_zip'])
+                              $('#invoice_posnic_supplier_zip').html(data[0][0]['supplier_zip']);
                         }
                         if(data[1]['posnic_supplier_state']==1){
-                              $('#invoice_posnic_supplier_country').html(data[0][0]['supplier_country'])
+                              $('#invoice_posnic_supplier_country').html(data[0][0]['supplier_country']);
                         }
                         if(data[1]['posnic_supplier_email']==1){
-                              $('#invoice_posnic_supplier_email').html(data[0][0]['supplier_email'])
+                              $('#invoice_posnic_supplier_email').html(data[0][0]['supplier_email']);
                         }
                         if(data[1]['posnic_supplier_phone']==1){
-                              $('#invoice_posnic_supplier_phone').html(data[0][0]['supplier_phone'])
+                              $('#invoice_posnic_supplier_phone').html(data[0][0]['supplier_phone']);
                         }
+                       $('#invoice_posnic_table thead').remove();
+                       $('#invoice_posnic_table tbody').remove();
+                        
+                     $('#invoice_posnic_table').append('<thead/><tbody/>');
+                        $('#invoice_posnic_table thead').append('<tr id="posnic_table_head"><td><?php echo $this->lang->line('no') ?></td></tr>');
+                        if(data[1]['posnic_item_name']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td2"><?php echo $this->lang->line('name') ?></td>');
+                        }
+                        if(data[1]['posnic_item_sku']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td3"><?php echo $this->lang->line('sku') ?></td>');
+                        }
+                        if(data[1]['posnic_item_selling_price']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td4"><?php echo $this->lang->line('selling_price') ?></td>');
+                        }
+                        if(data[1]['posnic_item_mrp']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td4"><?php echo $this->lang->line('mrp') ?></td>');
+                        }
+                        if(data[1]['posnic_item_price']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td4"><?php echo $this->lang->line('cost') ?></td>');
+                        }
+                        if(data[1]['posnic_item_quantity']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td5"><?php echo $this->lang->line('quantity') ?></td>');
+                        }
+                        if(data[1]['posnic_item_free_quantity']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td5"><?php echo $this->lang->line('free') ?></td>');
+                        }
+                        if(data[1]['posnic_item_tax1']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td6"><?php echo $this->lang->line('tax') ?> 1</td>');
+                        }
+                        if(data[1]['posnic_item_tax2']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td7"><?php echo $this->lang->line('tax') ?> 2</td>');
+                        }
+                        if(data[1]['posnic_item_discount1']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td8"><?php echo $this->lang->line('discount') ?> 1</td>');
+                        }
+                        if(data[1]['posnic_item_discount2']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td9"><?php echo $this->lang->line('discount') ?> 2</td>');
+                        }
+                        if(data[1]['posnic_item_subtotal']==1){
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td10"><?php echo $this->lang->line('sub_total') ?> </td>');
+                        }
+                        
+                        $('#invoice_posnic_order_text').html(data[1]['posnic_message']);
+                        
+                        for(var i=0;i<data[0].length;i++){
+                            var  quty=data[0][i]['quty'];
+                            var  free=data[0][i]['free'];                                   
+                            var  cost=data[0][i]['cost'];
+                            var  selling_price=data[0][i]['sell'];
+                            var  mrp=data[0][i]['mrp'];
+                            var total=parseFloat(quty)*parseFloat(cost);
+                            var subtotal=parseFloat(quty)*parseFloat(cost);
+                            var discount=data[0][i]['item_dis_amt'];
+                            var discount2=data[0][i]['item_dis_amt2'];
+                            var per=data[0][i]['dis_per'];
+                            var per2=data[0][i]['dis_per2'];                                   
+                           
+                            var tax=data[0][i]['order_tax'];  
+                            if(data[0][i]['tax_Inclusive']==0){                                                                          
+                                 total=(parseFloat(tax)+parseFloat(total));
+                              
+                            }
+                          
+                            var tax2=data[0][i]['order_tax2'];  
+                            if(data[0][i]['tax_inclusive2']==0){                                                                          
+                                 total=(parseFloat(tax2)+parseFloat(total));
+                              
+                            }
+                            if(per!="" && per!=0){
+                                discount=parseFloat(total)*parseFloat(per)/100;
+                            }
+                            if(per2!="" && per2!=0){
+                                discount2=(parseFloat(total)-parseFloat(discount))*parseFloat(per2)/100;
+                            }
+                            var total_discount=parseFloat(discount)+parseFloat(discount2);
+                            total=parseFloat(total)-parseFloat(total_discount);
+                            var num = parseFloat(total_discount);
+                            total_discount=num.toFixed(point);
+                            var num = parseFloat(total);
+                            total=num.toFixed(point);
+                            var num = parseFloat(subtotal);
+                            subtotal=num.toFixed(point);
+                             $('#invoice_posnic_table tbody').append('<tr id="posnic_table_body'+i+'"><td>'+parseInt(i+1)+'</td></tr>');
+                            if(data[1]['posnic_item_name']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td2">'+data[0][i]['items_name']+'</td>');
+                            }
+                            if(data[1]['posnic_item_sku']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td3">'+data[0][i]['i_code']+'</td>');
+                            }
+                            if(data[1]['posnic_item_selling_price']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td4">'+selling_price+'</td>');
+                            }
+                            if(data[1]['posnic_item_mrp']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td4">'+mrp+'</td>');
+                            }
+                            if(data[1]['posnic_item_price']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td4">'+cost+'</td>');
+                            }
+                            if(data[1]['posnic_item_quantity']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td5">'+quty+'</td>');
+                            }
+                            if(data[1]['posnic_item_free_quantity']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td5">'+free+'</td>');
+                            }
+                            if(data[1]['posnic_item_tax1']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td6">'+data[0][i]['order_tax']+'</td>');
+                            }
+                            if(data[1]['posnic_item_tax2']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td7">'+data[0][i]['order_tax2']+'</td>');
+                            }
+                            if(data[1]['posnic_item_discount1']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td8">'+discount+'</td>');
+                            }
+                            if(data[1]['posnic_item_discount2']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td9">'+discount2+'</td>');
+                            }
+                            if(data[1]['posnic_item_subtotal']==1){
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td10">'+total+' </td>');
+                            }
+                        }
+                        
+                        
+                        $('#my_love').append('<td>gopi</td>');
                       
                         $('#loading').modal('hide');
                 }
@@ -652,8 +775,8 @@ function purchase_order_approve(guid){
                     data['posnic_branch_city']==1?$('#posnic_branch_city').attr('checked','checked'):$('#posnic_branch_city').removeAttr('checked');
                     data['posnic_branch_state']==1?$('#posnic_branch_state').attr('checked','checked'):$('#posnic_branch_state').removeAttr('checked');
                     data['posnic_branch_country']==1?$('#posnic_branch_country').attr('checked','checked'):$('#posnic_branch_country').removeAttr('checked');
-                    data['posnic_branch_pin']==1?$('#posnic_branch_pin').attr('checked','checked'):$('#posnic_branch_pin').removeAttr('checked');
-                    data['posnic_posnic_branch_email']==1?$('#posnic_posnic_branch_email').attr('checked','checked'):$('#posnic_posnic_branch_email').removeAttr('checked');
+                    data['posnic_branch_zip']==1?$('#posnic_branch_zip').attr('checked','checked'):$('#posnic_branch_zip').removeAttr('checked');
+                    data['posnic_branch_email']==1?$('#posnic_branch_email').attr('checked','checked'):$('#posnic_branch_email').removeAttr('checked');
                     data['posnic_branch_phone']==1?$('#posnic_branch_phone').attr('checked','checked'):$('#posnic_branch_phone').removeAttr('checked');
                     data['posnic_supplier_name']==1?$('#posnic_supplier_name').attr('checked','checked'):$('#posnic_supplier_name').removeAttr('checked');
                     data['posnic_supplier_company']==1?$('#posnic_supplier_company').attr('checked','checked'):$('#posnic_supplier_company').removeAttr('checked');
@@ -661,14 +784,18 @@ function purchase_order_approve(guid){
                     data['posnic_supplier_city']==1?$('#posnic_supplier_city').attr('checked','checked'):$('#posnic_supplier_city').removeAttr('checked');
                     data['posnic_supplier_state']==1?$('#posnic_supplier_state').attr('checked','checked'):$('#posnic_supplier_state').removeAttr('checked');
                     data['posnic_supplier_country']==1?$('#posnic_supplier_country').attr('checked','checked'):$('#posnic_supplier_country').removeAttr('checked');
-                    data['posnic_supplier_pin']==1?$('#posnic_supplier_pin').attr('checked','checked'):$('#posnic_supplier_pin').removeAttr('checked');
+                    data['posnic_supplier_zip']==1?$('#posnic_supplier_zip').attr('checked','checked'):$('#posnic_supplier_zip').removeAttr('checked');
                     data['posnic_supplier_email']==1?$('#posnic_supplier_email').attr('checked','checked'):$('#posnic_supplier_email').removeAttr('checked');
                     data['posnic_supplier_phone']==1?$('#posnic_supplier_phone').attr('checked','checked'):$('#posnic_supplier_phone').removeAttr('checked');
                     data['posnic_item_name']==1?$('#posnic_item_name').attr('checked','checked'):$('#posnic_item_name').removeAttr('checked');
                     data['posnic_item_sku']==1?$('#posnic_item_sku').attr('checked','checked'):$('#posnic_item_sku').removeAttr('checked');
                     data['posnic_item_price']==1?$('#posnic_item_price').attr('checked','checked'):$('#posnic_item_price').removeAttr('checked');
+                    data['posnic_item_selling_price']==1?$('#posnic_item_selling_price').attr('checked','checked'):$('#posnic_item_selling_price').removeAttr('checked');
+                    data['posnic_item_mrp']==1?$('#posnic_item_mrp').attr('checked','checked'):$('#posnic_item_mrp').removeAttr('checked');
                     data['posnic_item_tax1']==1?$('#posnic_item_tax1').attr('checked','checked'):$('#posnic_item_tax1').removeAttr('checked');
                     data['posnic_item_tax2']==1?$('#posnic_item_tax2').attr('checked','checked'):$('#posnic_item_tax2').removeAttr('checked');
+                    data['posnic_item_quantity']==1?$('#posnic_item_quantity').attr('checked','checked'):$('#posnic_item_quantity').removeAttr('checked');
+                    data['posnic_item_free_quantity']==1?$('#posnic_item_free_quantity').attr('checked','checked'):$('#posnic_item_free_quantity').removeAttr('checked');
                     data['posnic_item_discount1']==1?$('#posnic_item_discount1').attr('checked','checked'):$('#posnic_item_discount1').removeAttr('checked');
                     data['posnic_item_discount2']==1?$('#posnic_item_discount2').attr('checked','checked'):$('#posnic_item_discount2').removeAttr('checked');
                     data['posnic_item_subtotal']==1?$('#posnic_item_subtotal').attr('checked','checked'):$('#posnic_item_subtotal').removeAttr('checked');
@@ -725,12 +852,12 @@ function purchase_order_approve(guid){
 	
     posnic_invoice = {
             init: function() {
-                    if($('#invoice_qrcode').length) {
+                    if($('#invoice_posnic_qrcode').length) {
                             var qr_base_size = '60',
                                     qr_text = 'posnic ',
                                     qr_size = isRetina() ? qr_base_size*2 : qr_base_size;
 
-                            $('#invoice_qrcode').qrcode({
+                            $('#invoice_posnic_qrcode').qrcode({
                                     render: 'image',
                                     size: qr_size,
                                     text: qr_text
@@ -738,11 +865,26 @@ function purchase_order_approve(guid){
                     }
                     if($('#invoice_print').length) {
                             $('#invoice_print').click(function(e) {
-                                    e.preventDefault();
-                                    $('body').addClass('printable');
-                                    setTimeout(function() {
-                                            window.print()
-                                    },1000)
+//                                    e.preventDefault();
+//                                    $('body').addClass('printable');
+//                                    setTimeout(function() {
+//                                            $("#invoice_div").printElement()
+//                                    },1000)
+//                                    	var container = $(this).attr('rel');
+                                         
+                                    //});
+                                     var divContents = $("#invoice_content").html();
+                                var printWindow = window.open('', '', 'height=auto,width=auto');
+                                printWindow.document.write('<html><head><title>POSNIC</title>');
+                                printWindow.document.write('<link rel="stylesheet" href="<?php echo base_url() ?>template/app/bootstrap/css/bootstrap.min.css">');
+                                printWindow.document.write('<link  rel="stylesheet" href="<?php echo base_url() ?>template/app/js/lib/dataTables/media/DT_bootstrap.css">');
+                                printWindow.document.write('<link  rel="stylesheet" href="<?php echo base_url() ?>template/print/core.css">');
+                                printWindow.document.write('</head><body >');
+                                printWindow.document.write(divContents);
+                                printWindow.document.write('</body></html>');
+                                printWindow.document.close();
+                                printWindow.print();
+                               // printWindow.close();
                             })
                     }
             }

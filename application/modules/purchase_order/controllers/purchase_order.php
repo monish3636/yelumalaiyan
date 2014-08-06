@@ -12,6 +12,7 @@ class Purchase_order extends CI_Controller{
         $this->load->view('index',$data);
         $this->load->view('template/app/navigation',$this->posnic->modules());
         $this->load->view('template/app/footer');
+        
     }
     // purchase order data table
     function data_table(){
@@ -366,9 +367,16 @@ function delete(){
         if($this->session->userdata['purchase_order_per']['print_invoice']==1){
         $this->load->model('purchase');
         $data[0]=  $this->purchase->purchase_order_invoice($guid); // get purchas eorder details
-        $this->config->load("settings"); // read setting config file
-        $data[1]=$this->config->item('invoice'); // get invoice array
-           
+         // read setting config file
+        if($this->session->flashdata('purchase_order_invoice')==""){
+            $this->config->load("settings");
+            $value=array();
+            $value=$this->config->item('invoice');
+            $this->session->set_flashdata('purchase_order_invoice',$value); 
+            $data[1]=$value; 
+        }else{        
+            $data[1]=$this->session->flashdata('purchase_order_invoice'); // get invoice array
+        }
         echo json_encode($data);
         }
     }
@@ -464,6 +472,14 @@ function search_items(){
                 $data=$data.'"posnic_item_sku"=>'.$posnic_item_sku.','."\n";
                 $posnic_item_price=$this->input->post('posnic_item_price')==1?1:0;
                 $data=$data.'"posnic_item_price"=>'.$posnic_item_price.','."\n";
+                $posnic_item_selling_price=$this->input->post('posnic_item_selling_price')==1?1:0;
+                $data=$data.'"posnic_item_selling_price"=>'.$posnic_item_selling_price.','."\n";
+                $posnic_item_rmp=$this->input->post('posnic_item_rmp')==1?1:0;
+                $data=$data.'"posnic_item_rmp"=>'.$posnic_item_rmp.','."\n";
+                $posnic_item_quantity=$this->input->post('posnic_item_quantity')==1?1:0;
+                $data=$data.'"posnic_item_quantity"=>'.$posnic_item_quantity.','."\n";
+                $posnic_item_free_quantity=$this->input->post('posnic_item_free_quantity')==1?1:0;
+                $data=$data.'"posnic_item_free_quantity"=>'.$posnic_item_free_quantity.','."\n";
                 $posnic_item_tax1=$this->input->post('posnic_item_tax1')==1?1:0;
                 $data=$data.'"posnic_item_tax1"=>'.$posnic_item_tax1.','."\n";
                 $posnic_item_tax2=$this->input->post('posnic_item_tax2')==1?1:0;
@@ -497,6 +513,8 @@ function search_items(){
                 $data=$data.');';                
                 $this->load->helper('file');
                 write_file('application/modules/purchase_order/config/settings.php', $data);
+                $this->config->load("settings");
+                $this->session->set_flashdata('purchase_order_invoice', $this->config->item('invoice'));
                 echo 'TRUE';
     }
 }

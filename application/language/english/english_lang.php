@@ -559,7 +559,7 @@ $lang['credit_days']='Credit Days';
   $lang['module']='Module';
   $lang['module_category_name']='Module Category Name';
   $lang['icon_class']='Icon Class';
-  $lang['order']='Order Number';
+  $lang['order']='Order';
   $lang['should_not_repeat_order_number']='Should Not Repeat Order Number';
   $lang['language']='Language';
   
