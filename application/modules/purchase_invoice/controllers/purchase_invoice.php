@@ -155,7 +155,7 @@ function save(){
         }
     }
     function  get_goods_receiving_note($guid){
-        if($this->session->userdata['purchase_order_per']['edit']==1){
+        if($this->session->userdata['purchase_invoice_per']['edit']==1){
         $this->load->model('invoice');
         $data=  $this->invoice->get_goods_receiving_note($guid);
         echo json_encode($data);
@@ -177,10 +177,17 @@ function save(){
             }
 
     }
-    function language($lang){
-       $lang= $this->lang->load($lang);
-       return $lang;
+      /* get purchase invoice 
+     function start     */
+    function  view_purchase_invoice($guid){
+        if($this->session->userdata['purchase_invoice_per']['view']==1){
+        $this->load->model('invoice');
+        $data=  $this->invoice->view_purchase_invoice($guid);
+        echo json_encode($data);
+        }
     }
+    /* function end*/
+  
     // get grn data
    
     }

@@ -751,7 +751,7 @@ function reload_update_user(){
                                                        
                                                   </div> 
                                                    <div class="form_sep porchase_order_for_grn" style="margin-top:0px">
-                                                         <label for="demo_order_number" ><?php echo $this->lang->line('order_number') ?></label>	
+                                                         <label for="demo_order_number" ><?php echo $this->lang->line('grn_no') ?></label>	
                                                          <input type="text" disabled="disabled" id="edit_grn_node" class='form-control'>
                                                    </div>
                                                </div>
@@ -933,8 +933,9 @@ function reload_update_user(){
                                             <th><?php echo $this->lang->line('quantity') ?></th>
                                             <th><?php echo $this->lang->line('free') ?></th>
                                             <th><?php echo $this->lang->line('sub_total') ?></th>
-                                            <th><?php echo $this->lang->line('tax') ?></th>
-                                            <th><?php echo $this->lang->line('discount') ?></th>
+                                            <th><?php echo $this->lang->line('tax') ?> 1</th>
+                                            <th><?php echo $this->lang->line('tax') ?> 2</th>
+                                            <th><?php echo $this->lang->line('discount') ?> </th>
                                             <th><?php echo $this->lang->line('total') ?></th>                                 
                                         </tr>
                                     </thead>
