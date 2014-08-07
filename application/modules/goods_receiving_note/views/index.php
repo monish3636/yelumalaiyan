@@ -255,9 +255,10 @@
              }
             total=total+item_total;
         }
+     
         var discount=0;        
         if($('#id_discount').val()=="" && $('#id_discount').val()==0){
-           discount=parseFloat(total)-parseFloat($('#discount_amount').val());
+           discount=parseFloat($('#discount_amount').val());
         }else{
             discount=(parseFloat(total)*parseFloat($('#id_discount').val()))/100;
             var discount = parseFloat(discount);
@@ -272,9 +273,9 @@
            round=0;
         if(isNaN(discount))
            discount=0;
-        $('#demo_total_amount').val(total);       
-        var total = parseFloat(total)+freight+round;
-        total=total.toFixed(point);    
+        $('#demo_total_amount').val(total);  
+        total = parseFloat(total)+freight+round;
+        total=total.toFixed(point); 
         $('#demo_grand_total').val(total-discount);
         var total = parseFloat($('#demo_grand_total').val());
         $('#demo_grand_total').val(total.toFixed(point));
