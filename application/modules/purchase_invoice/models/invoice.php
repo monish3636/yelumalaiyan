@@ -282,16 +282,80 @@ class Invoice extends CI_Model{
                 $row['freight']=$row['grn_freight'];
                 $row['round_amt']=$row['grn_round_amt'];
                 $row['total_item_amt']=$row['grn_total_item_amt'];
-                $row['total_amt']=$row['grn_total_amt'];
-               
+                $row['total_amt']=$row['grn_total_amt'];               
             }
                 $data[]=$row;
             }
+        return $data;
+    }
+    function purchase_invoice_invoice($guid){
+        $this->db->select('grn.guid as grn_guid,direct_invoice.guid as direct_invoice_guid,direct_invoice.discount_amt as direct_invoice_discount_amt,direct_invoice.discount as direct_invoice_discount,direct_invoice.freight as direct_invoice_freight,direct_invoice.round_amt as direct_invoice_round_amt,direct_invoice.total_amt as direct_invoice_total_amt,direct_invoice.total_item_amt as direct_invoice_total_item_amt,purchase_order.freight as grn_freight,purchase_order.round_amt as grn_round_amt ,purchase_order.discount as grn_discount,purchase_order.discount_amt as grn_discount_amt,grn.total_item_amt as grn_total_item_amt,grn.total_amt as grn_total_amt,direct_grn.guid as direct_grn_guid,direct_grn.discount as direct_grn_discount,direct_grn.discount_amt as direct_grn_discount_amt,direct_grn.freight as direct_grn_freight,direct_grn.round_amt as direct_grn_round_amt,direct_grn.total_amt as direct_grn_total_amt,direct_grn.total_item_amt as direct_grn_total_item_amt, direct_grn.grn_no as direct_grn_no,grn.grn_no,direct_grn.grn_date as direct_grn_date,direct_invoice.invoice_date as direct_invoice_date,grn.date as received_date,purchase_order.po_date,branches.code as branch_code,branches.store_name as branch_name,branches.address as branch_address,branches.city as branch_city,branches.state as branch_state,branches.zip as branch_zip ,branches.country as branch_country,branches.phone as branch_phone,branches.email as branch_mail,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,suppliers.email as supplier_email,suppliers.phone as supplier_phone,suppliers.city as supplier_city,suppliers.state as supplier_state,suppliers.zip as supplier_zip,suppliers.country as supplier_country,purchase_items.discount_per as dis_per ,purchase_items.discount_amount as item_dis_amt ,purchase_items.discount_amount2 as item_dis_amt2 ,purchase_items.tax2 as order_tax2 ,purchase_items.tax as order_tax,purchase_items.item ,purchase_items.quty ,purchase_items.free ,purchase_items.cost ,purchase_items.sell ,purchase_items.mrp,purchase_items.guid as o_i_guid ,purchase_items.amount ,purchase_items.date,items.guid as i_guid,items.name as items_name,items.code as i_code, items.tax_inclusive2,items.tax2_type,items.tax2_value,purchase_invoice.*,purchase_items.received_quty ,purchase_items.received_free ,purchase_items.discount_per2 as dis_per2');
+        $this->db->from('purchase_invoice')->where('purchase_invoice.guid',$guid);
+        $this->db->join('branches', "branches.guid = purchase_invoice.branch_id ",'left');
+        $this->db->join('direct_grn', 'direct_grn.guid=purchase_invoice.grn','left');
+        $this->db->join('direct_invoice', 'direct_invoice.guid=purchase_invoice.direct_invoice_id','left');
+        $this->db->join('purchase_order', 'purchase_order.guid=purchase_invoice.po','left');
+        $this->db->join('grn', 'grn.guid=purchase_invoice.grn','left');
+        $this->db->join('purchase_items', 'purchase_items.invoice_id = purchase_invoice.guid ','left');
+        $this->db->join('items', 'items.guid=purchase_items.item','left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_items.item  AND purchase_items.delete_status=0",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item  AND purchase_items.delete_status=0",'left');
+        $this->db->join('suppliers', 'suppliers.guid=purchase_invoice.supplier_id','left');
+         
+        $query=$this->db->get();
+        $data=array();
+        foreach ($query->result_array() as $row){
+            if($row['received_quty']!=0 && $row['received_quty']!=""){
+                $row['quty']=$row['received_quty'];
+            }
+            if($row['received_free']!=0 && $row['received_free']!=""){
+                $row['free']=$row['received_free'];
+            }
+            $row['date']=date('d-m-Y',$row['date']);
+            $row['received_date']=date('d-m-Y',$row['received_date']);
+            $row['po_date']=date('d-m-Y',$row['po_date']);
+            $row['direct_invoice_date']=date('d-m-Y',$row['direct_invoice_date']);
+            $row['direct_grn_date']=date('d-m-Y',$row['direct_grn_date']);
             
+            if($row['direct_invoice_date']!="" && $row['direct_invoice_date']!=0){
+                $row['received_date']=$row['received_date'];
+                $row['po_date']=$row['po_date'];
+            }
+            if($row['direct_grn_date']!="" && $row['direct_grn_date']!=0){
+                $row['received_date']=$row['direct_grn_date'];
+                $row['po_date']=$row['direct_grn_date'];
+            }
+            $row['grn_no']=$row['grn_no'];
+            if($row['direct_grn_no']!="" && $row['direct_grn_no']!=0){
+                $row['grn_no']=$row['direct_grn_no'];
+            }
             
-
-           
-
+            if($row['direct_invoice_guid']!="" && $row['direct_invoice_guid']!=0){
+                $row['discount']=$row['direct_invoice_discount'];
+                $row['discount_amt']=$row['direct_invoice_discount_amt'];
+                $row['freight']=$row['direct_invoice_freight'];
+                $row['round_amt']=$row['direct_invoice_round_amt'];
+                $row['total_item_amt']=$row['direct_invoice_total_item_amt'];
+                $row['total_amt']=$row['direct_invoice_total_amt'];
+            }
+            if($row['direct_grn_guid']!="" && $row['direct_grn_guid']!=0){
+                $row['discount']=$row['direct_grn_discount'];
+                $row['discount_amt']=$row['direct_grn_discount_amt'];
+                $row['freight']=$row['direct_grn_freight'];
+                $row['round_amt']=$row['direct_grn_round_amt'];
+                $row['total_item_amt']=$row['direct_grn_total_item_amt'];
+                $row['total_amt']=$row['direct_grn_total_amt'];
+            }
+            if($row['grn_guid']!=""){
+                $row['discount']=$row['grn_discount'];
+                $row['discount_amt']=$row['grn_discount_amt'];
+                $row['freight']=$row['grn_freight'];
+                $row['round_amt']=$row['grn_round_amt'];
+                $row['total_item_amt']=$row['grn_total_item_amt'];
+                $row['total_amt']=$row['grn_total_amt'];               
+            }
+                $data[]=$row;
+            }
         return $data;
     }
     
