@@ -823,7 +823,8 @@ $lang['credit_days']='Credit Days';
     $lang['pin']='Pin';
     $lang['inclusive_tax']='Inclusive Tax';
     $lang['exclusive_tax']='Exclusive Tax';
-    $lang['send_invoice_to_suppplier']='Send Invoice To supplier(Email)';
+    $lang['send_invoice_to_suppplier']='Send Invoice To Supplier(Email)';
+    $lang['send_invoice_to_customer']='Send Invoice To Customer(Email)';
     $lang['message']='Message';
     $lang['saved']='Saved';
     $lang['received_quantity']='Received Quantity';
@@ -835,6 +836,9 @@ $lang['credit_days']='Credit Days';
     $lang['po-date']='PO Date';
     $lang['direct_grn_number']='Direct GRN No';
     $lang['direct_grn_id']='Direct GRN Id';
+    $lang['customer']='Customer';
+    $lang['sales_quotation_number']='Sales Quotation No';
+    $lang['sales_quotation_id']='Sales Quotation Id';
     $lang['You_Have_NO_Permission_To_Print']='You Have NO Permission To Print';
    
 ?>

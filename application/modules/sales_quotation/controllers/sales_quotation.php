@@ -318,17 +318,29 @@ function order_number(){
  * search items to purchase order with or like 
  *  */
 
-function search_items(){
-    $search= $this->input->post('term');
-    $this->load->model('sales');
-    $data= $this->sales->search_items($search);      
-    echo json_encode($data);
-       
-        
-}
-function language($lang){
-       $lang= $this->lang->load($lang);
-       return $lang;
+    function search_items(){
+        $search= $this->input->post('term');
+        $this->load->model('sales');
+        $data= $this->sales->search_items($search);      
+        echo json_encode($data);
     }
+    function get_invoice_settings_and_sales_quotation($guid){
+        if($this->session->userdata['sales_quotation_per']['print_invoice']==1){
+            $this->load->model('sales');
+            $data[0]=  $this->sales->sales_quotation_invoice($guid); // get purchas eorder details
+             // read setting config file
+            if($this->session->flashdata('sales_quotation_invoice')==""){
+                $this->config->load("settings");
+                $value=array();
+                $value=$this->config->item('invoice');
+                $this->session->set_flashdata('sales_quotation_invoice',$value); 
+                $data[1]=$value; 
+            }else{        
+                $data[1]=$this->session->flashdata('sales_quotation_invoice'); // get invoice array
+            }
+            echo json_encode($data);
+        }
+    }
+
 }
 ?>
