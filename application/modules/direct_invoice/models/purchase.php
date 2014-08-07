@@ -70,6 +70,23 @@ class Purchase extends CI_Model{
          }
          return $data;
     }
+    function direct_invoice_invoice($guid){
+        $this->db->select('branches.code as branch_code,branches.store_name as branch_name,branches.address as branch_address,branches.city as branch_city,branches.state as branch_state,branches.zip as branch_zip ,branches.country as branch_country,branches.phone as branch_phone,branches.email as branch_mail,suppliers.email as supplier_email,suppliers.phone as supplier_phone,suppliers.city as supplier_city,suppliers.state as supplier_state,suppliers.zip as supplier_zip,suppliers.country as supplier_country,items.tax_inclusive2,items.tax2_type,items.tax2_value,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,suppliers_x_items.quty as item_limit,suppliers.guid as s_guid,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,direct_invoice.*,purchase_items.discount_per as dis_per ,purchase_items.discount_per2 as dis_per2 ,purchase_items.discount_amount as item_dis_amt ,purchase_items.discount_amount2 as item_dis_amt2 ,purchase_items.tax2 as order_tax2 ,purchase_items.tax as order_tax,purchase_items.item ,purchase_items.quty ,purchase_items.free ,purchase_items.cost ,purchase_items.sell ,purchase_items.mrp,purchase_items.guid as o_i_guid ,purchase_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_invoice')->where('direct_invoice.guid',$guid);
+        $this->db->join('purchase_items', 'purchase_items.order_id = direct_invoice.guid ','left');
+        $this->db->join('branches', "branches.guid = direct_invoice.branch_id ",'left');
+        $this->db->join('items', "items.guid=purchase_items.item AND purchase_items.order_id='".$guid."' ",'left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_items.item  ",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_items.item ",'left');
+        $this->db->join('suppliers', "suppliers.guid=direct_invoice.supplier_id AND purchase_items.order_id='".$guid."' ",'left');
+        $this->db->join('suppliers_x_items', "suppliers_x_items.supplier_id=direct_invoice.supplier_id AND suppliers_x_items.item_id=purchase_items.item AND purchase_items.order_id='".$guid."'  ",'left');
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){             
+            $row['invoice_date']=date('d-m-Y',$row['invoice_date']);         
+            $data[]=$row;
+        }
+         return $data;
+    }
     function delete_order_item($guid){      
           $this->db->where('guid',$guid);
           $this->db->delete('purchase_items');
