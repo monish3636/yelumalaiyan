@@ -571,7 +571,13 @@ function direct_grn_approve(guid){
                         }
                         if(data[1]['posnic_branch_name']==1){
                             $('#invoice_posnic_branch_name').show();
-                            $('#invoice_posnic_branch_name').html(data[0][0]['branch_address']);
+                            $('#invoice_posnic_branch_name').html(data[0][0]['branch_name']);
+                        }else{
+                            $('#invoice_posnic_branch_name').hide();
+                        }
+                         if(data[1]['posnic_branch_address']==1){
+                            $('#invoice_posnic_branch_address').show();
+                            $('#invoice_posnic_branch_address').html(data[0][0]['branch_address']);
                         }else{
                             $('#invoice_posnic_branch_name').hide();
                         }

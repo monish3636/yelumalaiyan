@@ -451,87 +451,169 @@
                 success: function(data)        
                 { 
                         if(data[1]['posnic_grn']==1){
+                            $('#invoice_posnic_grn_id').show();
                               $('#invoice_posnic_grn_id').html(data[0][0]['grn_no'])
+                        }else{
+                            $('#invoice_posnic_grn_id').hide();
                         }
                         
                         
                         if(data[1]['posnic_grn_no']==1){
+                            $('#invoice_grn_no').show();
                               $('#invoice_grn_no').html('<?php echo $this->lang->line('grn-order') ?> <span class="text-muted "> #'+data[0][0]['grn_id']+'</span>')
+                        }else{
+                            $('#invoice_grn_no').hide();
                         }
                         if(data[1]['posnic_grn_date']==1){
+                            $('#invoice_grn_date').show();
                               $('#invoice_grn_date').html('<?php echo $this->lang->line('grn-date') ?> : <span class="text-muted">'+data[0][0]['grn_date']+'</span>');
+                        }else{
+                            $('#invoice_grn_date').hide();
                         }
                         if(data[1]['posnic_order_id']==1){
+                            $('#invoice_posnic_po_id').show();
                               $('#invoice_posnic_po_id').html(data[0][0]['po_no'])
+                        }else{
+                            $('#invoice_posnic_po_id').hide();
                         }
                         
                         
                         if(data[1]['posnic_number']==1){
+                            $('#invoice_posnic_po_number').show();
                               $('#invoice_posnic_po_number').html('<?php echo $this->lang->line('order') ?> <span class="text-muted "> #'+data[0][0]['id']+'</span>')
+                        }else{
+                            $('#invoice_posnic_po_number').hide();
                         }
                         if(data[1]['posnic_date']==1){
+                            $('#invoice_posnic_date').show();
                               $('#invoice_posnic_date').html('<?php echo $this->lang->line('po-date') ?> : <span class="text-muted">'+data[0][0]['po_date']+'</span>');
+                        }else{
+                            $('#invoice_posnic_date').hide();
                         }
                         
                         
                         if(data[1]['posnic_expiry']==1){
                               $('#invoice_posnic_expiry_date').html('<?php echo $this->lang->line('expiry_date') ?> : <span class="text-muted">'+data[0][0]['exp_date']+'</span>')
+                        }else{
+                            $('#invoice_posnic_barcode').hide();
+                        }
+                         if(data[1]['posnic_barcode']==1){
+                            $('#invoice_posnic_barcode').show();
+                           //   $('#invoice_posnic_branch_code').html(data[0][0]['branch_code']);
+                        }else{
+                            $('#invoice_posnic_barcode').hide();
                         }
                         if(data[1]['posnic_branch_code']==1){
-                           //   $('#invoice_posnic_branch_code').html(data[0][0]['branch_code']);
+                            $('#invoice_posnic_branch_code').show();
+                            $('#invoice_posnic_branch_code').html(data[0][0]['branch_code']);
+                        }else{
+                            $('#invoice_posnic_branch_code').hide();
                         }
                         if(data[1]['posnic_branch_name']==1){
-                              $('#invoice_posnic_branch_name').html(data[0][0]['branch_name']);
+                            $('#invoice_posnic_branch_name').show();
+                            $('#invoice_posnic_branch_name').html(data[0][0]['branch_name']);
+                        }else{
+                            $('#invoice_posnic_branch_name').hide();
                         }
-                        if(data[1]['posnic_branch_name']==1){
-                              $('#invoice_posnic_branch_address').html(data[0][0]['branch_address']);
+                        if(data[1]['posnic_branch_address']==1){
+                            $('#invoice_posnic_branch_address').show();
+                            $('#invoice_posnic_branch_address').html(data[0][0]['branch_address']);
+                        }else{
+                            $('#invoice_posnic_branch_name').hide();
                         }
                         if(data[1]['posnic_branch_city']==1){
-                              $('#invoice_posnic_branch_city').html(data[0][0]['branch_city']);
+                            $('#invoice_posnic_branch_city').show();
+                            $('#invoice_posnic_branch_city').html(data[0][0]['branch_city']);
+                        }else{
+                            $('#invoice_posnic_branch_city').hide();
                         }
                         if(data[1]['posnic_branch_state']==1){
+                            $('#invoice_posnic_branch_state').show();
                               $('#invoice_posnic_branch_state').html(data[0][0]['branch_state']);
+                        }else{
+                            $('#invoice_posnic_branch_state').hide();
                         }
                         if(data[1]['posnic_branch_zip']==1){
+                            $('#invoice_posnic_branch_zip').show();
                               $('#invoice_posnic_branch_zip').html(data[0][0]['branch_zip']);
+                        }else{
+                            $('#invoice_posnic_branch_zip').hide();
                         }
                         if(data[1]['posnic_branch_country']==1){
-                              $('#invoice_posnic_branch_country').html(data[0][0]['branch_country']);
+                            $('#invoice_posnic_branch_country').show();
+                            $('#invoice_posnic_branch_country').html(data[0][0]['branch_country']);
+                        }else{
+                            $('#invoice_posnic_branch_country').hide();
                         }
                         if(data[1]['posnic_branch_phone']==1){
+                             $('#invoice_posnic_branch_phone').show();
                               $('#invoice_posnic_branch_phone').html(data[0][0]['branch_phone']);
+                        }else{
+                            $('#invoice_posnic_branch_phone').hide();
                         }
                         if(data[1]['posnic_branch_email']==1){
-                              $('#invoice_posnic_branch_email').html(data[0][0]['branch_mail']);
+                            $('#invoice_posnic_branch_email').show();
+                            $('#invoice_posnic_branch_email').html(data[0][0]['branch_mail']);
+                        }else{
+                            $('#invoice_posnic_branch_email').hide();
                         }
                         
                         
                         if(data[1]['posnic_supplier_name']==1){
-                              $('#invoice_posnic_supplier_name').html(data[0][0]['s_name']);
+                            $('#invoice_posnic_supplier_name').show();
+                            $('#invoice_posnic_supplier_name').html(data[0][0]['s_name']);
+                        }else{
+                            $('#invoice_posnic_supplier_name').hide();
                         }
                         if(data[1]['posnic_supplier_company']==1){
-                              $('#invoice_posnic_supplier_company').html(data[0][0]['c_name']);
+                            $('#invoice_posnic_supplier_company').show();
+                            $('#invoice_posnic_supplier_company').html(data[0][0]['c_name']);
+                        }else{
+                            $('#invoice_posnic_supplier_company').hide();
                         }
                         if(data[1]['posnic_supplier_address']==1){
-                              $('#invoice_posnic_supplier_address').html(data[0][0]['address']);
+                             $('#invoice_posnic_supplier_address').show();
+                            $('#invoice_posnic_supplier_address').html(data[0][0]['address']);
+                        }else{
+                            $('#invoice_posnic_supplier_address').hide();
                         }
                         if(data[1]['posnic_supplier_city']==1){
-                              $('#invoice_posnic_supplier_city').html(data[0][0]['supplier_city']);
+                            $('#invoice_posnic_supplier_city').show();
+                            $('#invoice_posnic_supplier_city').html(data[0][0]['supplier_city']);
+                        }
+                        else{
+                            $('#invoice_posnic_supplier_city').hide();
                         }
                         if(data[1]['posnic_supplier_state']==1){
+                             $('#invoice_posnic_supplier_state').show();
                               $('#invoice_posnic_supplier_state').html(data[0][0]['supplier_state']);
+                        }else{
+                            $('#invoice_posnic_supplier_state').hide();
                         }
                         if(data[1]['posnic_supplier_zip']==1){
+                             $('#invoice_posnic_supplier_zip').show();
                               $('#invoice_posnic_supplier_zip').html(data[0][0]['supplier_zip']);
+                        }else{
+                            $('#invoice_posnic_supplier_zip').hide();
                         }
-                        if(data[1]['posnic_supplier_state']==1){
+                        if(data[1]['posnic_supplier_country']==1){
+                             $('#invoice_posnic_supplier_country').show();
                               $('#invoice_posnic_supplier_country').html(data[0][0]['supplier_country']);
+                        }else{
+                            $('#invoice_posnic_supplier_country').hide();
                         }
                         if(data[1]['posnic_supplier_email']==1){
+                             $('#invoice_posnic_supplier_email').show();
                               $('#invoice_posnic_supplier_email').html(data[0][0]['supplier_email']);
+                        }else{
+                            $('#invoice_posnic_supplier_email').hide();
                         }
+                        
                         if(data[1]['posnic_supplier_phone']==1){
-                              $('#invoice_posnic_supplier_phone').html(data[0][0]['supplier_phone']);
+                            $('#invoice_posnic_supplier_phone').show();
+                            $('#invoice_posnic_supplier_phone').html(data[0][0]['supplier_phone']);
+                        }else{
+                            $('#invoice_posnic_supplier_phone').hide();
                         }
                        $('#invoice_posnic_table thead').remove();
                        $('#invoice_posnic_table tbody').remove();
