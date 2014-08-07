@@ -33,7 +33,7 @@
 "posnic_item_discount1"=>1,
 "posnic_item_discount2"=>1,
 "posnic_item_subtotal"=>1,
-"posnic_direct_invoice_subtotal"=>0,
+"posnic_purchase_invoice_subtotal"=>0,
 "posnic_inclusive_total_tax"=>1,
 "posnic_exclusive_total_tax"=>1,
 "posnic_total_item_discount"=>1,
