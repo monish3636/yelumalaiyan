@@ -1,4 +1,5 @@
 <style type="text/css">
+    .modal-backdrop {background: none;}
     .my_select{
          -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -27,9 +28,10 @@
    .item_select{
         width: 600px !important;
     }
-    table tr td {
-/*        width: 120px !important;*/
+    table{
+  width: 100% !important;
     }
+   
     .form-control{
          height: 24px;
    
@@ -351,6 +353,9 @@
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
+                                    var  tax_type2=data[i]['tax2_type'];
+                                    var  tax_value2=data[i]['tax2_value'];
+                                    var  tax_Inclusive2=data[i]['tax_inclusive2'];  
                                   
                                     var  free=data[i]['free'];
                                    
@@ -360,33 +365,38 @@
                                     var  o_i_guid=data[i]['o_i_guid'];
                                     var  date=data[i]['date'];
                                     var  items_id=data[i]['item'];
-                                    if(data[i]['dis_per']!=0){
-                                    var discount=(parseFloat(quty)*parseFloat(cost))*(data[i]['dis_per']/100);
+                                    var total=parseFloat(quty)*parseFloat(cost);
+                                    var subtotal=parseFloat(quty)*parseFloat(cost);
+                                    var discount=0;
+                                    var discount2=0;
                                     var per=data[i]['dis_per'];
-                                    }else{
-                                    var discount=data[i]['item_dis_amt'];
-                                     var num = parseFloat(discount);
-                                      discount=num.toFixed(point);
-                                    var per="";
-                                  
+                                    var per2=data[i]['dis_per2']; 
+                                    var type='Inc';
+                                    var tax=parseFloat(tax_value)*parseFloat(subtotal)  ;
+                                    if(data[i]['tax_Inclusive']==0){                                                                          
+                                        var total=(parseFloat(tax)+parseFloat(total));
+                                        type='Exc';
                                     }
-                                   if(data[i]['tax_Inclusive']==1){
-                                     var tax=data[i]['order_tax'];
-                                    
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(cost))-discount;
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                  
-                                      var tax=data[i]['order_tax'];
-                                      var total=(parseFloat(quty)*parseFloat(cost))-discount;
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
-                                   var discount = parseFloat(discount);
-                                      discount=discount.toFixed(point);
+                                    var type2='Inc';
+                                    var tax2=parseFloat(tax_value2)*parseFloat(subtotal)  ;
+                                    if(data[i]['tax_inclusive2']==0){                                                                          
+                                        var total=(parseFloat(tax2)+parseFloat(total));
+                                        type2='Exc';
+                                    }
+                                    if(per!="" && per!=0){
+                                        discount=parseFloat(total)*parseFloat(per)/100;
+                                    }
+                                    if(per2!="" && per2!=0){
+                                        discount2=(parseFloat(total)-parseFloat(discount))*parseFloat(per2)/100;
+                                    }
+                                    var total_discount=parseFloat(discount)+parseFloat(discount2);
+                                    total=parseFloat(total)-parseFloat(total_discount);
+                                    var num = parseFloat(total_discount);
+                                    total_discount=num.toFixed(point);
+                                    var num = parseFloat(total);
+                                    total=num.toFixed(point);
+                                    var num = parseFloat(subtotal);
+                                    subtotal=num.toFixed(point);
                                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                                     null,
                                     name+"<input type='hidden' id='"+data[i]['o_i_guid']+"' >",
@@ -397,8 +407,8 @@
                                     free,
                                    
                                     parseFloat(quty)*parseFloat(cost),
-                                    
                                     tax+' : '+tax_type+'('+type+')',
+                                    tax2+' : '+tax_type2+'('+type2+')',
                                     discount,
                                     total,
                                     ] );
