@@ -159,9 +159,9 @@
                             $('#newly_added').remove();
                             $('#parent_items').append('<div id="newly_added"></div>');
                             refresh_items_table();
-                            $('#update_button').show();
+                            $('#update_button').hide();
                             $('#save_button').hide();
-                            $('#update_clear').show();
+                            $('#update_clear').hide();
                             $('#save_clear').hide();
                             $('#loading').modal('show');
                             $.ajax({                                      
