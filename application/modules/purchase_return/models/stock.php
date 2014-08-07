@@ -64,7 +64,7 @@ class Stock extends CI_Model{
         return $data;
      
      }
-     function get_purchase_return($guid){
+    function get_purchase_return($guid){
         $this->db->select('items.tax_inclusive2,items.tax2_type,items.tax2_value,purchase_items.quty as item_limit,purchase_items.received_quty as received_quty,purchase_items.free as received_free,purchase_invoice.invoice ,suppliers.first_name,purchase_invoice.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,purchase_return.*,purchase_return_x_items.tax as order_tax,purchase_return_x_items.tax2 as order_tax2,purchase_return_x_items.item ,purchase_return_x_items.quty ,purchase_return_x_items.cost ,purchase_return_x_items.sell ,purchase_return_x_items.guid as o_i_guid ,purchase_return_x_items.amount ,purchase_return_x_items.discount_per ,purchase_return_x_items.discount_per2 ,purchase_return_x_items.discount_amount ,purchase_return_x_items.discount_amount2 ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_return')->where('purchase_return.guid',$guid);
         $this->db->join('purchase_invoice','purchase_invoice.guid=purchase_return.purchase_invoice_id','left');
         $this->db->join('suppliers','suppliers.guid=purchase_invoice.supplier_id','left');
@@ -86,7 +86,31 @@ class Stock extends CI_Model{
           $data[]=$row;
         }
         return $data;
-     }
+    }
+    function purchase_return_invoice($guid){
+        $this->db->select('purchase_invoice.id as invoice_id,branches.code as branch_code,branches.store_name as branch_name,branches.address as branch_address,branches.city as branch_city,branches.state as branch_state,branches.zip as branch_zip ,branches.country as branch_country,branches.phone as branch_phone,branches.email as branch_mail,items.tax_inclusive2,items.tax2_type,items.tax2_value,purchase_items.quty as item_limit,purchase_items.received_quty as received_quty,purchase_items.free as received_free,purchase_invoice.invoice ,suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,suppliers.email as supplier_email,suppliers.phone as supplier_phone,suppliers.city as supplier_city,suppliers.state as supplier_state,suppliers.zip as supplier_zip,suppliers.country as supplier_country,purchase_invoice.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,purchase_return.*,purchase_return_x_items.tax as order_tax,purchase_return_x_items.tax2 as order_tax2,purchase_return_x_items.item ,purchase_return_x_items.quty ,purchase_return_x_items.cost ,purchase_return_x_items.sell ,purchase_return_x_items.guid as o_i_guid ,purchase_return_x_items.amount ,purchase_return_x_items.discount_per ,purchase_return_x_items.discount_per2 ,purchase_return_x_items.discount_amount ,purchase_return_x_items.discount_amount2 ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('purchase_return')->where('purchase_return.guid',$guid);
+        $this->db->join('purchase_invoice','purchase_invoice.guid=purchase_return.purchase_invoice_id','left');
+        $this->db->join('branches', "branches.guid = purchase_return.branch_id ",'left');
+        $this->db->join('suppliers','suppliers.guid=purchase_invoice.supplier_id','left');
+        $this->db->join('purchase_return_x_items', "purchase_return_x_items.purchase_return_id = purchase_return.guid ",'left');
+        $this->db->join('purchase_items', 'purchase_items.item=purchase_return_x_items.item AND purchase_items.order_id=purchase_invoice.grn  OR purchase_items.item=purchase_return_x_items.item AND purchase_items.order_id=purchase_invoice.direct_invoice_id OR purchase_items.item=purchase_return_x_items.item AND purchase_items.order_id=purchase_invoice.po ','left');     
+        $this->db->join('items', ' items.guid=purchase_items.item','left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=purchase_return_x_items.item  ",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=purchase_return_x_items.item  ",'left');
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){
+            $row['date']=date('d-m-Y',$row['date']);
+            $row['sales_date']=date('d-m-Y',$row['sales_date']);
+            if($row['received_quty']!="" && $row['received_quty']!=NULL){
+                $row['item_limit']=$row['received_quty']+$row['received_free'];
+            }else{
+                $row['item_limit']=$row['item_limit'];
+            }
+          $data[]=$row;
+        }
+        return $data;
+    }
     function delete_order_item($guid){      
         $this->db->where('guid',$guid);
         $this->db->delete('purchase_return_x_items');
