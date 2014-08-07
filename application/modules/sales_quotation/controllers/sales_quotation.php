@@ -285,13 +285,20 @@ function delete(){
 }
 // function end
 
-function  get_sales_quotation($guid){
-    if($this->session->userdata['sales_quotation_per']['edit']==1){
-    $this->load->model('sales');
-    $data=  $this->sales->get_sales_quotation($guid);
-    echo json_encode($data);
+    function  get_sales_quotation($guid){
+        if($this->session->userdata['sales_quotation_per']['edit']==1){
+        $this->load->model('sales');
+        $data=  $this->sales->get_sales_quotation($guid);
+        echo json_encode($data);
+        }
     }
-}
+    function  view_sales_quotation($guid){
+        if($this->session->userdata['sales_quotation_per']['view']==1){
+        $this->load->model('sales');
+        $data=  $this->sales->get_sales_quotation($guid);
+        echo json_encode($data);
+        }
+    }
 
 function sales_quotation_approve(){
      if($this->session->userdata['sales_quotation_per']['approve']==1){

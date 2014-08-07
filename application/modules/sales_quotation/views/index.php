@@ -1,4 +1,5 @@
 <style type="text/css">
+    .modal-backdrop {background: none;}
     .my_select{
          -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -42,8 +43,8 @@
         height: 24px;
       line-height: 1.7;
     }
-    #dt_table_tools tr td + td + td + td + td + td + td + td + td {
-    width: 120px !important;
+     #dt_table_tools  tr th:nth-child(9),#dt_table_tools tr td:nth-child(9){
+      width: 170px;
     }
     .editable-address {
         display: block;
@@ -420,6 +421,7 @@
     });
     
     function posnic_add_new(){
+        invoice_enable()
         refresh_items_table();
         $('#first_name').select2('enable');
         $('#update_button').hide();
@@ -474,6 +476,7 @@
         $('#deactive').removeAttr("disabled");
         $('#posnic_add_sales_quotation').removeAttr("disabled");
         $('#sales_quotation_lists').attr("disabled",'disabled');
+        invoice_enable()
     }
     function clear_add_sales_quotation(){
         $("#parsley_reg").trigger('reset');
@@ -1422,7 +1425,7 @@
          
                     <div class="row small_inputs" >
                         <div class="col col-lg-12">
-                            <div class="row" style="padding-top: 1px;">
+                            <div class="row" style="padding-top: 1px;" id="sacn_items">
                                  
                                   
                                                 <div class="col col-sm-1" style="padding:1px; width: 190px;">
