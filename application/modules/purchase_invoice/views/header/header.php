@@ -50,7 +50,7 @@
                                                                 
                    						"fnRender": function (oObj) {
                                                                 
-                                                                        return '<a  ><span data-toggle="tooltip" class="label label-success hint--top hint--success" data-hint="<?php echo $this->lang->line('print') ?>"><i class="icon-print"></i></span></a>';
+                                                                        return '<a href=javascript:purchase_order_invoice("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-warning hint--top hint--warning" data-hint="<?php echo $this->lang->line('print') ?>"><i class="glyphicon glyphicon-print"></i></span></a>&nbsp<a href=javascript:purchase_order_view("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-default hint--top hint--default" data-hint="<?php echo $this->lang->line('view') ?>"><i class="icon-book"></i></span></a>';
                                                                 
                                                                 },
 								
@@ -111,32 +111,26 @@
    <?php }
 ?>
                         }
-        function good_receiving_note_approve(guid,po){
-            <?php if($this->session->userdata['purchase_invoice_per']['approve']==1){ ?>
-                $.ajax({
-                url: '<?php echo base_url() ?>index.php/purchase_invoice/good_receiving_note_approve',
-                type: "POST",
-                data: {
-                    guid: guid,
-                    po:po
-                    
-                },
-                  complete: function(response) {
-                     if(response['responseText']=='TRUE'){
-                         $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('approved');?>', { type: "success" });
-                        $("#dt_table_tools").dataTable().fnDraw();
-                    }else if(response['responseText']=='approve'){
-                         $.bootstrapGrowl($('#order__number_'+guid).val()+ ' <?php echo $this->lang->line('is')." ".$this->lang->line('already')." ".$this->lang->line('approved');?>', { type: "warning" });
-                    }else if(response['responseText']=='Noop'){
-                           $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('purchase_invoice');?>', { type: "error" });                       
-                    }
-                }
-            });
-             <?php }else{?>
-                         $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission')." ".$this->lang->line('to')." ".$this->lang->line('approve')." ".$this->lang->line('purchase_invoice');?>', { type: "error" });                       
-                <?php }?>
-               }
-        
+    function invoice_disable(){
+        $('#invoice_div').hide();
+        $('#invoice_settings').hide();
+        $('#parsley_reg input').prop('disabled',true);
+        $('#parsley_reg textarea').prop('disabled',true);
+    }
+    function invoice_enable(){
+        $('#company').attr("disabled", "disabled");
+        $('#address').attr("disabled", "disabled");
+        $('#demo_order_number').attr("disabled", "disabled");
+        $('#demo_total_amount').attr("disabled", "disabled");
+        $('#grand_total').attr("disabled", "disabled");
+        $('#sub_total').attr("disabled", "disabled");
+        $('#tax').attr("disabled", "disabled");
+        $('#sacn_items').show();
+        $('#invoice_div').hide();
+        $('#invoice_settings').hide();
+        $('#parsley_reg input').prop('disabled',false);
+        $('#parsley_reg textarea').prop('disabled',false);
+    }
           
         
         function posnic_active(guid){
@@ -157,8 +151,8 @@
             });
         }
           
-        function edit_function(guid){
-                        <?php if($this->session->userdata['purchase_invoice_per']['edit']==1){ ?>
+        function purchase_order_view(guid){
+                        <?php if($this->session->userdata['purchase_invoice_per']['view']==1){ ?>
                                 
                             $('#deleted').remove();
                             $('#parent_items').append('<div id="deleted"></div>');
@@ -171,17 +165,15 @@
                             $('#save_clear').hide();
                             $('#loading').modal('show');
                             $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/purchase_invoice/get_purchase_invoice/"+guid,                      
+                             url: "<?php echo base_url() ?>index.php/purchase_invoice/view_purchase_invoice/"+guid,                      
                              data: "", 
                              dataType: 'json',               
                              success: function(data)        
                              { 
+                                 invoice_disable();
                                 $("#user_list").hide();
-                                $('#add_new_order').show('slow');
-                                $('#delete').attr("disabled", "disabled");
+                                $('#add_new_order').show('slow');                             
                                 $('#posnic_add_purchase_invoice').attr("disabled", "disabled");
-                                $('#active').attr("disabled", "disabled");
-                                $('#deactive').attr("disabled", "disabled");
                                 $('#purchase_invoice_lists').removeAttr("disabled");
                                
                              
@@ -189,19 +181,18 @@
                                 $("#parsley_reg #company").val(data[0]['c_name']);
                                 $("#parsley_reg #address").val(data[0]['address']);
                                 $("#parsley_reg #purchase_invoice_guid").val(guid);
-                                $("#parsley_reg #demo_order_number").val(data[0]['po_no']);
-                                $("#parsley_reg #order_number").val(data[0]['po_no']);
+                                $("#parsley_reg #demo_invoice_no").val(data[0]['invoice']);
+                                $("#parsley_reg #order_number").val(data[0]['invoice']);
                                 $("#parsley_reg #order_date").val(data[0]['po_date']);
-                                $("#parsley_reg #expiry_date").val(data[0]['exp_date']);
-                                $("#parsley_reg #demo_grn_no").val(data[0]['grn_no']);
-                                $("#parsley_reg #grn_date").val(data[0]['grn_date']);
-                                $("#parsley_reg #note").val(data[0]['grn_note']);
-                                $("#parsley_reg #remark").val(data[0]['grn_remark']);
+                                $("#parsley_reg #received_date").val(data[0]['received_date']);
+                                $("#parsley_reg #edit_grn_node").val(data[0]['grn_no']);
+                                $("#parsley_reg #grn_date").val(data[0]['date']);
+                                $("#parsley_reg #note").val(data[0]['note']);
+                                $("#parsley_reg #remark").val(data[0]['remark']);
                               
                                // $("#parsley_reg #demo_order_number").select2('data', {id:'',text: data[0]['po_no']});
                                 $(".supplier_select_2").hide();
                                 $(".porchase_order_for_grn").show();
-                                $("#edit_grn_node").val(data[0]['po_no']);
                                 
                                 $("#parsley_reg #id_discount").val(data[0]['discount']);
                               
@@ -242,6 +233,9 @@
                                     var  tax_type=data[i]['tax_type_name'];
                                     var  tax_value=data[i]['tax_value'];
                                     var  tax_Inclusive=data[i]['tax_Inclusive'];
+                                    var  tax_type2=data[i]['tax2_type'];
+                                    var  tax_value2=data[i]['tax2_value'];
+                                    var  tax_Inclusive2=data[i]['tax_inclusive2'];  
                                   
                                     var  free=parseFloat(data[i]['free']);
                                     var  received_quty=data[i]['received_quty'];
@@ -253,53 +247,53 @@
                                     var  o_i_guid=data[i]['o_i_guid'];
                                     var  date=data[i]['date'];
                                     var  items_id=data[i]['item'];
-                                    if(data[i]['dis_per']!=0){
-                                    var discount=(parseFloat(quty)*parseFloat(cost))*(data[i]['dis_per']/100);
-                                    var per=data[i]['dis_per'];
-                                     var num = parseFloat(discount);
-                                      discount=num.toFixed(point);
-                                    }else{
+                                    var total=parseFloat(quty)*parseFloat(cost);
+                                    var subtotal=parseFloat(quty)*parseFloat(cost);
                                     var discount=data[i]['item_dis_amt'];
-                                     var num = parseFloat(discount);
-                                      discount=num.toFixed(point);
-                                    var per="";
-                                  
+                                    var discount2=data[i]['item_dis_amt2'];
+                                    var per=data[i]['dis_per'];
+                                    var per2=data[i]['dis_per2']; 
+                                    var type='Inc';
+                                    var tax=parseFloat(tax_value)*parseFloat(subtotal)  ;
+                                    if(data[i]['tax_Inclusive']==0){                                                                          
+                                        var total=(parseFloat(tax)+parseFloat(total));
+                                        type='Exc';
                                     }
-                                    
-                                   if(data[i]['tax_Inclusive']==1){
-                                     var tax=data[i]['order_tax'];
-                                    
-                                      var total=+tax+ +(parseFloat(quty)*parseFloat(cost))-discount;
-                                      var type='Exc';
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }else{
-                                      var type="Inc";
-                                  
-                                      var tax=data[i]['order_tax'];
-                                      var total=(parseFloat(quty)*parseFloat(cost))-discount;
-                                      var num = parseFloat(total);
-                                      total=num.toFixed(point);
-                                  }
-                                 var grn_received_quty=parseFloat(received_quty)-parseFloat(rece_quty);
-                             
-                                 var grn_received_free=parseFloat(received_free)-parseFloat(rece_free);
+                                    var type2='Inc';
+                                    var tax2=parseFloat(tax_value2)*parseFloat(subtotal)  ;
+                                    if(data[i]['tax_inclusive2']==0){                                                                          
+                                        var total=(parseFloat(tax2)+parseFloat(total));
+                                        type2='Exc';
+                                    }
+                                    if(per!="" && per!=0){
+                                        discount=parseFloat(total)*parseFloat(per)/100;
+                                    }
+                                    if(per2!="" && per2!=0){
+                                        discount2=(parseFloat(total)-parseFloat(discount))*parseFloat(per2)/100;
+                                    }
+                                    var total_discount=parseFloat(discount)+parseFloat(discount2);
+                                    total=parseFloat(total)-parseFloat(total_discount);
+                                    var num = parseFloat(total_discount);
+                                    total_discount=num.toFixed(point);
+                                    var num = parseFloat(total);
+                                    total=num.toFixed(point);
+                                    var num = parseFloat(subtotal);
+                                    subtotal=num.toFixed(point);
                                     var addId = $('#selected_item_table').dataTable().fnAddData( [
                                     null,
-                                    name,
+                                    name+"<input type='hidden' id='"+data[i]['o_i_guid']+"' >",
                                     sku,
                                     cost,
-                                    total,
-                                    date,
+                                    mrp,
                                     quty,
-                                    received_quty,
                                     free,
-                                    received_free,
-                                    "<input type='hidden' name='grn_items_guid[]' value='"+data[i]['grn_items_guid']+"' ><input type='hidden' id='grn_old_quantity_"+i+"'  value='"+rece_quty+"' ><input type='hidden' name='items[]' value='"+data[i]['item']+"' ><input type='hidden' id='o_quty_id_"+i+"' value='"+parseFloat(quty-grn_received_quty)+"' ><input type='text' id='r_quty_id_"+i+"' name='receive_quty[]' value='"+rece_quty+"' onkeyup='receive_quty_items_update("+i+")' onKeyPress='receive_quty(event,"+i+");return numbersonly(event)' class='form-control' style='width:100px'>",
-                                    "<input type='hidden' id='grn_old_free_"+i+"'  value='"+rece_free+"' ><input type='hidden' name='order_items[]' value='"+data[i]['o_i_guid']+"' ><input type='hidden' id='o_free_id_"+i+"' value='"+parseFloat(free-grn_received_free)+"' ><input type='text' id='r_free_id_"+i+"' name='receive_free[]' value='"+rece_free+"' onkeyup='receive_free_items_update("+i+")' onKeyPress='receive_free(event,"+i+","+data.length+");return numbersonly(event)' class='form-control' style='width:90px'>",
                                    
-                                
-                                 ] );
+                                    parseFloat(quty)*parseFloat(cost),
+                                    tax+' : '+tax_type+'('+type+')',
+                                    tax2+' : '+tax_type2+'('+type2+')',
+                                    discount,
+                                    total,
+                                    ] );
 
                               var theNode = $('#selected_item_table').dataTable().fnSettings().aoData[addId[0]].nTr;
                               theNode.setAttribute('id','new_item_row_id_'+items_id)
