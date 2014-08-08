@@ -433,6 +433,8 @@ function order_number(){
                 $data=$data.'"posnic_total_item_discount"=>'.$posnic_total_item_discount.','."\n";
                 $posnic_discount=$this->input->post('posnic_discount')==1?1:0;
                 $data=$data.'"posnic_discount"=>'.$posnic_discount.','."\n";
+                $posnic_customer_discount=$this->input->post('posnic_customer_discount')==1?1:0;
+                $data=$data.'"posnic_customer_discount"=>'.$posnic_customer_discount.','."\n";
                 $posnic_frieght=$this->input->post('posnic_frieght')==1?1:0;
                 $data=$data.'"posnic_frieght"=>'.$posnic_frieght.','."\n";
                 $posnic_round_off_amount=$this->input->post('posnic_round_off_amount')==1?1:0;

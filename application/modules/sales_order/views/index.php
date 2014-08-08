@@ -2163,7 +2163,7 @@
                                     <div id="st_purchase" class="tab-pane active">
                                         <div class="col-sm-3">
                                             <div class="form-group ">
-                                                    <label for="posnic_order_id" ><?php echo $this->lang->line('sales_quotation_id') ?></label>													
+                                                    <label for="posnic_order_id" ><?php echo $this->lang->line('sales_order_id') ?></label>													
 
                                                          <?php $posnic_order_id=array('name'=>'posnic_order_id',
                                                                                'class'=>' form-control ',
@@ -2175,7 +2175,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group ">
-                                                    <label for="posnic_number" ><?php echo $this->lang->line('sales_quotation_number') ?></label>													
+                                                    <label for="posnic_number" ><?php echo $this->lang->line('sales_order_number') ?></label>													
                              
                                                          <?php $posnic_number=array('name'=>'posnic_number',
                                                                                'class'=>' form-control ',
@@ -2187,7 +2187,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_date" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('date') ?></label>													
+                                                <label for="posnic_date" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('date') ?></label>													
                                                      
                                                         <?php $posnic_date=array('name'=>'posnic_date',
                                                                                'class'=>' form-control ',
@@ -2199,7 +2199,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_expiry" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('expiry_date') ?></label>													
+                                                <label for="posnic_expiry" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('expiry_date') ?></label>													
                                                      
                                                         <?php $posnic_expiry=array('name'=>'posnic_expiry',
                                                                                'class'=>' form-control ',
@@ -2211,7 +2211,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_barcode" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('barcode') ?></label>													
+                                                <label for="posnic_barcode" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('barcode') ?></label>													
                                                      
                                                         <?php $posnic_barcode=array('name'=>'posnic_barcode',
                                                                                'class'=>' form-control ',
@@ -2226,7 +2226,7 @@
                                     <div id="st_branch" class="tab-pane">
                                            <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_branch_code" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('branch')." ". $this->lang->line('code') ?></label>													
+                                                <label for="posnic_branch_code" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('branch')." ". $this->lang->line('code') ?></label>													
                                                      
                                                         <?php $posnic_branch_code=array('name'=>'posnic_branch_code',
                                                                                'class'=>' form-control ',
@@ -2238,7 +2238,7 @@
                                         </div>
                                            <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_branch_name" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('branch')." ". $this->lang->line('name') ?></label>													
+                                                <label for="posnic_branch_name" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('branch')." ". $this->lang->line('name') ?></label>													
                                                      
                                                         <?php $posnic_branch_name=array('name'=>'posnic_branch_name',
                                                                                'class'=>' form-control ',
@@ -2551,13 +2551,13 @@
                                     <div id="st_invoice" class="tab-pane">
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_sales_quotation_subtotal" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('subtotal') ?></label>													
+                                                <label for="posnic_sales_order_subtotal" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('subtotal') ?></label>													
                                                      
-                                                        <?php $posnic_sales_quotation_subtotal=array('name'=>'posnic_sales_quotation_subtotal',
+                                                        <?php $posnic_sales_order_subtotal=array('name'=>'posnic_sales_order_subtotal',
                                                                                'class'=>' form-control ',
                                                                                 'value'=>1,
-                                                                               'id'=>'posnic_sales_quotation_subtotal');
-                                                        echo form_checkbox($posnic_sales_quotation_subtotal)?>
+                                                                               'id'=>'posnic_sales_order_subtotal');
+                                                        echo form_checkbox($posnic_sales_order_subtotal)?>
                                                    
                                              </div>
                                         </div>
@@ -2599,7 +2599,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_discount" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('discount') ?> </label>													
+                                                <label for="posnic_discount" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('discount') ?> </label>													
                                                      
                                                         <?php $posnic_discount=array('name'=>'posnic_discount',
                                                                                'class'=>' form-control ',
@@ -2611,7 +2611,19 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_frieght" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('frieght') ?> </label>													
+                                                <label for="posnic_customer_discount" ><?php echo $this->lang->line('customer')." ". $this->lang->line('discount') ?> </label>													
+                                                     
+                                                        <?php $posnic_customer_discount=array('name'=>'posnic_customer_discount',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_discount');
+                                                        echo form_checkbox($posnic_customer_discount)?>
+                                                
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_frieght" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('frieght') ?> </label>													
                                                      
                                                         <?php $posnic_frieght=array('name'=>'posnic_frieght',
                                                                                'class'=>' form-control ',
@@ -2623,7 +2635,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_round_off_amount" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('round_off_amount') ?> </label>													
+                                                <label for="posnic_round_off_amount" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('round_off_amount') ?> </label>													
                                                      
                                                         <?php $posnic_round_off_amount=array('name'=>'posnic_round_off_amount',
                                                                                'class'=>' form-control ',
@@ -2635,7 +2647,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_grand_total" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('grand_total') ?> </label>													
+                                                <label for="posnic_grand_total" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('grand_total') ?> </label>													
                                                      
                                                         <?php $posnic_grand_total=array('name'=>'posnic_grand_total',
                                                                                'class'=>' form-control ',

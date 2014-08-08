@@ -2,7 +2,7 @@
  $config["invoice"]=array("posnic_order_id"=>1,
 "posnic_number"=>1,
 "posnic_date"=>1,
-"posnic_customer_discount"=>0,
+"posnic_customer_discount"=>1,
 "posnic_barcode"=>1,
 "posnic_branch_code"=>1,
 "posnic_branch_name"=>1,

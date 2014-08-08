@@ -443,10 +443,6 @@ function search_items(){
                 $data=$data.'"posnic_item_sku"=>'.$posnic_item_sku.','."\n";
                 $posnic_item_price=$this->input->post('posnic_item_price')==1?1:0;
                 $data=$data.'"posnic_item_price"=>'.$posnic_item_price.','."\n";
-                $posnic_item_selling_price=$this->input->post('posnic_item_selling_price')==1?1:0;
-                $data=$data.'"posnic_item_selling_price"=>'.$posnic_item_selling_price.','."\n";
-                $posnic_item_mrp=$this->input->post('posnic_item_mrp')==1?1:0;
-                $data=$data.'"posnic_item_mrp"=>'.$posnic_item_mrp.','."\n";
                 $posnic_item_quantity=$this->input->post('posnic_item_quantity')==1?1:0;
                 $data=$data.'"posnic_item_quantity"=>'.$posnic_item_quantity.','."\n";
                 $posnic_item_free_quantity=$this->input->post('posnic_item_free_quantity')==1?1:0;
@@ -457,8 +453,8 @@ function search_items(){
                 $data=$data.'"posnic_item_tax2"=>'.$posnic_item_tax2.','."\n";
                 $posnic_item_discount1=$this->input->post('posnic_item_discount1')==1?1:0;
                 $data=$data.'"posnic_item_discount1"=>'.$posnic_item_discount1.','."\n";
-                $posnic_item_discount2=$this->input->post('posnic_item_discount2')==1?1:0;
-                $data=$data.'"posnic_item_discount2"=>'.$posnic_item_discount2.','."\n";
+                $posnic_customer_discount=$this->input->post('posnic_customer_discount')==1?1:0;
+                $data=$data.'"posnic_customer_discount"=>'.$posnic_customer_discount.','."\n";
                 $posnic_item_subtotal=$this->input->post('posnic_item_subtotal')==1?1:0;
                 $data=$data.'"posnic_item_subtotal"=>'.$posnic_item_subtotal.','."\n";
                 $posnic_sales_order_subtotal=$this->input->post('posnic_sales_order_subtotal')==1?1:0;
