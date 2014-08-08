@@ -956,6 +956,15 @@
                             $('#posnic_table_tfoot5').append('<td ><?php echo $this->lang->line('order')." ".$this->lang->line('discount') ?> </td>');
                             $('#posnic_table_tfoot5').append('<td class="text-right">'+value+' </td>');                            
                         }
+                        if(data[1]['posnic_customer_discount']==1){
+                            var value=data[0][0]['customer_discount_amount'];
+                            var num = parseFloat(value);
+                            value=num.toFixed(point);
+                            if(isNaN(parseFloat(value))) value=0;
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot50" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot50').append('<td ><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?> </td>');
+                            $('#posnic_table_tfoot50').append('<td class="text-right">'+value+' </td>');                            
+                        }
                         if(data[1]['posnic_frieght']==1){                            
                             var value=data[0][0]['freight'];
                             var num = parseFloat(value);
@@ -1064,14 +1073,11 @@
                     data['posnic_item_name']==1?$('#posnic_item_name').attr('checked','checked'):$('#posnic_item_name').removeAttr('checked');
                     data['posnic_item_sku']==1?$('#posnic_item_sku').attr('checked','checked'):$('#posnic_item_sku').removeAttr('checked');
                     data['posnic_item_price']==1?$('#posnic_item_price').attr('checked','checked'):$('#posnic_item_price').removeAttr('checked');
-                    data['posnic_item_selling_price']==1?$('#posnic_item_selling_price').attr('checked','checked'):$('#posnic_item_selling_price').removeAttr('checked');
-                    data['posnic_item_mrp']==1?$('#posnic_item_mrp').attr('checked','checked'):$('#posnic_item_mrp').removeAttr('checked');
                     data['posnic_item_tax1']==1?$('#posnic_item_tax1').attr('checked','checked'):$('#posnic_item_tax1').removeAttr('checked');
                     data['posnic_item_tax2']==1?$('#posnic_item_tax2').attr('checked','checked'):$('#posnic_item_tax2').removeAttr('checked');
                     data['posnic_item_quantity']==1?$('#posnic_item_quantity').attr('checked','checked'):$('#posnic_item_quantity').removeAttr('checked');
-                    data['posnic_item_free_quantity']==1?$('#posnic_item_free_quantity').attr('checked','checked'):$('#posnic_item_free_quantity').removeAttr('checked');
                     data['posnic_item_discount1']==1?$('#posnic_item_discount1').attr('checked','checked'):$('#posnic_item_discount1').removeAttr('checked');
-                    data['posnic_item_discount2']==1?$('#posnic_item_discount2').attr('checked','checked'):$('#posnic_item_discount2').removeAttr('checked');
+                    data['posnic_customer_discount']==1?$('#posnic_customer_discount').attr('checked','checked'):$('#posnic_customer_discount').removeAttr('checked');
                     data['posnic_item_subtotal']==1?$('#posnic_item_subtotal').attr('checked','checked'):$('#posnic_item_subtotal').removeAttr('checked');
                     data['posnic_sales_order_subtotal']==1?$('#posnic_sales_order_subtotal').attr('checked','checked'):$('#posnic_sales_order_subtotal').removeAttr('checked');
                     data['posnic_inclusive_total_tax']==1?$('#posnic_inclusive_total_tax').attr('checked','checked'):$('#posnic_inclusive_total_tax').removeAttr('checked');

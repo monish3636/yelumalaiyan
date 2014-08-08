@@ -952,6 +952,15 @@
                             $('#posnic_table_tfoot5').append('<td ><?php echo $this->lang->line('order')." ".$this->lang->line('discount') ?> </td>');
                             $('#posnic_table_tfoot5').append('<td class="text-right">'+value+' </td>');                            
                         }
+                        if(data[1]['posnic_customer_discount']==1){
+                            var value=data[0][0]['customer_discount_amount'];
+                            var num = parseFloat(value);
+                            value=num.toFixed(point);
+                            if(isNaN(parseFloat(value))) value=0;
+                            $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot50" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
+                            $('#posnic_table_tfoot50').append('<td ><?php echo $this->lang->line('customer')." ".$this->lang->line('discount') ?> </td>');
+                            $('#posnic_table_tfoot50').append('<td class="text-right">'+value+' </td>');                            
+                        }
                         if(data[1]['posnic_frieght']==1){                            
                             var value=data[0][0]['freight'];
                             var num = parseFloat(value);

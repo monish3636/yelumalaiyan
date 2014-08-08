@@ -2302,6 +2302,18 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
+                                                <label for="posnic_customer_discount" ><?php echo $this->lang->line('customer')." ". $this->lang->line('discount') ?> </label>													
+                                                     
+                                                        <?php $posnic_customer_discount=array('name'=>'posnic_customer_discount',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_discount');
+                                                        echo form_checkbox($posnic_customer_discount)?>
+                                                
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
                                                 <label for="posnic_frieght" ><?php echo $this->lang->line('sales_quotation')." ". $this->lang->line('frieght') ?> </label>													
                                                      
                                                         <?php $posnic_frieght=array('name'=>'posnic_frieght',
