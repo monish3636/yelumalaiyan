@@ -2163,33 +2163,10 @@
                                                  
                                              </div>
                                         </div>
+                                      
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label for="posnic_item_selling_price" ><?php echo $this->lang->line('item')." ". $this->lang->line('selling_price') ?></label>													
-                                                     
-                                                        <?php $posnic_item_selling_price=array('name'=>'posnic_item_selling_price',
-                                                                               'class'=>' form-control ',
-                                                                                'value'=>1,
-                                                                               'id'=>'posnic_item_selling_price');
-                                                        echo form_checkbox($posnic_item_selling_price)?>
-                                                   
-                                             </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label for="posnic_item_mrp" ><?php echo $this->lang->line('item')." ". $this->lang->line('mrp') ?></label>													
-                                                     
-                                                        <?php $posnic_item_mrp=array('name'=>'posnic_item_mrp',
-                                                                               'class'=>' form-control ',
-                                                                                'value'=>1,
-                                                                               'id'=>'posnic_item_mrp');
-                                                        echo form_checkbox($posnic_item_mrp)?>
-                                                   
-                                             </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label for="posnic_item_price" ><?php echo $this->lang->line('item')." ". $this->lang->line('cost') ?></label>													
+                                                <label for="posnic_item_price" ><?php echo $this->lang->line('item')." ". $this->lang->line('price') ?></label>													
                                                      
                                                         <?php $posnic_item_price=array('name'=>'posnic_item_price',
                                                                                'class'=>' form-control ',
@@ -2211,18 +2188,7 @@
                                                    
                                              </div>
                                         </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label for="posnic_item_free_quantity" ><?php echo $this->lang->line('item')." ". $this->lang->line('free') ?></label>													
-                                                     
-                                                        <?php $posnic_item_free_quantity=array('name'=>'posnic_item_free_quantity',
-                                                                               'class'=>' form-control ',
-                                                                                'value'=>1,
-                                                                               'id'=>'posnic_item_free_quantity');
-                                                        echo form_checkbox($posnic_item_free_quantity)?>
-                                                   
-                                             </div>
-                                        </div>
+                                      
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="posnic_item_tax1" ><?php echo $this->lang->line('item')." ". $this->lang->line('tax') ?> 1</label>													
@@ -2259,18 +2225,7 @@
                                                
                                              </div>
                                         </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label for="posnic_item_discount2" ><?php echo $this->lang->line('item')." ". $this->lang->line('discount') ?> 2</label>													
-                                                     
-                                                        <?php $posnic_item_discount2=array('name'=>'posnic_item_discount2',
-                                                                               'class'=>' form-control ',
-                                                                                'value'=>1,
-                                                                               'id'=>'posnic_item_discount2');
-                                                        echo form_checkbox($posnic_item_discount2)?>
-                                                 
-                                             </div>
-                                        </div>
+                                        
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="posnic_item_subtotal" ><?php echo $this->lang->line('item')." ". $this->lang->line('subtotal') ?> </label>													

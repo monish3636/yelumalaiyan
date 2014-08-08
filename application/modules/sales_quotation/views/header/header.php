@@ -602,7 +602,7 @@
                 { 
                         if(data[1]['posnic_order_id']==1){
                             $('#invoice_posnic_id').show();
-                            $('#invoice_posnic_id').html(data[0][0]['po_no'])
+                            $('#invoice_posnic_id').html(data[0][0]['code'])
                         }else{
                             $('#invoice_posnic_id').hide();
                         }
@@ -614,7 +614,7 @@
                         }
                         if(data[1]['posnic_date']==1){
                             $('#invoice_posnic_date').show();
-                              $('#invoice_posnic_date').html('<?php echo $this->lang->line('date') ?> : <span class="text-muted">'+data[0][0]['po_date']+'</span>');
+                              $('#invoice_posnic_date').html('<?php echo $this->lang->line('date') ?> : <span class="text-muted">'+data[0][0]['date']+'</span>');
                         }else{
                             $('#invoice_posnic_date').hide();
                         }
@@ -754,21 +754,14 @@
                         if(data[1]['posnic_item_sku']==1){
                             $('#posnic_table_head').append('<td id="posnic_table_head_td3"><?php echo $this->lang->line('sku') ?></td>');
                         }
-                        if(data[1]['posnic_item_selling_price']==1){
-                            $('#posnic_table_head').append('<td id="posnic_table_head_td4"><?php echo $this->lang->line('selling_price') ?></td>');
-                        }
-                        if(data[1]['posnic_item_mrp']==1){
-                            $('#posnic_table_head').append('<td id="posnic_table_head_td4"><?php echo $this->lang->line('mrp') ?></td>');
-                        }
+                       
                         if(data[1]['posnic_item_price']==1){
-                            $('#posnic_table_head').append('<td id="posnic_table_head_td4"><?php echo $this->lang->line('cost') ?></td>');
+                            $('#posnic_table_head').append('<td id="posnic_table_head_td4"><?php echo $this->lang->line('price') ?></td>');
                         }
                         if(data[1]['posnic_item_quantity']==1){
                             $('#posnic_table_head').append('<td id="posnic_table_head_td5"><?php echo $this->lang->line('quantity') ?></td>');
                         }
-                        if(data[1]['posnic_item_free_quantity']==1){
-                            $('#posnic_table_head').append('<td id="posnic_table_head_td5"><?php echo $this->lang->line('free') ?></td>');
-                        }
+                       
                         if(data[1]['posnic_item_tax1']==1){
                             $('#posnic_table_head').append('<td id="posnic_table_head_td6"><?php echo $this->lang->line('tax') ?> 1</td>');
                         }
@@ -777,9 +770,6 @@
                         }
                         if(data[1]['posnic_item_discount1']==1){
                             $('#posnic_table_head').append('<td id="posnic_table_head_td8"><?php echo $this->lang->line('discount') ?> 1</td>');
-                        }
-                        if(data[1]['posnic_item_discount2']==1){
-                            $('#posnic_table_head').append('<td id="posnic_table_head_td9"><?php echo $this->lang->line('discount') ?> 2</td>');
                         }
                         if(data[1]['posnic_item_subtotal']==1){
                             $('#posnic_table_head').append('<td id="posnic_table_head_td10" class="text-right"><?php echo $this->lang->line('sub_total') ?> </td>');
@@ -795,84 +785,130 @@
                         var sales_quotation_sub_total=0;                        
                         var sales_quotation_grand=0;                        
                         for(var i=0;i<data[0].length;i++){
-                            var  quty=data[0][i]['quty'];
-                            var  free=data[0][i]['free'];                                   
-                            var  cost=data[0][i]['cost'];
-                            var  selling_price=data[0][i]['sell'];
-                            var  mrp=data[0][i]['mrp'];
-                            var total=parseFloat(quty)*parseFloat(cost);
-                            var subtotal=parseFloat(quty)*parseFloat(cost);
-                            var discount=data[0][i]['item_dis_amt'];
-                            var discount2=data[0][i]['item_dis_amt2'];
-                            var per=data[0][i]['dis_per'];
-                            var per2=data[0][i]['dis_per2'];                                   
-                           
-                            var tax=data[0][i]['order_tax'];  
-                          
-                            if(data[0][i]['tax_Inclusive']==0){                                                                          
-                                total=(parseFloat(tax)+parseFloat(total));
-                                total_exclusive_tax=parseFloat(total_exclusive_tax)+parseFloat(tax);
-                            }else{
-                                total_inclusive_tax=parseFloat(total_inclusive_tax)+parseFloat(tax);
+                            var  name=data[0][i]['items_name'];
+                            if(data[0][i]['kit_name']){
+                                name=data[0][i]['kit_name'];
                             }
-                          
-                            var tax2=data[0][i]['order_tax2'];  
-                            if(data[0][i]['tax_inclusive2']==0){                                                                          
-                                total=(parseFloat(tax2)+parseFloat(total));
+                            var  sku=data[0][i]['i_code'];
+                            if(data[0][i]['kit_code']){
+                                sku=data[0][i]['kit_code'];
+                            }
+                            if(data[0][i]['deco_code']){
+                                sku=data[0][i]['deco_code']+'-'+data[0][i]['deco_value'];
+                            }
+                            var  quty=data[0][i]['quty'];
+
+                            var  tax_type=data[0][i]['tax_type_name'];
+                            var  tax_value=data[0][i]['tax_value'];
+                            var  tax_inclusive=data[0][i]['tax_Inclusive'];
+                            var  tax_type2=data[0][i]['tax2_type'];
+                            var  tax_value2=data[0][i]['tax2_value'];
+                            var  tax_inclusive2=data[0][i]['tax_inclusive2'];
+                            var  price=data[0][i]['price'];
+                            if(data[0][i]['kit_code']){
+                                tax_type=data[0][i]['kit_tax_type'];
+                                tax_value=data[0][i]['kit_tax_value'];
+                                tax_inclusive=data[0][i]['kit_tax_Inclusive'];
+                                tax_type2=0;
+                                tax_value2=0;
+                                tax_inclusive2=0;
+                                price=data[0][i]['kit_price'];
+                                items_id=data[0][i]['kit_guid'];
+                            }else  if(data[0][i]['deco_code']){
+                                price=data[0][i]['price'];
+                                items_id=data[0][i]['deco_guid'];
+                            }
+                            else{
+                                var  items_id=data[0][i]['i_guid'];
+                                var uom=data[0][i]['uom']                                    
+                                if(uom==1){
+                                    var no_of_unit=data[0][i]['no_of_unit'];
+                                    price=price/no_of_unit;
+                                }
+
+                            }               
+                            var subtotal=parseFloat(quty)*parseFloat(price);
+                            var total=subtotal;
+                            var discount_per=data[0][i]['item_discount'];
+                            var type;
+                            var tax1=0;
+                            var tax2=0;
+                            var total_tax=0;
+                            tax1=parseFloat(subtotal)*parseFloat(tax_value)/100;
+                            if(tax_inclusive==0 && tax_value!=""){
+                                type1='Exc';
+                                total=parseFloat(total)+parseFloat(tax1);
+                                total_exclusive_tax=parseFloat(total_exclusive_tax)+parseFloat(tax1);
+                            }else{
+                                total_inclusive_tax=parseFloat(total_inclusive_tax)+parseFloat(tax1);
+                            }
+                            tax2=parseFloat(subtotal)*parseFloat(tax_value2)/100; 
+                            if(tax_inclusive2==0 && tax_value2!=""){
+                                total=parseFloat(total)+parseFloat(tax2);
+                                total_tax=parseFloat(total_tax)+parseFloat(tax2);
+                                type2='Exc';
                                 total_exclusive_tax=parseFloat(total_exclusive_tax)+parseFloat(tax2);
                             }else{
                                 total_inclusive_tax=parseFloat(total_inclusive_tax)+parseFloat(tax2);
                             }
-                            if(per!="" && per!=0){
-                                discount=parseFloat(total)*parseFloat(per)/100;
-                                total_item_discount=parseFloat(total_item_discount)+parseFloat(discount);
+                            if(isNaN(parseFloat(discount_per))){
+                                discount_per=0;
                             }
-                            if(per2!="" && per2!=0){
-                                discount2=(parseFloat(total)-parseFloat(discount))*parseFloat(per2)/100;
-                                total_item_discount=parseFloat(total_item_discount)+parseFloat(discount2);
-                            }
-                            var total_discount=parseFloat(discount)+parseFloat(discount2);
-                            total=parseFloat(total)-parseFloat(total_discount);
-                            var num = parseFloat(total_discount);
-                            total_discount=num.toFixed(point);
-                            var num = parseFloat(total);
+                            var discount=parseFloat(total)*parseFloat(discount_per)/100;
+                            var num = parseFloat(tax1);
+                            tax1=num.toFixed(point);
+                            var num = parseFloat(tax2);
+                            tax2=num.toFixed(point);
+                            var num = parseFloat(total-discount);
                             total=num.toFixed(point);
-                            var num = parseFloat(subtotal);
-                            subtotal=num.toFixed(point);
+                            var num = parseFloat(discount);
+                            discount=num.toFixed(point);
+                            if(isNaN(tax1)){
+                                tax1=0;
+                            }
+                            if(isNaN(tax2)){
+                                tax2=0;
+                            } 
+                            
+                            
+                            if(total_tax!=0){
+                                if($('#parsley_reg #total_tax').val()==0){
+                                    var num = parseFloat(total_tax);
+                                    total_tax=num.toFixed(point);
+                                    $('#parsley_reg #total_tax').val(total_tax);
+                                }else{
+                                    var total_tax=parseFloat($('#parsley_reg #total_tax').val())+parseFloat(total_tax);
+                                    var num = parseFloat(total_tax);
+                                    total_tax=num.toFixed(point);
+                                    $('#parsley_reg #total_tax').val(total_tax);
+                                }
+                            }
+                            
+                            total_item_discount=parseFloat(total_item_discount)+parseFloat(discount);
+                                
+                           
                             sales_quotation_sub_total=parseFloat(sales_quotation_sub_total)+parseFloat(total);
                              $('#invoice_posnic_table tbody').append('<tr id="posnic_table_body'+i+'"><td>'+parseInt(i+1)+'</td></tr>');
                             if(data[1]['posnic_item_name']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td2">'+data[0][i]['items_name']+'</td>');
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td2">'+name+'</td>');
                             }
                             if(data[1]['posnic_item_sku']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td3">'+data[0][i]['i_code']+'</td>');
-                            }
-                            if(data[1]['posnic_item_selling_price']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td4">'+selling_price+'</td>');
-                            }
-                            if(data[1]['posnic_item_mrp']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td4">'+mrp+'</td>');
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td3">'+sku+'</td>');
                             }
                             if(data[1]['posnic_item_price']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td4">'+cost+'</td>');
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td4">'+price+'</td>');
                             }
                             if(data[1]['posnic_item_quantity']==1){
                                 $('#posnic_table_body'+i).append('<td id="posnic_table_head_td5">'+quty+'</td>');
                             }
-                            if(data[1]['posnic_item_free_quantity']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td5">'+free+'</td>');
-                            }
                             if(data[1]['posnic_item_tax1']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td6">'+data[0][i]['order_tax']+'</td>');
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td6">'+tax1+'</td>');
                             }
                             if(data[1]['posnic_item_tax2']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td7">'+data[0][i]['order_tax2']+'</td>');
+                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td7">'+tax2+'</td>');
                             }
                             if(data[1]['posnic_item_discount1']==1){
                                 $('#posnic_table_body'+i).append('<td id="posnic_table_head_td8">'+discount+'</td>');
-                            }
-                            if(data[1]['posnic_item_discount2']==1){
-                                $('#posnic_table_body'+i).append('<td id="posnic_table_head_td9">'+discount2+'</td>');
                             }
                             if(data[1]['posnic_item_subtotal']==1){
                                 $('#posnic_table_body'+i).append('<td id="posnic_table_head_td10" class="text-right">'+total+' </td>');
@@ -897,7 +933,7 @@
                             var num = parseFloat(total_exclusive_tax);
                             total_exclusive_tax=num.toFixed(point);
                             $('#invoice_posnic_table tfoot').append('<tr id="posnic_table_tfoot3" class="item-row"><td colspan="'+parseInt($('#invoice_posnic_table thead tr td').length-2)+'"></td></tr>');
-                            $('#posnic_table_tfoot3').append('<td ><?php echo $this->lang->line('total')." ".$this->lang->line('inclusive_tax') ?> </td>');
+                            $('#posnic_table_tfoot3').append('<td ><?php echo $this->lang->line('total')." ".$this->lang->line('exclusive_tax') ?> </td>');
                             $('#posnic_table_tfoot3').append('<td class="text-right">'+total_exclusive_tax+' </td>');                            
                         }
                         if(data[1]['posnic_total_item_discount']==1){
