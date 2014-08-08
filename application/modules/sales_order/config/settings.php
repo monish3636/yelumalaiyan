@@ -34,7 +34,7 @@
 "posnic_item_discount1"=>1,
 "posnic_item_discount2"=>0,
 "posnic_item_subtotal"=>1,
-"posnic_sales_quotation_subtotal"=>0,
+"posnic_sales_order_subtotal"=>0,
 "posnic_inclusive_total_tax"=>1,
 "posnic_exclusive_total_tax"=>1,
 "posnic_total_item_discount"=>1,

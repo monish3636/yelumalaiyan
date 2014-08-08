@@ -94,7 +94,7 @@ class Sales_quotation extends MX_Controller{
     }
     
 function  set_seleted_item_suppier($suid){
-    $this->session->userdata['supplier_guid']=$suid;
+    $this->session->userdata['customer_guid']=$suid;
 }
     
  
@@ -249,7 +249,7 @@ function save(){
     }
         
 /*
- * get supplier details for purchase order
+ * get customer details for purchase order
  *  */       
 // functoon starts
 function search_customer(){
@@ -381,24 +381,24 @@ function order_number(){
                 $data=$data.'"posnic_branch_email"=>'.$posnic_branch_email.','."\n";
                 $posnic_branch_phone=$this->input->post('posnic_branch_phone')==1?1:0;
                 $data=$data.'"posnic_branch_phone"=>'.$posnic_branch_phone.','."\n";
-                $posnic_supplier_name=$this->input->post('posnic_supplier_name')==1?1:0;
-                $data=$data.'"posnic_supplier_name"=>'.$posnic_supplier_name.','."\n";
-                $posnic_supplier_company=$this->input->post('posnic_supplier_company')==1?1:0;
-                $data=$data.'"posnic_supplier_company"=>'.$posnic_supplier_company.','."\n";
-                $posnic_supplier_address=$this->input->post('posnic_supplier_address')==1?1:0;
-                $data=$data.'"posnic_supplier_address"=>'.$posnic_supplier_address.','."\n";
-                $posnic_supplier_city=$this->input->post('posnic_supplier_city')==1?1:0;
-                $data=$data.'"posnic_supplier_city"=>'.$posnic_supplier_city.','."\n";
-                $posnic_supplier_state=$this->input->post('posnic_supplier_state')==1?1:0;
-                $data=$data.'"posnic_supplier_state"=>'.$posnic_supplier_state.','."\n";
-                $posnic_supplier_country=$this->input->post('posnic_supplier_country')==1?1:0;
-                $data=$data.'"posnic_supplier_country"=>'.$posnic_supplier_country.','."\n";
-                $posnic_supplier_zip=$this->input->post('posnic_supplier_zip')==1?1:0;
-                $data=$data.'"posnic_supplier_zip"=>'.$posnic_supplier_zip.','."\n";
-                $posnic_supplier_email=$this->input->post('posnic_supplier_email')==1?1:0;
-                $data=$data.'"posnic_supplier_email"=>'.$posnic_supplier_email.','."\n";
-                $posnic_supplier_phone=$this->input->post('posnic_supplier_phone')==1?1:0;
-                $data=$data.'"posnic_supplier_phone"=>'.$posnic_supplier_phone.','."\n";
+                $posnic_customer_name=$this->input->post('posnic_customer_name')==1?1:0;
+                $data=$data.'"posnic_customer_name"=>'.$posnic_customer_name.','."\n";
+                $posnic_customer_company=$this->input->post('posnic_customer_company')==1?1:0;
+                $data=$data.'"posnic_customer_company"=>'.$posnic_customer_company.','."\n";
+                $posnic_customer_address=$this->input->post('posnic_customer_address')==1?1:0;
+                $data=$data.'"posnic_customer_address"=>'.$posnic_customer_address.','."\n";
+                $posnic_customer_city=$this->input->post('posnic_customer_city')==1?1:0;
+                $data=$data.'"posnic_customer_city"=>'.$posnic_customer_city.','."\n";
+                $posnic_customer_state=$this->input->post('posnic_customer_state')==1?1:0;
+                $data=$data.'"posnic_customer_state"=>'.$posnic_customer_state.','."\n";
+                $posnic_customer_country=$this->input->post('posnic_customer_country')==1?1:0;
+                $data=$data.'"posnic_customer_country"=>'.$posnic_customer_country.','."\n";
+                $posnic_customer_zip=$this->input->post('posnic_customer_zip')==1?1:0;
+                $data=$data.'"posnic_customer_zip"=>'.$posnic_customer_zip.','."\n";
+                $posnic_customer_email=$this->input->post('posnic_customer_email')==1?1:0;
+                $data=$data.'"posnic_customer_email"=>'.$posnic_customer_email.','."\n";
+                $posnic_customer_phone=$this->input->post('posnic_customer_phone')==1?1:0;
+                $data=$data.'"posnic_customer_phone"=>'.$posnic_customer_phone.','."\n";
                 $posnic_item_name=$this->input->post('posnic_item_name')==1?1:0;
                 $data=$data.'"posnic_item_name"=>'.$posnic_item_name.','."\n";
                 $posnic_item_sku=$this->input->post('posnic_item_sku')==1?1:0;
@@ -439,8 +439,8 @@ function order_number(){
                 $data=$data.'"posnic_round_off_amount"=>'.$posnic_round_off_amount.','."\n";
                 $posnic_grand_total=$this->input->post('posnic_grand_total')==1?1:0;
                 $data=$data.'"posnic_grand_total"=>'.$posnic_grand_total.','."\n";
-                $posnic_supplier_mail=$this->input->post('posnic_supplier_mail')==1?1:0;
-                $data=$data.'"posnic_supplier_mail"=>'.$posnic_supplier_mail.','."\n";
+                $posnic_customer_mail=$this->input->post('posnic_customer_mail')==1?1:0;
+                $data=$data.'"posnic_customer_mail"=>'.$posnic_customer_mail.','."\n";
                 $posnic_message=$this->input->post('posnic_message')==""?"'POSNIC'":$this->input->post('posnic_message');
                 $data=$data.'"posnic_message"=>'.'"'.$posnic_message.'"';
                 $data=$data.');';                
