@@ -1317,6 +1317,42 @@
                                     <div id="st_purchase" class="tab-pane active">
                                         <div class="col-sm-3">
                                             <div class="form-group ">
+                                                    <label for="posnic_sales_delivery_note_id" ><?php echo $this->lang->line('dn_no')." ".$this->lang->line('id') ?></label>													
+
+                                                         <?php $posnic_sales_delivery_note_id=array('name'=>'posnic_sales_delivery_note_id',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_sales_delivery_note_id');
+                                                                echo form_checkbox($posnic_sales_delivery_note_id)?>
+                                              
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group ">
+                                                    <label for="posnic_sales_delivery_note_number" ><?php echo $this->lang->line('dn_no')." ".$this->lang->line('no') ?></label>													
+                             
+                                                         <?php $posnic_sales_delivery_note_number=array('name'=>'posnic_sales_delivery_note_number',
+                                                                               'class'=>' form-control ',
+                                                               'value'=>1,
+                                                                               'id'=>'posnic_sales_delivery_note_number');
+                                                                echo form_checkbox($posnic_sales_delivery_note_number)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_sales_delivery_note_date" ><?php echo $this->lang->line('dn_no')." ". $this->lang->line('date') ?></label>													
+                                                     
+                                                        <?php $posnic_sales_delivery_note_date=array('name'=>'posnic_sales_delivery_note_date',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_sales_delivery_note_date');
+                                                        
+                                                        echo form_checkbox($posnic_sales_delivery_note_date)?>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group ">
                                                     <label for="posnic_order_id" ><?php echo $this->lang->line('sales_order_id') ?></label>													
 
                                                          <?php $posnic_order_id=array('name'=>'posnic_order_id',

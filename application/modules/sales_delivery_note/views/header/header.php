@@ -1139,6 +1139,9 @@
                 data: "", 
                 dataType: 'json',               
                 success: function(data) {
+                    data['posnic_sales_delivery_note_id']==1?$('#posnic_sales_delivery_note_id').attr('checked','checked'):$('#posnic_sales_delivery_note_id').removeAttr('checked'); 
+                    data['posnic_sales_delivery_note_number']==1?$('#posnic_sales_delivery_note_number').attr('checked','checked'):$('#posnic_sales_delivery_note_number').removeAttr('checked'); 
+                    data['posnic_sales_delivery_note_date']==1?$('#posnic_sales_delivery_note_date').attr('checked','checked'):$('#posnic_sales_delivery_note_date').removeAttr('checked');
                     data['posnic_order_id']==1?$('#posnic_order_id').attr('checked','checked'):$('#posnic_order_id').removeAttr('checked'); 
                     data['posnic_number']==1?$('#posnic_number').attr('checked','checked'):$('#posnic_number').removeAttr('checked'); 
                     data['posnic_date']==1?$('#posnic_date').attr('checked','checked'):$('#posnic_date').removeAttr('checked');

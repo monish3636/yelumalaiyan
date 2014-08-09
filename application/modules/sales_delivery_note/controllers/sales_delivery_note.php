@@ -284,19 +284,18 @@ function sdn_approve(){
                 
                 $con="<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');"."\n".' $config["invoice"]=array(';
           
-                $posnic_sales_delivery_note_id=$this->input->post('posnic_sales_delivery_note_id')==1? 1 : 0;
-                $data=$con.'"posnic_sales_delivery_note_id"=>'.$posnic_sales_delivery_note_id.','."\n";
-                $posnic_sales_delivery_note_number=$this->input->post('posnic_sales_delivery_note_number')==1?1:0;
-                $data=$data.'"posnic_sales_delivery_note_number"=>'.$posnic_sales_delivery_note_number.','."\n";
-                $posnic_sales_delivery_note_date=$this->input->post('posnic_sales_delivery_note_date')==1?1:0;
-                $data=$data.'"posnic_sales_delivery_note_date"=>'.$posnic_sales_delivery_note_date.','."\n";
-                
                 $posnic_order_id=$this->input->post('posnic_order_id')==1? 1 : 0;
                 $data=$con.'"posnic_order_id"=>'.$posnic_order_id.','."\n";
                 $posnic_number=$this->input->post('posnic_number')==1?1:0;
                 $data=$data.'"posnic_number"=>'.$posnic_number.','."\n";
                 $posnic_date=$this->input->post('posnic_date')==1?1:0;
                 $data=$data.'"posnic_date"=>'.$posnic_date.','."\n";
+                $posnic_sales_delivery_note_id=$this->input->post('posnic_sales_delivery_note_id')==1? 1 : 0;
+                $data=$data.'"posnic_sales_delivery_note_id"=>'.$posnic_sales_delivery_note_id.','."\n";
+                $posnic_sales_delivery_note_number=$this->input->post('posnic_sales_delivery_note_number')==1?1:0;
+                $data=$data.'"posnic_sales_delivery_note_number"=>'.$posnic_sales_delivery_note_number.','."\n";
+                $posnic_sales_delivery_note_date=$this->input->post('posnic_sales_delivery_note_date')==1?1:0;
+                $data=$data.'"posnic_sales_delivery_note_date"=>'.$posnic_sales_delivery_note_date.','."\n";
                 $posnic_expiry=$this->input->post('posnic_expiry')==1?1:0;
                 $data=$data.'"posnic_expiry"=>'.$posnic_expiry.','."\n";
                 $posnic_barcode=$this->input->post('posnic_barcode')==1?1:0;
