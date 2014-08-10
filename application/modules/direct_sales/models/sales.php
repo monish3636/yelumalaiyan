@@ -97,6 +97,29 @@ class Sales extends CI_Model{
          }
          return $data;
      }
+     function direct_sales_invoice($guid){
+        $this->db->select('customers.email as customer_email,customers.phone as customer_phone,customers.city as customer_city,customers.state as customer_state,customers.country as customer_country,customers.zip as customer_zip,branches.code as branch_code,branches.store_name as branch_name,branches.address as branch_address,branches.city as branch_city,branches.state as branch_state,branches.zip as branch_zip ,branches.country as branch_country,branches.phone as branch_phone,branches.email as branch_mail,items.tax_inclusive2,items.tax2_type,items.tax2_value,stock.quty as stock_quty,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,direct_sales.*,sales_items.quty ,sales_items.item as ds_item ,sales_items.stock_id ,sales_items.discount as item_discount,sales_items.price,sales_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_sales')->where('direct_sales.guid',$guid);
+        $this->db->join('sales_items', "sales_items.direct_sales_id = direct_sales.guid  ",'left');
+        $this->db->join('branches', "branches.guid = direct_sales.branch_id ",'left');
+        $this->db->join('stock', "stock.item = sales_items.item AND stock.price=sales_items.price  ",'left');
+        $this->db->join('item_kit','item_kit.guid=sales_items.item','left');
+        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
+        $this->db->join('decomposition_items','decomposition_items.guid=sales_items.item','left');
+        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
+        $this->db->join('items', "items.guid=sales_items.item OR items.guid=decomposition_items.item_id",'left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid ",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid ",'left');
+        $this->db->join('customers', "customers.guid=direct_sales.customer_id  ",'left');
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){         
+         
+          $row['date']=date('d-m-Y',$row['date']);
+         
+          $data[]=$row;
+         }
+         return $data;
+     }
      function get_direct_sales_for_bill($guid){
        $this->db->select('items.tax_inclusive2,items.tax2_type,items.tax2_value,stock.quty as stock_quty,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,direct_sales.*,sales_items.quty ,sales_items.item as ds_item ,sales_items.stock_id ,sales_items.discount as item_discount,sales_items.price,sales_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('direct_sales')->where('direct_sales.guid',$guid);
         $this->db->join('sales_items', "sales_items.direct_sales_id = direct_sales.guid  ",'left');
