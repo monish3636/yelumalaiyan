@@ -43,9 +43,9 @@
         height: 24px;
       line-height: 1.7;
     }
-    #dt_table_tools tr td + td + td + td + td + td + td + td + td {
-  width: 120px !important;
-}
+  #dt_table_tools  tr th:nth-child(9),#dt_table_tools tr td:nth-child(9){
+      width: 170px;
+    }
 .editable-address {
     display: block;
     margin-bottom: 5px;  
