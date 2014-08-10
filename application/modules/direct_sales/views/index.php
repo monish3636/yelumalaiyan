@@ -1,4 +1,5 @@
 <style type="text/css">
+        .modal-backdrop {background: none;}
     .my_select{
          -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;

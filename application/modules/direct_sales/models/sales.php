@@ -156,6 +156,23 @@ class Sales extends CI_Model{
      function approve_order($guid){
          $this->db->where('guid',$guid);
          $this->db->update('direct_sales',array('order_status'=>1));
+         
+        $this->db->select()->from('direct_sales')->where('guid',$guid);
+        $inv_sql=  $this->db->get();
+        foreach ($inv_sql->result() as $row){
+             
+            $value=array('branch_id'=>  $this->session->userdata('branch_id'),'customer_id'=>$row->customer_id,'invoice'=>$row->code,'direct_sales_id'=>$guid,'date'=>$row->date,'remark'=>$row->remark,'note'=>$row->note);
+            $this->db->insert('sales_bill',$value);
+            $id=  $this->db->insert_id();
+            $this->db->where('id',$id);
+            $invoice=md5('sales_bill'.$id);
+            $this->db->update('purchase_invoice',array('guid'=>  md5($invoice)));
+            $this->bill_status($guid,$invoice);
+            $this->payable_amount($row->customer_id,$guid,$invoice);
+        }
+         
+         
+         
          $this->db->select()->from('sales_items')->where('direct_sales_id',$guid);
          $sql=  $this->db->get();
          foreach ($sql->result() as $row){
