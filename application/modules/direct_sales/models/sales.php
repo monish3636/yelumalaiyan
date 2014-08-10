@@ -166,7 +166,7 @@ class Sales extends CI_Model{
             $id=  $this->db->insert_id();
             $this->db->where('id',$id);
             $invoice=md5('sales_bill'.$id);
-            $this->db->update('purchase_invoice',array('guid'=>  md5($invoice)));
+            $this->db->update('sales_bill',array('guid'=>  md5($invoice)));
             $this->bill_status($guid,$invoice);
             $this->payable_amount($row->customer_id,$guid,$invoice);
         }

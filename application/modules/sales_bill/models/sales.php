@@ -4,13 +4,12 @@ class Sales extends CI_Model{
         parent::__construct();
     }
     function get($end,$start,$like,$branch){
-                $this->db->select('sales_bill.*,sales_order.total_items as so_total_items,sales_delivery_note.total_amount as sdn_amount,sales_delivery_note.sales_delivery_note_no as sdn_code,direct_sales_delivery.total_items as dsd_total_items ,direct_sales_delivery.total_amt as dsd_amount,direct_sales_delivery.code dsd_code,direct_sales.total_items as ds_total, direct_sales.code as ds_code ,direct_sales.total_amt as ds_amount,customers.first_name as s_name,customers.company_name as c_name');
+                $this->db->select('sales_bill.*,sales_order.total_items as so_total_items,sales_delivery_note.total_amt as sdn_amount,sales_delivery_note.sales_delivery_note_no as sdn_code,direct_sales_delivery.total_items as dsd_total_items ,direct_sales_delivery.total_amt as dsd_amount,direct_sales_delivery.code dsd_code,customers.first_name as s_name,customers.company_name as c_name');
                 $this->db->from('sales_bill')->where('sales_bill.branch_id',$branch);
-                $this->db->join('direct_sales', 'direct_sales.guid=sales_bill.direct_sales_id','left');
                 $this->db->join('direct_sales_delivery', 'direct_sales_delivery.guid=sales_bill.sdn','left');
                 $this->db->join('sales_delivery_note','sales_delivery_note.guid=sales_bill.sdn','left');
                 $this->db->join('sales_order','sales_order.guid=sales_delivery_note.so','left');
-                $this->db->join('customers', 'customers.guid=sales_order.customer_id OR customers.guid=direct_sales.customer_id OR customers.guid=direct_sales_delivery.customer_id','left');
+                $this->db->join('customers', 'customers.guid=sales_order.customer_id OR customers.guid=direct_sales_delivery.customer_id','left');
                 $this->db->limit($end,$start); 
                 $this->db->or_like($like);     
                 $query=$this->db->get();
@@ -21,18 +20,16 @@ class Sales extends CI_Model{
                        $row['code']=$row['sdn_code'];
                        $row['total_items']=$row['so_total_items'];
                        $row['total']=$row['sdn_amount'];
+                        $data[]=$row;
                    }
                    if($row['dsd_code']!="" && $row['dsd_code']!=NULL){
                        $row['code']=$row['dsd_code'];
                        $row['total_items']=$row['dsd_total_items'];
                        $row['total']=$row['dsd_amount'];
+                        $data[]=$row;
                    }
-                   if($row['ds_code']!="" && $row['ds_code']!=NULL){
-                       $row['code']=$row['ds_code'];
-                       $row['total_items']=$row['ds_total'];
-                       $row['total']=$row['ds_amount'];
-                   }
-                    $data[]=$row;
+                  
+                   
                 }
               return $data; 
         
@@ -126,23 +123,104 @@ class Sales extends CI_Model{
         return $data;
     }
     function get_sales_bill($guid){
-        $this->db->select('items.tax_inclusive2,items.tax2_type,items.tax2_value,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,sales_delivery_note.date as sales_delivery_note_date,sales_delivery_note.note as sales_delivery_note_note,sales_delivery_note.remark as sales_delivery_note_remark,sales_delivery_note.sales_delivery_note_no,items.tax_Inclusive ,sales_delivery_note.so,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as s_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,sales_order.*,sales_items.discount as dis_per ,sales_items.item ,sales_items.quty ,sales_items.guid as o_i_guid ,sales_items.delivered_quty ,sales_items.price ,sales_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_delivery_note')->where('sales_delivery_note.guid',$guid)->where('sales_delivery_note.delete_status',0);
-        $this->db->join('sales_order', 'sales_delivery_note.so=sales_order.guid','left');      
-        $this->db->join('sales_items', 'sales_items.sales_order_id = sales_order.guid  ','left');
+        $this->db->select('direct_sales_delivery.date as dsd_date,sales_delivery_note.date as sdn_date,direct_sales_delivery.round_amt as dsd_round_amount, direct_sales_delivery.freight as dsd_freight,direct_sales_delivery.customer_discount as dsd_customer_discount, 	direct_sales_delivery.customer_discount_amount as dsd_customer_discount_amount,direct_sales_delivery.discount as dsd_discount,  direct_sales_delivery.discount_amt as dsd_discount_amt,sales_delivery_note.customer_discount  as sdn_customer_amount,sales_delivery_note.customer_discount_amount as sdn_customer_discount_amount, sales_order.freight as so_freight,sales_order.discount as so_discount,sales_order.discount_amt as so_discount_amt,sales_order.round_amt as so_round_amt,  , items.tax_inclusive2,items.tax2_type,items.tax2_value,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,sales_items.quty ,sales_items.item as so_item_id,sales_items.stock_id ,sales_items.discount as item_discount,sales_items.price,sales_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code,sales_bill.*,sales_order.total_items as so_total_items,sales_delivery_note.total_amt as sdn_amount,sales_delivery_note.sales_delivery_note_no as sdn_code,direct_sales_delivery.total_items as dsd_total_items ,direct_sales_delivery.total_amt as dsd_amount,direct_sales_delivery.code dsd_code,customers.first_name as s_name,customers.company_name as c_name');
+        $this->db->from('sales_bill')->where('sales_bill.guid',$guid);
+        $this->db->join('direct_sales_delivery', 'direct_sales_delivery.guid=sales_bill.sdn','left');
+        $this->db->join('sales_delivery_note','sales_delivery_note.guid=sales_bill.sdn','left');
+        $this->db->join('sales_order','sales_order.guid=sales_delivery_note.so','left');
+        $this->db->join('sales_items', "sales_items.invoice_id = sales_bill.guid ",'left');
         $this->db->join('item_kit','item_kit.guid=sales_items.item','left');
         $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
         $this->db->join('decomposition_items','decomposition_items.guid=sales_items.item','left');
         $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
         $this->db->join('items', "items.guid=sales_items.item OR items.guid=decomposition_items.item_id",'left');
-        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=sales_items.item  ",'left');
-        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=sales_items.item  ",'left');
-        $this->db->join('customers', "customers.guid=sales_order.customer_id AND sales_items.sales_order_id=sales_order.guid  ",'left');
-        $sql=  $this->db->get();
+        $this->db->join('taxes', "items.tax_id=taxes.guid ",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid",'left');
+        $this->db->join('customers', 'customers.guid=sales_order.customer_id OR customers.guid=direct_sales_delivery.customer_id','left');
+        
+        $query=$this->db->get();
         $data=array();
-        foreach($sql->result_array() as $row){             
-            $row['date']=date('d-m-Y',$row['date']);       
-            $row['sales_delivery_note_date']=date('d-m-Y',$row['sales_delivery_note_date']);       
-            $row['exp_date']=date('d-m-Y',$row['exp_date']);         
+        foreach ($query->result_array() as $row){
+           $row['date']=date('d-m-Y',$row['date']);
+           if($row['sdn_code']!="" && $row['sdn_code']!=NULL){
+               $row['dn_code']=$row['sdn_code'];
+                $row['total_items']=$row['so_total_items'];
+                $row['total_amt']=$row['sdn_amount'];
+                
+                $row['freight']=$row['so_freight'];
+                $row['discount']=$row['so_discount'];
+                $row['discount_amt']=$row['so_discount_amt'];
+                $row['round_amt']=$row['so_round_amt'];
+                $row['customer_discount']=$row['sdn_customer_amount'];
+                $row['customer_discount_amount']=$row['sdn_customer_discount_amount'];
+                $row['dn_date']=date('d-m-Y',$row['sdn_date']);
+           }
+           if($row['dsd_code']!="" && $row['dsd_code']!=NULL){
+                $row['dn_date']=date('d-m-Y',$row['dsd_date']);
+                $row['dn_code']=$row['dsd_code'];
+                $row['total_items']=$row['dsd_total_items'];
+                $row['total_amt']=$row['dsd_amount'];
+
+                $row['freight']=$row['dsd_freight'];
+                $row['discount']=$row['dsd_discount'];
+                $row['discount_amt']=$row['dsd_discount_amt'];
+                $row['round_amt']=$row['dsd_round_amount'];
+                $row['customer_discount']=$row['dsd_customer_discount'];
+                $row['customer_discount_amount']=$row['dsd_customer_discount_amount'];
+           }
+            $data[]=$row;
+        }
+        return $data;
+     }
+    function sales_bill_invoice($guid){
+        $this->db->select('sales_delivery_note.id as sdn_id,direct_sales_delivery.id as dsd_id,customers.email as customer_email,customers.phone as customer_phone,customers.city as customer_city,customers.state as customer_state,customers.country as customer_country,customers.zip as customer_zip,branches.code as branch_code,branches.store_name as branch_name,branches.address as branch_address,branches.city as branch_city,branches.state as branch_state,branches.zip as branch_zip ,branches.country as branch_country,branches.phone as branch_phone,branches.email as branch_mail,direct_sales_delivery.date as dsd_date,sales_delivery_note.date as sdn_date,direct_sales_delivery.round_amt as dsd_round_amount, direct_sales_delivery.freight as dsd_freight,direct_sales_delivery.customer_discount as dsd_customer_discount, 	direct_sales_delivery.customer_discount_amount as dsd_customer_discount_amount,direct_sales_delivery.discount as dsd_discount,  direct_sales_delivery.discount_amt as dsd_discount_amt,sales_delivery_note.customer_discount  as sdn_customer_amount,sales_delivery_note.customer_discount_amount as sdn_customer_discount_amount, sales_order.freight as so_freight,sales_order.discount as so_discount,sales_order.discount_amt as so_discount_amt,sales_order.round_amt as so_round_amt,  , items.tax_inclusive2,items.tax2_type,items.tax2_value,decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,items.uom,items.no_of_unit,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,customers.guid as c_guid,customers.first_name as s_name,customers.company_name as c_name,customers.address as address,sales_items.quty ,sales_items.item as so_item_id,sales_items.stock_id ,sales_items.discount as item_discount,sales_items.price,sales_items.guid as o_i_guid ,items.guid as i_guid,items.name as items_name,items.code as i_code,sales_bill.*,sales_order.total_items as so_total_items,sales_delivery_note.total_amt as sdn_amount,sales_delivery_note.sales_delivery_note_no as sdn_code,direct_sales_delivery.total_items as dsd_total_items ,direct_sales_delivery.total_amt as dsd_amount,direct_sales_delivery.code dsd_code,customers.first_name as s_name,customers.company_name as c_name');
+        $this->db->from('sales_bill')->where('sales_bill.guid',$guid);
+        $this->db->join('branches', "branches.guid = sales_bill.branch_id ",'left');
+        $this->db->join('direct_sales_delivery', 'direct_sales_delivery.guid=sales_bill.sdn','left');
+        $this->db->join('sales_delivery_note','sales_delivery_note.guid=sales_bill.sdn','left');
+        $this->db->join('sales_order','sales_order.guid=sales_delivery_note.so','left');
+        $this->db->join('sales_items', "sales_items.invoice_id = sales_bill.guid ",'left');
+        $this->db->join('item_kit','item_kit.guid=sales_items.item','left');
+        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
+        $this->db->join('decomposition_items','decomposition_items.guid=sales_items.item','left');
+        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
+        $this->db->join('items', "items.guid=sales_items.item OR items.guid=decomposition_items.item_id",'left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid ",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid",'left');
+        $this->db->join('customers', 'customers.guid=sales_order.customer_id OR customers.guid=direct_sales_delivery.customer_id','left');
+        
+        $query=$this->db->get();
+        $data=array();
+        foreach ($query->result_array() as $row){
+           $row['date']=date('d-m-Y',$row['date']);
+           if($row['sdn_code']!="" && $row['sdn_code']!=NULL){
+                $row['dn_id']=$row['sdn_id'];
+                $row['dn_code']=$row['sdn_code'];
+                $row['total_items']=$row['so_total_items'];
+                $row['total_amt']=$row['sdn_amount'];
+                
+                $row['freight']=$row['so_freight'];
+                $row['discount']=$row['so_discount'];
+                $row['discount_amt']=$row['so_discount_amt'];
+                $row['round_amt']=$row['so_round_amt'];
+                $row['customer_discount']=$row['sdn_customer_amount'];
+                $row['customer_discount_amount']=$row['sdn_customer_discount_amount'];
+                $row['dn_date']=date('d-m-Y',$row['sdn_date']);
+           }
+           if($row['dsd_code']!="" && $row['dsd_code']!=NULL){
+                $row['dn_id']=$row['dsd_id'];
+                $row['dn_date']=date('d-m-Y',$row['dsd_date']);
+                $row['dn_code']=$row['dsd_code'];
+                $row['total_items']=$row['dsd_total_items'];
+                $row['total_amt']=$row['dsd_amount'];
+
+                $row['freight']=$row['dsd_freight'];
+                $row['discount']=$row['dsd_discount'];
+                $row['discount_amt']=$row['dsd_discount_amt'];
+                $row['round_amt']=$row['dsd_round_amount'];
+                $row['customer_discount']=$row['dsd_customer_discount'];
+                $row['customer_discount_amount']=$row['dsd_customer_discount_amount'];
+           }
             $data[]=$row;
         }
         return $data;
