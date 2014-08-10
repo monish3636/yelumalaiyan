@@ -1,4 +1,5 @@
 <style type="text/css">
+       .modal-backdrop {background: none;}
     .my_select{
          -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -19,7 +20,7 @@
     transition: none 0s ease 0s;
     }
   
-   .supplier_select{
+   .customer_select{
         width: 200px !important;
     }
    .item_select{
@@ -42,9 +43,9 @@
         height: 24px;
       line-height: 1.7;
     }
-    #dt_table_tools tr td + td + td + td + td + td + td + td + td {
-  width: 120px !important;
-}
+  #dt_table_tools  tr th:nth-child(7),#dt_table_tools tr td:nth-child(7){
+      width: 170px;
+    }
 .editable-address {
     display: block;
     margin-bottom: 5px;  
@@ -102,7 +103,7 @@
                                        posnic_sales_return_lists();
                                        refresh_items_table();
                                     }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#parsley_reg #order_number').val()+' <?php echo $this->lang->line('supplier').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                           $.bootstrapGrowl($('#parsley_reg #order_number').val()+' <?php echo $this->lang->line('customer').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
                                     }else  if(response['responseText']=='FALSE'){
                                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
                                     }else{
@@ -118,7 +119,7 @@
                     }else{
                    $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('all_require_elements');?>', { type: "error" });                        
                     }<?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('supplier');?>', { type: "error" });                       
+                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                       
                     <?php }?>
     }
     function update_order(){
@@ -139,7 +140,7 @@
                                        posnic_sales_return_lists();
                                        refresh_items_table();
                                     }else  if(response['responseText']=='ALREADY'){
-                                           $.bootstrapGrowl($('#parsley_reg #order_number').val()+' <?php echo $this->lang->line('supplier').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
+                                           $.bootstrapGrowl($('#parsley_reg #order_number').val()+' <?php echo $this->lang->line('customer').' '.$this->lang->line('is_already_added');?>', { type: "warning" });                           
                                     }else  if(response['responseText']=='FALSE'){
                                            $.bootstrapGrowl('<?php echo $this->lang->line('Please Enter All Required Fields');?>', { type: "warning" });                           
                                     }else{
@@ -155,7 +156,7 @@
                     }else{
                    $.bootstrapGrowl('<?php echo $this->lang->line('please_enter')." ".$this->lang->line('all_require_elements');?>', { type: "error" });                        
                     }<?php }else{ ?>
-                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('supplier');?>', { type: "error" });                       
+                   $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('customer');?>', { type: "error" });                       
                     <?php }?>
     }
     
@@ -365,6 +366,7 @@
     
     function posnic_add_new(){
         refresh_items_table();
+        invoice_enable();
         $('#update_button').hide();
         $('#save_button').show();
         $('#update_clear').hide();
@@ -372,7 +374,7 @@
         $('#total_amount').val('');
         $("#parsley_reg #sales_bill").select2('enable');
         $('#items_id').val('');
-        $('#supplier_guid').val('');
+        $('#customer_guid').val('');
         $("#parsley_reg").trigger('reset');
         $('#deleted').remove();
         $('#parent_items').append('<div id="deleted"></div>');
@@ -395,12 +397,12 @@
             
             
             
-      $("#user_list").hide();
-    $('#add_new_order').show('slow');
-      $('#delete').attr("disabled", "disabled");
-      $('#posnic_add_sales_return').attr("disabled", "disabled");
-      $('#active').attr("disabled", "disabled");
-      $('#sales_return_lists').removeAttr("disabled");
+        $("#user_list").hide();
+        $('#add_new_order').show('slow');
+        $('#delete').attr("disabled", "disabled");
+        $('#posnic_add_sales_return').attr("disabled", "disabled");
+        $('#active').attr("disabled", "disabled");
+        $('#sales_return_lists').removeAttr("disabled");
      
          window.setTimeout(function ()
     {
@@ -411,15 +413,15 @@
                     $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('sales_return');?>', { type: "error" });                         
                     <?php }?>
 }
-function posnic_sales_return_lists(){
-  
-      $('#add_new_order').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#active').removeAttr("disabled");
-      $('#posnic_add_sales_return').removeAttr("disabled");
-      $('#sales_return_lists').attr("disabled",'disabled');
-}
+    function posnic_sales_return_lists(){
+        invoice_enable();
+        $('#add_new_order').hide('hide');      
+        $("#user_list").show('slow');
+        $('#delete').removeAttr("disabled");
+        $('#active').removeAttr("disabled");
+        $('#posnic_add_sales_return').removeAttr("disabled");
+        $('#sales_return_lists').attr("disabled",'disabled');
+    }
 function clear_add_sales_return(){
       $("#parsley_reg").trigger('reset');
       refresh_items_table();
@@ -431,7 +433,7 @@ function clear_update_sales_return(){
 }
 function reload_update_user(){
     var id=$('#guid').val();
-    supplier_function(id);
+    customer_function(id);
 }
 </script>
 <nav id="top_navigation">
@@ -1016,13 +1018,13 @@ function new_order_date(e){
                           </div>   
          
                     <div class="row small_inputs" >
-                    <div class="col col-lg-12">
+                    <div class="col col-lg-12" >
                       
                          
                              
                         
                              
-                              <div class="row" style="padding-top: 1px;">
+                              <div class="row" style="padding-top: 1px;" id="sacn_items">
                                  
                                   
                                                 <div class="col col-sm-1" style="padding:1px; width: 160px;">
@@ -1269,7 +1271,635 @@ function new_order_date(e){
                     
           </div>  </div>  </div>
     <?php echo form_close();?>
-</section>    
+</section>  
+<section class="container clearfix main_section" id="invoice_div" style="display: none">
+            <div id="main_content_outer " class="clearfix">
+                    <div id="main_content">
+
+                            <!-- main content -->
+                            <div class="row">
+                                    <div class="col-sm-4">
+                                            <a href="javascript:invoice_settings()" class="btn btn-default  btn-lg"><span class="icon icon-cogs sepV_b"></span><?php echo $this->lang->line('invoice_settings') ?></a>
+                                   
+                                            <a href="javascript:void(0)" class="btn btn-default btn-lg" id="invoice_print"><span class="glyphicon glyphicon-print sepV_b"></span><?php  echo $this->lang->line('print_invoice') ?></a>
+                                    </div>
+                            </div>
+                            <div id="invoice_content">
+                           
+                            <div class="row">
+                                    <div class="col-sm-3">
+                                            <h3 class="heading_a"><?php echo $this->lang->line('sales_return'); ?></h3>
+                                            <address>
+                                                   
+                                                    <p id="invoice_posnic_sales_retun_id"></p>
+                                                    <p  id="invoice_posnic_sales_retun_no"></p>
+                                                    <p id="invoice_posnic_sales_retun_date"></p>
+                                                    <p id="invoice_posnic_id"></p>
+                                                    <p  id="invoice_posnic_number"></p>
+                                                    <p id="invoice_posnic_date"></p>
+                                                    <p id="invoice_posnic_expiry_date"></p>
+                                                   
+                                                     
+                                            </address>
+                                    </div>
+                                    <div class="col-sm-3">
+                                         <br>
+                                         <br>
+                                        <div id="invoice_posnic_barcode"></div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                            <h3 class="heading_a"><?php echo $this->lang->line('branch'); ?></h3>
+                                            <address>
+                                                    <p  id="invoice_posnic_branch_code"></p>
+                                                    <p  ><small id="invoice_posnic_branch_name" class="text-muted "> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_address" class="text-muted"> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_city" class="text-muted "> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_state" class="text-muted"> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_zip" class="text-muted "> </small></p>
+                                                    <p  ><small id="invoice_posnic_branch_country" class="text-muted"> </small></p>
+                                                    <p  ><?php echo $this->lang->line('phone') ?>   :<small id="invoice_posnic_branch_phone" class="text-muted "> </small></p>
+                                                    <p  ><?php echo $this->lang->line('email') ?>   :<small id="invoice_posnic_branch_email" class="text-muted"> </small></p>
+                                            </address>
+                                    </div>
+                                    <div class="col-sm-3">
+                                            <h3 class="heading_a"><?php echo $this->lang->line('customer'); ?></h3>
+                                            <address>
+                                                    <p  id="invoice_posnic_customer_name" ></p>
+                                                    <p><small  id="invoice_posnic_customer_company" class="text-muted "></small></p>
+                                                    <p><small   id="invoice_posnic_customer_address" class="text-muted "></small></p>
+                                                    <p><small  id="invoice_posnic_customer_city" class="text-muted "></small></p>
+                                                    <p><small  id="invoice_posnic_customer_state" class="text-muted "></small></p>
+                                                    <p><small  id="invoice_posnic_customer_zip" class="text-muted "></small></p>
+                                                    <p><small id="invoice_posnic_customer_country" class="text-muted "></small></p>
+                                                    <p><?php echo $this->lang->line('phone') ?> :<small  id="invoice_posnic_customer_phone" class="text-muted "></small></p>
+                                                    <p><?php echo $this->lang->line('email') ?> :<small  id="invoice_posnic_customer_email" class="text-muted "></small></p>
+                                            </address>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-sm-12">
+                                            <table class="table table-striped" id="invoice_posnic_table">
+                                                    <thead>
+                                                            
+                                                    </thead>
+                                                    <tbody>
+                                                          
+                                                    </tbody>
+                                                    <tfoot>
+                                                     
+                                                    </tfoot>
+                                            </table>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-sm-12">
+                                            <div class="invoice_info" id="invoice_posnic_order_text"></div>
+                                    </div>
+                            </div>
+</div>
+                    </div>
+            </div>
+    </section>
+<section class="container clearfix main_section" id="invoice_settings" style="display: none">
+   
+    <div id="main_content_outer" class="clearfix" >
+        <div id="main_content">
+
+                <!-- main content -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <form class="form_settings" id="settings_form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title pull-left"><?php echo $this->lang->line('invoice_settings') ?></h4>
+                                <a href="javascript:save_invoice_settings()" class="btn btn-primary btn-sm pull-right"><?php echo $this->lang->line('save')." ".$this->lang->line('invoice_settings') ?></a>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#st_sales"><?php echo $this->lang->line('sales_order')." ".$this->lang->line('details') ?></a></li>
+                                    <li><a data-toggle="tab" href="#st_branch"><?php echo $this->lang->line('branch')." ".$this->lang->line('details') ?></a></li>
+                                    <li><a data-toggle="tab" href="#st_customer"><?php echo $this->lang->line('customer')." ".$this->lang->line('details') ?></a></li>
+                                    <li><a data-toggle="tab" href="#st_items"><?php echo $this->lang->line('items')." ".$this->lang->line('details') ?></a></li>
+                                    <li><a data-toggle="tab" href="#st_invoice"><?php echo $this->lang->line('invoice')." ".$this->lang->line('details') ?></a></li>
+                                    
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="st_sales" class="tab-pane active">
+                                        <div class="col-sm-3">
+                                            <div class="form-group ">
+                                                    <label for="posnic_order_id" ><?php echo $this->lang->line('sales_bill')." ". $this->lang->line('id') ?></label>													
+
+                                                         <?php $posnic_order_id=array('name'=>'posnic_order_id',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_order_id');
+                                                                echo form_checkbox($posnic_order_id)?>
+                                              
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group ">
+                                                    <label for="posnic_number" ><?php echo $this->lang->line('sales_bill')." ". $this->lang->line('no') ?></label>													
+                             
+                                                         <?php $posnic_number=array('name'=>'posnic_number',
+                                                                               'class'=>' form-control ',
+                                                               'value'=>1,
+                                                                               'id'=>'posnic_number');
+                                                                echo form_checkbox($posnic_number)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_date" ><?php echo $this->lang->line('sales_bill')." ". $this->lang->line('date') ?></label>													
+                                                     
+                                                        <?php $posnic_date=array('name'=>'posnic_date',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_date');
+                                                        
+                                                        echo form_checkbox($posnic_date)?>
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_sales_retun_id" ><?php echo $this->lang->line('sales_return')." ". $this->lang->line('id') ?></label>													
+                                                     
+                                                        <?php $posnic_sales_retun_id=array('name'=>'posnic_sales_retun_id',
+                                                                               'class'=>' form-control ',
+                                                            'value'=>1,
+                                                                               'id'=>'posnic_sales_retun_id');
+                                                        echo form_checkbox($posnic_sales_retun_id)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_sales_retun_no" ><?php echo $this->lang->line('sales_return')." ". $this->lang->line('no') ?></label>													
+                                                     
+                                                        <?php $posnic_sales_retun_no=array('name'=>'posnic_sales_retun_no',
+                                                                               'class'=>' form-control ',
+                                                            'value'=>1,
+                                                                               'id'=>'posnic_sales_retun_no');
+                                                        echo form_checkbox($posnic_sales_retun_no)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_sales_retun_date" ><?php echo $this->lang->line('sales_return')." ". $this->lang->line('date') ?></label>													
+                                                     
+                                                        <?php $posnic_sales_retun_date=array('name'=>'posnic_sales_retun_date',
+                                                                               'class'=>' form-control ',
+                                                            'value'=>1,
+                                                                               'id'=>'posnic_sales_retun_date');
+                                                        echo form_checkbox($posnic_sales_retun_date)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_barcode" ><?php echo $this->lang->line('sales_return')." ". $this->lang->line('barcode') ?></label>													
+                                                     
+                                                        <?php $posnic_barcode=array('name'=>'posnic_barcode',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_barcode');
+                                                        echo form_checkbox($posnic_barcode)?>
+                                                
+                                             </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div id="st_branch" class="tab-pane">
+                                           <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_code" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('branch')." ". $this->lang->line('code') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_code=array('name'=>'posnic_branch_code',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_code');
+                                                        echo form_checkbox($posnic_branch_code)?>
+                                                   
+                                             </div>
+                                        </div>
+                                           <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_name" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('branch')." ". $this->lang->line('name') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_name=array('name'=>'posnic_branch_name',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_name');
+                                                        echo form_checkbox($posnic_branch_name)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_address" ><?php echo $this->lang->line('branch')." ". $this->lang->line('address') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_address=array('name'=>'posnic_branch_address',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_address');
+                                                        echo form_checkbox($posnic_branch_address)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_city" ><?php echo $this->lang->line('branch')." ". $this->lang->line('city') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_city=array('name'=>'posnic_branch_city',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_city');
+                                                        echo form_checkbox($posnic_branch_city)?>
+                                               
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_state" ><?php echo $this->lang->line('branch')." ". $this->lang->line('state') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_state=array('name'=>'posnic_branch_state',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_state');
+                                                        echo form_checkbox($posnic_branch_state)?>
+                                               
+                                             </div>
+                                        </div>
+                                        
+                                         
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_country" ><?php echo $this->lang->line('branch')." ". $this->lang->line('country') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_country=array('name'=>'posnic_branch_country',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_country');
+                                                        echo form_checkbox($posnic_branch_country)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_zip" ><?php echo $this->lang->line('branch')." ". $this->lang->line('zip') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_zip=array('name'=>'posnic_branch_zip',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_zip');
+                                                        echo form_checkbox($posnic_branch_zip)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_email" ><?php echo $this->lang->line('branch')." ". $this->lang->line('email') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_email=array('name'=>'posnic_branch_email',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_email');
+                                                        echo form_checkbox($posnic_branch_email)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_branch_phone" ><?php echo $this->lang->line('branch')." ". $this->lang->line('phone') ?></label>													
+                                                     
+                                                        <?php $posnic_branch_phone=array('name'=>'posnic_branch_phone',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_branch_phone');
+                                                        echo form_checkbox($posnic_branch_phone)?>
+                                            
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div id="st_customer" class="tab-pane">
+      <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_name" ><?php echo $this->lang->line('customer')." ". $this->lang->line('name') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_name=array('name'=>'posnic_customer_name',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_name');
+                                                        echo form_checkbox($posnic_customer_name)?>
+                                                
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_company" ><?php echo $this->lang->line('customer')." ". $this->lang->line('company') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_company=array('name'=>'posnic_customer_company',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_company');
+                                                        echo form_checkbox($posnic_customer_company)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_address" ><?php echo $this->lang->line('customer')." ". $this->lang->line('address') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_address=array('name'=>'posnic_customer_address',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_address');
+                                                        echo form_checkbox($posnic_customer_address)?>
+                                                
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_city" ><?php echo $this->lang->line('customer')." ". $this->lang->line('city') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_city=array('name'=>'posnic_customer_city',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_city');
+                                                        echo form_checkbox($posnic_customer_city)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_state" ><?php echo $this->lang->line('customer')." ". $this->lang->line('state') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_state=array('name'=>'posnic_customer_state',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_state');
+                                                        echo form_checkbox($posnic_customer_state)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        
+                                         
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_country" ><?php echo $this->lang->line('customer')." ". $this->lang->line('country') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_country=array('name'=>'posnic_customer_country',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_country');
+                                                        echo form_checkbox($posnic_customer_country)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_zip" ><?php echo $this->lang->line('customer')." ". $this->lang->line('pin') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_zip=array('name'=>'posnic_customer_zip',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_zip');
+                                                        echo form_checkbox($posnic_customer_zip)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_email" ><?php echo $this->lang->line('customer')." ". $this->lang->line('email') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_email=array('name'=>'posnic_customer_email',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_email');
+                                                        echo form_checkbox($posnic_customer_email)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_phone" ><?php echo $this->lang->line('customer')." ". $this->lang->line('phone') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_phone=array('name'=>'posnic_customer_phone',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_phone');
+                                                        echo form_checkbox($posnic_customer_phone)?>
+                                                   
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div id="st_items" class="tab-pane">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_name" ><?php echo $this->lang->line('item')." ". $this->lang->line('name') ?></label>													
+                                                     
+                                                        <?php $posnic_item_name=array('name'=>'posnic_item_name',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_name');
+                                                        echo form_checkbox($posnic_item_name)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_sku" ><?php echo $this->lang->line('item')." ". $this->lang->line('sku') ?></label>													
+                                                     
+                                                        <?php $posnic_item_sku=array('name'=>'posnic_item_sku',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_sku');
+                                                        echo form_checkbox($posnic_item_sku)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_price" ><?php echo $this->lang->line('item')." ". $this->lang->line('cost') ?></label>													
+                                                     
+                                                        <?php $posnic_item_price=array('name'=>'posnic_item_price',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_price');
+                                                        echo form_checkbox($posnic_item_price)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_quantity" ><?php echo $this->lang->line('item')." ". $this->lang->line('quantity') ?></label>													
+                                                     
+                                                        <?php $posnic_item_quantity=array('name'=>'posnic_item_quantity',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_quantity');
+                                                        echo form_checkbox($posnic_item_quantity)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_tax1" ><?php echo $this->lang->line('item')." ". $this->lang->line('tax') ?> 1</label>													
+                                                     
+                                                        <?php $posnic_item_tax1=array('name'=>'posnic_item_tax1',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_tax1');
+                                                        echo form_checkbox($posnic_item_tax1)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_tax2" ><?php echo $this->lang->line('item')." ". $this->lang->line('tax') ?> 2</label>													
+                                                     
+                                                        <?php $posnic_item_tax2=array('name'=>'posnic_item_tax2',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_tax2');
+                                                        echo form_checkbox($posnic_item_tax2)?>
+                                                
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_discount1" ><?php echo $this->lang->line('item')." ". $this->lang->line('discount') ?> 1</label>													
+                                                     
+                                                        <?php $posnic_item_discount1=array('name'=>'posnic_item_discount1',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_discount1');
+                                                        echo form_checkbox($posnic_item_discount1)?>
+                                               
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_discount2" ><?php echo $this->lang->line('item')." ". $this->lang->line('discount') ?> 2</label>													
+                                                     
+                                                        <?php $posnic_item_discount2=array('name'=>'posnic_item_discount2',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_discount2');
+                                                        echo form_checkbox($posnic_item_discount2)?>
+                                                 
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_item_subtotal" ><?php echo $this->lang->line('item')." ". $this->lang->line('subtotal') ?> </label>													
+                                                     
+                                                        <?php $posnic_item_subtotal=array('name'=>'posnic_item_subtotal',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_item_subtotal');
+                                                        echo form_checkbox($posnic_item_subtotal)?>
+                                                
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div id="st_invoice" class="tab-pane">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_sales_order_subtotal" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('subtotal') ?></label>													
+                                                     
+                                                        <?php $posnic_sales_order_subtotal=array('name'=>'posnic_sales_order_subtotal',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_sales_order_subtotal');
+                                                        echo form_checkbox($posnic_sales_order_subtotal)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_inclusive_total_tax" ><?php echo $this->lang->line('total')." ". $this->lang->line('inclusive_tax') ?> 2</label>													
+                                                     
+                                                        <?php $posnic_inclusive_total_tax=array('name'=>'posnic_inclusive_total_tax',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_inclusive_total_tax');
+                                                        echo form_checkbox($posnic_inclusive_total_tax)?>
+                                               
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_exclusive_total_tax" ><?php echo $this->lang->line('total')." ". $this->lang->line('exclusive_tax') ?> 2</label>													
+                                                     
+                                                        <?php $posnic_exclusive_total_tax=array('name'=>'posnic_exclusive_total_tax',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_exclusive_total_tax');
+                                                        echo form_checkbox($posnic_exclusive_total_tax)?>
+                                              
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_total_item_discount" ><?php echo $this->lang->line('total')." ". $this->lang->line('item_discount') ?> </label>													
+                                                     
+                                                        <?php $posnic_total_item_discount=array('name'=>'posnic_total_item_discount',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_total_item_discount');
+                                                        echo form_checkbox($posnic_total_item_discount)?>
+                                                
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_grand_total" ><?php echo $this->lang->line('sales_order')." ". $this->lang->line('grand_total') ?> </label>													
+                                                     
+                                                        <?php $posnic_grand_total=array('name'=>'posnic_grand_total',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_grand_total');
+                                                        echo form_checkbox($posnic_grand_total)?>
+                                                   
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="posnic_customer_mail" ><?php echo $this->lang->line('send_invoice_to_suppplier') ?></label>													
+                                                     
+                                                        <?php $posnic_customer_mail=array('name'=>'posnic_customer_mail',
+                                                                               'class'=>' form-control ',
+                                                                                'value'=>1,
+                                                                               'id'=>'posnic_customer_mail');
+                                                        echo form_checkbox($posnic_customer_mail)?>
+                                                  
+                                             </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="posnic_message" ><?php echo $this->lang->line('message') ?> </label>													
+                                                  
+                                                        <?php $posnic_message=array('name'=>'posnic_message',
+                                                                               'class'=>' form-control ',
+                                                                               'id'=>'posnic_message',
+                                                                                'rows'=>1);
+                                                        echo form_textarea($posnic_message)?>
+                                                  
+                                             </div>
+                                        </div>
+                                    </div>
+                                            </div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+                    </div>
+                </div>
+</section>
            <div id="footer_space">
               
            </div>

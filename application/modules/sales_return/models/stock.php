@@ -92,6 +92,37 @@ class Stock extends CI_Model{
       
         return $data;
     }
+    function sales_return_invoice($guid){
+        $this->db->select('sales_bill.id as bill_id,customers.email as customer_email,customers.phone as customer_phone,customers.city as customer_city,customers.state as customer_state,customers.country as customer_country,customers.zip as customer_zip,branches.code as branch_code,branches.store_name as branch_name,branches.address as branch_address,branches.city as branch_city,branches.state as branch_state,branches.zip as branch_zip ,branches.country as branch_country,branches.phone as branch_phone,branches.email as branch_mail,sales_items.discount as item_discount,items.tax_inclusive2,items.tax2_type,items.tax2_value,items.tax_inclusive2,items.tax2_type,items.tax2_value, decomposition_items.guid as deco_guid,decomposition_items.tax_inclusive as deco_tax ,decomposition_type.value as deco_value,decomposition_items.code as deco_code,item_kit.tax_id as kit_tax_id,item_kit.tax_value as kit_tax_value,item_kit.tax_type as kit_tax_type,kit_category.category_name as kit_category,item_kit.no_of_items,item_kit.guid as kit_guid,item_kit.code as kit_code,item_kit.name as kit_name,item_kit.selling_price as kit_price,item_kit.tax_inclusive as kit_tax_Inclusive,item_kit.tax_amount as kit_tax_amount,sales_bill.invoice,sales_items.delivered_quty as so_quty ,sales_items.quty as ordered_quty,customers.first_name,sales_bill.date as sales_date,items.tax_Inclusive ,tax_types.type as tax_type_name,taxes.value as tax_value,taxes.type as tax_type,sales_return_x_items.quty as item_limit,sales_return.*,sales_return_x_items.tax as order_tax,sales_return_x_items.item ,sales_return_x_items.quty ,sales_return_x_items.sell ,sales_return_x_items.guid as o_i_guid ,sales_return_x_items.amount ,items.guid as i_guid,items.name as items_name,items.code as i_code')->from('sales_return')->where('sales_return.guid',$guid);
+        $this->db->join('sales_bill',"sales_bill.guid=sales_return.sales_bill_id AND sales_return.guid ='".$guid."'",'left');  
+        $this->db->join('branches', "branches.guid = sales_bill.branch_id ",'left');
+        $this->db->join('sales_return_x_items', "sales_return_x_items.sales_return_id = sales_return.guid  AND sales_return_x_items.sales_return_id ='".$guid."'",'left');
+        $this->db->join('sales_items', "sales_items.item=sales_return_x_items.item AND sales_items.invoice_id=sales_bill.guid AND sales_return_x_items.sales_return_id ='".$guid."'",'left');     
+        $this->db->join('customers','customers.guid=sales_bill.customer_id','left');
+        $this->db->join('item_kit','item_kit.guid=sales_return_x_items.item  ','left');
+        $this->db->join('kit_category','kit_category.guid=item_kit.category_id','left');
+        $this->db->join('decomposition_items','decomposition_items.guid=sales_return_x_items.item ','left');
+        $this->db->join('decomposition_type','decomposition_type.guid=decomposition_items.type_id','left');
+        $this->db->join('items', "items.guid=sales_return_x_items.item OR items.guid=decomposition_items.item_id",'left');
+        $this->db->join('taxes', "items.tax_id=taxes.guid AND items.guid=sales_return_x_items.item  ",'left');
+        $this->db->join('tax_types', "taxes.type=tax_types.guid AND items.tax_id=taxes.guid AND items.guid=sales_return_x_items.item  ",'left');
+      
+        $sql=  $this->db->get();
+        $data=array();
+        foreach($sql->result_array() as $row){
+            $row['date']=date('d-m-Y',$row['date']);
+            $row['sales_date']=date('d-m-Y',$row['sales_date']);
+            if($row['so_quty']!="" && $row['so_quty']!=0){
+                $row['item_limit']=$row['so_quty'];
+            }else{
+                $row['item_limit']=$row['ordered_quty'];
+            }      
+                
+          $data[]=$row;
+        }
+      
+        return $data;
+    }
     function delete_order_item($guid){      
         $this->db->where('guid',$guid);
         $this->db->delete('sales_return_x_items');
