@@ -17,7 +17,7 @@ class Sales_return extends MX_Controller{
 //         $this->stock->search_items('','667a901118c7eba0cb686b6dbbca1b48');
 //         $this->stock->search_items('','fc157016310c6314cc8b3b69c34d730e');
     }
-    // purchase order data table
+    // sales order data table
     function data_table(){
         $aColumns = array( 'guid','code','code','date','no_items','total_amount','active_status','stock_status' );	
 	$start = "";
@@ -96,7 +96,7 @@ class Sales_return extends MX_Controller{
     }
     
     function  set_seleted_item_suppier($suid){
-        $this->session->userdata['supplier_guid']=$suid;
+        $this->session->userdata['customer_guid']=$suid;
     }
     
    
@@ -239,13 +239,13 @@ function save(){
     }
         
 /*
- * get supplier details for stock transfer 
+ * get customer details for stock transfer 
  *  */       
 // functoon starts
-function search_supplier(){
+function search_customer(){
     $search= $this->input->post('term');  
     $like=array('first_name'=>$search,'last_name'=>$search,'company_name'=>$search,'phone'=>$search,'email'=>$search);       
-    $data= $this->posnic->posnic_select2('suppliers',$like)    ;
+    $data= $this->posnic->posnic_select2('customers',$like)    ;
     echo json_encode($data);
 }
 // function end
@@ -262,16 +262,16 @@ function search_sales_bill(){
 // function end
 
 /*
-Delete purchase order if the user have permission  */
+Delete sales order if the user have permission  */
 // function start
 function delete(){
-   if($this->session->userdata['brands_per']['delete']==1){ // check permission of current user for delete purchase  order
+   if($this->session->userdata['brands_per']['delete']==1){ // check permission of current user for delete sales  order
             if($this->input->post('guid')){ 
                 $this->load->model('stock');
                 $guid=$this->input->post('guid');
-                $status=$this->stock->check_approve($guid);// check if the purchase order was already apparoved or what
+                $status=$this->stock->check_approve($guid);// check if the sales order was already apparoved or what
                     if($status!=FALSE){
-                        $this->posnic->posnic_delete($guid,'sales_return'); // delete the purchase order
+                        $this->posnic->posnic_delete($guid,'sales_return'); // delete the sales order
                         echo 'TRUE';
                     }else{
                         echo 'Approved';
@@ -285,13 +285,21 @@ function delete(){
 }
 // function end
 
-function  get_sales_return($guid){
-    if($this->session->userdata['sales_return_per']['edit']==1){
-    $this->load->model('stock');
-    $data=  $this->stock->get_sales_return($guid);
-    echo json_encode($data);
+    function  get_sales_return($guid){
+        if($this->session->userdata['sales_return_per']['edit']==1){
+        $this->load->model('stock');
+        $data=  $this->stock->get_sales_return($guid);
+        echo json_encode($data);
+        }
     }
-}
+
+    function  view_sales_return($guid){
+        if($this->session->userdata['sales_return_per']['view']==1){
+        $this->load->model('stock');
+        $data=  $this->stock->get_sales_return($guid);
+        echo json_encode($data);
+        }
+    }
 
 function sales_return_approve(){
      if($this->session->userdata['sales_return_per']['approve']==1){
@@ -308,7 +316,7 @@ function order_number(){
        echo json_encode($data);
 }
 /*
- * search items to purchase order with or like 
+ * search items to sales order with or like 
  *  */
 
 function search_items(){
@@ -320,9 +328,127 @@ function search_items(){
        
         
 }
-function language($lang){
-       $lang= $this->lang->load($lang);
-       return $lang;
+
+           /* get sales order and invoice settings
+     function start     */
+    function  get_invoice_settings_and_sales_return($guid){
+        if($this->session->userdata['sales_return_per']['print_invoice']==1){
+        $this->load->model('stock');
+        $data[0]=  $this->stock->sales_return_invoice($guid); // get purchas eorder details
+         // read setting config file
+        if($this->session->flashdata('sales_return_invoice')==""){
+            $this->config->load("settings");
+            $value=array();
+            $value=$this->config->item('invoice');
+            $this->session->set_flashdata('sales_return_invoice',$value); 
+            $data[1]=$value; 
+        }else{        
+            $data[1]=$this->session->flashdata('sales_return_invoice'); // get invoice array
+        }
+        echo json_encode($data);
+        }
+    }
+    /* function end*/
+      /* get sales order invoice getting details*/
+    function get_invoice_settings(){
+        if($this->session->userdata['sales_return_per']['invoice_setting']==1){
+            $this->config->load("settings"); // read setting config file
+            $settings =$this->config->item('invoice'); // get invoice array
+            echo json_encode($settings);
+        }
+    }
+    function save_invoice_settings(){
+                
+                $con="<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');"."\n".' $config["invoice"]=array(';
+          
+                $posnic_order_id=$this->input->post('posnic_order_id')==1? 1 : 0;
+                $data=$con.'"posnic_order_id"=>'.$posnic_order_id.','."\n";
+                $posnic_number=$this->input->post('posnic_number')==1?1:0;
+                $data=$data.'"posnic_number"=>'.$posnic_number.','."\n";
+                $posnic_date=$this->input->post('posnic_date')==1?1:0;
+                $data=$data.'"posnic_date"=>'.$posnic_date.','."\n";
+                $posnic_sales_retun_id=$this->input->post('posnic_sales_retun_id')==1?1:0;
+                $data=$data.'"posnic_sales_retun_id"=>'.$posnic_sales_retun_id.','."\n";
+                $posnic_sales_retun_no=$this->input->post('posnic_sales_retun_no')==1?1:0;
+                $data=$data.'"posnic_sales_retun_no"=>'.$posnic_sales_retun_no.','."\n";
+                $posnic_sales_retun_date=$this->input->post('posnic_sales_retun_date')==1?1:0;
+                $data=$data.'"posnic_sales_retun_date"=>'.$posnic_sales_retun_date.','."\n";
+                $posnic_barcode=$this->input->post('posnic_barcode')==1?1:0;
+                $data=$data.'"posnic_barcode"=>'.$posnic_barcode.','."\n";
+                $posnic_branch_code=$this->input->post('posnic_branch_code')==1?1:0;
+                $data=$data.'"posnic_branch_code"=>'.$posnic_branch_code.','."\n";
+                $posnic_branch_name=$this->input->post('posnic_branch_name')==1?1:0;
+                $data=$data.'"posnic_branch_name"=>'.$posnic_branch_name.','."\n";
+                $posnic_branch_address=$this->input->post('posnic_branch_address')==1?1:0;
+                $data=$data.'"posnic_branch_address"=>'.$posnic_branch_address.','."\n";
+                $posnic_branch_city=$this->input->post('posnic_branch_city')==1?1:0;
+                $data=$data.'"posnic_branch_city"=>'.$posnic_branch_city.','."\n";
+                $posnic_branch_state=$this->input->post('posnic_branch_state')==1?1:0;
+                $data=$data.'"posnic_branch_state"=>'.$posnic_branch_state.','."\n";
+                $posnic_branch_country=$this->input->post('posnic_branch_country')==1?1:0;
+                $data=$data.'"posnic_branch_country"=>'.$posnic_branch_country.','."\n";
+                $posnic_branch_pin=$this->input->post('posnic_branch_zip')==1?1:0;
+                $data=$data.'"posnic_branch_zip"=>'.$posnic_branch_pin.','."\n";
+                $posnic_branch_email=$this->input->post('posnic_branch_email')==1?1:0;
+                $data=$data.'"posnic_branch_email"=>'.$posnic_branch_email.','."\n";
+                $posnic_branch_phone=$this->input->post('posnic_branch_phone')==1?1:0;
+                $data=$data.'"posnic_branch_phone"=>'.$posnic_branch_phone.','."\n";
+                $posnic_customer_name=$this->input->post('posnic_customer_name')==1?1:0;
+                $data=$data.'"posnic_customer_name"=>'.$posnic_customer_name.','."\n";
+                $posnic_customer_company=$this->input->post('posnic_customer_company')==1?1:0;
+                $data=$data.'"posnic_customer_company"=>'.$posnic_customer_company.','."\n";
+                $posnic_customer_address=$this->input->post('posnic_customer_address')==1?1:0;
+                $data=$data.'"posnic_customer_address"=>'.$posnic_customer_address.','."\n";
+                $posnic_customer_city=$this->input->post('posnic_customer_city')==1?1:0;
+                $data=$data.'"posnic_customer_city"=>'.$posnic_customer_city.','."\n";
+                $posnic_customer_state=$this->input->post('posnic_customer_state')==1?1:0;
+                $data=$data.'"posnic_customer_state"=>'.$posnic_customer_state.','."\n";
+                $posnic_customer_country=$this->input->post('posnic_customer_country')==1?1:0;
+                $data=$data.'"posnic_customer_country"=>'.$posnic_customer_country.','."\n";
+                $posnic_customer_zip=$this->input->post('posnic_customer_zip')==1?1:0;
+                $data=$data.'"posnic_customer_zip"=>'.$posnic_customer_zip.','."\n";
+                $posnic_customer_email=$this->input->post('posnic_customer_email')==1?1:0;
+                $data=$data.'"posnic_customer_email"=>'.$posnic_customer_email.','."\n";
+                $posnic_customer_phone=$this->input->post('posnic_customer_phone')==1?1:0;
+                $data=$data.'"posnic_customer_phone"=>'.$posnic_customer_phone.','."\n";
+                $posnic_item_name=$this->input->post('posnic_item_name')==1?1:0;
+                $data=$data.'"posnic_item_name"=>'.$posnic_item_name.','."\n";
+                $posnic_item_sku=$this->input->post('posnic_item_sku')==1?1:0;
+                $data=$data.'"posnic_item_sku"=>'.$posnic_item_sku.','."\n";
+                $posnic_item_price=$this->input->post('posnic_item_price')==1?1:0;
+                $data=$data.'"posnic_item_price"=>'.$posnic_item_price.','."\n";
+                $posnic_item_quantity=$this->input->post('posnic_item_quantity')==1?1:0;
+                $data=$data.'"posnic_item_quantity"=>'.$posnic_item_quantity.','."\n";
+                $posnic_item_tax1=$this->input->post('posnic_item_tax1')==1?1:0;
+                $data=$data.'"posnic_item_tax1"=>'.$posnic_item_tax1.','."\n";
+                $posnic_item_tax2=$this->input->post('posnic_item_tax2')==1?1:0;
+                $data=$data.'"posnic_item_tax2"=>'.$posnic_item_tax2.','."\n";
+                $posnic_item_discount1=$this->input->post('posnic_item_discount1')==1?1:0;
+                $data=$data.'"posnic_item_discount1"=>'.$posnic_item_discount1.','."\n";
+                $posnic_item_discount2=$this->input->post('posnic_item_discount2')==1?1:0;
+                $data=$data.'"posnic_item_discount2"=>'.$posnic_item_discount2.','."\n";
+                $posnic_item_subtotal=$this->input->post('posnic_item_subtotal')==1?1:0;
+                $data=$data.'"posnic_item_subtotal"=>'.$posnic_item_subtotal.','."\n";
+                $posnic_sales_return_subtotal=$this->input->post('posnic_sales_return_subtotal')==1?1:0;
+                $data=$data.'"posnic_sales_return_subtotal"=>'.$posnic_sales_return_subtotal.','."\n";
+                $posnic_inclusive_total_tax=$this->input->post('posnic_inclusive_total_tax')==1?1:0;
+                $data=$data.'"posnic_inclusive_total_tax"=>'.$posnic_inclusive_total_tax.','."\n";
+                $posnic_exclusive_total_tax=$this->input->post('posnic_exclusive_total_tax')==1?1:0;
+                $data=$data.'"posnic_exclusive_total_tax"=>'.$posnic_exclusive_total_tax.','."\n";
+                $posnic_total_item_discount=$this->input->post('posnic_total_item_discount')==1?1:0;
+                $data=$data.'"posnic_total_item_discount"=>'.$posnic_total_item_discount.','."\n";
+                $posnic_grand_total=$this->input->post('posnic_grand_total')==1?1:0;
+                $data=$data.'"posnic_grand_total"=>'.$posnic_grand_total.','."\n";
+                $posnic_customer_mail=$this->input->post('posnic_customer_mail')==1?1:0;
+                $data=$data.'"posnic_customer_mail"=>'.$posnic_customer_mail.','."\n";
+                $posnic_message=$this->input->post('posnic_message')==""?"'POSNIC'":$this->input->post('posnic_message');
+                $data=$data.'"posnic_message"=>'.'"'.$posnic_message.'"';
+                $data=$data.');';                
+                $this->load->helper('file');
+                write_file('application/modules/sales_return/config/settings.php', $data);
+                $this->config->load("settings");
+                $this->session->set_flashdata('sales_return_invoice', $this->config->item('invoice'));
+                echo 'TRUE';
     }
 }
 ?>
