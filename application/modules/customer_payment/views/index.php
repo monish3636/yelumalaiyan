@@ -377,110 +377,105 @@
         
      });
     
-function posnic_add_new(){
-$("#customer_payment_select_2").show('slow');
-$('#customer_payment_order').hide();
-$("#parsley_reg #sales_bill").select2('enable');
-$('#update_button').hide();
-$('#save_button').show();
-$('#update_clear').hide();
-$('#save_clear').show();
-$('#total_amount').val('');
-$('#items_id').val('');
-$("#parsley_reg").trigger('reset');
-$('#deleted').remove();
-$("#parsley_reg #first_name").select2('data', {id:'',text: 'Search Supplier'});
-    <?php if($this->session->userdata['customer_payment_per']['add']==1){ ?>
+    function posnic_add_new(){
+        invoice_enable();
+        $("#customer_payment_select_2").show('slow');
+        $('#customer_payment_order').hide();
+        $("#parsley_reg #sales_bill").select2('enable');
+        $('#update_button').hide();
+        $('#save_button').show();
+        $('#update_clear').hide();
+        $('#save_clear').show();
+        $('#total_amount').val('');
+        $('#items_id').val('');
+        $("#parsley_reg").trigger('reset');
+        $('#deleted').remove();
+        $("#parsley_reg #first_name").select2('data', {id:'',text: 'Search Supplier'});
+        <?php if($this->session->userdata['customer_payment_per']['add']==1){ ?>
              $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/customer_payment/payment_code/",                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             {    
-                                 
-                                
-                                 $('#parsley_reg #payment_code').val(data[0][0]['prefix']+data[0][0]['max']);
-                                 $('#parsley_reg #demo_payment_code').val(data[0][0]['prefix']+data[0][0]['max']);
-                             }
-                             });
+                url: "<?php echo base_url() ?>index.php/customer_payment/payment_code/",                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                {    
+                    $('#parsley_reg #payment_code').val(data[0][0]['prefix']+data[0][0]['max']);
+                    $('#parsley_reg #demo_payment_code').val(data[0][0]['prefix']+data[0][0]['max']);
+                }
+            });
             
             
             
-      $("#user_list").hide();
-      $("#debit_payament").hide();
-      $('#credit_payment').show('slow');
-    
-      $('#delete').attr("disabled", "disabled");
-      $('#posnic_add_customer_payment').attr("disabled", "disabled");
-     
-      $('#posnic_customer_debit_payment').removeAttr("disabled");
-      $('#customer_payment_lists').removeAttr("disabled");
+        $("#user_list").hide();
+        $("#debit_payament").hide();
+        $('#credit_payment').show('slow');
+
+        $('#delete').attr("disabled", "disabled");
+        $('#posnic_add_customer_payment').attr("disabled", "disabled");
+
+        $('#posnic_customer_debit_payment').removeAttr("disabled");
+        $('#customer_payment_lists').removeAttr("disabled");
      
          window.setTimeout(function ()
-    {
+        {
        
-        $('#parsley_reg #sales_bill').select2('open');
-    }, 500);
+            $('#parsley_reg #sales_bill').select2('open');
+        }, 500);
+      <?php }else{ ?>
+                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('payment');?>', { type: "error" });                         
+                    <?php }?>
+    }
+    function posnic_add_debit(){
+        invoice_enable();
+        $("#customer_payment_select_2").show('slow');
+        $('#customer_payment_order').hide();
+        $("#parsley_ext #sales_return").select2('enable');
+        $('#parsley_ext #update_button').hide();
+        $('#parsley_ext #save_button').show();
+        $('#parsley_ext #update_clear').hide();
+        $('#parsley_ext #save_clear').show();
+        $('#parsley_ext #total_amount').val('');
+        $('#parsley_ext #items_id').val('');
+        $("#parsley_ext").trigger('reset');
+        $('#parsley_ext #deleted').remove();
+        $("#parsley_ext #first_name").select2('data', {id:'',text: 'Search Supplier'});
+        <?php
+        if($this->session->userdata['customer_payment_per']['add']==1){ ?>
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/customer_payment/payment_code/",                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                {    
+                    $('#parsley_ext #payment_code').val(data[0][0]['prefix']+data[0][0]['max']);
+                    $('#parsley_ext #demo_payment_code').val(data[0][0]['prefix']+data[0][0]['max']);
+                }
+            });
+            $("#user_list").hide();
+            $('#credit_payment').hide();
+            $('#debit_payament').show('slow');
+            $('#delete').attr("disabled", "disabled");
+            $('#posnic_customer_debit_payment').attr("disabled", "disabled");
+            $('#posnic_add_customer_payment').removeAttr("disabled");
+            $('#customer_payment_lists').removeAttr("disabled");     
+            window.setTimeout(function ()
+            {
+
+                $('#parsley_ext #sales_return').select2('open');
+            }, 500);
       <?php }else{ ?>
                     $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('payment');?>', { type: "error" });                         
                     <?php }?>
 }
-function posnic_add_debit(){
-$("#customer_payment_select_2").show('slow');
-$('#customer_payment_order').hide();
-$("#parsley_ext #sales_return").select2('enable');
-$('#parsley_ext #update_button').hide();
-$('#parsley_ext #save_button').show();
-$('#parsley_ext #update_clear').hide();
-$('#parsley_ext #save_clear').show();
-$('#parsley_ext #total_amount').val('');
-$('#parsley_ext #items_id').val('');
-$("#parsley_ext").trigger('reset');
-$('#parsley_ext #deleted').remove();
-$("#parsley_ext #first_name").select2('data', {id:'',text: 'Search Supplier'});
-    <?php if($this->session->userdata['customer_payment_per']['add']==1){ ?>
-             $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/customer_payment/payment_code/",                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             {    
-                                 
-                                
-                                 $('#parsley_ext #payment_code').val(data[0][0]['prefix']+data[0][0]['max']);
-                                 $('#parsley_ext #demo_payment_code').val(data[0][0]['prefix']+data[0][0]['max']);
-                             }
-                             });
-            
-            
-            
-      $("#user_list").hide();
-      $('#credit_payment').hide();
-      $('#debit_payament').show('slow');
-     
-      $('#delete').attr("disabled", "disabled");
-      $('#posnic_customer_debit_payment').attr("disabled", "disabled");
-      $('#posnic_add_customer_payment').removeAttr("disabled");
-      $('#customer_payment_lists').removeAttr("disabled");
-     
-         window.setTimeout(function ()
-    {
-       
-        $('#parsley_ext #sales_return').select2('open');
-    }, 500);
-      <?php }else{ ?>
-                    $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Add')." ".$this->lang->line('payment');?>', { type: "error" });                         
-                    <?php }?>
-}
-function posnic_customer_payment_lists(){
-      $('#debit_payament').hide('hide');
-      $('#credit_payment').hide('hide');      
-      $("#user_list").show('slow');
-      $('#delete').removeAttr("disabled");
-      $('#posnic_add_customer_payment').removeAttr("disabled");
-      $('#posnic_customer_debit_payment').removeAttr("disabled");
-      $('#customer_payment_lists').attr("disabled",'disabled');
-}
+    function posnic_customer_payment_lists(){
+        invoice_enable();
+        $('#debit_payament').hide('hide');
+        $('#credit_payment').hide('hide');      
+        $("#user_list").show('slow');
+        $('#delete').removeAttr("disabled");
+        $('#posnic_add_customer_payment').removeAttr("disabled");
+        $('#posnic_customer_debit_payment').removeAttr("disabled");
+        $('#customer_payment_lists').attr("disabled",'disabled');
+    }
 function clear_add_payment(){
       $("#parsley_reg").trigger('reset');
       
