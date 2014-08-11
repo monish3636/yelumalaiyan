@@ -229,7 +229,7 @@ function save_sales_return_payment(){
           
    }
     function delete(){
-       if($this->session->userdata['goods_receiving_note_per']['delete']==1){
+       if($this->session->userdata['customer_payment_per']['delete']==1){
             if($this->input->post('guid')){
                 $guid=  $this->input->post('guid');
                 
@@ -278,18 +278,46 @@ function save_sales_return_payment(){
      *  get payment details for edit     
      * function start */
     function get_customer_payment($guid){
-        $this->load->model('payment');
-        $data=  $this->payment->get_payment_details($guid);
-        echo json_encode($data); // encode data array to json
+        if($this->session->userdata['customer_payment_per']['edit']==1){
+            $this->load->model('payment');
+            $data=  $this->payment->get_payment_details($guid);
+            echo json_encode($data); // encode data array to json
+        }
+    }
+    /* function end*/
+    /*
+     *  get payment details for edit     
+     * function start */
+    function view_customer_payment($guid){
+        if($this->session->userdata['customer_payment_per']['view']==1){        
+            $this->load->model('payment');
+            $data=  $this->payment->get_payment_details($guid);
+            echo json_encode($data); // encode data array to json
+        }
     }
     /* function end*/
     /*
     get customer debit payment     
         function start     */
     function get_customer_debit_payment($guid){
-        $this->load->model('payment');
-        $data=  $this->payment->get_customer_debit_payment($guid);
-        echo json_encode($data); // encode data array to json
+        if($this->session->userdata['customer_payment_per']['edit']==1){
+            $this->load->model('payment');
+            $data=  $this->payment->get_customer_debit_payment($guid);
+            echo json_encode($data); // encode data array to json
+        }
+    }
+    
+    
+    /* function end*/
+    /*
+    get customer debit payment     
+        function start     */
+    function view_customer_debit_payment($guid){
+        if($this->session->userdata['customer_payment_per']['view']==1){        
+            $this->load->model('payment');
+            $data=  $this->payment->get_customer_debit_payment($guid);
+            echo json_encode($data); // encode data array to json
+        }
     }
     
     

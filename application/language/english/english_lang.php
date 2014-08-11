@@ -844,5 +844,6 @@ $lang['credit_days']='Credit Days';
     $lang['sales_quotation_number']='Sales Quotation No';
     $lang['sales_quotation_id']='Sales Quotation Id';
     $lang['You_Have_NO_Permission_To_Print']='You Have NO Permission To Print';
+    $lang['You_Have_NO_Permission_To']='You Have NO Permission To ';
    
 ?>

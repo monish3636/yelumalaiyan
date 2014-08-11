@@ -54,9 +54,9 @@
                                                                 
                    						"fnRender": function (oObj) {
                                                                  if(oObj.aData[9]==""){
-                                                                        return '<a href=javascript:edit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit') ?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete') ?>'><i class='icon-trash'></i></span> </a>";
+                                                                        return '<a href=javascript:view_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-default hint--top hint--default" data-hint="<?php echo $this->lang->line('view') ?>"><i class="icon-book"></i></span></a>&nbsp<a href=javascript:edit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit') ?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete') ?>'><i class='icon-trash'></i></span> </a>";
                                                                     }else{
-                                                                          return '<a href=javascript:edit_debit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit') ?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete') ?>'><i class='icon-trash'></i></span> </a>";
+                                                                          return '<a href=javascript:view_debit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-default hint--top hint--default" data-hint="<?php echo $this->lang->line('view') ?>"><i class="icon-book"></i></span></a>&nbsp<a href=javascript:edit_debit_function("'+oObj.aData[0]+'") ><span data-toggle="tooltip" class="label label-info hint--top hint--info" data-hint="<?php echo $this->lang->line('edit') ?>"><i class="icon-edit"></i></span></a>'+"&nbsp;<a href=javascript:user_function('"+oObj.aData[0]+"'); ><span data-toggle='tooltip' class='label label-danger hint--top hint--error' data-hint='<?php echo $this->lang->line('delete') ?>'><i class='icon-trash'></i></span> </a>";
                                                                     }
                                                                 },
 								
@@ -119,145 +119,264 @@
         
     
           
-        function edit_function(guid){
-                        <?php if($this->session->userdata['customer_payment_per']['edit']==1){ ?>
-                                
-                            $("#parsley_reg").trigger('reset');
-                            $('#parsley_reg #update_button').show();
-                            $('#parsley_reg #save_button').hide();
-                            $('#parsley_reg #update_clear').show();
-                            $('#parsley_reg #save_clear').hide();
-                            $('#loading').modal('show');
-                            $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/customer_payment/get_customer_payment/"+guid,                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             { 
-                                $("#user_list").hide();
-                                $('#credit_payment').show('slow');
-                               
-                                
-                                $('#delete').attr("disabled", "disabled");
-                                $('#posnic_add_customer_payment').attr("disabled", "disabled");
-                                $('#posnic_customer_debit_payment').attr("disabled", "disabled");
-                                $('#active').attr("disabled", "disabled");
-                                $('#deactive').attr("disabled", "disabled");
-                                $('#customer_payment_lists').removeAttr("disabled");
-                               
-                             
-                                
-                                $("#parsley_reg #payment_id").val(data[0]['guid']);
-                                $("#parsley_reg #invoice").val(data[0]['invoice']);
-                                $("#parsley_reg #company").val(data[0]['company']);
-                                $("#parsley_reg #supplier").val(data[0]['name']);
-                                $("#parsley_reg #demo_payment_code").val(data[0]['code']);
-                                $("#parsley_reg #sales_bill").select2('data', {id:'',text: data[0]['invoice']});
-                                 $("#parsley_reg #sales_bill").select2('disable');
-                                $("#parsley_reg #payment_code").val(data[0]['code']);
-                                $("#parsley_reg #payment_date").val(data[0]['payment_date']);
-                                $("#parsley_reg #amount").val(data[0]['amount']);
-                                $("#parsley_reg #memo").val(data[0]['memo']);
-                                $("#parsley_reg #payment").val(data[0]['payable_id']);
-                                var balance=data[0]['paid_amount']-data[0]['amount'];
-                                $("#parsley_reg #balance_amount").val(data[0]['total']-balance);
-                                $("#parsley_reg #balance").val(data[0]['total']-balance-data[0]['amount']);
-                                $("#parsley_reg #total").val(data[0]['total']);
-                                $("#parsley_reg #paid_amount").val(balance);
-                                var num = parseFloat( $("#parsley_reg #balance_amount").val());
-                                $("#parsley_reg #balance_amount").val(num.toFixed(point));
-                                var num = parseFloat( $("#parsley_reg #balance").val());
-                                $("#parsley_reg #balance").val(num.toFixed(point));
-                                var num = parseFloat( $("#parsley_reg #paid_amount").val());
-                                $("#parsley_reg #paid_amount").val(num.toFixed(point));
-                             
-                               
-                             } 
-                           });
-                      
-                          window.setTimeout(function ()
-                    {
-                       //$('#parsley_reg #delivery_date').focus();
-                       document.getElementById('amount').focus();
-                       $('#loading').modal('hide');
-                    }, 0);
-                         
-                        <?php }else{?>
-                                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('customer_payment');?>', { type: "error" });                       
-                        <?php }?>
-                       }
-        function edit_debit_function(guid){
-                        <?php if($this->session->userdata['customer_payment_per']['edit']==1){ ?>
-                                
-                            $("#parsley_ext").trigger('reset');
-                            $('#parsley_ext #update_button').show();
-                            $('#parsley_ext #save_button').hide();
-                            $('#parsley_ext #update_clear').show();
-                            $('#parsley_ext #save_clear').hide();
-                            $('#loading').modal('show');
-                            $.ajax({                                      
-                             url: "<?php echo base_url() ?>index.php/customer_payment/get_customer_debit_payment/"+guid,                      
-                             data: "", 
-                             dataType: 'json',               
-                             success: function(data)        
-                             { 
-                                $("#user_list").hide();
-                                $('#debit_payament').show('slow');
-                               
-                                
-                                $('#delete').attr("disabled", "disabled");
-                                $('#posnic_add_customer_payment').attr("disabled", "disabled");
-                                $('#posnic_customer_debit_payment').attr("disabled", "disabled");
-                                $('#active').attr("disabled", "disabled");
-                                $('#deactive').attr("disabled", "disabled");
-                                $('#customer_payment_lists').removeAttr("disabled");
-                               
-                             
-                                
-                             
-                                 
-                                $("#parsley_ext #payment_id").val(data[0]['guid']);
-                                $("#parsley_ext #sales_return_guid").val(data[0]['return_id']);
-                                //$("#parsley_ext #invoice").val(data[0]['invoice']);
-                                $("#parsley_ext #sales_bill").val(data[0]['invoice']);
-                                $("#parsley_ext #customer").val(data[0]['name']);
-                                $("#parsley_ext #demo_payment_code").val(data[0]['code']);
-                                $("#parsley_ext #sales_return").select2('data', {id:'',text: data[0]['sales_return_code']});
-                                 $("#parsley_ext #sales_return").select2('disable');
-                                $("#parsley_ext #payment_code").val(data[0]['code']);
-                                $("#parsley_ext #payment_date").val(data[0]['payment_date']);
-                                $("#parsley_ext #amount").val(data[0]['amount']);
-                                $("#parsley_ext #memo").val(data[0]['memo']);
-                                $("#parsley_ext #payment").val(data[0]['payable_id']);
-                                var balance=data[0]['paid_amount']-data[0]['amount'];
-                                $("#parsley_ext #balance_amount").val(data[0]['total']-balance);
-                                $("#parsley_ext #balance").val(data[0]['total']-balance-data[0]['amount']);
-                                $("#parsley_ext #total").val(data[0]['total']);
-                                $("#parsley_ext #paid_amount").val(balance);
-                                var num = parseFloat( $("#parsley_ext #balance_amount").val());
-                                $("#parsley_ext #balance_amount").val(num.toFixed(point));
-                                var num = parseFloat( $("#parsley_ext #balance").val());
-                                $("#parsley_ext #balance").val(num.toFixed(point));
-                                var num = parseFloat( $("#parsley_ext #paid_amount").val());
-                                $("#parsley_ext #paid_amount").val(num.toFixed(point));
-                             
-                               
-                             
-                               
-                             } 
-                           });
-                      
-                          window.setTimeout(function ()
-                    {
-                  
-                       document.getElementById('amount').focus();
-                       $('#loading').modal('hide');
-                    }, 0);
-                         
-                        <?php }else{?>
-                                 $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('customer_payment');?>', { type: "error" });                       
-                        <?php }?>
-                       }
+    function edit_function(guid){
+        <?php
+        if($this->session->userdata['customer_payment_per']['edit']==1){ ?>
+            $("#parsley_reg").trigger('reset');
+            $('#parsley_reg #update_button').show();
+            $('#parsley_reg #save_button').hide();
+            $('#parsley_reg #update_clear').show();
+            $('#parsley_reg #save_clear').hide();
+            $('#loading').modal('show');
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/customer_payment/get_customer_payment/"+guid,                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                    $("#user_list").hide();
+                    $('#credit_payment').show('slow');
+                    $('#delete').attr("disabled", "disabled");
+                    $('#posnic_add_customer_payment').attr("disabled", "disabled");
+                    $('#posnic_customer_debit_payment').attr("disabled", "disabled");
+                    $('#active').attr("disabled", "disabled");
+                    $('#deactive').attr("disabled", "disabled");
+                    $('#customer_payment_lists').removeAttr("disabled");
+                    $("#parsley_reg #payment_id").val(data[0]['guid']);
+                    $("#parsley_reg #invoice").val(data[0]['invoice']);
+                    $("#parsley_reg #company").val(data[0]['company']);
+                    $("#parsley_reg #supplier").val(data[0]['name']);
+                    $("#parsley_reg #demo_payment_code").val(data[0]['code']);
+                    $("#parsley_reg #sales_bill").select2('data', {id:'',text: data[0]['invoice']});
+                     $("#parsley_reg #sales_bill").select2('disable');
+                    $("#parsley_reg #payment_code").val(data[0]['code']);
+                    $("#parsley_reg #payment_date").val(data[0]['payment_date']);
+                    $("#parsley_reg #amount").val(data[0]['amount']);
+                    $("#parsley_reg #memo").val(data[0]['memo']);
+                    $("#parsley_reg #payment").val(data[0]['payable_id']);
+                    var balance=data[0]['paid_amount']-data[0]['amount'];
+                    $("#parsley_reg #balance_amount").val(data[0]['total']-balance);
+                    $("#parsley_reg #balance").val(data[0]['total']-balance-data[0]['amount']);
+                    $("#parsley_reg #total").val(data[0]['total']);
+                    $("#parsley_reg #paid_amount").val(balance);
+                    var num = parseFloat( $("#parsley_reg #balance_amount").val());
+                    $("#parsley_reg #balance_amount").val(num.toFixed(point));
+                    var num = parseFloat( $("#parsley_reg #balance").val());
+                    $("#parsley_reg #balance").val(num.toFixed(point));
+                    var num = parseFloat( $("#parsley_reg #paid_amount").val());
+                    $("#parsley_reg #paid_amount").val(num.toFixed(point));
+                } 
+            });
+            window.setTimeout(function ()
+            {
+                document.getElementById('amount').focus();
+                $('#loading').modal('hide');
+            }, 0);
+            <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('customer_payment');?>', { type: "error" });                       
+            <?php
+        }?>
+    }
+    function view_function(guid){
+        <?php
+        if($this->session->userdata['customer_payment_per']['view']==1){ ?>
+            $("#parsley_reg").trigger('reset');
+            $('#parsley_reg #update_button').hide();
+            $('#parsley_reg #save_button').hide();
+            $('#parsley_reg #update_clear').hide();
+            $('#parsley_reg #save_clear').hide();
+            $('#loading').modal('show');
+            invoice_disable();
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/customer_payment/view_customer_payment/"+guid,                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                    $("#user_list").hide();
+                    $('#credit_payment').show('slow');
+                    $('#delete').attr("disabled", "disabled");
+                    $('#posnic_add_customer_payment').attr("disabled", "disabled");
+                    $('#posnic_customer_debit_payment').attr("disabled", "disabled");
+                    $('#active').attr("disabled", "disabled");
+                    $('#deactive').attr("disabled", "disabled");
+                    $('#customer_payment_lists').removeAttr("disabled");
+                    $("#parsley_reg #payment_id").val(data[0]['guid']);
+                    $("#parsley_reg #invoice").val(data[0]['invoice']);
+                    $("#parsley_reg #company").val(data[0]['company']);
+                    $("#parsley_reg #supplier").val(data[0]['name']);
+                    $("#parsley_reg #demo_payment_code").val(data[0]['code']);
+                    $("#parsley_reg #sales_bill").select2('data', {id:'',text: data[0]['invoice']});
+                     $("#parsley_reg #sales_bill").select2('disable');
+                    $("#parsley_reg #payment_code").val(data[0]['code']);
+                    $("#parsley_reg #payment_date").val(data[0]['payment_date']);
+                    $("#parsley_reg #amount").val(data[0]['amount']);
+                    $("#parsley_reg #memo").val(data[0]['memo']);
+                    $("#parsley_reg #payment").val(data[0]['payable_id']);
+                    var balance=data[0]['paid_amount']-data[0]['amount'];
+                    $("#parsley_reg #balance_amount").val(data[0]['total']-balance);
+                    $("#parsley_reg #balance").val(data[0]['total']-balance-data[0]['amount']);
+                    $("#parsley_reg #total").val(data[0]['total']);
+                    $("#parsley_reg #paid_amount").val(balance);
+                    var num = parseFloat( $("#parsley_reg #balance_amount").val());
+                    $("#parsley_reg #balance_amount").val(num.toFixed(point));
+                    var num = parseFloat( $("#parsley_reg #balance").val());
+                    $("#parsley_reg #balance").val(num.toFixed(point));
+                    var num = parseFloat( $("#parsley_reg #paid_amount").val());
+                    $("#parsley_reg #paid_amount").val(num.toFixed(point));
+                } 
+            });
+          
+            <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To')." ".$this->lang->line('view')." ".$this->lang->line('customer_payment');?>', { type: "error" });                       
+            <?php
+        }?>
+    }
+    function edit_debit_function(guid){
+        <?php
+        if($this->session->userdata['customer_payment_per']['edit']==1){ ?>
+            $("#parsley_ext").trigger('reset');
+            $('#parsley_ext #update_button').show();
+            $('#parsley_ext #save_button').hide();
+            $('#parsley_ext #update_clear').show();
+            $('#parsley_ext #save_clear').hide();
+            $('#loading').modal('show');
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/customer_payment/get_customer_debit_payment/"+guid,                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                    $("#user_list").hide();
+                    $('#debit_payament').show('slow');
+                    $('#delete').attr("disabled", "disabled");
+                    $('#posnic_add_customer_payment').attr("disabled", "disabled");
+                    $('#posnic_customer_debit_payment').attr("disabled", "disabled");
+                    $('#active').attr("disabled", "disabled");
+                    $('#deactive').attr("disabled", "disabled");
+                    $('#customer_payment_lists').removeAttr("disabled");
+                    $("#parsley_ext #payment_id").val(data[0]['guid']);
+                    $("#parsley_ext #sales_return_guid").val(data[0]['return_id']);
+                    $("#parsley_ext #sales_bill").val(data[0]['invoice']);
+                    $("#parsley_ext #customer").val(data[0]['name']);
+                    $("#parsley_ext #demo_payment_code").val(data[0]['code']);
+                    $("#parsley_ext #sales_return").select2('data', {id:'',text: data[0]['sales_return_code']});
+                    $("#parsley_ext #sales_return").select2('disable');
+                    $("#parsley_ext #payment_code").val(data[0]['code']);
+                    $("#parsley_ext #payment_date").val(data[0]['payment_date']);
+                    $("#parsley_ext #amount").val(data[0]['amount']);
+                    $("#parsley_ext #memo").val(data[0]['memo']);
+                    $("#parsley_ext #payment").val(data[0]['payable_id']);
+                    var balance=data[0]['paid_amount']-data[0]['amount'];
+                    $("#parsley_ext #balance_amount").val(data[0]['total']-balance);
+                    $("#parsley_ext #balance").val(data[0]['total']-balance-data[0]['amount']);
+                    $("#parsley_ext #total").val(data[0]['total']);
+                    $("#parsley_ext #paid_amount").val(balance);
+                    var num = parseFloat( $("#parsley_ext #balance_amount").val());
+                    $("#parsley_ext #balance_amount").val(num.toFixed(point));
+                    var num = parseFloat( $("#parsley_ext #balance").val());
+                    $("#parsley_ext #balance").val(num.toFixed(point));
+                    var num = parseFloat( $("#parsley_ext #paid_amount").val());
+                    $("#parsley_ext #paid_amount").val(num.toFixed(point));
+                } 
+            });
+            window.setTimeout(function ()
+            {
+                document.getElementById('amount').focus();
+                $('#loading').modal('hide');
+            }, 0);
+            <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You Have NO Permission To Edit')." ".$this->lang->line('customer_payment');?>', { type: "error" });                       
+            <?php
+        }?>
+    }
+    function view_debit_function(guid){
+        <?php
+        if($this->session->userdata['customer_payment_per']['view']==1){ ?>
+            $("#parsley_ext").trigger('reset');
+            $('#parsley_ext #update_button').show();
+            $('#parsley_ext #save_button').show();
+            $('#parsley_ext #update_clear').show();
+            $('#parsley_ext #save_clear').show();
+            $('#loading').modal('show');
+            $.ajax({                                      
+                url: "<?php echo base_url() ?>index.php/customer_payment/view_customer_debit_payment/"+guid,                      
+                data: "", 
+                dataType: 'json',               
+                success: function(data)        
+                { 
+                    $("#user_list").hide();
+                    $('#debit_payament').show('slow');
+                    $('#delete').attr("disabled", "disabled");
+                    $('#posnic_add_customer_payment').attr("disabled", "disabled");
+                    $('#posnic_customer_debit_payment').attr("disabled", "disabled");
+                    $('#active').attr("disabled", "disabled");
+                    $('#deactive').attr("disabled", "disabled");
+                    $('#customer_payment_lists').removeAttr("disabled");
+                    $("#parsley_ext #payment_id").val(data[0]['guid']);
+                    $("#parsley_ext #sales_return_guid").val(data[0]['return_id']);
+                    $("#parsley_ext #sales_bill").val(data[0]['invoice']);
+                    $("#parsley_ext #customer").val(data[0]['name']);
+                    $("#parsley_ext #demo_payment_code").val(data[0]['code']);
+                    $("#parsley_ext #sales_return").select2('data', {id:'',text: data[0]['sales_return_code']});
+                    $("#parsley_ext #sales_return").select2('disable');
+                    $("#parsley_ext #payment_code").val(data[0]['code']);
+                    $("#parsley_ext #payment_date").val(data[0]['payment_date']);
+                    $("#parsley_ext #amount").val(data[0]['amount']);
+                    $("#parsley_ext #memo").val(data[0]['memo']);
+                    $("#parsley_ext #payment").val(data[0]['payable_id']);
+                    var balance=data[0]['paid_amount']-data[0]['amount'];
+                    $("#parsley_ext #balance_amount").val(data[0]['total']-balance);
+                    $("#parsley_ext #balance").val(data[0]['total']-balance-data[0]['amount']);
+                    $("#parsley_ext #total").val(data[0]['total']);
+                    $("#parsley_ext #paid_amount").val(balance);
+                    var num = parseFloat( $("#parsley_ext #balance_amount").val());
+                    $("#parsley_ext #balance_amount").val(num.toFixed(point));
+                    var num = parseFloat( $("#parsley_ext #balance").val());
+                    $("#parsley_ext #balance").val(num.toFixed(point));
+                    var num = parseFloat( $("#parsley_ext #paid_amount").val());
+                    $("#parsley_ext #paid_amount").val(num.toFixed(point));
+                } 
+            });
+            invoice_disable();
+            <?php
+        }else{?>
+            $.bootstrapGrowl('<?php echo $this->lang->line('You_Have_NO_Permission_To')." ".$this->lang->line('view')." ".$this->lang->line('customer_payment');?>', { type: "error" });                       
+            <?php
+        }?>
+    }
+    function invoice_disable(){
+        $('#purchase_invoice').select2('disable');
+        $('#purchase_return').select2('disable');
+        $('#update_button').hide();
+        $('#update_clear').hide();
+        $('#invoice_div').hide();
+        $('#invoice_settings').hide();
+       
+        $('#parsley_ext #payment_date').attr("disabled", "disabled");
+        $('#parsley_reg #payment_date').attr("disabled", "disabled");
+        $('#parsley_ext #amount').attr("disabled", "disabled");
+        $('#parsley_reg #amount').attr("disabled", "disabled");
+        $('#parsley_ext #balance').attr("disabled", "disabled");
+        $('#parsley_reg #balance').attr("disabled", "disabled");
+        $('#parsley_ext #memo').attr("disabled", "disabled");
+        $('#parsley_reg #memo').attr("disabled", "disabled");
+    }
+    function invoice_enable(){
+        $('#parsley_ext #memo').removeAttr("disabled");
+        $('#parsley_reg #memo').removeAttr("disabled");
+        $('#parsley_ext #payment_date').removeAttr("disabled");
+        $('#parsley_reg #payment_date').removeAttr("disabled");
+        $('#parsley_ext #amount').removeAttr("disabled");
+        $('#parsley_reg #amount').removeAttr("disabled");
+        $('#sacn_items').show();
+        $('#invoice_div').hide();
+        $('#invoice_settings').hide();
+        
+    }
 		</script>
                 <script type="text/javascript" charset="utf-8" language="javascript" src="<?php echo base_url() ?>template/data_table/js/DT_bootstrap.js"></script>
 
