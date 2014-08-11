@@ -236,12 +236,21 @@ function save_purchase_return_payment(){
     }
     /* function end */
    function get_supplier_credit_payment($guid){
-        $this->load->model('payment');
-        $data=  $this->payment->get_supplier_credit_payment($guid);
-        echo json_encode($data); // encode data array to json
+        If($this->session->userdata['supplier_payment_per']['edit']==1){
+            $this->load->model('payment');
+            $data=  $this->payment->get_supplier_credit_payment($guid);
+            echo json_encode($data); // encode data array to json
+        }
+    }
+    function view_supplier_credit_payment($guid){
+        If($this->session->userdata['supplier_payment_per']['view']==1){
+            $this->load->model('payment');
+            $data=  $this->payment->get_supplier_credit_payment($guid);
+            echo json_encode($data); // encode data array to json
+        }
     }
      function update_purchase_return(){
-        If($this->session->userdata['customer_payment_per']['add']==1){
+        If($this->session->userdata['supplier_payment_per']['add']==1){
             $this->form_validation->set_rules('payment_date',$this->lang->line('payment_date'), 'required');
             $this->form_validation->set_rules('payment_id',$this->lang->line('payment_id'), 'required');
             $this->form_validation->set_rules('purchase_return_guid',$this->lang->line('purchase_return_guid'), 'required');
@@ -282,15 +291,55 @@ function save_purchase_return_payment(){
      *  get payment details for edit     
      * function start */
     function get_supplier_payment($guid){
-        $this->load->model('payment');
-        $data=  $this->payment->get_payment_details($guid);
-        echo json_encode($data); // encode data array to json
+        If($this->session->userdata['supplier_payment_per']['edit']==1){
+            $this->load->model('payment');
+            $data=  $this->payment->get_payment_details($guid);
+            echo json_encode($data); // encode data array to json
+        }
     }
     /* function end*/
-    function language($lang){
-       $lang= $this->lang->load($lang);
-       return $lang;
+    /*
+     *  get payment details for edit     
+     * function start */
+    function view_supplier_payment($guid){
+        If($this->session->userdata['supplier_payment_per']['view']==1){
+            $this->load->model('payment');
+            $data=  $this->payment->get_payment_details($guid);
+            echo json_encode($data); // encode data array to json
+        }
     }
+    /* function end*/
+    
+    /* get invoice setting and supplier payments details
+        function start     */    
+    function get_invoice_settings_and_supplier_payment($guid){
+        if($this->session->userdata['supplier_payment_per']['print_invoice']==1){
+            $this->load->model('payment');
+            $data[0]=  $this->payment->supplier_payment_invoice($guid); // get  supplier payments details
+             // read setting config file
+            if($this->session->flashdata('supplier_payment_invoice')==""){
+                $this->config->load("settings");
+                $value=array();
+                $value=$this->config->item('invoice');
+                $this->session->set_flashdata('supplier_payment_invoice',$value); 
+                $data[1]=$value; 
+            }else{        
+                $data[1]=$this->session->flashdata('supplier_payment_invoice'); // get invoice array
+            }
+        echo json_encode($data);
+        }
+    }
+    /* function end*/
+      /* get supplioer payment details*/
+    function get_invoice_settings(){
+        if($this->session->userdata['supplier_payment_per']['invoice_setting']==1){
+            $this->config->load("settings"); // read setting config file
+            $settings =$this->config->item('invoice'); // get invoice array
+            echo json_encode($settings);
+        }
+    }
+    /* function end*/
+    
     
     }
 ?>
