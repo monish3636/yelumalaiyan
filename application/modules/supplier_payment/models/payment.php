@@ -38,12 +38,13 @@ class Payment extends CI_Model{
     function  serach_invoice($like){
         $this->db->select('supplier_payable.guid as p_guid,supplier_payable.invoice_id,supplier_payable.amount, supplier_payable.paid_amount, purchase_invoice.*, suppliers.first_name as name,suppliers.company_name as company,suppliers.address1 as address')->from('purchase_invoice')->where('purchase_invoice.branch_id',  $this->session->userdata['branch_id']);
         $this->db->join('suppliers', 'suppliers.guid=purchase_invoice.supplier_id ','left');  
-        $this->db->join('supplier_payable', 'suppliers.guid=purchase_invoice.supplier_id AND supplier_payable.invoice_id=purchase_invoice.guid','left');  
+        $this->db->join('supplier_payable', 'supplier_payable.invoice_id=purchase_invoice.direct_invoice_id OR supplier_payable.invoice_id=purchase_invoice.guid','left');  
         $or_like=array('purchase_invoice.invoice'=>$like,'suppliers.company_name'=>$like,'suppliers.first_name'=>$like);
         $this->db->or_like($or_like);     
         $this->db->limit($this->session->userdata['data_limit']);
         $sql=$this->db->get();
         return $sql->result();
+      
     }
     /* function end*/
      /* get purchase return auto suggestion
@@ -154,6 +155,24 @@ class Payment extends CI_Model{
         $this->db->select('purchase_invoice.invoice,payment.*,supplier_payable.amount as total,supplier_payable.paid_amount,suppliers.first_name as name,suppliers.company_name as company,suppliers.address1 as address')->from('payment')->where('payment.guid',$guid);
         $this->db->join('supplier_payable','supplier_payable.guid=payment.payable_id');
         $this->db->join('purchase_invoice', 'purchase_invoice.guid=supplier_payable.invoice_id ','left'); 
+        $this->db->join('suppliers', 'suppliers.guid=payment.supplier_id ','left'); 
+        $sql=  $this->db->get();
+        $data=array();
+        foreach ($sql->result_array() as $row){
+            $row['payment_date']=date('d-m-Y',$row['payment_date']); // converet date  form strtotime formt  to date
+            $data[]=$row; 
+        }
+        return $data;
+    }
+    /*
+     *  fucntion end */ 
+    /* function starts
+     */
+    function supplier_payment_invoice($guid){
+        $this->db->select('suppliers.first_name as s_name,suppliers.company_name as c_name,suppliers.address1 as address,suppliers.email as supplier_email,suppliers.phone as supplier_phone,suppliers.city as supplier_city,suppliers.state as supplier_state,suppliers.zip as supplier_zip,suppliers.country as supplier_country,branches.code as branch_code,branches.store_name as branch_name,branches.address as branch_address,branches.city as branch_city,branches.state as branch_state,branches.zip as branch_zip ,branches.country as branch_country,branches.phone as branch_phone,branches.email as branch_mail,purchase_invoice.invoice,payment.*,supplier_payable.amount as total,supplier_payable.paid_amount,suppliers.first_name as name,suppliers.company_name as company,suppliers.address1 as address')->from('payment')->where('payment.guid',$guid);
+        $this->db->join('supplier_payable','supplier_payable.guid=payment.payable_id');
+        $this->db->join('purchase_invoice', 'purchase_invoice.guid=supplier_payable.invoice_id ','left'); 
+        $this->db->join('branches', "branches.guid = payment.branch_id ",'left');
         $this->db->join('suppliers', 'suppliers.guid=payment.supplier_id ','left'); 
         $sql=  $this->db->get();
         $data=array();
