@@ -349,10 +349,9 @@ class Items extends MX_Controller{
                                     'description'=>$this->input->post('description'),
                                     'cost_price'=>$this->input->post('cost'),
                                     'selling_price'=>$this->input->post('selling_price'),                                   
-                                    'profit_margin'=>$this->input->post('formula_profit'),                                   
+                                                                    
                                     'mrp'=>$this->input->post('mrp'),
-                                    'discount1'=>$this->input->post('formula_discount1'),
-                                    'discount2'=>$this->input->post('formula_discount2'),
+                                      'discount'=>$this->input->post('discount_per'),
                                     'discount'=>$this->input->post('discount_per'),
                                     'start_date'=>  strtotime($this->input->post('starting_date')),
                                     'end_date'=>strtotime($this->input->post('ending_date')),
@@ -379,14 +378,9 @@ class Items extends MX_Controller{
                                  if($this->posnic->check_unique($value,'items')){ 
                                      echo 'TRUE';
                                      $this->user_image="";
-                                    echo $guid;
+                                   
                                      $this->load->model('item');
-                                       echo $this->input->post('starting_date');
-                            echo '<pre><br>';
-                            echo $this->input->post('ending_date');
-                            echo strtotime($this->input->post('starting_date'));
-                            echo '<pre><br>';
-                            echo strtotime($this->input->post('ending_date'));
+                                 
                                         $this->item->update_item($data,$guid);
                                     
                                  }else{
