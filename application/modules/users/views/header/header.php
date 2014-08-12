@@ -7,10 +7,10 @@
                   
      
                               posnic_table();
-                                parsley_reg.onsubmit=function()
-                                { 
-                                  return false;
-                                } 
+//                                parsley_reg.onsubmit=function()
+//                                { 
+//                                  return false;
+//                                } 
                          
                         } );
                         
@@ -172,6 +172,11 @@
                                  $('#parsley_reg #zip').val(data[0]['zip']);
                                  $('#parsley_reg #user_guid').val(data[0]['guid']);
                                  $('#parsley_reg #pos_users_id').val(data[0]['username']);
+                                 $('#parsley_reg #profile_picture').val(data[0]['image']);
+                                  $('#parsley_reg .fileupload-preview').empty();
+                                 $('#parsley_reg .fileupload-preview').append('<img src="<?php echo base_url('uploads/profile_images') ?>/'+data[0]['image']+'">');
+                                 $("#parsley_reg .fileupload-preview").css('display' ,'block')  ;                       
+                                 $("#parsley_reg .fileupload-new").css('display' ,'inline')  
                                 for(var i=0;i<data.length;i++){
                                     var group=data[i]['user_group_id'];
                                     var group_name=data[i]['group_name'];
